@@ -69,6 +69,12 @@ android {
     }
 }
 
+androidComponents {
+    // Compose UI tests need the ui-test-manifest activity, which only debug builds merge.
+    // Release-specific behaviour is covered by tests that toggle the build flag explicitly.
+    beforeVariants(selector().withBuildType("release")) { it.enableUnitTest = false }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
