@@ -7,4 +7,6 @@
 - Splash screen, adaptive + themed launcher icon, edge-to-edge, predictive back enabled.
 - Debug-only design-system showcase.
 - detekt (with Compose rules), Spotless/ktlint, Kover, Android Lint warnings-as-errors, GitHub Actions CI.
-- Tests: design-token and WCAG contrast tests, Robolectric navigation tests.
+- Tests: design-token and WCAG contrast tests, Robolectric navigation tests (debug variant).
+- Dependabot (Gradle + Actions) and a pull request template.
+- Verified: `./gradlew check` and `:app:assembleRelease` green on GitHub Actions (ubuntu-24.04, JDK 17).
