@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_title">BIENVENUE</string>
+    <string name="welcome_subtitle">Trouvez votre prochain espace, sentez-vous chez vous\nLà où le confort rencontre la praticité</string>
+    <string name="open_design_system">Ouvrir le design system</string>
+    <string name="back">Retour</string>
+    <string name="ds_typography">Typographie</string>
+    <string name="ds_colors">Couleurs</string>
+    <string name="ds_buttons">Boutons</string>
+    <string name="ds_chips">Puces et verre</string>
+    <string name="ds_brand">Marque</string>
+</resources>

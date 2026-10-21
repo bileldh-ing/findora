@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- The adaptive launcher icon stays in mipmap-anydpi-v26: aapt2 rejects an
+         unqualified anydpi adaptive-icon, so the v26 qualifier is required. -->
+    <issue id="ObsoleteSdkInt">
+        <ignore path="src/main/res/mipmap-anydpi-v26" />
+    </issue>
+</lint>

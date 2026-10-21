@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Findora</string>
+    <string name="welcome_title">WELCOME</string>
+    <string name="welcome_subtitle">Find your next space, feel at home\nWhere comfort meets convenience</string>
+    <string name="open_design_system">Open design system</string>
+    <string name="back">Back</string>
+    <string name="ds_typography">Typography</string>
+    <string name="ds_colors">Colors</string>
+    <string name="ds_buttons">Buttons</string>
+    <string name="ds_chips">Chips and glass</string>
+    <string name="ds_brand">Brand</string>
+</resources>

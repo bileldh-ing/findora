@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_title">مرحبًا</string>
+    <string name="welcome_subtitle">اعثر على مساحتك القادمة وتشعر وكأنك في بيتك\nحيث تلتقي الراحة بالسهولة</string>
+    <string name="open_design_system">فتح نظام التصميم</string>
+    <string name="back">رجوع</string>
+    <string name="ds_typography">الخطوط</string>
+    <string name="ds_colors">الألوان</string>
+    <string name="ds_buttons">الأزرار</string>
+    <string name="ds_chips">الشرائح والزجاج</string>
+    <string name="ds_brand">العلامة</string>
+</resources>

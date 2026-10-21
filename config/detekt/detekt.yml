@@ -1,0 +1,51 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  excludes: "Compose.*"
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
+
+style:
+  MagicNumber:
+    # Design tokens (dp, sp, hex colors) are intentionally literal in the theme package.
+    excludes: ['**/designsystem/**', '**/test/**', '**/androidTest/**']
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
+  ForbiddenComment:
+    active: true
+    comments:
+      - reason: 'No TODO may ship (agent rule).'
+        value: 'TODO:'
+      - reason: 'No FIXME may ship.'
+        value: 'FIXME:'
+
+complexity:
+  LongParameterList:
+    functionThreshold: 8
+    ignoreDefaultParameters: true
+    ignoreAnnotated: ['Composable']
+  LongMethod:
+    ignoreAnnotated: ['Composable']
+
+Compose:
+  CompositionLocalAllowlist:
+    active: true
+    allowedCompositionLocals:
+      - LocalFindoraColors
+      - LocalFindoraTypography
+      - LocalFindoraSpacing
+      - LocalFindoraShapes
+      - LocalFindoraElevation
+      - LocalFindoraMotion
+  ModifierMissing:
+    active: true
+  ViewModelForwarding:
+    active: true
