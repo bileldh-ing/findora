@@ -4,12 +4,30 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "build(deps)"
     groups:
       androidx:
         patterns: ["androidx.*"]
       kotlin:
         patterns: ["org.jetbrains.kotlin*", "com.google.devtools.ksp"]
+    ignore:
+      # AGP 9 is a deliberate migration (Gradle 9.1+, new DSL, KSP/Hilt/Kover compatibility),
+      # done in its own PR rather than as a Dependabot bump.
+      - dependency-name: "com.android.application"
+        versions: [">= 9.0.0"]
+      - dependency-name: "com.android.tools.build:gradle"
+        versions: [">= 9.0.0"]
+      # Hilt 2.59+ requires AGP 9 when the Hilt Gradle plugin is applied (dagger-2.59 release notes).
+      - dependency-name: "com.google.dagger*"
+        versions: [">= 2.59"]
+      # hilt-navigation-compose 1.4.0 requires AGP 9.1+ and compileSdk 37 (AAR metadata check).
+      - dependency-name: "androidx.hilt:hilt-navigation-compose"
+        versions: [">= 1.4.0"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    commit-message:
+      prefix: "ci(deps)"

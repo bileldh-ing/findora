@@ -1,0 +1,16 @@
+Findora - Dream House. Where comfort meets convenience.
+
+Findora is a rental app designed to make finding your next home feel simple and calm. It is built photo-first: large, clear property images, a clean high-contrast design and a layout that keeps the details you care about one glance away.
+
+What Findora is built for
+• Browse rental properties in a clean, photo-first feed
+• See the essentials at a glance: monthly price, rating, location and verification status
+• Shortlist the places you like and compare them side by side
+• Get a personalised best-match ranking based on your budget, location and lifestyle
+• Explore listings on a map and book viewings with property owners
+• Use the app in English, French or Arabic, with full right-to-left support
+• Light and dark themes, designed with readable contrast throughout
+
+Findora is developed in the open, in small, tested releases. Each update to this listing describes what that version actually contains, so check "What's new" for the features available in your version.
+
+Privacy first: Findora does not sell your data. See our privacy policy for details.

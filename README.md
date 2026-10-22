@@ -3,6 +3,8 @@
 > Where comfort meets convenience. A production-minded Android rental app built with Kotlin and Jetpack Compose.
 
 [![CI](https://github.com/bileldh-ing/findora/actions/workflows/ci.yml/badge.svg)](https://github.com/bileldh-ing/findora/actions/workflows/ci.yml)
+[![Release](https://github.com/bileldh-ing/findora/actions/workflows/release.yml/badge.svg)](https://github.com/bileldh-ing/findora/actions/workflows/release.yml)
+[![Latest release](https://img.shields.io/github/v/release/bileldh-ing/findora?include_prereleases&sort=semver)](https://github.com/bileldh-ing/findora/releases)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.1-7F52FF?logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
 ![minSdk](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)

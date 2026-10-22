@@ -10,3 +10,10 @@
 .externalNativeBuild
 .cxx
 .env
+
+# Signing material and store credentials: never commit (see docs/RELEASING.md)
+*.jks
+*.keystore
+keystore.properties
+*service-account*.json
+play-*.json

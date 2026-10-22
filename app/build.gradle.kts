@@ -10,6 +10,26 @@ plugins {
     alias(libs.plugins.kover)
 }
 
+/**
+ * Reads a release setting from an environment variable (CI) or a Gradle property
+ * (for local builds, e.g. in ~/.gradle/gradle.properties). Blank values count as absent.
+ */
+fun releaseSetting(
+    env: String,
+    property: String,
+): String? =
+    providers.environmentVariable(env).orNull?.takeIf { it.isNotBlank() }
+        ?: providers.gradleProperty(property).orNull?.takeIf { it.isNotBlank() }
+
+val releaseKeystorePath = releaseSetting("FINDORA_KEYSTORE_PATH", "findora.keystore.path")
+val releaseKeystorePassword = releaseSetting("FINDORA_KEYSTORE_PASSWORD", "findora.keystore.password")
+val releaseKeyAlias = releaseSetting("FINDORA_KEY_ALIAS", "findora.key.alias")
+val releaseKeyPassword = releaseSetting("FINDORA_KEY_PASSWORD", "findora.key.password")
+val hasReleaseSigning =
+    listOf(releaseKeystorePath, releaseKeystorePassword, releaseKeyAlias, releaseKeyPassword).all { it != null }
+val releaseVersionCode = releaseSetting("FINDORA_VERSION_CODE", "findora.versionCode")?.toInt()
+val releaseVersionName = releaseSetting("FINDORA_VERSION_NAME", "findora.versionName")
+
 android {
     namespace = "com.findora.app"
     compileSdk = 35
@@ -24,6 +44,19 @@ android {
         vectorDrawables { useSupportLibrary = true }
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                val keystore = file(requireNotNull(releaseKeystorePath))
+                check(keystore.isFile) { "Release keystore not found at $keystore (FINDORA_KEYSTORE_PATH)." }
+                storeFile = keystore
+                storePassword = releaseKeystorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
@@ -33,8 +66,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Debug-signed so CI and recruiters can install the release APK without a keystore.
-            signingConfig = signingConfigs.getByName("debug")
+            // Upload-key signed when the FINDORA_* signing settings are present (see docs/RELEASING.md);
+            // otherwise debug-signed so CI and recruiters can still build and install the release APK.
+            signingConfig = signingConfigs.getByName(if (hasReleaseSigning) "release" else "debug")
         }
     }
 
@@ -70,9 +104,27 @@ android {
 }
 
 androidComponents {
+    // CI injects versionCode/versionName (FINDORA_VERSION_CODE / FINDORA_VERSION_NAME); defaultConfig is the fallback.
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            releaseVersionCode?.let { output.versionCode.set(it) }
+            releaseVersionName?.let { output.versionName.set(it) }
+        }
+    }
     // Compose UI tests need the ui-test-manifest activity, which only debug builds merge.
     // Release-specific behaviour is covered by tests that toggle the build flag explicitly.
     beforeVariants(selector().withBuildType("release")) { it.enableUnitTest = false }
+}
+
+if (gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }) {
+    if (hasReleaseSigning) {
+        logger.lifecycle("Findora release signing: upload keystore (key alias '$releaseKeyAlias').")
+    } else {
+        logger.warn(
+            "Findora release signing: FINDORA_KEYSTORE_* settings not found, release artifacts are DEBUG-SIGNED " +
+                "and cannot be uploaded to Google Play. See docs/RELEASING.md.",
+        )
+    }
 }
 
 kotlin {
@@ -136,6 +188,8 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test.junit4)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }

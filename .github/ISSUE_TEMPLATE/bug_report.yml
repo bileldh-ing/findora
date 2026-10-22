@@ -1,0 +1,56 @@
+name: Bug report
+description: Something in Findora does not work as expected.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report a problem. Please do not include personal data or passwords.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Tap ...
+        3. See ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: The release (versionName and versionCode) or commit you built.
+      placeholder: 0.1.0 (101)
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: Pixel 8, Android 15
+    validations:
+      required: true
+  - type: dropdown
+    id: locale
+    attributes:
+      label: App language
+      options: [English, French, Arabic (RTL)]
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options: [Light, Dark]
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Logcat output (`adb logcat`) or screenshots, if available.
+      render: shell

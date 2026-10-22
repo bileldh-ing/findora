@@ -1,0 +1,9 @@
+# Default reviewer for everything in the repository.
+*                       @bileldh-ing
+
+# Build, CI/CD and release configuration.
+/.github/               @bileldh-ing
+/gradle/                @bileldh-ing
+*.gradle.kts            @bileldh-ing
+/fastlane/              @bileldh-ing
+/distribution/          @bileldh-ing

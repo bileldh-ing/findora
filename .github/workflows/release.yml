@@ -1,0 +1,207 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: "versionName for this build (default: <defaultConfig versionName>-dispatch.<run number>)"
+        required: false
+        default: ""
+      create_release:
+        description: "Also create a GitHub Release (tag v<version_name> on this commit)"
+        type: boolean
+        default: false
+      play_upload:
+        description: "Upload to Google Play (needs PLAY_SERVICE_ACCOUNT_JSON and the upload keystore secrets)"
+        type: boolean
+        default: false
+      play_track:
+        description: "Google Play track"
+        type: choice
+        options: [internal, alpha, beta, production]
+        default: internal
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+  PACKAGE_NAME: com.findora.app
+
+jobs:
+  build:
+    name: Signed release build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      version_name: ${{ steps.version.outputs.version_name }}
+      version_code: ${{ steps.version.outputs.version_code }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      signed: ${{ steps.signing.outputs.signed }}
+      has_play: ${{ steps.signing.outputs.has_play }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # release notes need the previous tag
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Compute version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version_name }}
+          # versionCode = run number + offset: strictly increasing across releases. Raise the
+          # FINDORA_VERSION_CODE_OFFSET repository variable if Play ever holds a higher code.
+          OFFSET: ${{ vars.FINDORA_VERSION_CODE_OFFSET || '100' }}
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            version_name="${GITHUB_REF_NAME#v}"
+          elif [[ -n "$INPUT_VERSION" ]]; then
+            version_name="${INPUT_VERSION#v}"
+          else
+            base=$(sed -nE 's/^\s*versionName = "([^"]+)".*/\1/p' app/build.gradle.kts | head -1)
+            version_name="${base}-dispatch.${GITHUB_RUN_NUMBER}"
+          fi
+          if ! [[ "$version_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error title=Invalid version::'$version_name' is not semver (tag must look like v1.2.3 or v1.2.3-rc1)."
+            exit 1
+          fi
+          version_code=$(( GITHUB_RUN_NUMBER + OFFSET ))
+          prerelease=false; [[ "$version_name" == *-* ]] && prerelease=true
+          {
+            echo "version_name=$version_name"
+            echo "version_code=$version_code"
+            echo "prerelease=$prerelease"
+          } >> "$GITHUB_OUTPUT"
+          echo "FINDORA_VERSION_NAME=$version_name" >> "$GITHUB_ENV"
+          echo "FINDORA_VERSION_CODE=$version_code" >> "$GITHUB_ENV"
+          echo "### Findora $version_name (versionCode $version_code)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Prepare upload keystore
+        id: signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.FINDORA_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.FINDORA_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.FINDORA_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.FINDORA_KEY_PASSWORD }}
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [[ -n "$KEYSTORE_BASE64" && -n "$KEYSTORE_PASSWORD" && -n "$KEY_ALIAS" && -n "$KEY_PASSWORD" ]]; then
+            echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/findora-upload.jks"
+            echo "FINDORA_KEYSTORE_PATH=$RUNNER_TEMP/findora-upload.jks" >> "$GITHUB_ENV"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+            echo "Signing: upload keystore from repository secrets." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            msg="FINDORA_KEYSTORE_BASE64 / FINDORA_KEYSTORE_PASSWORD / FINDORA_KEY_ALIAS / FINDORA_KEY_PASSWORD not all set: artifacts are DEBUG-SIGNED (installable, not uploadable to Play). See docs/RELEASING.md."
+            echo "::warning title=Release is debug-signed::$msg"
+            echo "Signing: **debug key** ($msg)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [[ -n "$PLAY_JSON" ]]; then echo "has_play=true" >> "$GITHUB_OUTPUT"; else echo "has_play=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: assembleRelease + bundleRelease
+        env:
+          FINDORA_KEYSTORE_PASSWORD: ${{ secrets.FINDORA_KEYSTORE_PASSWORD }}
+          FINDORA_KEY_ALIAS: ${{ secrets.FINDORA_KEY_ALIAS }}
+          FINDORA_KEY_PASSWORD: ${{ secrets.FINDORA_KEY_PASSWORD }}
+        run: |
+          set -o pipefail
+          ./gradlew :app:assembleRelease :app:bundleRelease --stacktrace 2>&1 | tee release.log
+
+      - name: Verify signature and collect artifacts
+        run: |
+          set -euo pipefail
+          apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          mkdir -p dist
+          apk=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          aab=$(ls app/build/outputs/bundle/release/*.aab | head -1)
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          "$apksigner" verify --print-certs "$apk" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cp "$apk" "dist/findora-${FINDORA_VERSION_NAME}.apk"
+          cp "$aab" "dist/findora-${FINDORA_VERSION_NAME}.aab"
+          cp app/build/outputs/mapping/release/mapping.txt "dist/findora-${FINDORA_VERSION_NAME}-mapping.txt"
+          (cd dist && sha256sum ./* > SHA256SUMS.txt && cat SHA256SUMS.txt)
+
+      - name: Release notes
+        run: python3 .github/scripts/release-notes.py "$FINDORA_VERSION_NAME" dist/RELEASE_NOTES.md
+
+      - name: Report failures as annotations
+        if: failure()
+        run: .github/scripts/annotate-failures.sh release.log
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: findora-release
+          path: dist/
+          if-no-files-found: error
+
+  github-release:
+    name: GitHub Release
+    needs: build
+    if: github.ref_type == 'tag' || inputs.create_release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: findora-release
+          path: dist
+      - name: Publish release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: v${{ needs.build.outputs.version_name }}
+          target_commitish: ${{ github.sha }}
+          name: Findora ${{ needs.build.outputs.version_name }}
+          body_path: dist/RELEASE_NOTES.md
+          prerelease: ${{ needs.build.outputs.prerelease == 'true' }}
+          fail_on_unmatched_files: true
+          files: |
+            dist/*.apk
+            dist/*.aab
+            dist/*-mapping.txt
+            dist/SHA256SUMS.txt
+
+  play:
+    name: Google Play upload
+    needs: build
+    # Runs only when a Play service account is configured AND the bundle is signed with the upload key.
+    # Tags upload automatically; manual runs upload only when play_upload is ticked.
+    if: >-
+      needs.build.outputs.has_play == 'true' &&
+      needs.build.outputs.signed == 'true' &&
+      (github.ref_type == 'tag' || inputs.play_upload)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: google-play
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: findora-release
+          path: dist
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ env.PACKAGE_NAME }}
+          releaseFiles: dist/findora-${{ needs.build.outputs.version_name }}.aab
+          mappingFile: dist/findora-${{ needs.build.outputs.version_name }}-mapping.txt
+          releaseName: ${{ needs.build.outputs.version_name }} (${{ needs.build.outputs.version_code }})
+          track: ${{ inputs.play_track || 'internal' }}
+          # Set the PLAY_RELEASE_STATUS variable to 'draft' while the app is still a draft in Play Console.
+          status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
+          whatsNewDirectory: distribution/whatsnew
