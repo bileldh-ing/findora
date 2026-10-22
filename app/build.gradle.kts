@@ -38,8 +38,8 @@ android {
         applicationId = "com.findora.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
@@ -98,6 +98,11 @@ android {
         disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "OldTargetApi")
     }
 
+    sourceSets {
+        // Exported Room schemas double as test assets for MigrationTestHelper.
+        getByName("test").assets.srcDir(file("schemas"))
+    }
+
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
@@ -127,6 +132,13 @@ if (gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = tr
     }
 }
 
+ksp {
+    // Exported Room schemas are committed so every future migration can be tested against them.
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.generateKotlin", "true")
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
@@ -151,7 +163,17 @@ kover {
         filters {
             excludes {
                 // Generated code and pure UI wiring are excluded; domain/data are measured.
-                classes("*Hilt_*", "*_Factory*", "*_HiltModules*", "*.BuildConfig", "*ComposableSingletons*")
+                classes(
+                    "*Hilt_*",
+                    "*_Factory*",
+                    "*_HiltModules*",
+                    "*_MembersInjector*",
+                    "*.BuildConfig",
+                    "*ComposableSingletons*",
+                    "*_Impl*",
+                    "*Module",
+                    "*Module\$*",
+                )
                 annotatedBy("androidx.compose.runtime.Composable")
             }
         }
@@ -177,6 +199,16 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.android)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.okhttp)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -184,6 +216,10 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.mockk)
     testImplementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.androidx.compose.ui.test.junit4)
 

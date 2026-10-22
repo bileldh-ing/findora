@@ -17,3 +17,7 @@
 keystore.properties
 *service-account*.json
 play-*.json
+
+# Python seed tooling
+__pycache__/
+*.pyc
