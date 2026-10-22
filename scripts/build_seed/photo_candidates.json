@@ -1,0 +1,2328 @@
+{
+ "source": "Pexels (https://www.pexels.com/license/)",
+ "curatedOn": "2026-10-22",
+ "photos": [
+  {
+   "pexelsId": 245032,
+   "category": "office",
+   "alt": "Sleek home office setup with dual monitors, a laptop, and minimalist decor.",
+   "photographer": "Tranmautritam",
+   "photographerUrl": "https://www.pexels.com/@tranmautritam/",
+   "pageUrl": "https://www.pexels.com/photo/silver-imac-245032/",
+   "query": "home office interior"
+  },
+  {
+   "pexelsId": 259580,
+   "category": "living",
+   "alt": "Elegant living room with modern decor, featuring a purple sofa and chic dining area.",
+   "photographer": "Pixabay",
+   "photographerUrl": "https://www.pexels.com/@pixabay/",
+   "pageUrl": "https://www.pexels.com/photo/dining-and-living-room-furnitures-in-room-259580/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 276746,
+   "category": "living",
+   "alt": "Bright living room with elegant furniture and modern decor, perfect for relaxation.",
+   "photographer": "Pixabay",
+   "photographerUrl": "https://www.pexels.com/@pixabay/",
+   "pageUrl": "https://www.pexels.com/photo/beige-fabric-3-seat-sfoa-276746/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 280239,
+   "category": "living",
+   "alt": "Modern living room with open plan kitchen and garden view, bright and airy ambiance.",
+   "photographer": "Pixabay",
+   "photographerUrl": "https://www.pexels.com/@pixabay/",
+   "pageUrl": "https://www.pexels.com/photo/empty-fabric-sofa-inside-room-280239/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 1484981,
+   "category": "living",
+   "alt": "Charming living room featuring artistic decor, floral pillows, and cozy seating in natural light.",
+   "photographer": "Ulrike Häßler",
+   "photographerUrl": "https://www.pexels.com/@ulrike-hassler-159445/",
+   "pageUrl": "https://www.pexels.com/photo/photo-of-a-living-room-1484981/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 1974596,
+   "category": "exterior",
+   "alt": "Contemporary minimalist home exterior with lush landscaping and open driveway.",
+   "photographer": "Julia Kuzenkov",
+   "photographerUrl": "https://www.pexels.com/@julia-kuzenkov-442028/",
+   "pageUrl": "https://www.pexels.com/photo/white-and-brown-house-1974596/",
+   "query": "tropical house"
+  },
+  {
+   "pexelsId": 2032850,
+   "category": "building",
+   "alt": "Modern apartment building with balconies bathed in sunset light.",
+   "photographer": "Diana ✨",
+   "photographerUrl": "https://www.pexels.com/@didsss/",
+   "pageUrl": "https://www.pexels.com/photo/white-concrete-building-2032850/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 2079234,
+   "category": "exterior",
+   "alt": "Low angle view of a modern apartment building exterior with glass windows under a clear blue sky.",
+   "photographer": "Emre Can Acer",
+   "photographerUrl": "https://www.pexels.com/@emrecan/",
+   "pageUrl": "https://www.pexels.com/photo/concrete-house-during-day-2079234/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 2099019,
+   "category": "exterior",
+   "alt": "Picturesque stone cottage nestled among vibrant greenery and towering trees in a serene garden setting.",
+   "photographer": "Philbert Pembani",
+   "photographerUrl": "https://www.pexels.com/@philpembani/",
+   "pageUrl": "https://www.pexels.com/photo/house-near-trees-2099019/",
+   "query": "garden house",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 2499395,
+   "category": "building",
+   "alt": "A view of classic Parisian apartment buildings under a clear morning sky.",
+   "photographer": "Vincent Rivaud",
+   "photographerUrl": "https://www.pexels.com/@vince/",
+   "pageUrl": "https://www.pexels.com/photo/architectural-photography-of-a-building-2499395/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 2962088,
+   "category": "building",
+   "alt": "A contemporary apartment building featuring balconies, set against a clear blue sky.",
+   "photographer": "Athena Sandrini",
+   "photographerUrl": "https://www.pexels.com/@athena/",
+   "pageUrl": "https://www.pexels.com/photo/white-concrete-building-under-blue-sky-2962088/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 3754595,
+   "category": "studio",
+   "alt": "A cozy and stylish bedroom featuring modern decor and a sunlit window with shutter panels.",
+   "photographer": "La Miko",
+   "photographerUrl": "https://www.pexels.com/@lamiko/",
+   "pageUrl": "https://www.pexels.com/photo/white-and-blue-striped-throw-pillow-on-white-bed-3754595/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 3754698,
+   "category": "studio",
+   "alt": "Stylish modern bedroom featuring a chevron pillow and sleek minimalist design.",
+   "photographer": "La Miko",
+   "photographerUrl": "https://www.pexels.com/@lamiko/",
+   "pageUrl": "https://www.pexels.com/photo/folded-towels-on-bed-3754698/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 3754700,
+   "category": "studio",
+   "alt": "Stylish living room with unique artistic wall, modern furniture, and soft lighting.",
+   "photographer": "La Miko",
+   "photographerUrl": "https://www.pexels.com/@lamiko/",
+   "pageUrl": "https://www.pexels.com/photo/living-room-interior-3754700/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 3958954,
+   "category": "exterior",
+   "alt": "A row of modern suburban homes with garages, driveways, and landscaped lawns in daylight.",
+   "photographer": "Curtis Adams",
+   "photographerUrl": "https://www.pexels.com/@curtis-adams-1694007/",
+   "pageUrl": "https://www.pexels.com/photo/white-and-blue-wooden-house-3958954/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 4030908,
+   "category": "kitchen",
+   "alt": "Contemporary kitchen in Mexico City featuring minimalist design and stylish decor.",
+   "photographer": "Alan Quirván",
+   "photographerUrl": "https://www.pexels.com/@quirva/",
+   "pageUrl": "https://www.pexels.com/photo/modern-kitchen-interior-4030908/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 4534508,
+   "category": "exterior",
+   "alt": "Contemporary residential building exterior with large windows reflecting the sky.",
+   "photographer": "Adrien Olichon",
+   "photographerUrl": "https://www.pexels.com/@adrien-olichon-1257089/",
+   "pageUrl": "https://www.pexels.com/photo/facade-of-modern-residential-house-with-windows-4534508/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 4913326,
+   "category": "exterior",
+   "alt": "A luxurious mansion entrance framed by ornate gates and abundant greenery in a tranquil setting.",
+   "photographer": "Maria Orlova",
+   "photographerUrl": "https://www.pexels.com/@orlovamaria/",
+   "pageUrl": "https://www.pexels.com/photo/facade-of-cozy-residential-house-surrounded-by-green-trees-4913326/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 4915583,
+   "category": "living",
+   "alt": "A minimalist living room featuring a comfortable sofa, cushions, and stylish decor.",
+   "photographer": "Maria Orlova",
+   "photographerUrl": "https://www.pexels.com/@orlovamaria/",
+   "pageUrl": "https://www.pexels.com/photo/living-room-interior-with-cozy-sofa-and-small-table-4915583/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 5417293,
+   "category": "studio",
+   "alt": "Contemporary living room featuring stylish furniture, artwork, and lush greenery.",
+   "photographer": "Andrea Davis",
+   "photographerUrl": "https://www.pexels.com/@andreaedavis/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-room-interior-with-furniture-and-carpet-on-floor-5417293/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 5865349,
+   "category": "exterior",
+   "alt": "House among Exotic Vegetation",
+   "photographer": "Rachel Claire",
+   "photographerUrl": "https://www.pexels.com/@rachel-claire/",
+   "pageUrl": "https://www.pexels.com/photo/house-among-exotic-vegetation-5865349/",
+   "query": "tropical house"
+  },
+  {
+   "pexelsId": 5900807,
+   "category": "dining",
+   "alt": "Spacious contemporary dining room featuring wooden chairs and table with bright windows.",
+   "photographer": "Curtis Adams",
+   "photographerUrl": "https://www.pexels.com/@curtis-adams-1694007/",
+   "pageUrl": "https://www.pexels.com/photo/simple-and-contemporary-dining-room-design-5900807/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 5998031,
+   "category": "dining",
+   "alt": "A modern dining room setup with stylish furniture and decor under warm lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/dining-room-in-classic-style-5998031/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 5998138,
+   "category": "living",
+   "alt": "Spacious modern living room interior with cozy couch, fireplace, and large TV.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/spacious-lounge-room-with-soft-furniture-5998138/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6032416,
+   "category": "kitchen",
+   "alt": "Sleek and spacious kitchen with wooden cabinets in contemporary style.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/simple-interior-of-contemporary-multistory-apartment-6032416/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6077368,
+   "category": "living",
+   "alt": "Spacious living room featuring panoramic windows and modern furnishings.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-with-kitchen-living-room-and-dining-area-6077368/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6180675,
+   "category": "dining",
+   "alt": "A serene minimalist dining room with pink chairs and a floral centerpiece.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/dining-table-and-pink-chairs-in-light-dining-room-6180675/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 6238684,
+   "category": "living",
+   "alt": "Warm and inviting modern apartment with stylish furnishings and open layout.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-apartment-with-kitchen-and-living-zone-near-hallway-6238684/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6265836,
+   "category": "kitchen",
+   "alt": "Contemporary kitchen featuring sleek cabinets, wooden counter, and modern appliances.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-kitchen-with-modern-furniture-and-appliances-6265836/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6296919,
+   "category": "living",
+   "alt": "A contemporary living room with brown sofa, decor, and wooden accents viewed from above.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-living-room-with-couch-6296919/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6400270,
+   "category": "exterior",
+   "alt": "A quaint green house sits peacefully surrounded by a dense, vibrant forest under a brooding sky.",
+   "photographer": "Luciano Rochadel",
+   "photographerUrl": "https://www.pexels.com/@lrochadel/",
+   "pageUrl": "https://www.pexels.com/photo/a-teal-house-surrounded-by-trees-6400270/",
+   "query": "tropical house"
+  },
+  {
+   "pexelsId": 6438751,
+   "category": "bathroom",
+   "alt": "Sleek and contemporary bathroom design featuring a modern sink, bathtub, and glass shower enclosure.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/bathroom-with-shower-and-bathtub-6438751/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6444240,
+   "category": "bathroom",
+   "alt": "Sleek and contemporary bathroom featuring elegant white marble and modern fixtures for a clean look.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bathroom-with-white-bathtub-6444240/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6447382,
+   "category": "living",
+   "alt": "A clean, contemporary kitchen with an island and urban city view.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-kitchen-with-table-and-chairs-near-big-window-6447382/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6447384,
+   "category": "studio",
+   "alt": "Chic and contemporary studio apartment featuring sleek design elements and a cozy layout.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-modern-apartment-with-kitchen-and-bedroom-6447384/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 6489093,
+   "category": "bedroom",
+   "alt": "Spacious modern bedroom with a large window and minimalist decor, emphasizing natural light.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-stylish-bedroom-with-cupboard-6489093/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 6489096,
+   "category": "living",
+   "alt": "Spacious and bright modern living room with minimalist decor and wooden flooring.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/spacious-light-room-with-cupboards-6489096/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6489117,
+   "category": "living",
+   "alt": "Stylish modern living room featuring elegant furniture, decorative elements, and a flat-screen TV setup.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/stylish-room-with-tv-and-table-6489117/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6492399,
+   "category": "bathroom",
+   "alt": "Elegant contemporary bathroom featuring marble tiles, walk-in shower, and illuminated mirror.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/minimalist-styled-bathroom-with-tiled-walls-and-shower-cabin-6492399/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6508345,
+   "category": "kitchen",
+   "alt": "Sleek and contemporary white kitchen interior with a minimalist design featuring open fridge and stylish lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-contemporary-light-kitchen-with-white-furniture-and-modern-appliances-6508345/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6508353,
+   "category": "kitchen",
+   "alt": "Sleek white kitchen with minimalist design and wooden details for a contemporary home.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-interior-of-kitchen-with-bar-counter-and-kettle-6508353/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6527057,
+   "category": "kitchen",
+   "alt": "Explore this modern kitchen with sleek cabinetry, built-in appliances, and contemporary decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-appliances-and-furniture-in-light-kitchen-6527057/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6538889,
+   "category": "bathroom",
+   "alt": "Sleek modern bathroom with double sinks and a stylish bathtub.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bathroom-interior-with-bathtub-and-minimalist-furniture-6538889/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6580232,
+   "category": "living",
+   "alt": "Contemporary living room with large windows and bookshelf overlooking a serene lake.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-apartament-on-water-with-floor-to-ceiling-windows-6580232/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6580396,
+   "category": "living",
+   "alt": "Stylishly designed living room with luxurious elements and modern decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-design-of-an-apartment-flat-6580396/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6585598,
+   "category": "living",
+   "alt": "Elegant contemporary living area with stylish furniture, mirror, and ambient lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-interior-with-kitchen-and-living-room-6585598/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6588585,
+   "category": "bathroom",
+   "alt": "Clean and spacious modern bathroom with minimalist decor and fixtures.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/bathroom-with-toilet-and-bathtub-near-sink-on-counter-6588585/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6758782,
+   "category": "living",
+   "alt": "Contemporary indoor space with minimalist design featuring wooden cabinetry and black panels.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/corridor-interior-with-cabinet-near-kitchen-6758782/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6782369,
+   "category": "living",
+   "alt": "Spacious living room with a modern design featuring a cozy couch, table, and stylish decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/comfortable-lounge-with-modern-interior-and-large-cozy-cofa-6782369/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6803550,
+   "category": "office",
+   "alt": "Stylish home office setup with desktop computer and organized workspace.",
+   "photographer": "cottonbro studio",
+   "photographerUrl": "https://www.pexels.com/@cottonbro/",
+   "pageUrl": "https://www.pexels.com/photo/modern-office-desk-setup-with-a-computer-6803550/",
+   "query": "home office interior"
+  },
+  {
+   "pexelsId": 6890406,
+   "category": "bathroom",
+   "alt": "Stylish and contemporary bathroom featuring a modern sink, mirror, and minimal design elements.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/toilet-and-sink-in-modern-light-bathroom-6890406/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6903157,
+   "category": "bedroom",
+   "alt": "Stylish bedroom with unmade bed near window with curtains",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/stylish-bedroom-with-unmade-bed-near-window-with-curtains-6903157/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 6903210,
+   "category": "bathroom",
+   "alt": "Spacious and stylish modern bathroom with sleek fixtures and contemporary design.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/stylish-bathroom-with-tiled-floor-and-walls-6903210/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6908357,
+   "category": "dining",
+   "alt": "A chic dining room featuring a wooden table, elegant decor, and modern design elements.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/spacious-apartment-with-dining-room-6908357/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 6908358,
+   "category": "dining",
+   "alt": "Spacious modern dining room featuring a large wooden table and contemporary design elements.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/wooden-table-in-stylish-apartment-6908358/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 6920448,
+   "category": "kitchen",
+   "alt": "Sleek and spacious white kitchen interior with modern minimalist design and ample space.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/photo-of-a-kitchen-interior-6920448/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6920610,
+   "category": "bathroom",
+   "alt": "Elegant marble bathroom featuring modern sink and fixtures.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-a-bathroom-6920610/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6920611,
+   "category": "bathroom",
+   "alt": "Luxurious bathroom featuring marble walls and floor with modern fixtures and minimalist design.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bathroom-design-6920611/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6934176,
+   "category": "living",
+   "alt": "A contemporary home interior showcasing a decorative mirror, modern furnishings, and elegant lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-flat-with-spacious-open-hallway-6934176/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6957081,
+   "category": "bathroom",
+   "alt": "Spacious modern bathroom with a Jacuzzi, floral tile decor, and wooden vanity.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/white-bathtub-and-sink-in-spacious-bathtub-at-home-6957081/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 6958148,
+   "category": "living",
+   "alt": "Stylish interior featuring a modern kitchen and lounge area with earthy tones and contemporary decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/table-near-couch-in-modern-apartment-6958148/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6970061,
+   "category": "living",
+   "alt": "Stylish interior design featuring a gray sofa and artistic textured black wall.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/gray-couch-in-a-living-room-6970061/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 6980564,
+   "category": "kitchen",
+   "alt": "Contemporary kitchen featuring built-in appliances and sleek cabinets, perfect for modern homes.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-kitchen-interior-with-furniture-at-home-6980564/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 6980671,
+   "category": "living",
+   "alt": "Spacious bedroom featuring modern furnishings and elegant decor with cozy lighting and glass partition.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-bedroom-interior-against-living-room-at-home-6980671/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 6980724,
+   "category": "living",
+   "alt": "Modern living room featuring a stylish gray sofa, chandelier, and wall-mounted TV with ample copy space.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/television-against-sofa-in-modern-living-room-6980724/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 7005268,
+   "category": "bathroom",
+   "alt": "Contemporary bathroom interior featuring glass shower, sink, and mirror in natural tones.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-modern-bathroom-with-glass-shower-cabin-7005268/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7005292,
+   "category": "kitchen",
+   "alt": "Modern kitchen interior featuring minimalist design, sleek cabinets, and neutral tones.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/minimalist-interior-of-spacious-kitchen-with-modern-furniture-and-appliances-7005292/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7005298,
+   "category": "living",
+   "alt": "Bright, contemporary living and dining area with sleek furniture and ample lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-illuminated-apartment-with-cozy-sofa-and-kitchen-area-7005298/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7018243,
+   "category": "bathroom",
+   "alt": "Contemporary bathroom featuring a glass shower, beige tiles, and stylish fixtures for a modern aesthetic.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bathroom-interior-with-shower-cabin-and-mirror-in-house-7018243/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7018822,
+   "category": "bathroom",
+   "alt": "A minimalist bathroom with wooden accents featuring a glass shower, sink, toilet, and washing machine.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-bathroom-with-shower-enclosure-and-toilet-bowl-7018822/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7019016,
+   "category": "studio",
+   "alt": "Contemporary studio apartment with chic interior design and minimalist decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-apartment-with-kitchen-living-room-and-dining-zone-7019016/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 7031602,
+   "category": "exterior",
+   "alt": "A contemporary villa surrounded by lush green lawn under a bright blue sky.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/landscape-with-modern-residential-house-against-cloudy-sky-7031602/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 7031840,
+   "category": "bathroom",
+   "alt": "A contemporary bathroom featuring a sleek tub, stylish decor, and soft lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/bathroom-with-partition-and-shower-cabin-7031840/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7040695,
+   "category": "studio",
+   "alt": "Stylish dining and kitchen area with city view from large windows.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-in-beige-pastel-color-7040695/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 7040698,
+   "category": "studio",
+   "alt": "Stylish open plan apartment featuring contemporary kitchen and living area with brick decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/new-contemporary-kitchen-with-dining-zone-7040698/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 7045299,
+   "category": "bathroom",
+   "alt": "Contemporary bathroom featuring a floral glass wall and sleek white bathtub.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bathroom-interior-with-bath-and-shower-cabin-at-home-7045299/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7045921,
+   "category": "living",
+   "alt": "Spacious modern loft featuring an elegant green sofa, industrial decor, and sleek kitchen.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/comfortable-sofa-placed-in-modern-apartment-7045921/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7045922,
+   "category": "bathroom",
+   "alt": "Spacious and elegant modern bathroom featuring marble floors and contemporary design.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-luxury-bathroom-in-modern-apartment-7045922/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7045991,
+   "category": "studio",
+   "alt": "Stylish open-plan apartment featuring a wooden partition, cozy bed, and modern kitchen.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/kitchen-and-bedroom-interior-in-modern-house-7045991/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 7045996,
+   "category": "living",
+   "alt": "Stylish open plan studio apartment with modern furniture and wooden accents.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bedroom-and-kitchen-interior-with-furniture-at-home-7045996/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7061402,
+   "category": "kitchen",
+   "alt": "A contemporary kitchen features sleek cabinetry, black appliances, and wooden surfaces.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-kitchen-with-matte-furniture-in-big-house-7061402/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7061664,
+   "category": "kitchen",
+   "alt": "Explore a bright, spacious kitchen interior with wooden accents and modern design elements.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-kitchen-with-dining-table-and-stylish-furniture-7061664/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7167073,
+   "category": "living",
+   "alt": "Spacious, modern living room with elegant decor, lush plants, and stylish lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/spacious-living-room-in-stylish-apartment-7167073/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7173665,
+   "category": "bathroom",
+   "alt": "Contemporary bathroom featuring bathtub, shower, and elegant interior design elements.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-modern-bathroom-with-bathtub-and-enclosed-shower-7173665/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 7174114,
+   "category": "exterior",
+   "alt": "A picturesque brick house with large windows, set amidst lush gardens of blooming roses and tall trees.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/house-near-plants-and-trees-with-flowers-in-backyard-7174114/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 7195598,
+   "category": "dining",
+   "alt": "Cozy dining room with wooden table, elegant chairs, and beautiful chandelier.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-round-dining-table-with-chairs-placed-in-spacious-kitchen-7195598/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 7214158,
+   "category": "kitchen",
+   "alt": "Bright and spacious kitchen with modern minimalist design and stylish decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-modern-kitchen-with-island-counter-7214158/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7214166,
+   "category": "living",
+   "alt": "Elegant modern living room interior with stylish decor and furniture.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-living-room-in-modern-apartment-7214166/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 7214456,
+   "category": "living",
+   "alt": "Luxurious open-plan interior with modern kitchen and stylish living space.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/spacious-modern-luxury-apartment-in-minimalistic-style-7214456/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7501130,
+   "category": "exterior",
+   "alt": "A contemporary white house surrounded by lush greenery on a hillside, showcasing modern architecture.",
+   "photographer": "Gustavo Galeano Maz",
+   "photographerUrl": "https://www.pexels.com/@fotografiagmazg/",
+   "pageUrl": "https://www.pexels.com/photo/white-concrete-house-with-green-grass-lawn-7501130/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 7511693,
+   "category": "studio",
+   "alt": "Spacious modern interior with open-plan kitchen and cozy living area, featuring stylish furnishings.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-apartment-with-living-room-and-kitchen-7511693/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 7511695,
+   "category": "living",
+   "alt": "Stylish modern apartment with open plan layout, featuring kitchen, dining, and living areas.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-with-kitchen-and-living-room-7511695/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7535070,
+   "category": "kitchen",
+   "alt": "Spacious modern kitchen interior with white cabinets and stylish chandelier.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/spacious-kitchen-interior-with-white-cupboards-in-contemporary-apartment-7535070/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7546221,
+   "category": "kitchen",
+   "alt": "A clean, modern kitchen with white cabinets and a dining area.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/neat-modern-apartment-kitchen-7546221/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7546294,
+   "category": "bedroom",
+   "alt": "Contemporary bedroom interior design featuring elegant furnishings and a soft color palette.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/photo-of-the-bedroom-7546294/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 7546566,
+   "category": "kitchen",
+   "alt": "Sleek modern kitchen with high gloss cabinets and integrated appliances in a contemporary dining space.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/contemporary-kitchen-and-dining-room-design-7546566/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 7546648,
+   "category": "living",
+   "alt": "A stylish living room featuring a blue couch, wall-mounted TV, and elegant decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-design-of-room-7546648/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 7587311,
+   "category": "living",
+   "alt": "Elegant open-concept living room and kitchen with contemporary decor, emphasizing comfort and style.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/a-clean-home-interior-7587311/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 7587828,
+   "category": "living",
+   "alt": "Spacious modern living room featuring brick walls, teal sofa, and red rug.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-modern-apartment-with-stylish-kitchen-and-living-room-7587828/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 8082195,
+   "category": "bathroom",
+   "alt": "Elegant bathroom with marble tiles, large mirror, and modern fixtures.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-a-luxury-hotel-bathroom-with-glass-shower-cabin-8082195/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 8082562,
+   "category": "bedroom",
+   "alt": "Elegant modern bedroom featuring a stylish bed, ambient lighting, and cozy decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/interior-design-of-a-bedroom-8082562/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 8089172,
+   "category": "living",
+   "alt": "Spacious living room with a modern, minimalist design and open kitchen layout.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/an-interior-of-a-living-room-8089172/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 8089191,
+   "category": "dining",
+   "alt": "A bright and stylish dining area featuring wooden chairs, plants, and ambient lighting.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/table-chairs-and-plants-in-room-8089191/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 8092433,
+   "category": "dining",
+   "alt": "A beautifully decorated dining room featuring a long wooden table and ornate curtains, exuding elegance and luxury.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-dining-area-8092433/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 8134745,
+   "category": "exterior",
+   "alt": "A stunning modern house with a spacious pool and green garden, ideal for relaxation.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/a-modern-house-with-swimming-pool-8134745/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 8134772,
+   "category": "kitchen",
+   "alt": "A bright, spacious kitchen featuring minimalist design and modern appliances.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/kitchen-with-cabinets-and-oven-near-window-8134772/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 8134847,
+   "category": "exterior",
+   "alt": "Contemporary luxury house with a sleek design, lush garden, and blue sky.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/brown-and-white-wooden-house-under-blue-sky-8134847/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 8135118,
+   "category": "bedroom",
+   "alt": "Spacious bedroom featuring luxurious design elements like plush pillows, chandelier, and dresser.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/brown-throw-pillows-on-white-bed-8135118/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 8135492,
+   "category": "living",
+   "alt": "Spacious modern living room featuring elegant chandeliers, plush sofa, and contemporary decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/sofa-in-living-room-8135492/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 8135496,
+   "category": "living",
+   "alt": "Luxurious open-plan living room with modern interior design and stylish lighting features.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/a-clean-open-plan-interior-design-8135496/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 8142976,
+   "category": "studio",
+   "alt": "Spacious modern studio apartment featuring an open kitchen and minimalist decor.",
+   "photographer": "Max Vakhtbovych",
+   "photographerUrl": "https://www.pexels.com/@artbovich/",
+   "pageUrl": "https://www.pexels.com/photo/apartment-studio-interior-8142976/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 8811452,
+   "category": "exterior",
+   "alt": "Charming two-story wooden house surrounded by lush greenery and vibrant flowers in a suburban neighborhood.",
+   "photographer": "Jonathan Cooper",
+   "photographerUrl": "https://www.pexels.com/@theshuttervision/",
+   "pageUrl": "https://www.pexels.com/photo/old-house-surrounded-with-plants-8811452/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 9039850,
+   "category": "building",
+   "alt": "Low-angle view of brick residential buildings with lush greenery.",
+   "photographer": "Dylan Leagh",
+   "photographerUrl": "https://www.pexels.com/@dylan-leagh-86004871/",
+   "pageUrl": "https://www.pexels.com/photo/low-angle-shot-of-a-concrete-building-9039850/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 9877337,
+   "category": "studio",
+   "alt": "Free Spacious modern apartment living room with wooden furniture and neutral tones.",
+   "photographer": "Nguyễn Thị Minh Nghi",
+   "photographerUrl": "https://www.pexels.com/@gatranro/",
+   "pageUrl": "https://www.pexels.com/photo/a-wooden-furniture-inside-the-house-9877337/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 9877451,
+   "category": "studio",
+   "alt": "Spacious minimalist apartment with wooden accents, featuring sofa, bed, and ceiling lights in Hanoi.",
+   "photographer": "Nguyễn Thị Minh Nghi",
+   "photographerUrl": "https://www.pexels.com/@gatranro/",
+   "pageUrl": "https://www.pexels.com/photo/checkered-throw-pillows-on-sofa-9877451/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 9877459,
+   "category": "studio",
+   "alt": "A bright and airy bedroom featuring elegant furniture and stylish decor with natural lighting.",
+   "photographer": "Nguyễn Thị Minh Nghi",
+   "photographerUrl": "https://www.pexels.com/@gatranro/",
+   "pageUrl": "https://www.pexels.com/photo/bed-near-balcony-9877459/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 9899871,
+   "category": "bedroom",
+   "alt": "A serene bedroom with natural light highlighting elegant decor, ideal for a restful ambiance.",
+   "photographer": "Erik Mclean",
+   "photographerUrl": "https://www.pexels.com/@introspectivedsgn/",
+   "pageUrl": "https://www.pexels.com/photo/big-bed-in-room-9899871/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 10486289,
+   "category": "dining",
+   "alt": "A beautifully designed dining room featuring classic wooden furniture and elegant lighting.",
+   "photographer": "Curtis Adams",
+   "photographerUrl": "https://www.pexels.com/@curtis-adams-1694007/",
+   "pageUrl": "https://www.pexels.com/photo/a-dining-room-inside-a-home-10486289/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 10758468,
+   "category": "living",
+   "alt": "Sleek Scandinavian-style kitchen with wooden elements and minimalistic decor in a modern apartment.",
+   "photographer": "Viaceslav Kat",
+   "photographerUrl": "https://www.pexels.com/@fotoaibe/",
+   "pageUrl": "https://www.pexels.com/photo/interior-design-of-dining-area-10758468/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 10813661,
+   "category": "exterior",
+   "alt": "Wooden house with climbing plants on wire mesh and blooming garden flowers.",
+   "photographer": "Alexey Demidov",
+   "photographerUrl": "https://www.pexels.com/@alexeydemidov/",
+   "pageUrl": "https://www.pexels.com/photo/climbing-plants-growing-outside-the-wooden-house-10813661/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 10827225,
+   "category": "exterior",
+   "alt": "Contemporary suburban house with a wide driveway and landscaped front yard.",
+   "photographer": "Curtis Adams",
+   "photographerUrl": "https://www.pexels.com/@curtis-adams-1694007/",
+   "pageUrl": "https://www.pexels.com/photo/driveway-and-house-10827225/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 11014232,
+   "category": "exterior",
+   "alt": "A quaint Victorian-style brick house in Manchester with ivy-covered walls and city skyscrapers in the background.",
+   "photographer": "Miguel Saddi Vitorino",
+   "photographerUrl": "https://www.pexels.com/@arcanjosaddi/",
+   "pageUrl": "https://www.pexels.com/photo/a-house-in-a-city-11014232/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 11603371,
+   "category": "building",
+   "alt": "Urban high-rise building facade with balconies and windows in Dubai.",
+   "photographer": "aboodi vesakaran",
+   "photographerUrl": "https://www.pexels.com/@aboodi/",
+   "pageUrl": "https://www.pexels.com/photo/balconies-in-an-apartment-building-11603371/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 11661241,
+   "category": "exterior",
+   "alt": "Quaint stone shed nestled in vibrant garden with lush trees and plants creating a peaceful retreat.",
+   "photographer": "David McElwee",
+   "photographerUrl": "https://www.pexels.com/@davidmcelwee/",
+   "pageUrl": "https://www.pexels.com/photo/small-stone-shrine-in-forest-11661241/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 11871257,
+   "category": "exterior",
+   "alt": "Contemporary villa featuring glass balconies and unique desert-inspired landscaping.",
+   "photographer": "Studio Pépite",
+   "photographerUrl": "https://www.pexels.com/@studio-pepite-193599117/",
+   "pageUrl": "https://www.pexels.com/photo/modern-villa-in-the-desert-11871257/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 12029115,
+   "category": "building",
+   "alt": "A modern residential building's glass balconies under a clear sky, showcasing contemporary architecture.",
+   "photographer": "Egor Komarov",
+   "photographerUrl": "https://www.pexels.com/@egorkomarov/",
+   "pageUrl": "https://www.pexels.com/photo/glass-balconies-on-residential-building-12029115/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 12119318,
+   "category": "dining",
+   "alt": "Bright dining room showcasing a wooden table, vintage chairs, and modern chandelier.",
+   "photographer": "Curtis Adams",
+   "photographerUrl": "https://www.pexels.com/@curtis-adams-1694007/",
+   "pageUrl": "https://www.pexels.com/photo/brown-wooden-dining-table-with-white-chairs-12119318/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 12277021,
+   "category": "living",
+   "alt": "A stylish minimalist living room with a modern sofa and a wooden chest of drawers.",
+   "photographer": "dada _design",
+   "photographerUrl": "https://www.pexels.com/@dada-_design-240566386/",
+   "pageUrl": "https://www.pexels.com/photo/beige-couch-with-throw-pillows-beside-a-wooden-chest-of-drawers-12277021/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 12359235,
+   "category": "exterior",
+   "alt": "A modern house facade with stone accents and a streetlight in daylight, showcasing contemporary architecture.",
+   "photographer": "Abdullah Asad",
+   "photographerUrl": "https://www.pexels.com/@abdullah-asad-154796132/",
+   "pageUrl": "https://www.pexels.com/photo/streetlight-by-mansion-12359235/",
+   "query": "modern house exterior",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 12713154,
+   "category": "exterior",
+   "alt": "Contemporary house exterior with car parked in open garage, surrounded by lush greenery.",
+   "photographer": "Bilal Mansuri",
+   "photographerUrl": "https://www.pexels.com/@perqued/",
+   "pageUrl": "https://www.pexels.com/photo/a-concrete-house-with-parked-car-in-garage-12713154/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 12740950,
+   "category": "exterior",
+   "alt": "Serene view of lush palm trees and traditional houses in Bali's tropical landscape.",
+   "photographer": "Vincent Gerbouin",
+   "photographerUrl": "https://www.pexels.com/@vincent-gerbouin-445991/",
+   "pageUrl": "https://www.pexels.com/photo/palm-trees-in-the-yard-12740950/",
+   "query": "tropical house",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 12745901,
+   "category": "building",
+   "alt": "Close-up shot of a high-rise apartment building with balconies visible.",
+   "photographer": "Valeri Mak",
+   "photographerUrl": "https://www.pexels.com/@valeri-mak-2319397/",
+   "pageUrl": "https://www.pexels.com/photo/view-of-a-residential-building-12745901/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 13009887,
+   "category": "kitchen",
+   "alt": "A bright and spacious modern kitchen with white cabinets, appliances, and natural light.",
+   "photographer": "Alesha",
+   "photographerUrl": "https://www.pexels.com/@alesha-260500796/",
+   "pageUrl": "https://www.pexels.com/photo/the-interior-of-a-kitchen-of-a-house-13009887/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 13041129,
+   "category": "exterior",
+   "alt": "A sleek modern house showcasing minimalist design with lush green surroundings and garden.",
+   "photographer": "Bilal Mansuri",
+   "photographerUrl": "https://www.pexels.com/@perqued/",
+   "pageUrl": "https://www.pexels.com/photo/yard-of-modern-house-13041129/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 13248773,
+   "category": "building",
+   "alt": "View from a classic European balcony with intricate railings overlooking charming building facades.",
+   "photographer": "Nicolas",
+   "photographerUrl": "https://www.pexels.com/@nicolas-294960336/",
+   "pageUrl": "https://www.pexels.com/photo/view-on-balcony-from-indoors-in-classic-building-13248773/",
+   "query": "balcony view apartment",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 13600836,
+   "category": "exterior",
+   "alt": "A contemporary house featuring a spacious outdoor patio and lush garden in daylight.",
+   "photographer": "Pew Nguyen",
+   "photographerUrl": "https://www.pexels.com/@nguyendesigner/",
+   "pageUrl": "https://www.pexels.com/photo/patio-of-luxurious-house-13600836/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 13722886,
+   "category": "living",
+   "alt": "Sleek modern living room featuring dark tones and elegant furnishings with ambient lighting.",
+   "photographer": "Bilal Mansuri",
+   "photographerUrl": "https://www.pexels.com/@perqued/",
+   "pageUrl": "https://www.pexels.com/photo/living-room-with-television-13722886/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 13771880,
+   "category": "exterior",
+   "alt": "Low-angle view of a modern building in Slootdorp, Netherlands, against a blue sky.",
+   "photographer": "David Underland",
+   "photographerUrl": "https://www.pexels.com/@david-underland/",
+   "pageUrl": "https://www.pexels.com/photo/brick-and-wooden-building-against-blue-sky-13771880/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 13876738,
+   "category": "building",
+   "alt": "Vertical view of a modern residential building with balconies under a clear blue sky.",
+   "photographer": "cami",
+   "photographerUrl": "https://www.pexels.com/@casnafu/",
+   "pageUrl": "https://www.pexels.com/photo/facade-of-a-residential-building-with-balconies-13876738/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 14975205,
+   "category": "exterior",
+   "alt": "A picturesque view of a brick house with a gabled roof surrounded by lush greenery.",
+   "photographer": "Adrien Olichon",
+   "photographerUrl": "https://www.pexels.com/@adrien-olichon-1257089/",
+   "pageUrl": "https://www.pexels.com/photo/foliage-in-front-of-house-14975205/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 15118080,
+   "category": "building",
+   "alt": "Patterned view of apartment balconies in Naples, highlighting urban architecture.",
+   "photographer": "Efrem Efre",
+   "photographerUrl": "https://www.pexels.com/@efrem-efre-2786187/",
+   "pageUrl": "https://www.pexels.com/photo/close-up-shot-of-an-apartment-building-15118080/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 15391694,
+   "category": "exterior",
+   "alt": "A modern villa in Ubatuba, Brazil, surrounded by lush palm trees and tropical vegetation.",
+   "photographer": "Murillo Molissani",
+   "photographerUrl": "https://www.pexels.com/@murillohm/",
+   "pageUrl": "https://www.pexels.com/photo/a-palm-tree-in-front-of-a-modern-house-15391694/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 15743372,
+   "category": "exterior",
+   "alt": "Elegant modern home facade with minimalist design and a bare tree in the foreground.",
+   "photographer": "Ushindi Namegabe",
+   "photographerUrl": "https://www.pexels.com/@ushindinamegabe/",
+   "pageUrl": "https://www.pexels.com/photo/facade-of-residential-building-15743372/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 15827510,
+   "category": "exterior",
+   "alt": "Contemporary minimalist house featuring a large driveway and serene garden setting.",
+   "photographer": "Andrew Levytskyi",
+   "photographerUrl": "https://www.pexels.com/@andrew-levytskyi-84228/",
+   "pageUrl": "https://www.pexels.com/photo/little-modern-house-in-japan-15827510/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 16056400,
+   "category": "living",
+   "alt": "Stylish living room featuring contemporary furniture, blue accents, and a warm ambiance.",
+   "photographer": "Erdem ÖZDEMİR",
+   "photographerUrl": "https://www.pexels.com/@erdemozdemir/",
+   "pageUrl": "https://www.pexels.com/photo/apartment-living-room-16056400/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 16631149,
+   "category": "exterior",
+   "alt": "Modern white building exterior with large windows and minimalist design in an urban setting.",
+   "photographer": "Axel Sandoval",
+   "photographerUrl": "https://www.pexels.com/@axlsm/",
+   "pageUrl": "https://www.pexels.com/photo/windows-and-white-walls-in-building-16631149/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 16724947,
+   "category": "building",
+   "alt": "Vertical shot of urban residential buildings with balconies against a clear sky.",
+   "photographer": "Sakina Mammadli",
+   "photographerUrl": "https://www.pexels.com/@sakina-mammadli-365647691/",
+   "pageUrl": "https://www.pexels.com/photo/balconies-of-an-apartment-building-16724947/",
+   "query": "balcony view apartment",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 16973548,
+   "category": "building",
+   "alt": "Close-up of a building's balconies with chairs and plants creating a cozy outdoor space.",
+   "photographer": "cami",
+   "photographerUrl": "https://www.pexels.com/@casnafu/",
+   "pageUrl": "https://www.pexels.com/photo/residential-apartment-building-with-balconies-16973548/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 17121842,
+   "category": "building",
+   "alt": "Apartments with laundry drying outdoors on balconies during a clear day.",
+   "photographer": "Наталья Умнова",
+   "photographerUrl": "https://www.pexels.com/@591756069/",
+   "pageUrl": "https://www.pexels.com/photo/clothes-drying-on-balconies-17121842/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 17158647,
+   "category": "dining",
+   "alt": "Stylish modern dining room with elegant furniture and tasteful interior design.",
+   "photographer": "hi room",
+   "photographerUrl": "https://www.pexels.com/@hiroom/",
+   "pageUrl": "https://www.pexels.com/photo/dining-room-in-house-17158647/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 17174767,
+   "category": "exterior",
+   "alt": "Contemporary white and wooden villa exterior shot at daytime with elegant design.",
+   "photographer": "Viktoriia Kondratiuk",
+   "photographerUrl": "https://www.pexels.com/@viktoriia-kondratiuk-458099300/",
+   "pageUrl": "https://www.pexels.com/photo/stylish-modern-villa-17174767/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 17174768,
+   "category": "exterior",
+   "alt": "A contemporary luxury villa featuring minimalistic architecture and lush greenery.",
+   "photographer": "Viktoriia Kondratiuk",
+   "photographerUrl": "https://www.pexels.com/@viktoriia-kondratiuk-458099300/",
+   "pageUrl": "https://www.pexels.com/photo/stylish-modern-villa-17174768/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 17947888,
+   "category": "dining",
+   "alt": "Contemporary dining room with sleek furniture and stylish decor. Ideal for interior design inspiration.",
+   "photographer": "Kirti Phadke",
+   "photographerUrl": "https://www.pexels.com/@kirti-phadke-316475723/",
+   "pageUrl": "https://www.pexels.com/photo/a-modern-dining-room-design-17947888/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 17953880,
+   "category": "building",
+   "alt": "Vertical shot of clothes drying on balconies of a high-rise urban building, showing daily lifestyle.",
+   "photographer": "Artem Makarov",
+   "photographerUrl": "https://www.pexels.com/@artem-makarov-289670876/",
+   "pageUrl": "https://www.pexels.com/photo/clothes-drying-on-balconies-17953880/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 18071866,
+   "category": "studio",
+   "alt": "A modern kitchen with a neatly arranged table setting featuring fruit and juice, capturing a minimalist interior design.",
+   "photographer": "Jaycee300s",
+   "photographerUrl": "https://www.pexels.com/@jaycee300s-3059779/",
+   "pageUrl": "https://www.pexels.com/photo/a-kitchen-design-18071866/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 18319631,
+   "category": "building",
+   "alt": "View of residential buildings with balconies in Thessaloniki, Greece.",
+   "photographer": "Nick Theodorou",
+   "photographerUrl": "https://www.pexels.com/@nick-theodorou-716713036/",
+   "pageUrl": "https://www.pexels.com/photo/buildings-with-apartments-18319631/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 18386499,
+   "category": "building",
+   "alt": "Urban apartment complex seen through a metal fence during daytime.",
+   "photographer": "Orhan Pergel",
+   "photographerUrl": "https://www.pexels.com/@skylake/",
+   "pageUrl": "https://www.pexels.com/photo/view-on-residential-building-through-net-fence-18386499/",
+   "query": "balcony view apartment",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 18514152,
+   "category": "exterior",
+   "alt": "Peaceful garden path lined with lush greenery and rustic wooden houses.",
+   "photographer": "Alpha En",
+   "photographerUrl": "https://www.pexels.com/@alphaen/",
+   "pageUrl": "https://www.pexels.com/photo/trees-and-bushes-around-footpath-by-house-18514152/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 18559611,
+   "category": "exterior",
+   "alt": "Contemporary suburban houses with wood accents in a tree-lined neighborhood.",
+   "photographer": "Stephen Leonardi",
+   "photographerUrl": "https://www.pexels.com/@stephen-leonardi-587681991/",
+   "pageUrl": "https://www.pexels.com/photo/a-modern-home-with-wooden-siding-and-a-sidewalk-18559611/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 18804136,
+   "category": "building",
+   "alt": "Contemporary apartment building with balconies in Kadıköy, İstanbul, showcasing urban architecture.",
+   "photographer": "Meral Oral",
+   "photographerUrl": "https://www.pexels.com/@meraloral21/",
+   "pageUrl": "https://www.pexels.com/photo/balconies-in-block-of-flats-18804136/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 18971223,
+   "category": "exterior",
+   "alt": "Elegantly designed luxury resort with a swimming pool, set against a stunning mountain backdrop.",
+   "photographer": "Ahmet ÇÖTÜR",
+   "photographerUrl": "https://www.pexels.com/@ahmetcotur/",
+   "pageUrl": "https://www.pexels.com/photo/hotel-with-a-swimming-pool-with-the-view-of-a-mountain-18971223/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 19166739,
+   "category": "building",
+   "alt": "A vibrant display of colorful balconies on a residential building. Perfect for urban lifestyle themes.",
+   "photographer": "Jan van der Wolf",
+   "photographerUrl": "https://www.pexels.com/@jan-van-der-wolf-11680885/",
+   "pageUrl": "https://www.pexels.com/photo/balconies-of-residential-building-19166739/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 19192263,
+   "category": "kitchen",
+   "alt": "Contemporary kitchen with sleek design, wooden shelves, and marble countertops.",
+   "photographer": "ML Design Cuisines",
+   "photographerUrl": "https://www.pexels.com/@ml-design-cuisines-806269471/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-a-modern-kitchen-19192263/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 19239905,
+   "category": "living",
+   "alt": "Bright living room featuring modern decor with sofa, TV, and abstract art.",
+   "photographer": "Moussa Idrissi",
+   "photographerUrl": "https://www.pexels.com/@mographe/",
+   "pageUrl": "https://www.pexels.com/photo/bright-living-room-with-sofa-and-television-19239905/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 19481007,
+   "category": "building",
+   "alt": "Diagonal view of a modern apartment building featuring balconies and a standout orange awning.",
+   "photographer": "Jan van der Wolf",
+   "photographerUrl": "https://www.pexels.com/@jan-van-der-wolf-11680885/",
+   "pageUrl": "https://www.pexels.com/photo/apartment-building-balcony-19481007/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 19846376,
+   "category": "studio",
+   "alt": "Bright and cozy modern apartment interior featuring a bookshelf, guitar, and dining area with natural light.",
+   "photographer": "Lisa Anna",
+   "photographerUrl": "https://www.pexels.com/@lisa-anna-901356985/",
+   "pageUrl": "https://www.pexels.com/photo/room-divided-by-wall-to-living-room-and-bedroom-19846376/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 19878513,
+   "category": "kitchen",
+   "alt": "Spacious modern kitchen with wooden cabinetry and sleek design elements.",
+   "photographer": "Lisa Anna",
+   "photographerUrl": "https://www.pexels.com/@lisa-anna-901356985/",
+   "pageUrl": "https://www.pexels.com/photo/bright-kitchen-with-wooden-furniture-19878513/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 19966809,
+   "category": "kitchen",
+   "alt": "Sleek modern kitchen featuring white cabinetry, built-in appliances, and minimalist design.",
+   "photographer": "Alex Tyson",
+   "photographerUrl": "https://www.pexels.com/@alex-tyson-919593032/",
+   "pageUrl": "https://www.pexels.com/photo/white-furniture-in-modern-kitchen-19966809/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 19980080,
+   "category": "bedroom",
+   "alt": "Contemporary hotel bedroom with elegant decor and soft lighting for a cozy ambiance.",
+   "photographer": "Екатерина Cтепаненко",
+   "photographerUrl": "https://www.pexels.com/@c-914608489/",
+   "pageUrl": "https://www.pexels.com/photo/a-bed-in-a-hotel-room-19980080/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 20060316,
+   "category": "studio",
+   "alt": "A beautifully designed modern bedroom featuring comfortable furnishings and elegant decor.",
+   "photographer": "Presidential Apartments Kensington",
+   "photographerUrl": "https://www.pexels.com/@presidential-apartments-kensington-859097149/",
+   "pageUrl": "https://www.pexels.com/photo/modern-design-of-room-in-house-20060316/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 20296321,
+   "category": "exterior",
+   "alt": "A contemporary detached house in a suburban neighborhood with a scenic canal front.",
+   "photographer": "Robert So",
+   "photographerUrl": "https://www.pexels.com/@robertkso/",
+   "pageUrl": "https://www.pexels.com/photo/suburban-house-with-a-canal-in-the-foreground-20296321/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 20336639,
+   "category": "exterior",
+   "alt": "Beautiful rustic stone house surrounded by a lush garden with trees and plants during the day.",
+   "photographer": "Faruk Tokluoğlu",
+   "photographerUrl": "https://www.pexels.com/@faruktokluoglu/",
+   "pageUrl": "https://www.pexels.com/photo/rustic-stone-house-surrounded-by-a-lush-garden-with-trees-and-plants-during-the-day-20336639/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 20348123,
+   "category": "kitchen",
+   "alt": "A luxurious minimalist kitchen features marble backsplash and golden faucet.",
+   "photographer": "Mateusz Pielech",
+   "photographerUrl": "https://www.pexels.com/@mateusz-pielech-1032276948/",
+   "pageUrl": "https://www.pexels.com/photo/luxury-modern-kitchen-20348123/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 20604659,
+   "category": "living",
+   "alt": "Elegant modern bedroom in Prague featuring chic decor and luxurious elements.",
+   "photographer": "TurnKey Apartments",
+   "photographerUrl": "https://www.pexels.com/@turnkey-apartments-1077810297/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-modern-bedroom-in-prague-20604659/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 20604670,
+   "category": "studio",
+   "alt": "Stylish modern bedroom with kitchenette featuring a sleek design in Prague apartment.",
+   "photographer": "TurnKey Apartments",
+   "photographerUrl": "https://www.pexels.com/@turnkey-apartments-1077810297/",
+   "pageUrl": "https://www.pexels.com/photo/view-of-a-modern-apartment-with-an-open-floor-plan-20604670/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 21765129,
+   "category": "kitchen",
+   "alt": "A sleek and modern kitchen interior with blue cabinets and a bowl of fruit on the countertop.",
+   "photographer": "Damir K",
+   "photographerUrl": "https://www.pexels.com/@damir/",
+   "pageUrl": "https://www.pexels.com/photo/interior-of-a-modern-kitchen-with-blue-cabinets-21765129/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 21852178,
+   "category": "living",
+   "alt": "Elegant interior lounge featuring leather furniture, large windows with snowy view, creating a warm, inviting atmosphere.",
+   "photographer": "Fuat Ertuş",
+   "photographerUrl": "https://www.pexels.com/@fuat-ertus-521355943/",
+   "pageUrl": "https://www.pexels.com/photo/leather-sofa-and-an-armchair-in-a-living-room-21852178/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 21874959,
+   "category": "kitchen",
+   "alt": "Charming kitchen design featuring fresh fruits and vegetables on a wooden counter with stylish decor.",
+   "photographer": "George Turmanidze",
+   "photographerUrl": "https://www.pexels.com/@george-turmanidze-660738/",
+   "pageUrl": "https://www.pexels.com/photo/kitchen-in-house-21874959/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 22485304,
+   "category": "exterior",
+   "alt": "A picturesque suburban house surrounded by lush trees and shrubs under a dramatic sky.",
+   "photographer": "Nadiye Odabaşı",
+   "photographerUrl": "https://www.pexels.com/@nadiye-odabasi-3668408/",
+   "pageUrl": "https://www.pexels.com/photo/mansion-around-trees-22485304/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 23247632,
+   "category": "building",
+   "alt": "Side view of elegant urban apartments featuring ornate iron balconies in a vintage architectural style.",
+   "photographer": "Emrah K.",
+   "photographerUrl": "https://www.pexels.com/@emrah-k-699932621/",
+   "pageUrl": "https://www.pexels.com/photo/vintage-apartment-building-23247632/",
+   "query": "balcony view apartment",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 26888462,
+   "category": "exterior",
+   "alt": "Picturesque cottage with a beautiful flower garden featuring tropical plants under a bright, sunny sky.",
+   "photographer": "Zaid Pathan",
+   "photographerUrl": "https://www.pexels.com/@iamzaid/",
+   "pageUrl": "https://www.pexels.com/photo/tropical-plants-in-front-of-wooden-house-26888462/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 27023868,
+   "category": "living",
+   "alt": "Bright interior featuring red armchairs, indoor plant, and minimalist design.",
+   "photographer": "Алан Албегов",
+   "photographerUrl": "https://www.pexels.com/@albeg/",
+   "pageUrl": "https://www.pexels.com/photo/a-living-room-with-red-chairs-and-a-plant-27023868/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 27099158,
+   "category": "exterior",
+   "alt": "Charming rustic houses by the coast in Istanbul, surrounded by a lush garden with a sea view.",
+   "photographer": "özlem kara",
+   "photographerUrl": "https://www.pexels.com/@ozlem-kara-1081249695/",
+   "pageUrl": "https://www.pexels.com/photo/a-house-with-a-garden-on-a-shore-27099158/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 27164969,
+   "category": "living",
+   "alt": "A sleek and contemporary living room with minimalist furnishings and decor.",
+   "photographer": "Wilcle Nunes",
+   "photographerUrl": "https://www.pexels.com/@wilcle-nunes-38713774/",
+   "pageUrl": "https://www.pexels.com/photo/a-modern-living-room-with-a-white-couch-and-a-tv-27164969/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 27497441,
+   "category": "dining",
+   "alt": "Elegant dining area in Dalat, Vietnam featuring wood table, chairs, and pendant lights.",
+   "photographer": "Dongdilac",
+   "photographerUrl": "https://www.pexels.com/@dongdilac/",
+   "pageUrl": "https://www.pexels.com/photo/phong-tr-ng-27497441/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 27626183,
+   "category": "bathroom",
+   "alt": "Explore a contemporary bathroom featuring luxury fittings and a scenic window view.",
+   "photographer": "Ahmet ÇÖTÜR",
+   "photographerUrl": "https://www.pexels.com/@ahmetcotur/",
+   "pageUrl": "https://www.pexels.com/photo/a-bathroom-with-a-large-window-and-a-sink-27626183/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 28148280,
+   "category": "studio",
+   "alt": "Stylish and modern bedroom interior design with wooden furniture in a Zanzibar hotel room.",
+   "photographer": "Keegan Checks",
+   "photographerUrl": "https://www.pexels.com/@keeganjchecks/",
+   "pageUrl": "https://www.pexels.com/photo/studio-apartment-28148280/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 28275917,
+   "category": "dining",
+   "alt": "Luxurious dining room with classic furniture and a view of a vibrant garden through a large window.",
+   "photographer": "Brandon Alexander",
+   "photographerUrl": "https://www.pexels.com/@brandon-alexander-263452033/",
+   "pageUrl": "https://www.pexels.com/photo/dining-room-28275917/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 28542161,
+   "category": "living",
+   "alt": "Warm and inviting living room with modern art, rattan chair, and sofa.",
+   "photographer": "juliane Monari",
+   "photographerUrl": "https://www.pexels.com/@julianemonarifotografia/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-living-room-with-modern-art-decor-28542161/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 28609812,
+   "category": "bedroom",
+   "alt": "TBD-darkmode-cinema-geometric",
+   "photographer": "DARKMODE CINEMA",
+   "photographerUrl": "https://www.pexels.com/@darkmodecinema/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bedroom-interior-with-geometric-wall-art-28609812/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 29012619,
+   "category": "living",
+   "alt": "A minimalist living room with soft white sofas and large curtains, creating a cozy atmosphere.",
+   "photographer": "Beyza Kılıçdere",
+   "photographerUrl": "https://www.pexels.com/@beyza-kilicdere-1855080990/",
+   "pageUrl": "https://www.pexels.com/photo/bright-modern-living-room-with-soft-white-interiors-29012619/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 29252574,
+   "category": "living",
+   "alt": "A cozy modern living room with elegant decor and natural light streaming in.",
+   "photographer": "Mateusz Pielech",
+   "photographerUrl": "https://www.pexels.com/@mateusz-pielech-1032276948/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-with-stylish-interior-decor-29252574/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 29887333,
+   "category": "bathroom",
+   "alt": "Cozy bathroom featuring a vintage vanity set against an exposed brick wall, creating a rustic ambiance.",
+   "photographer": "Alexander Mass",
+   "photographerUrl": "https://www.pexels.com/@rebornfilmes/",
+   "pageUrl": "https://www.pexels.com/photo/rustic-bathroom-with-exposed-brick-wall-29887333/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 30445143,
+   "category": "living",
+   "alt": "Stylish hallway featuring a wooden door and sleek interiors with natural lighting.",
+   "photographer": "aksinfo7 universe",
+   "photographerUrl": "https://www.pexels.com/@aksinfo7/",
+   "pageUrl": "https://www.pexels.com/photo/modern-minimalist-hallway-with-wooden-door-30445143/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 30537128,
+   "category": "office",
+   "alt": "Stylish apartment interior featuring a modern kitchen and elegant office area.",
+   "photographer": "Алан Албегов",
+   "photographerUrl": "https://www.pexels.com/@albeg/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-interior-with-kitchen-and-office-space-30537128/",
+   "query": "home office interior"
+  },
+  {
+   "pexelsId": 30580640,
+   "category": "exterior",
+   "alt": "Front view of twin modern houses with a symmetrical architectural design under a cloudy sky.",
+   "photographer": "Karolina K",
+   "photographerUrl": "https://www.pexels.com/@karolina-k-2149378526/",
+   "pageUrl": "https://www.pexels.com/photo/modern-twin-houses-with-symmetrical-design-30580640/",
+   "query": "modern house exterior"
+  },
+  {
+   "pexelsId": 30628740,
+   "category": "dining",
+   "alt": "A stylish dining room with a rustic wood ceiling and modern decor in Brazil.",
+   "photographer": "Jonathan Borba",
+   "photographerUrl": "https://www.pexels.com/@jonathanborba/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-dining-room-with-rustic-wood-ceiling-30628740/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 30767888,
+   "category": "bedroom",
+   "alt": "Stylish bedroom interior in Santa Teresa, Brazil featuring modern decor and warm tones.",
+   "photographer": "Jonathan Borba",
+   "photographerUrl": "https://www.pexels.com/@jonathanborba/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-modern-bedroom-in-santa-teresa-brazil-30767888/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 31374154,
+   "category": "dining",
+   "alt": "Warm dining room interior with modern fixtures, table setting, and decorative plants in Bengaluru, India.",
+   "photographer": "Mehul",
+   "photographerUrl": "https://www.pexels.com/@mehul-2025855431/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-dining-room-with-modern-decor-and-lighting-31374154/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 31488380,
+   "category": "bedroom",
+   "alt": "TBD-check-page",
+   "photographer": "Michael D Beckwith",
+   "photographerUrl": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-vintage-bedroom-with-canopy-bed-31488380/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 31488428,
+   "category": "bedroom",
+   "alt": "Explore the opulent vintage bedroom interior at Burton Constable Hall in England.",
+   "photographer": "Michael D Beckwith",
+   "photographerUrl": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+   "pageUrl": "https://www.pexels.com/photo/luxurious-historical-bedroom-at-burton-constable-hall-31488428/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 31728404,
+   "category": "studio",
+   "alt": "Stylish minimalist bedroom design with wooden decor and ample lighting.",
+   "photographer": "Đậu Photograph",
+   "photographerUrl": "https://www.pexels.com/@dauphotographer/",
+   "pageUrl": "https://www.pexels.com/photo/modern-minimalist-bedroom-interior-design-31728404/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 31728410,
+   "category": "studio",
+   "alt": "Inviting bedroom with wood panel walls, soft lighting, and cozy bedding creates a warm atmosphere.",
+   "photographer": "Đậu Photograph",
+   "photographerUrl": "https://www.pexels.com/@dauphotographer/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-warm-bedroom-with-soft-lighting-atmosphere-31728410/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 32177957,
+   "category": "living",
+   "alt": "Chic and elegant living room featuring modern minimalist decor, comfortable seating, and stylish furnishings.",
+   "photographer": "The Ghazi",
+   "photographerUrl": "https://www.pexels.com/@the-ghazi-2152398165/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-with-minimalist-decor-32177957/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 32177959,
+   "category": "living",
+   "alt": "Spacious modern living room with minimalist design and stylish decor elements.",
+   "photographer": "The Ghazi",
+   "photographerUrl": "https://www.pexels.com/@the-ghazi-2152398165/",
+   "pageUrl": "https://www.pexels.com/photo/modern-minimalist-living-room-with-elegant-decor-32177959/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 32177961,
+   "category": "living",
+   "alt": "Elegant modern living room design with neutral color palette, contemporary furnishings, and natural light.",
+   "photographer": "The Ghazi",
+   "photographerUrl": "https://www.pexels.com/@the-ghazi-2152398165/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-with-neutral-minimalist-decor-32177961/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 32177962,
+   "category": "living",
+   "alt": "Elegant living room with a stylish sofa and decor in a modern setting.",
+   "photographer": "The Ghazi",
+   "photographerUrl": "https://www.pexels.com/@the-ghazi-2152398165/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-interior-with-cozy-sofa-32177962/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 32324496,
+   "category": "exterior",
+   "alt": "Charming stone house surrounded by tropical foliage, featuring tile roof and lush greenery.",
+   "photographer": "Alexey Demidov",
+   "photographerUrl": "https://www.pexels.com/@alexeydemidov/",
+   "pageUrl": "https://www.pexels.com/photo/tropical-house-with-lush-greenery-in-jungle-setting-32324496/",
+   "query": "tropical house"
+  },
+  {
+   "pexelsId": 32420131,
+   "category": "kitchen",
+   "alt": "Bright and modern minimalist kitchen featuring a large island, bar stools, and sleek appliances.",
+   "photographer": "Ryan Lansdown",
+   "photographerUrl": "https://www.pexels.com/@ryanlans/",
+   "pageUrl": "https://www.pexels.com/photo/modern-minimalist-kitchen-with-island-and-bar-stools-32420131/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 32545191,
+   "category": "exterior",
+   "alt": "Elegant entrance of a modern residence with lush greenery and blue sky backdrop.",
+   "photographer": "Erick Lie",
+   "photographerUrl": "https://www.pexels.com/@erick-lie-2153031333/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-entrance-to-a-modern-residence-32545191/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 32548151,
+   "category": "exterior",
+   "alt": "A quaint summer house nestled in nature with lush green plants and sunlight casting shadows.",
+   "photographer": "Christina & Peter",
+   "photographerUrl": "https://www.pexels.com/@christina99999/",
+   "pageUrl": "https://www.pexels.com/photo/charming-summer-house-surrounded-by-trees-32548151/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 32587066,
+   "category": "building",
+   "alt": "Facade of a yellow apartment building showcasing multiple balconies and windows.",
+   "photographer": "Henry Acevedo",
+   "photographerUrl": "https://www.pexels.com/@henry-acevedo-382866382/",
+   "pageUrl": "https://www.pexels.com/photo/yellow-apartment-building-with-balconies-32587066/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 32666471,
+   "category": "exterior",
+   "alt": "Charming small stone shed surrounded by vibrant flowers and greenery in a serene garden setting.",
+   "photographer": "David Pickup | Advertising & Marketing 🇬🇧",
+   "photographerUrl": "https://www.pexels.com/@davidpickup/",
+   "pageUrl": "https://www.pexels.com/photo/quaint-stone-shed-amidst-lush-garden-32666471/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 32933635,
+   "category": "office",
+   "alt": "A well-lit home office with laptop, flowers, and modern decor creates a cozy work environment.",
+   "photographer": "Ana Miranda",
+   "photographerUrl": "https://www.pexels.com/@thisisanamirandahi/",
+   "pageUrl": "https://www.pexels.com/photo/bright-and-stylish-home-office-with-cozy-decor-32933635/",
+   "query": "home office interior"
+  },
+  {
+   "pexelsId": 32981687,
+   "category": "exterior",
+   "alt": "A picturesque brick house surrounded by verdant trees under a clear blue sky.",
+   "photographer": "Vivian Venhasque",
+   "photographerUrl": "https://www.pexels.com/@vivian-venhasque-484321734/",
+   "pageUrl": "https://www.pexels.com/photo/charming-brick-house-with-lush-greenery-32981687/",
+   "query": "garden house",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 33054919,
+   "category": "dining",
+   "alt": "Stylish Kraków dining room with elegant tableware and decor enhancing modern design.",
+   "photographer": "Mateusz Pielech",
+   "photographerUrl": "https://www.pexels.com/@mateusz-pielech-1032276948/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-dining-room-in-contemporary-krakow-home-33054919/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 33196352,
+   "category": "building",
+   "alt": "Colorful apartments with plants and decorations on balconies in Nuremberg, Germany.",
+   "photographer": "Alexey K.",
+   "photographerUrl": "https://www.pexels.com/@alexey-k-458081116/",
+   "pageUrl": "https://www.pexels.com/photo/residential-balconies-in-nuremberg-germany-33196352/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 33405284,
+   "category": "exterior",
+   "alt": "Charming House with Green Roof Surrounded by Bare Trees",
+   "photographer": "Ryan Lansdown",
+   "photographerUrl": "https://www.pexels.com/@ryanlans/",
+   "pageUrl": "https://www.pexels.com/photo/charming-house-with-green-roof-surrounded-by-bare-trees-33405284/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 33537442,
+   "category": "living",
+   "alt": "Sunlit room with brick walls, sofa, and desk by large window, showcasing a peaceful setting.",
+   "photographer": "Nadin Sh",
+   "photographerUrl": "https://www.pexels.com/@nadin-sh-78971847/",
+   "pageUrl": "https://www.pexels.com/photo/sunlit-room-with-brick-walls-and-sofa-33537442/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 34277690,
+   "category": "exterior",
+   "alt": "Explore this tropical luxury home featuring modern architecture and lush landscaping.",
+   "photographer": "Alef Morais",
+   "photographerUrl": "https://www.pexels.com/@alef-morais-336305364/",
+   "pageUrl": "https://www.pexels.com/photo/tropical-luxury-home-with-modern-architecture-34277690/",
+   "query": "tropical house"
+  },
+  {
+   "pexelsId": 34688219,
+   "category": "living",
+   "alt": "Spacious modern living room with elegant sofas and stylish decor.",
+   "photographer": "Moussa Idrissi",
+   "photographerUrl": "https://www.pexels.com/@mographe/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-with-luxurious-decor-34688219/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 35085361,
+   "category": "building",
+   "alt": "Minimalist apartment facade with glass balconies against a clear blue sky.",
+   "photographer": "Peter Caretta",
+   "photographerUrl": "https://www.pexels.com/@peter-caretta-2150230261/",
+   "pageUrl": "https://www.pexels.com/photo/modern-architectural-building-facade-with-balconies-35085361/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 35114454,
+   "category": "exterior",
+   "alt": "Exterior view of a residential building in Bengaluru, India with clear blue sky.",
+   "photographer": "Aditya Oberai",
+   "photographerUrl": "https://www.pexels.com/@oberai/",
+   "pageUrl": "https://www.pexels.com/photo/residential-building-in-bengaluru-india-35114454/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 35187099,
+   "category": "building",
+   "alt": "Angular view of a modern brick apartment building with multiple balconies under clear sky.",
+   "photographer": "Muharrem Alper",
+   "photographerUrl": "https://www.pexels.com/@muharrem-alper-428087426/",
+   "pageUrl": "https://www.pexels.com/photo/modern-brick-apartment-building-with-balconies-35187099/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 35355792,
+   "category": "bedroom",
+   "alt": "Elegant modern bedroom featuring stylish furniture and lighting for a cozy ambiance.",
+   "photographer": "Gagan Architects",
+   "photographerUrl": "https://www.pexels.com/@gagan-architects-2158402383/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bedroom-interior-design-with-elegant-decor-35355792/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 35419464,
+   "category": "living",
+   "alt": "Spacious minimalist living room with neutral decor and natural light.",
+   "photographer": "Peter Vang",
+   "photographerUrl": "https://www.pexels.com/@peter-vang-2157328093/",
+   "pageUrl": "https://www.pexels.com/photo/modern-minimalist-living-room-interior-with-neutral-tones-35419464/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 35493890,
+   "category": "bathroom",
+   "alt": "Elegant modern bathroom featuring marble tiles and sleek white vanity.",
+   "photographer": "Peter Vang",
+   "photographerUrl": "https://www.pexels.com/@peter-vang-2157328093/",
+   "pageUrl": "https://www.pexels.com/photo/modern-bathroom-with-marble-tile-and-vanity-35493890/",
+   "query": "modern bathroom"
+  },
+  {
+   "pexelsId": 35527003,
+   "category": "kitchen",
+   "alt": "Bright modern kitchen with marble countertops overlooking a stylish dining area.",
+   "photographer": "Peter Vang",
+   "photographerUrl": "https://www.pexels.com/@peter-vang-2157328093/",
+   "pageUrl": "https://www.pexels.com/photo/modern-kitchen-with-dining-area-in-view-35527003/",
+   "query": "modern kitchen"
+  },
+  {
+   "pexelsId": 35818904,
+   "category": "building",
+   "alt": "Minimalist architecture of a modern apartment building with frosted glass balconies.",
+   "photographer": "Sue Hsu",
+   "photographerUrl": "https://www.pexels.com/@sue-hsu-721218065/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-building-exterior-view-35818904/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 36099137,
+   "category": "dining",
+   "alt": "Stunning interior of an ornate historical dining room in Burton Constable Hall, UK.",
+   "photographer": "Michael D Beckwith",
+   "photographerUrl": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-historical-dining-room-with-ornate-decor-36099137/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 36099150,
+   "category": "bedroom",
+   "alt": "Classic vintage bedroom with a canopy bed and antique furnishings.",
+   "photographer": "Michael D Beckwith",
+   "photographerUrl": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-vintage-bedroom-with-canopy-bed-36099150/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 36260762,
+   "category": "dining",
+   "alt": "A beautifully preserved historical dining room in a classic English country house setting.",
+   "photographer": "Michael D Beckwith",
+   "photographerUrl": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-historical-dining-room-in-english-country-house-36260762/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 36353382,
+   "category": "living",
+   "alt": "Cozy and stylish modern living room with large windows and sofa.",
+   "photographer": "The Ghazi",
+   "photographerUrl": "https://www.pexels.com/@the-ghazi-2152398165/",
+   "pageUrl": "https://www.pexels.com/photo/modern-stylish-living-room-with-natural-light-36353382/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 36353383,
+   "category": "living",
+   "alt": "Stylish living room featuring a brown sofa, large windows, and modern decor.",
+   "photographer": "The Ghazi",
+   "photographerUrl": "https://www.pexels.com/@the-ghazi-2152398165/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-with-minimalist-decor-36353383/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 36659952,
+   "category": "exterior",
+   "alt": "A charming wooden hut in a vibrant green backyard under a blue sky with clouds.",
+   "photographer": "Nivin Kalai",
+   "photographerUrl": "https://www.pexels.com/@nivin-kalai-1524359739/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-wooden-hut-in-lush-green-backyard-36659952/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 36777534,
+   "category": "living",
+   "alt": "Stylishly designed living room featuring a blue sofa, abstract art, and natural light from large windows.",
+   "photographer": "Curtis Adams",
+   "photographerUrl": "https://www.pexels.com/@curtis-adams-1694007/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-with-blue-sofa-and-abstract-art-36777534/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 37038330,
+   "category": "building",
+   "alt": "Urban apartment building with multiple balconies featuring potted plants and greenery.",
+   "photographer": "Hatice Dikçe",
+   "photographerUrl": "https://www.pexels.com/@hatice-dikce-2149369647/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-balconies-with-plants-37038330/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 37237787,
+   "category": "studio",
+   "alt": "A stylish bedroom with a comfy bed, Netflix on TV, and elegant decor.",
+   "photographer": "Waqas ilyas",
+   "photographerUrl": "https://www.pexels.com/@waqas-ilyas-81841622/",
+   "pageUrl": "https://www.pexels.com/photo/cozy-modern-bedroom-with-netflix-on-tv-37237787/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 37291657,
+   "category": "exterior",
+   "alt": "A traditional Finnish wooden house with white fencing and wooden stairs surrounded by spring greenery.",
+   "photographer": "Hert Niks",
+   "photographerUrl": "https://www.pexels.com/@hert/",
+   "pageUrl": "https://www.pexels.com/photo/charming-finnish-house-with-wooden-stairs-in-spring-37291657/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 37405568,
+   "category": "exterior",
+   "alt": "Charming suburban neighborhood with red-roofed houses surrounded by greenery in Ankara, Türkiye.",
+   "photographer": "Eren Arıcı",
+   "photographerUrl": "https://www.pexels.com/@eren-arici-718198662/",
+   "pageUrl": "https://www.pexels.com/photo/suburban-landscape-with-red-roofs-in-ankara-37405568/",
+   "query": "garden house",
+   "excluded": "curation: the dwelling is not the subject of the shot"
+  },
+  {
+   "pexelsId": 37460705,
+   "category": "studio",
+   "alt": "Bright and contemporary living room with stylish decor, showcasing an open kitchen and cozy seating area.",
+   "photographer": "UMUT 🆁🅰🆆",
+   "photographerUrl": "https://www.pexels.com/@umudicreative/",
+   "pageUrl": "https://www.pexels.com/photo/modern-living-room-and-kitchen-interior-design-37460705/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 37884161,
+   "category": "bedroom",
+   "alt": "A vintage English bedroom featuring a four-poster bed and ornate fireplace.",
+   "photographer": "Michael D Beckwith",
+   "photographerUrl": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+   "pageUrl": "https://www.pexels.com/photo/historic-english-bedroom-with-vintage-decor-37884161/",
+   "query": "bedroom interior"
+  },
+  {
+   "pexelsId": 38539315,
+   "category": "exterior",
+   "alt": "Idyllic Mediterranean townhouse row with lush ivy on a sunny day.",
+   "photographer": "Ayşegül Aytören",
+   "photographerUrl": "https://www.pexels.com/@aysegul-aytoren-46790226/",
+   "pageUrl": "https://www.pexels.com/photo/charming-mediterranean-townhouses-and-ivy-38539315/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 38574067,
+   "category": "exterior",
+   "alt": "Chic villa by the sea with lush surroundings and mountain backdrop. Perfect harmony of nature and architecture.",
+   "photographer": "Ira",
+   "photographerUrl": "https://www.pexels.com/@ira-2300811/",
+   "pageUrl": "https://www.pexels.com/photo/modern-seaside-villa-with-mountain-view-38574067/",
+   "query": "modern villa"
+  },
+  {
+   "pexelsId": 38808956,
+   "category": "building",
+   "alt": "A low-angle view of a colorful urban apartment building with green balconies and clear blue sky.",
+   "photographer": "Emre Gencer",
+   "photographerUrl": "https://www.pexels.com/@reojuve/",
+   "pageUrl": "https://www.pexels.com/photo/urban-apartment-building-against-blue-sky-38808956/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 38865714,
+   "category": "exterior",
+   "alt": "Stylish modern house exterior featuring lush tropical plants and unique architecture.",
+   "photographer": "Sun .X",
+   "photographerUrl": "https://www.pexels.com/@sunfotos/",
+   "pageUrl": "https://www.pexels.com/photo/modern-concrete-house-with-tropical-plants-38865714/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 38924915,
+   "category": "building",
+   "alt": "Contemporary apartment building with glass balconies surrounded by lush green foliage.",
+   "photographer": "Peter Xie",
+   "photographerUrl": "https://www.pexels.com/@peter-xie-371876898/",
+   "pageUrl": "https://www.pexels.com/photo/modern-building-with-glass-balconies-and-lush-foliage-38924915/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 38975400,
+   "category": "living",
+   "alt": "Sleek modern interior featuring a black accent wall, piano corner, and minimalist lighting.",
+   "photographer": "McFollis",
+   "photographerUrl": "https://www.pexels.com/@thisismcfollis/",
+   "pageUrl": "https://www.pexels.com/photo/modern-minimalist-interior-with-black-accent-wall-38975400/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 39189076,
+   "category": "exterior",
+   "alt": "Picturesque cottage with lush palm tree and vibrant daffodil field in early spring setting.",
+   "photographer": "Jason Condon",
+   "photographerUrl": "https://www.pexels.com/@jason-condon-2149169107/",
+   "pageUrl": "https://www.pexels.com/photo/charming-cottage-with-palm-tree-and-daffodils-39189076/",
+   "query": "garden house"
+  },
+  {
+   "pexelsId": 39275634,
+   "category": "building",
+   "alt": "Stylish apartment building in Vienna showcasing modern architecture with unique balcony designs under a vibrant sky.",
+   "photographer": "Lisa Aßlaber",
+   "photographerUrl": "https://www.pexels.com/@lazergraphy/",
+   "pageUrl": "https://www.pexels.com/photo/modern-apartment-building-with-unique-balconies-in-vienna-39275634/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 39338470,
+   "category": "studio",
+   "alt": "Bright minimalist bedroom with a single bed and desk, ideal for modern living.",
+   "photographer": "Mateusz Pielech",
+   "photographerUrl": "https://www.pexels.com/@mateusz-pielech-1032276948/",
+   "pageUrl": "https://www.pexels.com/photo/minimalist-modern-bedroom-with-white-decor-39338470/",
+   "query": "studio apartment"
+  },
+  {
+   "pexelsId": 39655354,
+   "category": "building",
+   "alt": "High-rise apartment buildings with unique designs feature prominently against a bright blue sky.",
+   "photographer": "Juan Pablo Daniel",
+   "photographerUrl": "https://www.pexels.com/@who0ne/",
+   "pageUrl": "https://www.pexels.com/photo/modern-urban-architecture-against-blue-sky-39655354/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 39656753,
+   "category": "dining",
+   "alt": "Cozy vintage dining room with large arched windows and warm lighting.",
+   "photographer": "Uday Ahir",
+   "photographerUrl": "https://www.pexels.com/@aumgraphy/",
+   "pageUrl": "https://www.pexels.com/photo/sunlit-vintage-dining-room-with-arched-windows-39656753/",
+   "query": "dining room interior"
+  },
+  {
+   "pexelsId": 39828898,
+   "category": "living",
+   "alt": "Luxurious modern living room with elegant decor and stylish chandelier.",
+   "photographer": "shaza jocarlos",
+   "photographerUrl": "https://www.pexels.com/@shaza-jocarlos-841367558/",
+   "pageUrl": "https://www.pexels.com/photo/modern-elegant-living-room-interior-design-39828898/",
+   "query": "modern living room"
+  },
+  {
+   "pexelsId": 39829283,
+   "category": "living",
+   "alt": "Sophisticated living room with modern furniture and elegant decor.",
+   "photographer": "shaza jocarlos",
+   "photographerUrl": "https://www.pexels.com/@shaza-jocarlos-841367558/",
+   "pageUrl": "https://www.pexels.com/photo/elegant-modern-living-room-interior-design-39829283/",
+   "query": "modern apartment interior"
+  },
+  {
+   "pexelsId": 39978728,
+   "category": "building",
+   "alt": "Upward view of two modern apartment buildings with a clear blue sky in İzmir, Türkiye.",
+   "photographer": "Doğan Alpaslan Demir",
+   "photographerUrl": "https://www.pexels.com/@izafi/",
+   "pageUrl": "https://www.pexels.com/photo/modern-residential-buildings-in-izmir-turkiye-39978728/",
+   "query": "balcony view apartment"
+  },
+  {
+   "pexelsId": 40048674,
+   "category": "exterior",
+   "alt": "Classic suburban home with vintage car on driveway, American flag displayed outside, capturing a nostalgic and patriotic vibe.",
+   "photographer": "Carlos Aguilar",
+   "photographerUrl": "https://www.pexels.com/@carlos-aguilar-660553055/",
+   "pageUrl": "https://www.pexels.com/photo/charming-suburban-home-with-vintage-car-and-flag-40048674/",
+   "query": "garden house"
+  }
+ ]
+}

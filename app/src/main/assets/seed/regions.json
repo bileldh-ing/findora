@@ -1,0 +1,311 @@
+{
+ "schemaVersion": 1,
+ "sampleData": true,
+ "defaultRegionId": "kerala",
+ "regions": [
+  {
+   "id": "kerala",
+   "name": "Kerala",
+   "country": "IN",
+   "currency": "INR",
+   "locale": "en-IN",
+   "isDefault": true,
+   "center": {
+    "latitude": 9.9816,
+    "longitude": 76.2999
+   },
+   "defaultZoom": 12.0,
+   "bounds": {
+    "south": 8.17,
+    "west": 74.85,
+    "north": 12.8,
+    "east": 77.42
+   },
+   "localities": [
+    {
+     "name": "Kochi",
+     "latitude": 9.9816,
+     "longitude": 76.2999
+    },
+    {
+     "name": "Edappally",
+     "latitude": 10.0261,
+     "longitude": 76.3125
+    },
+    {
+     "name": "Fort Kochi",
+     "latitude": 9.9658,
+     "longitude": 76.2421
+    },
+    {
+     "name": "Kakkanad",
+     "latitude": 10.0159,
+     "longitude": 76.3419
+    },
+    {
+     "name": "Kaloor",
+     "latitude": 9.9971,
+     "longitude": 76.292
+    },
+    {
+     "name": "Vyttila",
+     "latitude": 9.9682,
+     "longitude": 76.3182
+    },
+    {
+     "name": "Panampilly Nagar",
+     "latitude": 9.96,
+     "longitude": 76.295
+    },
+    {
+     "name": "Marine Drive",
+     "latitude": 9.9773,
+     "longitude": 76.2773
+    },
+    {
+     "name": "Thrippunithura",
+     "latitude": 9.9439,
+     "longitude": 76.3489
+    },
+    {
+     "name": "Aluva",
+     "latitude": 10.1076,
+     "longitude": 76.3516
+    },
+    {
+     "name": "Palarivattom",
+     "latitude": 10.0033,
+     "longitude": 76.3077
+    },
+    {
+     "name": "Kadavanthra",
+     "latitude": 9.9667,
+     "longitude": 76.3
+    },
+    {
+     "name": "Thevara",
+     "latitude": 9.941,
+     "longitude": 76.296
+    },
+    {
+     "name": "Kowdiar, Thiruvananthapuram",
+     "latitude": 8.5241,
+     "longitude": 76.9608
+    },
+    {
+     "name": "Kazhakoottam, Thiruvananthapuram",
+     "latitude": 8.5581,
+     "longitude": 76.8816
+    },
+    {
+     "name": "Kozhikode Beach",
+     "latitude": 11.2588,
+     "longitude": 75.7804
+    },
+    {
+     "name": "Thrissur Round",
+     "latitude": 10.5276,
+     "longitude": 76.2144
+    },
+    {
+     "name": "Alappuzha",
+     "latitude": 9.4981,
+     "longitude": 76.3388
+    },
+    {
+     "name": "Munnar",
+     "latitude": 10.0889,
+     "longitude": 77.0595
+    },
+    {
+     "name": "Kottayam",
+     "latitude": 9.5916,
+     "longitude": 76.5222
+    }
+   ]
+  },
+  {
+   "id": "tunis",
+   "name": "Tunis",
+   "country": "TN",
+   "currency": "TND",
+   "locale": "fr-TN",
+   "isDefault": false,
+   "center": {
+    "latitude": 36.8065,
+    "longitude": 10.1815
+   },
+   "defaultZoom": 12.0,
+   "bounds": {
+    "south": 36.7,
+    "west": 10.05,
+    "north": 37.0,
+    "east": 10.4
+   },
+   "localities": [
+    {
+     "name": "La Marsa",
+     "latitude": 36.8782,
+     "longitude": 10.3247
+    },
+    {
+     "name": "Carthage",
+     "latitude": 36.8528,
+     "longitude": 10.3233
+    },
+    {
+     "name": "Sidi Bou Said",
+     "latitude": 36.8687,
+     "longitude": 10.3417
+    },
+    {
+     "name": "Gammarth",
+     "latitude": 36.918,
+     "longitude": 10.288
+    },
+    {
+     "name": "Les Berges du Lac",
+     "latitude": 36.838,
+     "longitude": 10.237
+    },
+    {
+     "name": "Ennasr",
+     "latitude": 36.858,
+     "longitude": 10.164
+    },
+    {
+     "name": "El Menzah",
+     "latitude": 36.839,
+     "longitude": 10.172
+    },
+    {
+     "name": "Lafayette",
+     "latitude": 36.817,
+     "longitude": 10.181
+    }
+   ]
+  },
+  {
+   "id": "paris",
+   "name": "Paris",
+   "country": "FR",
+   "currency": "EUR",
+   "locale": "fr-FR",
+   "isDefault": false,
+   "center": {
+    "latitude": 48.8566,
+    "longitude": 2.3522
+   },
+   "defaultZoom": 13.0,
+   "bounds": {
+    "south": 48.8,
+    "west": 2.22,
+    "north": 48.91,
+    "east": 2.47
+   },
+   "localities": [
+    {
+     "name": "Le Marais",
+     "latitude": 48.859,
+     "longitude": 2.362
+    },
+    {
+     "name": "Montmartre",
+     "latitude": 48.8867,
+     "longitude": 2.3431
+    },
+    {
+     "name": "Batignolles",
+     "latitude": 48.887,
+     "longitude": 2.317
+    },
+    {
+     "name": "Bastille",
+     "latitude": 48.8532,
+     "longitude": 2.3691
+    },
+    {
+     "name": "Saint-Germain-des-Prés",
+     "latitude": 48.854,
+     "longitude": 2.333
+    },
+    {
+     "name": "Canal Saint-Martin",
+     "latitude": 48.871,
+     "longitude": 2.365
+    },
+    {
+     "name": "Belleville",
+     "latitude": 48.872,
+     "longitude": 2.385
+    },
+    {
+     "name": "Passy",
+     "latitude": 48.858,
+     "longitude": 2.285
+    }
+   ]
+  },
+  {
+   "id": "dubai",
+   "name": "Dubai",
+   "country": "AE",
+   "currency": "AED",
+   "locale": "en-AE",
+   "isDefault": false,
+   "center": {
+    "latitude": 25.2048,
+    "longitude": 55.2708
+   },
+   "defaultZoom": 11.5,
+   "bounds": {
+    "south": 24.9,
+    "west": 55.0,
+    "north": 25.35,
+    "east": 55.6
+   },
+   "localities": [
+    {
+     "name": "Dubai Marina",
+     "latitude": 25.08,
+     "longitude": 55.14
+    },
+    {
+     "name": "Jumeirah Lake Towers",
+     "latitude": 25.07,
+     "longitude": 55.145
+    },
+    {
+     "name": "Downtown Dubai",
+     "latitude": 25.1972,
+     "longitude": 55.2744
+    },
+    {
+     "name": "Business Bay",
+     "latitude": 25.185,
+     "longitude": 55.265
+    },
+    {
+     "name": "Jumeirah Village Circle",
+     "latitude": 25.06,
+     "longitude": 55.21
+    },
+    {
+     "name": "Al Barsha",
+     "latitude": 25.113,
+     "longitude": 55.2
+    },
+    {
+     "name": "Palm Jumeirah",
+     "latitude": 25.1124,
+     "longitude": 55.139
+    },
+    {
+     "name": "Deira",
+     "latitude": 25.27,
+     "longitude": 55.31
+    }
+   ]
+  }
+ ]
+}
