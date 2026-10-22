@@ -80,11 +80,14 @@ private val AvatarSize = 48.dp
 private val SpecIconSize = 22.dp
 private val SmallIconSize = 16.dp
 private val BadgeSize = 20.dp
+private val SheetBadgeSize = 28.dp
+private val StarSize = 18.dp
 private val SimilarCardWidth = 200.dp
 private val MinTouchTarget = 48.dp
 
 @Composable
-private fun currentLocale(): Locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
+private fun currentLocale(): Locale =
+    ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
 
 /** Section heading, announced as a heading by TalkBack. */
 @Composable
@@ -157,8 +160,9 @@ private fun CountUpPrice(
     val shown = Money(animated.value.roundToLong().coerceIn(0L, money.amount), money.currency)
     val finalText =
         stringResource(R.string.detail_price_per_month, PriceFormatter.format(money, locale, PriceStyle.Localized))
+    val shownText = PriceFormatter.format(shown, locale, PriceStyle.Localized)
     Text(
-        text = stringResource(R.string.detail_price_per_month, PriceFormatter.format(shown, locale, PriceStyle.Localized)),
+        text = stringResource(R.string.detail_price_per_month, shownText),
         style = FindoraTheme.typography.title,
         color = FindoraTheme.colors.accent,
         modifier = modifier.clearAndSetSemantics { contentDescription = finalText }.testTag("detailPrice"),
@@ -179,7 +183,12 @@ private fun RatingRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.clearAndSetSemantics { contentDescription = description }.testTag("detailRating"),
     ) {
-        Icon(FindoraIcons.Star, contentDescription = null, tint = FindoraTheme.colors.star, modifier = Modifier.size(18.dp))
+        Icon(
+            FindoraIcons.Star,
+            contentDescription = null,
+            tint = FindoraTheme.colors.star,
+            modifier = Modifier.size(StarSize),
+        )
         Spacer(Modifier.width(FindoraTheme.spacing.xxs))
         Text(ratingText, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.onBackground)
         Spacer(Modifier.width(FindoraTheme.spacing.xs))
@@ -204,7 +213,11 @@ private fun VerifiedChip(
                 .padding(horizontal = FindoraTheme.spacing.xs)
                 .testTag("detailVerified"),
     ) {
-        Image(rememberVectorPainter(FindoraIcons.VerifiedBadge), contentDescription = null, modifier = Modifier.size(BadgeSize))
+        Image(
+            rememberVectorPainter(FindoraIcons.VerifiedBadge),
+            contentDescription = null,
+            modifier = Modifier.size(BadgeSize),
+        )
         Spacer(Modifier.width(FindoraTheme.spacing.xxs))
         Text(
             text = stringResource(R.string.detail_verified),
@@ -239,7 +252,11 @@ fun VerificationSheet(
                     .padding(bottom = FindoraTheme.spacing.lg),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(rememberVectorPainter(FindoraIcons.VerifiedBadge), contentDescription = null, modifier = Modifier.size(28.dp))
+                Image(
+                    rememberVectorPainter(FindoraIcons.VerifiedBadge),
+                    contentDescription = null,
+                    modifier = Modifier.size(SheetBadgeSize),
+                )
                 Spacer(Modifier.width(FindoraTheme.spacing.xs))
                 SectionTitle(stringResource(R.string.detail_verified_title))
             }
@@ -269,8 +286,10 @@ fun SpecsRow(
         horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
         modifier = modifier.fillMaxWidth().then(horizontalPadding).testTag("detailSpecs"),
     ) {
-        SpecItem(FindoraIcons.Bed, property.bedrooms.toString(), stringResource(R.string.detail_bedrooms), Modifier.weight(1f))
-        SpecItem(FindoraIcons.Bath, property.bathrooms.toString(), stringResource(R.string.detail_bathrooms), Modifier.weight(1f))
+        val beds = stringResource(R.string.detail_bedrooms)
+        val baths = stringResource(R.string.detail_bathrooms)
+        SpecItem(FindoraIcons.Bed, property.bedrooms.toString(), beds, Modifier.weight(1f))
+        SpecItem(FindoraIcons.Bath, property.bathrooms.toString(), baths, Modifier.weight(1f))
         SpecItem(
             FindoraIcons.Area,
             stringResource(R.string.detail_area_value, property.areaSqm),
@@ -298,7 +317,12 @@ private fun SpecItem(
                 .padding(vertical = FindoraTheme.spacing.sm, horizontal = FindoraTheme.spacing.xxs)
                 .clearAndSetSemantics { contentDescription = "$label: $value" },
     ) {
-        Icon(icon, contentDescription = null, tint = FindoraTheme.colors.onBackground, modifier = Modifier.size(SpecIconSize))
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = FindoraTheme.colors.onBackground,
+            modifier = Modifier.size(SpecIconSize),
+        )
         Text(value, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.onBackground, maxLines = 1)
         Text(
             label,
@@ -412,16 +436,27 @@ fun AgentCard(
                     .padding(FindoraTheme.spacing.md)
                     .testTag("detailAgent"),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.semantics(mergeDescendants = true) {}) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.semantics(mergeDescendants = true) {},
+            ) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(AvatarSize).clip(CircleShape).background(Color(agent.avatar.backgroundArgb)),
+                    modifier =
+                        Modifier
+                            .size(AvatarSize)
+                            .clip(CircleShape)
+                            .background(Color(agent.avatar.backgroundArgb)),
                 ) {
                     Text(agent.avatar.initials, style = FindoraTheme.typography.bodyMedium, color = Color.White)
                 }
                 Spacer(Modifier.width(FindoraTheme.spacing.sm))
                 Column {
-                    Text(agent.name, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.onBackground)
+                    Text(
+                        agent.name,
+                        style = FindoraTheme.typography.bodyMedium,
+                        color = FindoraTheme.colors.onBackground,
+                    )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             FindoraIcons.Clock,
@@ -430,7 +465,11 @@ fun AgentCard(
                             modifier = Modifier.size(SmallIconSize),
                         )
                         Spacer(Modifier.width(FindoraTheme.spacing.xxs))
-                        Text(response, style = FindoraTheme.typography.caption, color = FindoraTheme.colors.onSurfaceMuted)
+                        Text(
+                            response,
+                            style = FindoraTheme.typography.caption,
+                            color = FindoraTheme.colors.onSurfaceMuted,
+                        )
                     }
                 }
             }
@@ -471,7 +510,11 @@ fun LocationSection(
             )
             Spacer(Modifier.width(FindoraTheme.spacing.sm))
             Column {
-                Text(property.locality, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.onBackground)
+                Text(
+                    property.locality,
+                    style = FindoraTheme.typography.bodyMedium,
+                    color = FindoraTheme.colors.onBackground,
+                )
                 Text(
                     text = stringResource(R.string.detail_coordinates, formatCoordinates(property.location)),
                     style = FindoraTheme.typography.caption,

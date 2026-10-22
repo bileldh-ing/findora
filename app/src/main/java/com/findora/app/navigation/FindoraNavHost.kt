@@ -37,12 +37,24 @@ fun FindoraNavHost(
     navController: NavHostController = rememberNavController(),
     showDesignSystem: Boolean = BuildConfig.DEBUG,
 ) {
-    val toMain = { navController.navigateClearingBackStack(FindoraRoute.Main) }
-    val toWelcome = { navController.navigateClearingBackStack(FindoraRoute.Welcome) }
-    val openProperty: (String) -> Unit = { id -> navController.navigate(FindoraRoute.PropertyDetail(id)) }
     SharedTransitionLayout(modifier = modifier) {
         CompositionLocalProvider(LocalSharedTransitionScope provides this) {
-            NavHost(navController = navController, startDestination = startDestination) {
+            FindoraGraph(startDestination, navController, showDesignSystem)
+        }
+    }
+}
+
+@Composable
+private fun FindoraGraph(
+    startDestination: FindoraRoute,
+    navController: NavHostController,
+    showDesignSystem: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val openProperty: (String) -> Unit = { id -> navController.navigate(FindoraRoute.PropertyDetail(id)) }
+    val toMain = { navController.navigateClearingBackStack(FindoraRoute.Main) }
+    val toWelcome = { navController.navigateClearingBackStack(FindoraRoute.Welcome) }
+    NavHost(navController = navController, startDestination = startDestination, modifier = modifier) {
         composable<FindoraRoute.Welcome> {
             WelcomeRoute(
                 onLogin = { navController.navigate(FindoraRoute.Login) },
@@ -79,19 +91,20 @@ fun FindoraNavHost(
             UnlockRoute(onUnlock = toMain, onSignedOut = toWelcome)
         }
         composable<FindoraRoute.Main> {
+            val openDesignSystem: (() -> Unit)? =
+                if (showDesignSystem) {
+                    { navController.navigate(FindoraRoute.DesignSystem) }
+                } else {
+                    null
+                }
             CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
-            MainShell(
-                onOpenSearch = { navController.navigate(FindoraRoute.Search) },
-                onOpenProperty = openProperty,
-                onSignedOut = toWelcome,
-                onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
-                onOpenDesignSystem =
-                    if (showDesignSystem) {
-                        { navController.navigate(FindoraRoute.DesignSystem) }
-                    } else {
-                        null
-                    },
-            )
+                MainShell(
+                    onOpenSearch = { navController.navigate(FindoraRoute.Search) },
+                    onOpenProperty = openProperty,
+                    onSignedOut = toWelcome,
+                    onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
+                    onOpenDesignSystem = openDesignSystem,
+                )
             }
         }
         composable<FindoraRoute.PropertyDetail>(
@@ -111,8 +124,6 @@ fun FindoraNavHost(
             composable<FindoraRoute.DesignSystem> {
                 DesignSystemScreen(onBack = { navController.popBackStack() })
             }
-        }
-    }
         }
     }
 }

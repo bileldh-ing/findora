@@ -115,7 +115,9 @@ fun PhotoCarousel(
         Box(
             Modifier
                 .fillMaxSize()
-                .background(Brush.verticalGradient(0f to Color.Black.copy(alpha = TOP_SCRIM_END), 1f to Color.Transparent)),
+                .background(
+                    Brush.verticalGradient(0f to Color.Black.copy(alpha = TOP_SCRIM_END), 1f to Color.Transparent),
+                ),
         )
         if (property.images.size > 1) {
             PageIndicator(

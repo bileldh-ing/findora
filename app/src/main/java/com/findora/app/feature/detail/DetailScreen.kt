@@ -111,7 +111,8 @@ fun DetailScreen(
     ) {
         when (state) {
             DetailUiState.Loading -> DetailSkeleton()
-            is DetailUiState.Error -> DetailErrorMessage(state.error, onRetry = { onEvent(DetailUiEvent.Retry) }, onBack)
+            is DetailUiState.Error ->
+                DetailErrorMessage(state.error, onRetry = { onEvent(DetailUiEvent.Retry) }, onBack = onBack)
             is DetailUiState.Content ->
                 DetailContent(content = state, onEvent = onEvent, onBack = onBack, onOpenProperty = onOpenProperty)
         }
