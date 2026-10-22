@@ -38,8 +38,8 @@ android {
         applicationId = "com.findora.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
@@ -163,19 +163,38 @@ kover {
     reports {
         filters {
             excludes {
-                // Generated code and pure UI wiring are excluded; domain/data are measured.
+                // Measured: domain, data and ViewModels. Excluded: generated code, DI wiring and pure UI.
+                // Dagger/Hilt names its factories Outer_ProvideXFactory or Foo_Factory, hence "*_*Factory".
+                packages(
+                    "com.findora.app.core.data.di",
+                    "com.findora.app.core.di",
+                    "hilt_aggregated_deps",
+                    "dagger.hilt.internal.aggregatedroot.codegen",
+                )
                 classes(
                     "*Hilt_*",
-                    "*_Factory*",
+                    "*_*Factory",
+                    "*_*Factory\$*",
                     "*_HiltModules*",
+                    "*_HiltComponents*",
+                    "*_GeneratedInjector",
+                    "*_ComponentTreeDeps",
                     "*_MembersInjector*",
+                    "*.Dagger*",
                     "*.BuildConfig",
                     "*ComposableSingletons*",
                     "*_Impl*",
                     "*Module",
                     "*Module\$*",
                 )
-                annotatedBy("androidx.compose.runtime.Composable")
+                annotatedBy(
+                    "androidx.compose.runtime.Composable",
+                    "dagger.Module",
+                    "dagger.internal.DaggerGenerated",
+                    "dagger.hilt.codegen.OriginatingElement",
+                    "dagger.hilt.android.AndroidEntryPoint",
+                    "dagger.hilt.android.HiltAndroidApp",
+                )
             }
         }
     }
@@ -206,6 +225,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.biometric)
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
