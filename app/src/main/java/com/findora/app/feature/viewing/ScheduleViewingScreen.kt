@@ -81,7 +81,7 @@ private const val SLOT_COLUMNS = 3
 @Composable
 fun ScheduleViewingRoute(
     onBack: () -> Unit,
-    onDone: () -> Unit,
+    onFinish: () -> Unit,
     onOpenViewings: () -> Unit,
     onCreateAccount: () -> Unit,
     modifier: Modifier = Modifier,
@@ -118,7 +118,7 @@ fun ScheduleViewingRoute(
         state = state,
         onEvent = { event -> if (event == ScheduleUiEvent.Confirm) confirm() else viewModel.onEvent(event) },
         onBack = onBack,
-        onDone = onDone,
+        onFinish = onFinish,
         onOpenViewings = onOpenViewings,
         onCreateAccount = onCreateAccount,
         snackbarHostState = snackbarHostState,
@@ -135,7 +135,7 @@ fun ScheduleViewingScreen(
     state: ScheduleUiState,
     onEvent: (ScheduleUiEvent) -> Unit,
     onBack: () -> Unit,
-    onDone: () -> Unit,
+    onFinish: () -> Unit,
     onOpenViewings: () -> Unit,
     onCreateAccount: () -> Unit,
     modifier: Modifier = Modifier,
@@ -175,7 +175,7 @@ fun ScheduleViewingScreen(
                     state = state,
                     onAddToCalendar = { onEvent(ScheduleUiEvent.AddToCalendar) },
                     onOpenViewings = onOpenViewings,
-                    onDone = onDone,
+                    onFinish = onFinish,
                 )
         }
         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter).navigationBarsPadding())
@@ -449,7 +449,7 @@ private fun BookedContent(
     state: ScheduleUiState.Booked,
     onAddToCalendar: () -> Unit,
     onOpenViewings: () -> Unit,
-    onDone: () -> Unit,
+    onFinish: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val locale = currentLocale()
@@ -503,7 +503,7 @@ private fun BookedContent(
         )
         PrimaryPillButton(
             text = stringResource(R.string.action_done),
-            onClick = onDone,
+            onClick = onFinish,
             modifier = Modifier.testTag("bookedDone"),
         )
         TextLink(

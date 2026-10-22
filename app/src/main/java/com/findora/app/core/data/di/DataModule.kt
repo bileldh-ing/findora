@@ -94,7 +94,12 @@ abstract class DataBindingsModule {
 
     @Binds
     abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
+}
 
+/** Viewing bookings and their WorkManager reminders. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class ViewingBindingsModule {
     @Binds
     abstract fun bindViewingRepository(impl: RoomViewingRepository): ViewingRepository
 

@@ -124,7 +124,7 @@ private fun FindoraGraph(
         composable<FindoraRoute.ScheduleViewing> {
             ScheduleViewingRoute(
                 onBack = { navController.popBackStack() },
-                onDone = { navController.popBackStack() },
+                onFinish = { navController.popBackStack() },
                 onOpenViewings = {
                     navController.navigate(FindoraRoute.Viewings) {
                         popUpTo<FindoraRoute.ScheduleViewing> { inclusive = true }

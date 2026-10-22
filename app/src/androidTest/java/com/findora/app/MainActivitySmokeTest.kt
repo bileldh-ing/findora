@@ -2,6 +2,7 @@ package com.findora.app
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
@@ -15,6 +16,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -71,7 +73,8 @@ class MainActivitySmokeTest {
         composeRule.waitUntil(TIMEOUT_MILLIS) {
             composeRule.onAllNodes(hasTestTag("settings")).fetchSemanticsNodes().isNotEmpty()
         }
-        composeRule.onNodeWithText("Log out").performScrollTo().performClick()
+        // A semantics click: once scrolled to the bottom edge the row can sit under the floating nav pill.
+        composeRule.onNodeWithText("Log out").performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
         composeRule.waitUntil(TIMEOUT_MILLIS) {
             composeRule.onAllNodes(hasTestTag("welcome")).fetchSemanticsNodes().isNotEmpty()
         }

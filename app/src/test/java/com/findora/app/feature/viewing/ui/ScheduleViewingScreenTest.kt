@@ -69,7 +69,7 @@ class ScheduleViewingScreenTest {
                     state = state,
                     onEvent = vm::onEvent,
                     onBack = { backs++ },
-                    onDone = { dones++ },
+                    onFinish = { dones++ },
                     onOpenViewings = { viewingLists++ },
                     onCreateAccount = { signUps++ },
                 )

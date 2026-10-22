@@ -19,6 +19,7 @@ sealed interface BookingOutcome {
     data object Overlaps : BookingOutcome
 }
 
+@Suppress("TooManyFunctions")
 @Dao
 abstract class ViewingDao {
     /** Throws SQLiteConstraintException when the slot is already booked for that listing. */

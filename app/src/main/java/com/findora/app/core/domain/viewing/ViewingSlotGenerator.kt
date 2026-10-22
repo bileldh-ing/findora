@@ -11,16 +11,24 @@ import javax.inject.Inject
 
 /** Opening hours and granularity of the viewing calendar. */
 data class SlotConfig(
-    val opensAt: LocalTime = LocalTime.of(9, 0),
+    val opensAt: LocalTime = DEFAULT_OPENS_AT,
     /** The last slot must end by this time. */
-    val closesAt: LocalTime = LocalTime.of(18, 0),
-    val stepMinutes: Int = 30,
-    val durationMinutes: Int = 30,
-    val horizonDays: Int = 14,
+    val closesAt: LocalTime = DEFAULT_CLOSES_AT,
+    val stepMinutes: Int = DEFAULT_STEP_MINUTES,
+    val durationMinutes: Int = DEFAULT_DURATION_MINUTES,
+    val horizonDays: Int = DEFAULT_HORIZON_DAYS,
 ) {
     init {
         require(stepMinutes > 0 && durationMinutes > 0 && horizonDays > 0) { "positive values required" }
         require(opensAt.isBefore(closesAt)) { "opensAt must be before closesAt" }
+    }
+
+    companion object {
+        val DEFAULT_OPENS_AT: LocalTime = LocalTime.of(9, 0)
+        val DEFAULT_CLOSES_AT: LocalTime = LocalTime.of(18, 0)
+        const val DEFAULT_STEP_MINUTES = 30
+        const val DEFAULT_DURATION_MINUTES = 30
+        const val DEFAULT_HORIZON_DAYS = 14
     }
 }
 

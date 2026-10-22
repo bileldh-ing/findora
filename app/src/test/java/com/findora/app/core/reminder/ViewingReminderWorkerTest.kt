@@ -91,8 +91,11 @@ class ViewingReminderWorkerTest {
                     .toString()
                     .startsWith(georgie.title),
             )
-            val channel = notifications.getNotificationChannel(AndroidViewingReminderNotifier.CHANNEL_ID)
-            assertEquals("Viewing reminders", (channel as android.app.NotificationChannel).name)
+            val channel =
+                context
+                    .getSystemService(NotificationManager::class.java)
+                    .getNotificationChannel(AndroidViewingReminderNotifier.CHANNEL_ID)
+            assertEquals("Viewing reminders", channel.name)
             val tap = shadowOf(posted.contentIntent).savedIntent
             assertEquals(Intent.ACTION_VIEW, tap.action)
             assertEquals(PropertyDeepLink.uriFor(georgie.id), tap.dataString)
