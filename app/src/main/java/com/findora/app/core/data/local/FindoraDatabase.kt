@@ -9,6 +9,7 @@ import com.findora.app.core.data.local.dao.FavoriteDao
 import com.findora.app.core.data.local.dao.InteractionEventDao
 import com.findora.app.core.data.local.dao.MessageDao
 import com.findora.app.core.data.local.dao.PropertyDao
+import com.findora.app.core.data.local.dao.PropertySearchDao
 import com.findora.app.core.data.local.dao.RecentSearchDao
 import com.findora.app.core.data.local.dao.SavedSearchDao
 import com.findora.app.core.data.local.dao.UserDao
@@ -60,6 +61,8 @@ abstract class FindoraDatabase : RoomDatabase() {
     abstract fun interactionEventDao(): InteractionEventDao
 
     abstract fun accountDao(): AccountDao
+
+    abstract fun propertySearchDao(): PropertySearchDao
 
     companion object {
         const val VERSION = 2

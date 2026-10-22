@@ -46,6 +46,12 @@ abstract class RecentSearchDao {
     @Query("DELETE FROM recent_searches WHERE user_id = :userId")
     abstract suspend fun clear(userId: String)
 
+    @Query("DELETE FROM recent_searches WHERE user_id = :userId AND normalized_query = :normalizedQuery")
+    abstract suspend fun delete(
+        userId: String,
+        normalizedQuery: String,
+    )
+
     @Transaction
     open suspend fun record(
         userId: String,

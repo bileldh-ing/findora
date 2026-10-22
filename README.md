@@ -21,12 +21,30 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 0 | Bootstrap: build system, design system, navigation, CI | Done |
 | 1 | Data layer and property imagery | Done |
 | 2 | Welcome and authentication | Done |
-| 3 | Home screen, pixel-faithful to the reference design | Next |
-| 4 | Property detail and viewing bookings | Planned |
+| 3 | Home screen, pixel-faithful to the reference design | Done |
+| 4 | Property detail and viewing bookings | Next |
 | 5 | Best-match recommendations | Planned |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 3 ships
+
+- **Home, as in the reference**: location pill (region picker), bell with an unread dot (notifications
+  sheet, swipe to mark read), initials avatar, "Discover / Your New House", search pill with a filter badge,
+  sliding category chips and a two-column grid of glass-chip cards. The title collapses as you scroll and a
+  compact search bar pins to the top.
+- **Paging 3 over Room**: the shared `PropertyFilter` becomes one parameterised SQL query
+  (`PropertyQueryBuilder`, unit-tested clause by clause) behind a `@RawQuery` PagingSource. Pull to refresh,
+  shimmer skeletons, empty, error and offline states.
+- **Filters**: rent and area sliders bounded by the region's listings, bedrooms, bathrooms, furnished, pets,
+  parking, verified, amenities and five sort orders; the badge counts active refinements.
+- **Search** with 300 ms debounced suggestions and per-user recent searches (swipe to delete, clear all).
+- **Favourites** per user: heart toggle, double-tap with a heart burst, and a Saved tab.
+- **Floating navigation pill** (Home, Locations, Saved, Settings) with a sliding spring indicator.
+  Locations is a region and neighbourhood picker until the map ships; Chat joins with Phase 6.
+- Staggered card entrance and `animateItem`, all skipped when system animations are off; TalkBack reads one
+  summary per card with Save as a custom action.
 
 ## What Phase 2 ships
 
@@ -45,7 +63,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 - **Route guard**: a valid session at launch skips Welcome; with the biometric lock on, the app opens on an
   Unlock screen (`androidx.biometric`, fingerprint/face or screen lock).
 - **Settings (first cut)**: account card, theme (system/light/dark, applied app-wide), biometric lock toggle,
-  log out, delete account with confirmation. Until Home lands in Phase 3 this is the signed-in screen.
+  log out, delete account with confirmation (now the Settings tab).
 - English, French and Arabic strings for everything; icons are a thin-stroke set drawn in code, with
   auto-mirroring for directional icons in RTL.
 
@@ -133,12 +151,17 @@ app/src/main/java/com/findora/app
 │   ├── data/auth               password hashing, Keystore session cipher, local AuthRepository
 │   ├── security                biometric availability
 │   ├── image                   Coil ImageLoader and offline fallback
+│   ├── ui                      property card, state views, swipe-to-delete row
 │   └── di                      coroutine dispatchers module
 ├── feature
 │   ├── auth                    welcome, login, sign up, forgot password, biometric unlock
+│   ├── home                    header, paged grid, filter, region and notification sheets
+│   ├── search                  debounced suggestions and recent searches
+│   ├── saved                   saved homes
+│   ├── locations               region and neighbourhood picker
 │   ├── settings                account, theme, biometric lock, logout, delete account
 │   └── designsystem            debug-only component showcase
-└── navigation                  type-safe routes, NavHost and the launch route guard
+└── navigation                  type-safe routes, NavHost, route guard, main shell and floating nav pill
 ```
 
 ## Tech stack
@@ -155,6 +178,7 @@ app/src/main/java/com/findora/app
 | Kotlin Coroutines + Flow | Async work and reactive streams from Room to UI |
 | Coil 3 (compose, network-okhttp) + OkHttp | Image loading with memory/disk cache and crossfade |
 | androidx.biometric | Fingerprint, face or screen-lock prompt for the optional app lock |
+| Paging 3 (runtime, compose, room-paging, paging-testing) | Incremental loading of the Home feed straight from Room, `LazyPagingItems` in the grid, `asSnapshot` in tests |
 | Turbine, MockK, kotlinx-coroutines-test | Flow assertions, mocking and virtual-time coroutine tests |
 | Robolectric + Compose UI test | Compose UI tests on the JVM, in CI |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
@@ -182,7 +206,12 @@ app/src/main/java/com/findora/app
 | `AuthViewModelsTest` | Login (validation, attempts left, lockout countdown), sign-up, forgot password, welcome (Turbine) |
 | `SettingsViewModelTest`, `AppViewModelTest` | Theme, biometric rules, logout/delete; launch route guard |
 | `AuthScreensTest` | Welcome content and buttons, light/dark, login and sign-up inline validation (Compose, Robolectric) |
-| `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Settings and back |
+| `PropertyQueryBuilderTest` | Every filter clause, bound arguments, LIKE escaping, sort tie-breakers |
+| `PropertySearchDaoTest` | Room + Paging 3 feed across pages, category/text/refinements in SQL, price sorts, bounds, suggestions |
+| `HomeViewModelTest`, `SearchViewModelTest`, `SavedAndLocationsViewModelTest` | Header, refresh states, category paging, favourites per user, filter reset between users, regions, notifications; debounced suggestions, submit, per-user recents; saved list; locations (Turbine) |
+| `HomeDataRepositoriesTest` | Unread messages per user and mark-read, recent-search delete, Home filter ownership |
+| `HomeScreenTest`, `SearchAndTabsScreenTest` | Reference header, chips filtering the grid, favourite toggle and TalkBack action, filter sheet and badge, empty/error/offline states, notifications, search, nav pill, Saved, Locations (Compose, Robolectric) |
+| `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, tabs, Settings and back |
 
 ## Credits
 

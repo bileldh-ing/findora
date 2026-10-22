@@ -99,4 +99,106 @@
     <string name="delete_account_message">This permanently removes your account, favourites, searches and viewings from this device.</string>
     <string name="action_delete">Delete</string>
     <string name="action_cancel">Cancel</string>
+    <!-- Home -->
+    <string name="home_discover">Discover</string>
+    <string name="home_new_house">Your New House</string>
+    <string name="search_placeholder">Search Place…</string>
+    <string name="cd_filters">Filters</string>
+    <plurals name="cd_filters_active">
+        <item quantity="one">Filters, %1$d active</item>
+        <item quantity="other">Filters, %1$d active</item>
+    </plurals>
+    <string name="category_rental_house">Rental House</string>
+    <string name="category_apartment">Apartment</string>
+    <string name="category_houses">Houses</string>
+    <string name="category_rooms">Rooms</string>
+    <string name="home_nearby">Nearby Rental Houses</string>
+    <string name="per_month">Month</string>
+    <string name="cd_change_location">Change location, current: %1$s</string>
+    <string name="cd_notifications">Notifications</string>
+    <plurals name="cd_notifications_unread">
+        <item quantity="one">Notifications, %1$d unread</item>
+        <item quantity="other">Notifications, %1$d unread</item>
+    </plurals>
+    <string name="cd_profile">Profile and settings</string>
+    <string name="cd_clear_search">Clear search</string>
+    <string name="card_description">%1$s, %2$s. %3$s per month. Rated %4$s.</string>
+    <string name="card_verified">Verified listing.</string>
+    <string name="card_saved">Saved.</string>
+    <string name="action_save">Save</string>
+    <string name="action_unsave">Remove from saved</string>
+    <string name="empty_title">No homes match</string>
+    <string name="empty_body">Try another category or clear your filters.</string>
+    <string name="action_clear_filters">Clear filters</string>
+    <string name="error_title">Couldn\'t load listings</string>
+    <string name="error_body">Check your connection and try again.</string>
+    <string name="action_retry">Retry</string>
+    <string name="offline_banner">Offline: showing saved listings</string>
+    <string name="region_picker_title">Choose a location</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_empty">You\'re all caught up</string>
+    <!-- Filters -->
+    <string name="filter_title">Filters</string>
+    <string name="filter_price">Monthly rent</string>
+    <string name="filter_bedrooms">Bedrooms</string>
+    <string name="filter_bathrooms">Bathrooms</string>
+    <string name="filter_area">Area</string>
+    <string name="filter_area_value">%1$d–%2$d m² (%3$d–%4$d sq ft)</string>
+    <string name="filter_range_value">%1$s – %2$s</string>
+    <string name="filter_any">Any</string>
+    <string name="filter_at_least">%1$d+</string>
+    <string name="filter_furnished">Furnished</string>
+    <string name="filter_pets">Pet friendly</string>
+    <string name="filter_parking">Parking</string>
+    <string name="filter_verified">Verified only</string>
+    <string name="filter_amenities">Amenities</string>
+    <string name="filter_sort">Sort by</string>
+    <string name="sort_best">Best match</string>
+    <string name="sort_price_low">Price: low to high</string>
+    <string name="sort_price_high">Price: high to low</string>
+    <string name="sort_newest">Newest</string>
+    <string name="sort_rating">Rating</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_show_results">Show results</string>
+    <string name="amenity_wifi">Wi-Fi</string>
+    <string name="amenity_air_conditioning">Air conditioning</string>
+    <string name="amenity_power_backup">Power backup</string>
+    <string name="amenity_lift">Lift</string>
+    <string name="amenity_security">Security</string>
+    <string name="amenity_cctv">CCTV</string>
+    <string name="amenity_gym">Gym</string>
+    <string name="amenity_swimming_pool">Swimming pool</string>
+    <string name="amenity_garden">Garden</string>
+    <string name="amenity_balcony">Balcony</string>
+    <string name="amenity_washing_machine">Washing machine</string>
+    <string name="amenity_modular_kitchen">Modular kitchen</string>
+    <string name="amenity_water_purifier">Water purifier</string>
+    <string name="amenity_play_area">Play area</string>
+    <string name="amenity_clubhouse">Clubhouse</string>
+    <string name="amenity_solar_water_heater">Solar water heater</string>
+    <string name="amenity_rainwater_harvesting">Rainwater harvesting</string>
+    <string name="amenity_home_office">Home office</string>
+    <string name="amenity_sea_view">Sea view</string>
+    <string name="amenity_backwater_view">Backwater view</string>
+    <!-- Search -->
+    <string name="search_recent">Recent searches</string>
+    <string name="action_clear_all">Clear all</string>
+    <string name="search_suggestions">Suggestions</string>
+    <string name="suggestion_locality">Area</string>
+    <string name="suggestion_property">Home</string>
+    <string name="search_no_suggestions">No matches. Press search to look for “%1$s” anyway.</string>
+    <string name="action_delete_recent">Delete</string>
+    <!-- Main tabs -->
+    <string name="nav_home">Home</string>
+    <string name="nav_locations">Locations</string>
+    <string name="nav_saved">Saved</string>
+    <!-- Saved -->
+    <string name="saved_title">Saved homes</string>
+    <string name="saved_empty_title">No saved homes yet</string>
+    <string name="saved_empty_body">Tap the heart on a home, or double-tap its photo, to keep it here.</string>
+    <!-- Locations -->
+    <string name="locations_title">Locations</string>
+    <string name="locations_subtitle">Choose a region, or jump straight to a neighbourhood</string>
+    <string name="locations_current">Current</string>
+    <string name="notifications_mark_read">Mark as read</string>
 </resources>

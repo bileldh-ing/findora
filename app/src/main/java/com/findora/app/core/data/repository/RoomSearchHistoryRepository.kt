@@ -36,7 +36,7 @@ class RoomSearchHistoryRepository
             userId: String,
             query: String,
         ) {
-            val trimmed = query.trim().replace(whitespace, " ")
+            val trimmed = normalize(query)
             if (trimmed.isEmpty()) return
             withContext(ioDispatcher) {
                 dao.record(
@@ -49,7 +49,14 @@ class RoomSearchHistoryRepository
             }
         }
 
+        override suspend fun delete(
+            userId: String,
+            query: String,
+        ) = withContext(ioDispatcher) { dao.delete(userId, normalize(query).lowercase(Locale.ROOT)) }
+
         override suspend fun clear(userId: String) = withContext(ioDispatcher) { dao.clear(userId) }
+
+        private fun normalize(query: String): String = query.trim().replace(whitespace, " ")
 
         private companion object {
             val whitespace = Regex("\\s+")

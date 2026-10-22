@@ -17,6 +17,7 @@ import com.findora.app.core.data.auth.SessionStore
 import com.findora.app.core.data.auth.TokenCipher
 import com.findora.app.core.data.local.FindoraDatabase
 import com.findora.app.core.data.local.dao.AccountDao
+import com.findora.app.core.data.local.dao.PropertySearchDao
 import com.findora.app.core.di.IoDispatcher
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.security.AndroidBiometricAvailability
@@ -63,6 +64,9 @@ object AuthModule {
 
     @Provides
     fun provideAccountDao(db: FindoraDatabase): AccountDao = db.accountDao()
+
+    @Provides
+    fun providePropertySearchDao(db: FindoraDatabase): PropertySearchDao = db.propertySearchDao()
 
     @Provides
     @Singleton

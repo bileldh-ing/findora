@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Listing photos are loaded over HTTPS (Coil + OkHttp); the bundled WebP pack covers offline use. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".FindoraApplication"
         android:allowBackup="false"

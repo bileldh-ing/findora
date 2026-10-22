@@ -15,6 +15,12 @@ interface SearchHistoryRepository {
         query: String,
     )
 
+    /** Removes one entry (swipe to delete); matching is case-insensitive like [record]. */
+    suspend fun delete(
+        userId: String,
+        query: String,
+    )
+
     suspend fun clear(userId: String)
 
     companion object {

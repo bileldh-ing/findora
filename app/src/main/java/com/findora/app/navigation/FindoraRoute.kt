@@ -20,9 +20,13 @@ sealed interface FindoraRoute {
     @Serializable
     data object Unlock : FindoraRoute
 
-    /** The signed-in (or guest) app. */
+    /** The signed-in (or guest) app: Home, Locations, Saved and Settings tabs under the floating nav pill. */
     @Serializable
     data object Main : FindoraRoute
+
+    /** Full-screen search over the tabs (suggestions and recent searches); applies its text to Home. */
+    @Serializable
+    data object Search : FindoraRoute
 
     /** Debug-only catalogue of every design-system component. */
     @Serializable
