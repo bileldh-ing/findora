@@ -14,6 +14,7 @@ import com.findora.app.core.testing.MutableClock
 import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.inMemoryDatabase
 import com.findora.app.core.testing.seedListings
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -46,7 +47,7 @@ class OfflineFirstPropertyRepositoryTest {
     @After
     fun tearDown() = db.close()
 
-    private fun repository(dispatcher: UnconfinedTestDispatcher) =
+    private fun repository(dispatcher: TestDispatcher) =
         OfflineFirstPropertyRepository(
             remote = FakeRemoteDataSource(fileSeedReader(), config, Random(1)),
             dao = db.propertyDao(),

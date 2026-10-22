@@ -16,6 +16,8 @@ style:
     # Design tokens (dp, sp, hex colors) are intentionally literal in the theme package.
     excludes: ['**/designsystem/**', '**/test/**', '**/androidTest/**']
     ignorePropertyDeclaration: true
+    # Enum constructor arguments are data (ISO 4217 minor digits, ids), not magic numbers.
+    ignoreEnums: true
     ignoreCompanionObjectPropertyDeclaration: true
   UnusedPrivateMember:
     ignoreAnnotated: ['Preview']

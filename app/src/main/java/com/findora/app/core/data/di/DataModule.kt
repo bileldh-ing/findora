@@ -103,6 +103,24 @@ object DataModule {
 
     @Provides
     @Singleton
+    fun provideSettingsDataStore(
+        @ApplicationContext context: Context,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher,
+    ): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            // A corrupted file resets settings to defaults instead of crashing on start.
+            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+            scope = CoroutineScope(SupervisorJob() + ioDispatcher),
+            produceFile = { context.preferencesDataStoreFile(SETTINGS_FILE) },
+        )
+}
+
+/** Room database and its DAOs. */
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+    @Provides
+    @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
     ): FindoraDatabase =
@@ -134,17 +152,4 @@ object DataModule {
 
     @Provides
     fun provideInteractionEventDao(db: FindoraDatabase): InteractionEventDao = db.interactionEventDao()
-
-    @Provides
-    @Singleton
-    fun provideSettingsDataStore(
-        @ApplicationContext context: Context,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): DataStore<Preferences> =
-        PreferenceDataStoreFactory.create(
-            // A corrupted file resets settings to defaults instead of crashing on start.
-            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
-            scope = CoroutineScope(SupervisorJob() + ioDispatcher),
-            produceFile = { context.preferencesDataStoreFile(SETTINGS_FILE) },
-        )
 }

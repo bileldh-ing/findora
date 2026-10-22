@@ -24,10 +24,9 @@ fun assetUri(assetPath: String): String = "file:///android_asset/${assetPath.tri
 class OfflineFallbackInterceptor : Interceptor {
     override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
         val result = chain.proceed()
-        if (result !is ErrorResult) return result
-        val fallback = chain.request.getExtra(OfflineFallbackAsset) ?: return result
-        val fallbackUri = assetUri(fallback)
-        if (chain.request.data == fallbackUri) return result
+        val fallbackUri = chain.request.getExtra(OfflineFallbackAsset)?.let(::assetUri)
+        val canRetry = result is ErrorResult && fallbackUri != null && chain.request.data != fallbackUri
+        if (!canRetry) return result
         val retry =
             chain.request
                 .newBuilder()
