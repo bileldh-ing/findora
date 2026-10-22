@@ -12,6 +12,7 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -22,6 +23,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.findora.app.core.data.repository.SeedRegionRepository
@@ -130,6 +132,12 @@ class HomeScreenTest {
             .fetchSemanticsNodes()
             .map { it.config[SemanticsProperties.TestTag].removePrefix("card_") }
 
+    /** Scrolls the lazy grid until a node matching [matcher] is composed, then checks it is on screen. */
+    private fun showInGrid(matcher: SemanticsMatcher) {
+        compose.onNodeWithTag("homeGrid").performScrollToNode(matcher)
+        compose.onNode(matcher).assertIsDisplayed()
+    }
+
     private fun tagPrefix(prefix: String) =
         SemanticsMatcher("test tag starts with $prefix") {
             it.config.getOrNull(SemanticsProperties.TestTag)?.startsWith(prefix) == true
@@ -149,9 +157,9 @@ class HomeScreenTest {
             "Rooms",
         ).forEach { compose.onNodeWithText(it).assertIsDisplayed() }
         compose.onNodeWithTag("chip_0").assertIsSelected()
-        compose.onNodeWithText("Nearby Rental Houses").assertIsDisplayed()
-        compose.onNodeWithText("Georgie House").assertIsDisplayed()
-        compose.onAllNodesWithText("10.000/ Month").onFirst().assertIsDisplayed()
+        showInGrid(hasText("Nearby Rental Houses"))
+        showInGrid(hasText("Georgie House"))
+        compose.onAllNodesWithText("10.000/ Month").onFirst().assertExists()
         compose.onNodeWithContentDescription("Profile and settings").assertIsDisplayed()
         compose.onNodeWithContentDescription("Notifications").assertIsDisplayed()
         compose.onNodeWithContentDescription("Filters").assertIsDisplayed()
@@ -257,16 +265,16 @@ class HomeScreenTest {
     @Test
     fun anEmptyResultOffersToClearFilters() {
         compose.setContent { InteractiveHome(homeState(filter = PropertyFilter(query = "no such place"))) }
-        compose.onNodeWithText("No homes match").assertIsDisplayed()
+        showInGrid(hasText("No homes match"))
         compose.onNodeWithText("Clear filters").performClick()
         assertEquals(HomeUiEvent.ResetFilter, events.last())
-        compose.onNodeWithText("Georgie House").assertIsDisplayed()
+        showInGrid(hasText("Georgie House"))
     }
 
     @Test
     fun aFailedFirstLoadShowsRetryAndACachedFeedShowsTheOfflineBanner() {
         compose.setContent { InteractiveHome(homeState(refresh = RefreshStatus.Failed(0))) }
-        compose.onNodeWithText("Couldn't load listings").assertIsDisplayed()
+        showInGrid(hasText("Couldn't load listings"))
         compose.onNodeWithText("Retry").performClick()
         assertEquals(HomeUiEvent.Refresh, events.last())
     }
@@ -274,9 +282,9 @@ class HomeScreenTest {
     @Test
     fun aCachedFeedShowsTheOfflineBannerInDarkTheme() {
         compose.setContent { InteractiveHome(homeState(refresh = RefreshStatus.Failed(40)), darkTheme = true) }
-        compose.onNodeWithTag("offlineBanner").assertIsDisplayed()
-        compose.onNodeWithText("Offline: showing saved listings").assertIsDisplayed()
-        compose.onNodeWithText("Georgie House").assertIsDisplayed()
+        showInGrid(hasTestTag("offlineBanner"))
+        compose.onNodeWithText("Offline: showing saved listings").assertExists()
+        showInGrid(hasText("Georgie House"))
     }
 
     @Test

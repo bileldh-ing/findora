@@ -81,10 +81,11 @@ fun HomeTopBar(
                     .heightIn(min = HeaderButtonSize)
                     .clip(FindoraTheme.shapes.chip)
                     .clickable(onClick = onLocationClick)
+                    .testTag("locationChip")
                     .clearAndSetSemantics {
                         contentDescription = locationDescription
                         role = Role.Button
-                    }.testTag("locationChip"),
+                    },
         ) {
             Icon(
                 FindoraIcons.MapPinHouse,
@@ -271,10 +272,11 @@ fun SearchPill(
                         .size(HeaderButtonSize)
                         .clip(CircleShape)
                         .clickable(onClick = onClearQuery)
+                        .testTag("clearQuery")
                         .clearAndSetSemantics {
                             contentDescription = clearDescription
                             role = Role.Button
-                        }.testTag("clearQuery"),
+                        },
             ) {
                 Icon(
                     FindoraIcons.Close,
@@ -319,10 +321,11 @@ private fun FilterButton(
                 .size(SearchPillHeight)
                 .clip(CircleShape)
                 .clickable(onClick = onClick)
+                .testTag("filterButton")
                 .clearAndSetSemantics {
                     contentDescription = description
                     role = Role.Button
-                }.testTag("filterButton"),
+                },
     ) {
         Icon(
             FindoraIcons.Sliders,

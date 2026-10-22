@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -67,7 +68,9 @@ fun SlidingChipRow(
                     Modifier
                         .defaultMinSize(minHeight = ChipHeight)
                         .clip(FindoraTheme.shapes.chip)
-                        .background(FindoraTheme.colors.surface),
+                        .background(FindoraTheme.colors.surface)
+                        // Layout-only twin of the real chip: hidden from TalkBack and tests.
+                        .clearAndSetSemantics {},
                 ) {
                     // Invisible spacer chip: same size as the label chip, painted under it.
                     Text(

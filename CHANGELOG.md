@@ -12,7 +12,8 @@
 - **Main shell**: floating white navigation pill (Home, Locations, Saved, Settings) with a spring indicator that slides between tabs; every tab has bottom padding for the pill. Chat joins in Phase 6, so no dead tab is shown.
 - Accessibility: one TalkBack summary per card (name, locality, currency-formatted rent, rating, verified, saved) with Save / Remove as a custom action, headings, selectable tabs and chips, 48 dp targets.
 - The Home filter is shared by Home, Search, the sheet and Locations, and resets when another user signs in.
-- English, French and Arabic strings for every new screen.
+- English, French and Arabic strings for every new screen (TalkBack counts use plurals, including Arabic dual and few/many forms).
+- Fix: the manifest now declares `INTERNET`; listing photos were blocked (and the first remote photo request crashed the app) without it.
 - Tests: PropertyQueryBuilderTest, PropertySearchDaoTest (Room + Paging `asSnapshot`), HomeViewModelTest, SearchViewModelTest, Saved and Locations ViewModel tests (Turbine), message and search-history repository tests, Compose tests for the Home header, chip filtering, favourite toggle, filter sheet, empty/error/offline states, Search, the nav pill, Saved and Locations; the instrumented journey now lands on Home, filters by chip and walks the tabs.
 
 ## [0.3.0] Phase 2: Welcome and authentication

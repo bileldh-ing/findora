@@ -20,6 +20,8 @@ import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
 import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.inboxMessage
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -100,10 +102,10 @@ class HomeViewModelTest {
     fun selectingACategoryFiltersThePagedFeed() =
         runTest(main.dispatcher) {
             val vm = viewModel()
-            val everything = vm.listings.asSnapshot()
+            val everything = flowOf(vm.listings.first()).asSnapshot()
             assertEquals(40, everything.size)
             vm.onEvent(HomeUiEvent.SelectCategory(HomeCategory.Apartment))
-            val apartments = vm.listings.asSnapshot()
+            val apartments = flowOf(vm.listings.first()).asSnapshot()
             assertTrue(apartments.isNotEmpty())
             assertTrue(apartments.all { it.type == PropertyType.Apartment })
             assertEquals(PropertyFilter(type = PropertyType.Apartment), properties.requestedFilters.last().second)

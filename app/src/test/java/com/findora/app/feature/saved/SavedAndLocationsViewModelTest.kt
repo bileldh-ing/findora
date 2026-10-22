@@ -34,9 +34,11 @@ class SavedAndLocationsViewModelTest {
             favorites.toggle(AuthRepository.GUEST_USER_ID, first)
             favorites.toggle(auth.account.id, second)
             val vm = SavedViewModel(favorites, auth)
+            assertTrue(SavedUiState().isLoading)
             vm.state.test {
-                assertTrue(awaitItem().isLoading)
-                assertEquals(listOf(first), awaitItem().homes.map { it.id })
+                var state = awaitItem()
+                while (state.isLoading) state = awaitItem()
+                assertEquals(listOf(first), state.homes.map { it.id })
                 auth.signIn()
                 assertEquals(listOf(second), awaitItem().homes.map { it.id })
                 vm.toggleFavorite(second)
