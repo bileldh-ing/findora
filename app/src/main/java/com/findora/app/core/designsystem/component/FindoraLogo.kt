@@ -14,8 +14,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -65,7 +65,8 @@ fun FindoraLogoBadge(
                 .size(size)
                 .clip(CircleShape)
                 .background(Color.White)
-                .semantics { contentDescription = "Findora Dream House logo" },
+                // One announcement for the whole badge; the tiny lockup text inside is decorative.
+                .clearAndSetSemantics { contentDescription = "Findora Dream House logo" },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {

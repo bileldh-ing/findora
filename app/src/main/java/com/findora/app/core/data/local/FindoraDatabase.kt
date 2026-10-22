@@ -1,8 +1,10 @@
 package com.findora.app.core.data.local
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.findora.app.core.data.local.dao.AccountDao
 import com.findora.app.core.data.local.dao.FavoriteDao
 import com.findora.app.core.data.local.dao.InteractionEventDao
 import com.findora.app.core.data.local.dao.MessageDao
@@ -13,6 +15,7 @@ import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
 import com.findora.app.core.data.local.entity.FavoriteEntity
 import com.findora.app.core.data.local.entity.InteractionEventEntity
+import com.findora.app.core.data.local.entity.LoginAttemptEntity
 import com.findora.app.core.data.local.entity.MessageEntity
 import com.findora.app.core.data.local.entity.PropertyEntity
 import com.findora.app.core.data.local.entity.RecentSearchEntity
@@ -31,9 +34,12 @@ import com.findora.app.core.data.local.entity.ViewingEntity
         ViewingEntity::class,
         RecentSearchEntity::class,
         InteractionEventEntity::class,
+        LoginAttemptEntity::class,
     ],
     version = FindoraDatabase.VERSION,
     exportSchema = true,
+    // v2 adds login_attempts (sign-in throttling): a pure table addition, so Room generates the migration.
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
 )
 @TypeConverters(Converters::class)
 abstract class FindoraDatabase : RoomDatabase() {
@@ -53,8 +59,10 @@ abstract class FindoraDatabase : RoomDatabase() {
 
     abstract fun interactionEventDao(): InteractionEventDao
 
+    abstract fun accountDao(): AccountDao
+
     companion object {
-        const val VERSION = 1
+        const val VERSION = 2
         const val NAME = "findora.db"
     }
 }

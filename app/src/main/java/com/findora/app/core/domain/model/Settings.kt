@@ -24,4 +24,5 @@ data class AppSettings(
     val regionId: String = RegionPack.DEFAULT_REGION_ID,
     val currencyOverride: Currency? = null,
     val onboardingCompleted: Boolean = false,
+    val biometricLockEnabled: Boolean = false,
 )

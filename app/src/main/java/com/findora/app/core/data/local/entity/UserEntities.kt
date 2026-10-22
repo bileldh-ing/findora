@@ -100,3 +100,11 @@ data class InteractionEventEntity(
     @ColumnInfo(name = "occurred_at") val occurredAtMillis: Long,
     @ColumnInfo(name = "dwell_millis") val dwellMillis: Long,
 )
+
+/** Failed sign-in attempts per normalized e-mail, persisted so a lockout survives an app restart. */
+@Entity(tableName = "login_attempts")
+data class LoginAttemptEntity(
+    @PrimaryKey val email: String,
+    @ColumnInfo(name = "failed_count") val failedCount: Int,
+    @ColumnInfo(name = "locked_until") val lockedUntilMillis: Long?,
+)

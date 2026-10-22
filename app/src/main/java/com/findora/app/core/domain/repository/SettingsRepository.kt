@@ -18,4 +18,7 @@ interface SettingsRepository {
     suspend fun setCurrencyOverride(currency: Currency?)
 
     suspend fun setOnboardingCompleted(completed: Boolean)
+
+    /** Ask for a biometric (or device credential) unlock before showing the app when a session is restored. */
+    suspend fun setBiometricLockEnabled(enabled: Boolean)
 }

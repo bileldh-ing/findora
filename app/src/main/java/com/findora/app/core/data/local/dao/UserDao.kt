@@ -19,6 +19,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :id")
     fun observeById(id: String): Flow<UserEntity?>
 
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun findById(id: String): UserEntity?
+
     @Query("UPDATE users SET password_hash = :hash, password_salt = :salt WHERE id = :id")
     suspend fun updatePassword(
         id: String,

@@ -126,7 +126,7 @@ object DatabaseModule {
     ): FindoraDatabase =
         Room
             .databaseBuilder(context, FindoraDatabase::class.java, FindoraDatabase.NAME)
-            // Schema v1 is the first release; future versions ship explicit, tested migrations.
+            // Every schema change ships a migration (auto or explicit) tested against the exported schemas.
             .build()
 
     @Provides

@@ -52,6 +52,10 @@ class DataStoreSettingsRepository
             dataStore.edit { it[Keys.onboarding] = completed }
         }
 
+        override suspend fun setBiometricLockEnabled(enabled: Boolean) {
+            dataStore.edit { it[Keys.biometric] = enabled }
+        }
+
         private suspend fun put(
             key: Preferences.Key<String>,
             value: String,
@@ -69,6 +73,7 @@ class DataStoreSettingsRepository
                         Currency.entries.firstOrNull { it.code == code }
                     },
                 onboardingCompleted = prefs[Keys.onboarding] ?: false,
+                biometricLockEnabled = prefs[Keys.biometric] ?: false,
             )
 
         private object Keys {
@@ -77,5 +82,6 @@ class DataStoreSettingsRepository
             val region = stringPreferencesKey("region_id")
             val currency = stringPreferencesKey("currency_override")
             val onboarding = booleanPreferencesKey("onboarding_completed")
+            val biometric = booleanPreferencesKey("biometric_lock")
         }
     }
