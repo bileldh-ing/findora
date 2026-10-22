@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
-      contents: write # dependency-submission uploads the Gradle dependency graph on main
+      contents: write # dependency-submission can submit the Gradle dependency graph on main
       pull-requests: write # dependency-review comments on PRs
     steps:
       - uses: actions/checkout@v7
@@ -33,11 +33,16 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Submit dependency graph (main)
-        if: github.event_name == 'push'
+      # The resolved Gradle dependency graph is always generated (uploaded as an artifact). It is also
+      # submitted to GitHub (Dependabot alerts, dependency review) once the repository's Dependency
+      # graph is enabled and the DEPENDENCY_GRAPH_ENABLED variable is 'true' (see CONTRIBUTING.md).
+      - name: Resolve dependency graph
+        if: github.event_name != 'pull_request'
         uses: gradle/actions/dependency-submission@v6
+        with:
+          dependency-graph: ${{ vars.DEPENDENCY_GRAPH_ENABLED == 'true' && 'generate-submit-and-upload' || 'generate-and-upload' }}
       - name: Review dependency changes (PR)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && vars.DEPENDENCY_GRAPH_ENABLED == 'true'
         uses: actions/dependency-review-action@v5
         with:
           fail-on-severity: high

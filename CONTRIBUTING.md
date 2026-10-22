@@ -20,8 +20,14 @@ Run the same gates CI runs:
 ./gradlew :app:connectedDebugAndroidTest    # instrumented tests, with an emulator or device attached
 ```
 
-CI also validates the Gradle wrapper, reviews new dependencies for known vulnerabilities, runs the
+CI also validates the Gradle wrapper checksum, resolves the full dependency graph, runs the
 instrumented tests on an API 34 emulator and builds the R8 release APK and AAB.
+
+Dependency vulnerability review on pull requests needs the repository's dependency graph:
+Settings → Code security → enable **Dependency graph** (and Dependabot alerts), then add the
+repository variable `DEPENDENCY_GRAPH_ENABLED` = `true` (Settings → Secrets and variables → Actions →
+Variables). CI then submits the Gradle graph on every push to `main` and runs
+`dependency-review-action` (fails on high-severity advisories) on every pull request.
 
 ## Code guidelines
 
