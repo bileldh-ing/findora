@@ -194,4 +194,5 @@
     <string name="locations_title">Locations</string>
     <string name="locations_subtitle">Choose a region, or jump straight to a neighbourhood</string>
     <string name="locations_current">Current</string>
+    <string name="notifications_mark_read">Mark as read</string>
 </resources>

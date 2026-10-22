@@ -177,4 +177,5 @@
     <string name="locations_title">المواقع</string>
     <string name="locations_subtitle">اختر منطقة أو انتقل مباشرة إلى حي</string>
     <string name="locations_current">الحالي</string>
+    <string name="notifications_mark_read">تحديد كمقروء</string>
 </resources>

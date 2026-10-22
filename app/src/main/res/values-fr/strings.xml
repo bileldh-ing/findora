@@ -177,4 +177,5 @@
     <string name="locations_title">Lieux</string>
     <string name="locations_subtitle">Choisissez une région ou allez directement à un quartier</string>
     <string name="locations_current">Actuel</string>
+    <string name="notifications_mark_read">Marquer comme lu</string>
 </resources>
