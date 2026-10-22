@@ -10,7 +10,7 @@ object PropertyDeepLink {
     const val HOST = "property"
     const val BASE_PATH = "$SCHEME://$HOST"
 
-    private val idPattern = Regex("[A-Za-z0-9._-]+")
+    private val idPattern = Regex("[A-Za-z0-9][A-Za-z0-9._-]*")
 
     fun uriFor(propertyId: String): String = "$BASE_PATH/$propertyId"
 

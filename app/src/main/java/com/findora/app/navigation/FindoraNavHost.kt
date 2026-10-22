@@ -108,7 +108,7 @@ private fun FindoraGraph(
             }
         }
         composable<FindoraRoute.PropertyDetail>(
-            deepLinks = listOf(navDeepLink<FindoraRoute.PropertyDetail>(basePath = PropertyDeepLink.BASE_PATH)),
+            deepLinks = propertyDetailDeepLinks,
         ) {
             CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
                 DetailRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
@@ -129,6 +129,10 @@ private fun FindoraGraph(
 }
 
 private const val SEARCH_FADE_MILLIS = 200
+
+/** `findora://property/{propertyId}` mapped onto [FindoraRoute.PropertyDetail]; shared with the routing test. */
+internal val propertyDetailDeepLinks =
+    listOf(navDeepLink<FindoraRoute.PropertyDetail>(basePath = PropertyDeepLink.BASE_PATH))
 
 /** Navigates to [route] and removes everything behind it (sign-in, sign-out). */
 private fun NavHostController.navigateClearingBackStack(route: FindoraRoute) {

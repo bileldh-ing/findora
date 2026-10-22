@@ -22,7 +22,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 1 | Data layer and property imagery | Done |
 | 2 | Welcome and authentication | Done |
 | 3 | Home screen, pixel-faithful to the reference design | Done |
-| 4 | Property detail and viewing bookings | Next |
+| 4 | Property detail (done: gallery, agent contact, share links, similar homes); viewing bookings next | In progress |
 | 5 | Best-match recommendations | Planned |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
@@ -211,6 +211,7 @@ app/src/main/java/com/findora/app
 | `HomeViewModelTest`, `SearchViewModelTest`, `SavedAndLocationsViewModelTest` | Header, refresh states, category paging, favourites per user, filter reset between users, regions, notifications; debounced suggestions, submit, per-user recents; saved list; locations (Turbine) |
 | `HomeDataRepositoriesTest` | Unread messages per user and mark-read, recent-search delete, Home filter ownership |
 | `HomeScreenTest`, `SearchAndTabsScreenTest` | Reference header, chips filtering the grid, favourite toggle and TalkBack action, filter sheet and badge, empty/error/offline states, notifications, search, nav pill, Saved, Locations (Compose, Robolectric) |
+| `DetailViewModelTest`, `PropertyDeepLinkTest`, `DetailScreenTest` | Detail content, not found, retry, favourites and recorded signals, share/call/email/map effects; `findora://property/{id}` parsing and routing; detail UI, gallery and error states (Turbine, Compose, Robolectric) |
 | `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, tabs, Settings and back |
 
 ## Credits
