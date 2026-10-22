@@ -232,4 +232,54 @@
         <item quantity="many">%1$d avis</item>
         <item quantity="other">%1$d avis</item>
     </plurals>
+    <!-- Visites (Phase 4B) -->
+    <string name="schedule_title">Planifier une visite</string>
+    <string name="schedule_pick_day">Choisissez un jour</string>
+    <string name="schedule_pick_time">Choisissez un horaire</string>
+    <string name="schedule_today">Aujourd\'hui</string>
+    <string name="schedule_day_full_cd">%1$s, complet</string>
+    <plurals name="schedule_day_cd">
+        <item quantity="one">%1$s, %2$d créneau libre</item>
+        <item quantity="many">%1$s, %2$d créneaux libres</item>
+        <item quantity="other">%1$s, %2$d créneaux libres</item>
+    </plurals>
+    <string name="schedule_slot_taken_cd">%1$s, déjà réservé</string>
+    <string name="schedule_slot_busy_cd">%1$s, vous avez déjà une visite à cette heure</string>
+    <string name="schedule_no_slots">Aucun créneau libre ce jour-là. Essayez un autre jour.</string>
+    <string name="schedule_note_label">Note pour l\'agent (facultatif)</string>
+    <string name="schedule_note_counter">%1$d/%2$d</string>
+    <string name="schedule_select_time">Choisissez un horaire</string>
+    <string name="schedule_confirm_at">Confirmer la visite à %1$s</string>
+    <string name="schedule_confirming">Réservation…</string>
+    <string name="schedule_guest_note">Mode invité : cette visite reste sur cet appareil jusqu\'à votre déconnexion.</string>
+    <string name="schedule_error_taken">Ce créneau vient d\'être réservé. Choisissez-en un autre.</string>
+    <string name="schedule_error_overlap">Vous avez déjà une visite à cette heure.</string>
+    <string name="schedule_error_past">Ce créneau est passé. Choisissez-en un autre.</string>
+    <string name="schedule_error_failed">Impossible de réserver la visite</string>
+    <string name="booked_title">Visite réservée</string>
+    <string name="booked_when">%1$s à %2$s</string>
+    <string name="booked_reminder">Nous vous le rappellerons une heure avant.</string>
+    <string name="booked_add_calendar">Ajouter à l\'agenda</string>
+    <string name="booked_my_viewings">Voir mes visites</string>
+    <string name="action_done">Terminé</string>
+    <string name="calendar_event_title">Visite : %1$s</string>
+    <string name="calendar_event_description">Réservée avec Findora : %1$s</string>
+    <string name="viewings_title">Mes visites</string>
+    <string name="viewings_upcoming">À venir</string>
+    <string name="viewings_past">Passées</string>
+    <string name="viewings_empty_title">Aucune visite pour l\'instant</string>
+    <string name="viewings_empty_body">Ouvrez une annonce et touchez « Planifier une visite » pour réserver.</string>
+    <string name="viewings_cancel">Annuler la visite</string>
+    <string name="viewings_cancel_title">Annuler cette visite ?</string>
+    <string name="viewings_cancel_message">Votre visite de %1$s le %2$s sera annulée et le créneau libéré.</string>
+    <string name="viewings_keep">La garder</string>
+    <string name="viewings_cancelled">Visite annulée</string>
+    <string name="viewings_cancel_failed">Impossible d\'annuler la visite. Réessayez.</string>
+    <string name="viewings_listing_unavailable">Annonce plus disponible</string>
+    <string name="viewings_note">Note : %1$s</string>
+    <string name="reminder_channel_name">Rappels de visite</string>
+    <string name="reminder_channel_description">Un rappel une heure avant chaque visite réservée.</string>
+    <string name="reminder_title">Visite dans une heure</string>
+    <string name="reminder_body">%1$s à %2$s. Touchez pour voir l\'annonce.</string>
+    <string name="reminder_fallback_title">Votre visite</string>
 </resources>

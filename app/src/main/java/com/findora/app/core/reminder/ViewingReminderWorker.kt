@@ -33,18 +33,18 @@ class ViewingReminderWorker
     ) : CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
             val viewingId = inputData.getLong(KEY_VIEWING_ID, NO_ID)
-            if (viewingId == NO_ID) return Result.failure()
-            val viewing = viewings.viewing(viewingId) ?: return Result.success()
-            if (!viewing.startAt.isAfter(clock.now())) return Result.success()
-            val title =
-                properties.observeProperty(viewing.propertyId).first()?.title
-                    ?: applicationContext.getString(R.string.reminder_fallback_title)
-            val time =
-                DateTimeFormatter
-                    .ofLocalizedTime(FormatStyle.SHORT)
-                    .format(viewing.startAt.atZone(zone))
-            notifier.post(ViewingReminder(viewing.id, viewing.propertyId, title, time))
-            return Result.success()
+            val viewing = if (viewingId == NO_ID) null else viewings.viewing(viewingId)
+            if (viewing != null && viewing.startAt.isAfter(clock.now())) {
+                val title =
+                    properties.observeProperty(viewing.propertyId).first()?.title
+                        ?: applicationContext.getString(R.string.reminder_fallback_title)
+                val time =
+                    DateTimeFormatter
+                        .ofLocalizedTime(FormatStyle.SHORT)
+                        .format(viewing.startAt.atZone(zone))
+                notifier.post(ViewingReminder(viewing.id, viewing.propertyId, title, time))
+            }
+            return if (viewingId == NO_ID) Result.failure() else Result.success()
         }
 
         companion object {

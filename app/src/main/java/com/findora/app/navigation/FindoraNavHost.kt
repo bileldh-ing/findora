@@ -24,6 +24,8 @@ import com.findora.app.feature.auth.welcome.WelcomeRoute
 import com.findora.app.feature.designsystem.DesignSystemScreen
 import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.search.SearchRoute
+import com.findora.app.feature.viewing.ScheduleViewingRoute
+import com.findora.app.feature.viewing.ViewingsRoute
 
 /**
  * The root graph. A [SharedTransitionLayout] wraps it so a listing photo can travel from its card (inside the
@@ -103,6 +105,7 @@ private fun FindoraGraph(
                     onOpenProperty = openProperty,
                     onSignedOut = toWelcome,
                     onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
+                    onOpenViewings = { navController.navigate(FindoraRoute.Viewings) },
                     onOpenDesignSystem = openDesignSystem,
                 )
             }
@@ -111,8 +114,27 @@ private fun FindoraGraph(
             deepLinks = propertyDetailDeepLinks,
         ) {
             CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
-                DetailRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
+                DetailRoute(
+                    onBack = { navController.popBackStack() },
+                    onOpenProperty = openProperty,
+                    onScheduleViewing = { id -> navController.navigate(FindoraRoute.ScheduleViewing(id)) },
+                )
             }
+        }
+        composable<FindoraRoute.ScheduleViewing> {
+            ScheduleViewingRoute(
+                onBack = { navController.popBackStack() },
+                onDone = { navController.popBackStack() },
+                onOpenViewings = {
+                    navController.navigate(FindoraRoute.Viewings) {
+                        popUpTo<FindoraRoute.ScheduleViewing> { inclusive = true }
+                    }
+                },
+                onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
+            )
+        }
+        composable<FindoraRoute.Viewings> {
+            ViewingsRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
         }
         composable<FindoraRoute.Search>(
             enterTransition = { fadeIn(tween(SEARCH_FADE_MILLIS)) },

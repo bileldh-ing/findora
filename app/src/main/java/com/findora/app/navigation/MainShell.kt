@@ -43,6 +43,7 @@ fun MainShell(
     onOpenProperty: (String) -> Unit,
     onSignedOut: () -> Unit,
     onCreateAccount: () -> Unit,
+    onOpenViewings: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
@@ -89,6 +90,7 @@ fun MainShell(
                 SettingsRoute(
                     onSignedOut = onSignedOut,
                     onCreateAccount = onCreateAccount,
+                    onOpenViewings = onOpenViewings,
                     onOpenDesignSystem = onOpenDesignSystem,
                     contentPadding = contentPadding,
                 )

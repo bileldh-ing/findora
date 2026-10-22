@@ -37,7 +37,8 @@ interface ViewingRepository {
 
 /** Schedules the local "viewing in one hour" reminder. Implemented with WorkManager. */
 interface ViewingReminderScheduler {
-    fun schedule(viewing: Viewing)
+    /** Returns true when a reminder was scheduled (false when the viewing starts within the reminder lead). */
+    fun schedule(viewing: Viewing): Boolean
 
     fun cancel(viewingId: Long)
 }

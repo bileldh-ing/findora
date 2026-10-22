@@ -47,6 +47,7 @@ data class ViewingSlot(
 data class ViewingDay(
     val date: LocalDate,
     val slots: List<ViewingSlot>,
+    val isToday: Boolean = false,
 ) {
     val availableCount: Int get() = slots.count { it.isAvailable }
 }
@@ -73,7 +74,7 @@ class ViewingSlotGenerator(
         val today = now.atZone(zone).toLocalDate()
         return (0 until config.horizonDays)
             .map { offset -> today.plusDays(offset.toLong()) }
-            .map { date -> ViewingDay(date, slotsOn(date, now, propertyBookings, userBookings)) }
+            .map { date -> ViewingDay(date, slotsOn(date, now, propertyBookings, userBookings), isToday = date == today) }
             .filter { it.slots.isNotEmpty() }
     }
 

@@ -22,8 +22,8 @@ class WorkManagerViewingReminderScheduler
         private val workManager: Provider<WorkManager>,
         private val clock: AppClock,
     ) : ViewingReminderScheduler {
-        override fun schedule(viewing: Viewing) {
-            val delay = reminderDelay(viewing.startAt, clock.now()) ?: return
+        override fun schedule(viewing: Viewing): Boolean {
+            val delay = reminderDelay(viewing.startAt, clock.now()) ?: return false
             val request =
                 OneTimeWorkRequestBuilder<ViewingReminderWorker>()
                     .setInitialDelay(delay.toMillis(), TimeUnit.MILLISECONDS)
@@ -31,6 +31,7 @@ class WorkManagerViewingReminderScheduler
                     .addTag(TAG)
                     .build()
             workManager.get().enqueueUniqueWork(uniqueName(viewing.id), ExistingWorkPolicy.REPLACE, request)
+            return true
         }
 
         override fun cancel(viewingId: Long) {

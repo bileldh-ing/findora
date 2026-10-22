@@ -33,7 +33,8 @@ complexity:
   LongParameterList:
     functionThreshold: 8
     ignoreDefaultParameters: true
-    ignoreAnnotated: ['Composable']
+    # Dependency-injected constructors list collaborators, not call-site arguments.
+    ignoreAnnotated: ['Composable', 'Inject', 'AssistedInject']
   LongMethod:
     ignoreAnnotated: ['Composable']
 

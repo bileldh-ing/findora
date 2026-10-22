@@ -34,6 +34,16 @@ sealed interface FindoraRoute {
         val propertyId: String,
     ) : FindoraRoute
 
+    /** Book a viewing of a listing (opened from its detail page). */
+    @Serializable
+    data class ScheduleViewing(
+        val propertyId: String,
+    ) : FindoraRoute
+
+    /** The user's upcoming and past viewings (from Settings and from a confirmed booking). */
+    @Serializable
+    data object Viewings : FindoraRoute
+
     /** Debug-only catalogue of every design-system component. */
     @Serializable
     data object DesignSystem : FindoraRoute

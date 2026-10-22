@@ -48,6 +48,7 @@ private val AvatarSize = 56.dp
 fun SettingsRoute(
     onSignedOut: () -> Unit,
     onCreateAccount: () -> Unit,
+    onOpenViewings: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -66,6 +67,7 @@ fun SettingsRoute(
         state = state,
         onEvent = viewModel::onEvent,
         onCreateAccount = onCreateAccount,
+        onOpenViewings = onOpenViewings,
         onOpenDesignSystem = onOpenDesignSystem,
         modifier = modifier,
         contentPadding = contentPadding,
@@ -81,6 +83,7 @@ fun SettingsScreen(
     state: SettingsUiState,
     onEvent: (SettingsUiEvent) -> Unit,
     onCreateAccount: () -> Unit,
+    onOpenViewings: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -105,6 +108,13 @@ fun SettingsScreen(
         )
         Spacer(Modifier.height(FindoraTheme.spacing.xs))
         AccountCard(state = state, onCreateAccount = onCreateAccount)
+        Spacer(Modifier.height(FindoraTheme.spacing.xs))
+        ActionRow(
+            title = stringResource(R.string.viewings_title),
+            icon = FindoraIcons.Calendar,
+            onClick = onOpenViewings,
+            modifier = Modifier.testTag("settingsViewings"),
+        )
 
         SectionTitle(stringResource(R.string.settings_appearance))
         SegmentedControl(
