@@ -18,6 +18,9 @@ interface MessageDao {
     @Query("SELECT COUNT(*) FROM messages WHERE recipient_id = :userId AND read_at IS NULL")
     fun observeUnreadCount(userId: String): Flow<Int>
 
+    @Query("SELECT * FROM messages WHERE recipient_id = :userId AND read_at IS NULL ORDER BY sent_at DESC, id DESC")
+    fun observeUnread(userId: String): Flow<List<MessageEntity>>
+
     @Query(
         """
         UPDATE messages SET read_at = :readAtMillis

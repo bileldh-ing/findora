@@ -22,9 +22,11 @@ import com.findora.app.core.data.local.dao.ViewingDao
 import com.findora.app.core.data.remote.FakeRemoteDataSource
 import com.findora.app.core.data.remote.RemoteDataSource
 import com.findora.app.core.data.repository.CachePolicy
+import com.findora.app.core.data.repository.InMemoryHomeFilterRepository
 import com.findora.app.core.data.repository.OfflineFirstPropertyRepository
 import com.findora.app.core.data.repository.RoomFavoritesRepository
 import com.findora.app.core.data.repository.RoomInteractionRepository
+import com.findora.app.core.data.repository.RoomMessageRepository
 import com.findora.app.core.data.repository.RoomSearchHistoryRepository
 import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.data.seed.AssetSeedReader
@@ -32,7 +34,9 @@ import com.findora.app.core.data.seed.SeedReader
 import com.findora.app.core.data.settings.DataStoreSettingsRepository
 import com.findora.app.core.di.IoDispatcher
 import com.findora.app.core.domain.repository.FavoritesRepository
+import com.findora.app.core.domain.repository.HomeFilterRepository
 import com.findora.app.core.domain.repository.InteractionRepository
+import com.findora.app.core.domain.repository.MessageRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.RegionRepository
 import com.findora.app.core.domain.repository.SearchHistoryRepository
@@ -76,6 +80,12 @@ abstract class DataBindingsModule {
 
     @Binds
     abstract fun bindSettingsRepository(impl: DataStoreSettingsRepository): SettingsRepository
+
+    @Binds
+    abstract fun bindHomeFilterRepository(impl: InMemoryHomeFilterRepository): HomeFilterRepository
+
+    @Binds
+    abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
 }
 
 @Module
