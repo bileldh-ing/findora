@@ -56,6 +56,9 @@ data class HomeUiState(
 ) {
     val category: HomeCategory get() = HomeCategory.of(filter.type)
 
+    /** True when anything narrows the feed (category, search text or a sheet refinement). */
+    val isFiltered: Boolean get() = filter != PropertyFilter()
+
     /** "Kochi, Kerala": the region's first neighbourhood and its name, as in the reference header. */
     val locationLabel: String
         get() = region?.let { pack -> listOfNotNull(pack.localities.firstOrNull()?.name, pack.name).distinct().joinToString(", ") }.orEmpty()
@@ -82,6 +85,14 @@ sealed interface HomeUiEvent {
 
     data object ClearQuery : HomeUiEvent
 
+    /** Back to the default feed: every category, refinement and search text cleared. */
+    data object ResetFilter : HomeUiEvent
+
+    /** A notification swiped away in the sheet is marked read. */
+    data class DismissNotification(
+        val messageId: String,
+    ) : HomeUiEvent
+
     data object Refresh : HomeUiEvent
 }
 
@@ -95,7 +106,7 @@ class HomeViewModel
         private val filters: HomeFilterRepository,
         private val auth: AuthRepository,
         private val currentRegion: CurrentRegion,
-        messages: MessageRepository,
+        private val messages: MessageRepository,
     ) : ViewModel() {
         private val userId: Flow<String> =
             auth.session.map { it?.userId ?: AuthRepository.GUEST_USER_ID }.distinctUntilChanged()
@@ -139,6 +150,7 @@ class HomeViewModel
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), HomeUiState())
 
         init {
+            viewModelScope.launch { userId.collect(filters::claim) }
             viewModelScope.launch { regionList.value = currentRegion.all() }
             viewModelScope.launch {
                 currentRegion.region.map { it.id }.distinctUntilChanged().collect { refresh(it, force = false) }
@@ -154,6 +166,9 @@ class HomeViewModel
                 is HomeUiEvent.SelectRegion -> viewModelScope.launch { currentRegion.select(event.regionId) }
                 HomeUiEvent.ClearRefinements -> filters.update { it.withoutRefinements() }
                 HomeUiEvent.ClearQuery -> filters.update { it.copy(query = "") }
+                HomeUiEvent.ResetFilter -> filters.reset()
+                is HomeUiEvent.DismissNotification ->
+                    viewModelScope.launch { messages.markRead(userId.first(), event.messageId) }
                 HomeUiEvent.Refresh ->
                     viewModelScope.launch { refresh(currentRegion.region.first().id, force = true) }
             }

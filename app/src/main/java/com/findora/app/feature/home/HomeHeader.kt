@@ -47,7 +47,8 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 
 private val HeaderButtonSize = 48.dp
 private val HeaderIconSize = 22.dp
-private val LocationIconSize = 18.dp
+private val LocationIconSize = 30.dp
+private val ClearIconSize = 18.dp
 private val UnreadDotSize = 9.dp
 private val SearchPillHeight = 56.dp
 private val BadgeSize = 18.dp
@@ -70,6 +71,7 @@ fun HomeTopBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val locationDescription = stringResource(R.string.cd_change_location, locationLabel)
+        // Pin-in-a-house icon followed by the black location pill; the whole group is one button.
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier =
@@ -77,27 +79,30 @@ fun HomeTopBar(
                     .weight(1f, fill = false)
                     .heightIn(min = HeaderButtonSize)
                     .clip(FindoraTheme.shapes.chip)
-                    .background(FindoraTheme.colors.primaryAction)
                     .clickable(onClick = onLocationClick)
                     .clearAndSetSemantics {
                         contentDescription = locationDescription
                         role = Role.Button
-                    }.padding(horizontal = FindoraTheme.spacing.md)
-                    .testTag("locationChip"),
+                    }.testTag("locationChip"),
         ) {
             Icon(
                 FindoraIcons.MapPinHouse,
                 contentDescription = null,
-                tint = FindoraTheme.colors.onPrimaryAction,
+                tint = FindoraTheme.colors.onBackground,
                 modifier = Modifier.size(LocationIconSize),
             )
             Spacer(Modifier.width(FindoraTheme.spacing.xs))
             Text(
                 text = locationLabel,
-                style = FindoraTheme.typography.bodyMedium,
+                style = FindoraTheme.typography.label,
                 color = FindoraTheme.colors.onPrimaryAction,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                modifier =
+                    Modifier
+                        .clip(FindoraTheme.shapes.chip)
+                        .background(FindoraTheme.colors.primaryAction)
+                        .padding(horizontal = FindoraTheme.spacing.sm, vertical = FindoraTheme.spacing.xxs),
             )
         }
         Spacer(Modifier.weight(1f, fill = true).width(FindoraTheme.spacing.xs))
@@ -155,11 +160,7 @@ private fun CircleButton(
                 .size(HeaderButtonSize)
                 .clip(CircleShape)
                 .then(
-                    if (filled) {
-                        Modifier.background(FindoraTheme.colors.primaryAction)
-                    } else {
-                        Modifier.border(1.dp, FindoraTheme.colors.outline, CircleShape)
-                    },
+                    Modifier.background(if (filled) FindoraTheme.colors.primaryAction else FindoraTheme.colors.surface),
                 ).clickable(onClick = onClick)
                 .clearAndSetSemantics {
                     contentDescription = description
@@ -255,7 +256,7 @@ fun SearchPill(
                             role = Role.Button
                         }.testTag("clearQuery"),
             ) {
-                Icon(FindoraIcons.Close, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(LocationIconSize))
+                Icon(FindoraIcons.Close, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(ClearIconSize))
             }
         }
         Box(Modifier.width(1.dp).height(DividerHeight).background(FindoraTheme.colors.outline))

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Session-scoped filter state; it resets on sign-out so the next user starts from the default feed. */
+/** Process-scoped filter state; it resets when another user claims it, so each user starts from the default feed. */
 @Singleton
 class InMemoryHomeFilterRepository
     @Inject
@@ -19,7 +19,15 @@ class InMemoryHomeFilterRepository
 
         override fun update(transform: (PropertyFilter) -> PropertyFilter) = state.update(transform)
 
+        private var owner: String? = null
+
         override fun reset() {
             state.value = PropertyFilter()
+        }
+
+        @Synchronized
+        override fun claim(ownerId: String) {
+            if (owner != null && owner != ownerId) reset()
+            owner = ownerId
         }
     }

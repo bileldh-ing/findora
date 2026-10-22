@@ -13,4 +13,10 @@ interface HomeFilterRepository {
     fun update(transform: (PropertyFilter) -> PropertyFilter)
 
     fun reset()
+
+    /**
+     * Called with the current user whenever the feed is shown: when a different user (or a guest) takes over,
+     * the previous user's filter and search text are dropped so nothing leaks between accounts.
+     */
+    fun claim(ownerId: String)
 }
