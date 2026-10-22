@@ -196,7 +196,11 @@ class ScheduleViewingViewModel
             // A selection that was booked meanwhile (or has started) silently drops out.
             val slot =
                 form.slot?.takeIf { wanted ->
-                    days.firstOrNull { it.date == date }?.slots.orEmpty().any { it.start == wanted && it.isAvailable }
+                    days
+                        .firstOrNull { it.date == date }
+                        ?.slots
+                        .orEmpty()
+                        .any { it.start == wanted && it.isAvailable }
                 }
             return ScheduleUiState.Picking(
                 property = property,

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.findora.app.core.common.AppClock
 import com.findora.app.core.common.SystemAppClock
 import com.findora.app.core.data.local.FindoraDatabase
@@ -47,8 +48,6 @@ import com.findora.app.core.domain.repository.ViewingRepository
 import com.findora.app.core.reminder.AndroidViewingReminderNotifier
 import com.findora.app.core.reminder.ViewingReminderNotifier
 import com.findora.app.core.reminder.WorkManagerViewingReminderScheduler
-import androidx.work.WorkManager
-import java.time.ZoneId
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -59,6 +58,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
+import java.time.ZoneId
 import javax.inject.Singleton
 import kotlin.random.Random
 

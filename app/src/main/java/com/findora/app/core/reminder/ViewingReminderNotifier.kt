@@ -52,8 +52,9 @@ class AndroidViewingReminderNotifier
                     .Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_stat_viewing)
                     .setContentTitle(context.getString(R.string.reminder_title))
-                    .setContentText(context.getString(R.string.reminder_body, reminder.propertyTitle, reminder.timeText))
-                    .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                    .setContentText(
+                        context.getString(R.string.reminder_body, reminder.propertyTitle, reminder.timeText),
+                    ).setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setAutoCancel(true)
                     .setContentIntent(openPropertyIntent(reminder))

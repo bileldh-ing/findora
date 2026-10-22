@@ -48,9 +48,9 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -196,7 +196,12 @@ private fun PickingContent(
         ViewingTopBar(stringResource(R.string.schedule_title), onBack)
         Column(
             verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.md),
-            modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(bottom = FindoraTheme.spacing.md),
+            modifier =
+                Modifier
+                    .weight(
+                        1f,
+                    ).verticalScroll(rememberScrollState())
+                    .padding(bottom = FindoraTheme.spacing.md),
         ) {
             Column(Modifier.padding(horizontal = horizontal)) {
                 Text(
@@ -368,7 +373,10 @@ private fun SlotGrid(
         return
     }
     val locale = currentLocale()
-    Column(verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs), modifier = modifier.testTag("slotGrid")) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
+        modifier = modifier.testTag("slotGrid"),
+    ) {
         slots.chunked(SLOT_COLUMNS).forEachIndexed { rowIndex, row ->
             Row(horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
                 row.forEachIndexed { columnIndex, slot ->
@@ -410,8 +418,10 @@ private fun SlotChip(
                 .heightIn(min = SlotHeight)
                 .clip(FindoraTheme.shapes.chip)
                 .background(if (isSelected) colors.primaryAction else colors.background)
-                .border(BorderStroke(1.dp, if (isSelected) colors.primaryAction else colors.outline), FindoraTheme.shapes.chip)
-                .selectable(
+                .border(
+                    BorderStroke(1.dp, if (isSelected) colors.primaryAction else colors.outline),
+                    FindoraTheme.shapes.chip,
+                ).selectable(
                     selected = isSelected,
                     enabled = slot.isAvailable,
                     role = Role.RadioButton,

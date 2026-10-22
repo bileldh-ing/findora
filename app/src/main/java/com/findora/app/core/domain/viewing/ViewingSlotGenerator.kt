@@ -74,8 +74,9 @@ class ViewingSlotGenerator(
         val today = now.atZone(zone).toLocalDate()
         return (0 until config.horizonDays)
             .map { offset -> today.plusDays(offset.toLong()) }
-            .map { date -> ViewingDay(date, slotsOn(date, now, propertyBookings, userBookings), isToday = date == today) }
-            .filter { it.slots.isNotEmpty() }
+            .map { date ->
+                ViewingDay(date, slotsOn(date, now, propertyBookings, userBookings), isToday = date == today)
+            }.filter { it.slots.isNotEmpty() }
     }
 
     /** Whether a slot starting at [start] can be booked now (used to re-check right before saving). */

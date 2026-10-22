@@ -113,7 +113,9 @@ class ViewingsViewModel
                     flowOf(emptyList())
                 } else {
                     combine(
-                        list.map { viewing -> properties.observeProperty(viewing.propertyId).map { ViewingItem(viewing, it) } },
+                        list.map { viewing ->
+                            properties.observeProperty(viewing.propertyId).map { ViewingItem(viewing, it) }
+                        },
                     ) { it.toList() }
                 }
             }

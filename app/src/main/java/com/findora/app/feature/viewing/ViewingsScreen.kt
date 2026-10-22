@@ -137,7 +137,10 @@ private fun ViewingsList(
     ) {
         if (state.upcoming.isNotEmpty()) {
             item(key = "upcomingHeader") {
-                ViewingSectionTitle(stringResource(R.string.viewings_upcoming), Modifier.padding(top = FindoraTheme.spacing.xs))
+                ViewingSectionTitle(
+                    stringResource(R.string.viewings_upcoming),
+                    Modifier.padding(top = FindoraTheme.spacing.xs),
+                )
             }
             items(state.upcoming, key = { "u${it.viewing.id}" }) { item ->
                 ViewingRow(
@@ -150,7 +153,10 @@ private fun ViewingsList(
         }
         if (state.past.isNotEmpty()) {
             item(key = "pastHeader") {
-                ViewingSectionTitle(stringResource(R.string.viewings_past), Modifier.padding(top = FindoraTheme.spacing.md))
+                ViewingSectionTitle(
+                    stringResource(R.string.viewings_past),
+                    Modifier.padding(top = FindoraTheme.spacing.md),
+                )
             }
             items(state.past, key = { "p${it.viewing.id}" }) { item ->
                 ViewingRow(
@@ -189,9 +195,16 @@ private fun ViewingRow(
                 .fillMaxWidth()
                 .clip(FindoraTheme.shapes.chip)
                 .background(FindoraTheme.colors.surface)
-                .clickable(enabled = item.property != null, role = Role.Button, onClickLabel = openLabel, onClick = onOpen)
-                .padding(start = FindoraTheme.spacing.md, top = FindoraTheme.spacing.sm, bottom = FindoraTheme.spacing.sm)
-                .testTag("viewing_${item.viewing.id}"),
+                .clickable(
+                    enabled = item.property != null,
+                    role = Role.Button,
+                    onClickLabel = openLabel,
+                    onClick = onOpen,
+                ).padding(
+                    start = FindoraTheme.spacing.md,
+                    top = FindoraTheme.spacing.sm,
+                    bottom = FindoraTheme.spacing.sm,
+                ).testTag("viewing_${item.viewing.id}"),
     ) {
         Icon(
             FindoraIcons.Calendar,
