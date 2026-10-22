@@ -52,6 +52,7 @@ import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.image.offlineFallback
 import kotlinx.coroutines.launch
@@ -88,7 +89,9 @@ fun PropertyCard(
     val rating = String.format(locale, "%.1f", property.rating)
     val summary =
         buildString {
-            append(stringResource(R.string.card_description, property.title, property.locality, price, rating))
+            // TalkBack reads a currency-formatted amount ("₹10,000") rather than the design's "10.000/ Month".
+            val spokenPrice = PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
+            append(stringResource(R.string.card_description, property.title, property.locality, spokenPrice, rating))
             if (property.verified) append(' ').append(stringResource(R.string.card_verified))
             if (isFavorite) append(' ').append(stringResource(R.string.card_saved))
         }

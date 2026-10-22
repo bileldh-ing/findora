@@ -94,10 +94,6 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     autoFocus: Boolean = true,
 ) {
-    val focusRequester = remember { FocusRequester() }
-    if (autoFocus) {
-        LaunchedEffect(Unit) { focusRequester.requestFocus() }
-    }
     LazyColumn(
         modifier =
             modifier
@@ -114,7 +110,7 @@ fun SearchScreen(
                 onQueryChange = { onEvent(SearchUiEvent.QueryChanged(it)) },
                 onSubmit = { onEvent(SearchUiEvent.Submit(state.query)) },
                 onBack = onBack,
-                fieldModifier = Modifier.focusRequester(focusRequester),
+                autoFocus = autoFocus,
             )
         }
         if (state.showRecents) {
@@ -220,9 +216,14 @@ private fun SearchField(
     onQueryChange: (String) -> Unit,
     onSubmit: () -> Unit,
     onBack: () -> Unit,
+    autoFocus: Boolean,
     modifier: Modifier = Modifier,
-    fieldModifier: Modifier = Modifier,
 ) {
+    // Requested from the field's own composition so the requester is always attached first.
+    val focusRequester = remember { FocusRequester() }
+    if (autoFocus) {
+        LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
@@ -279,7 +280,8 @@ private fun SearchField(
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { onSubmit() }),
                     modifier =
-                        fieldModifier
+                        Modifier
+                            .focusRequester(focusRequester)
                             .fillMaxWidth()
                             .semantics { contentDescription = placeholder }
                             .testTag("searchField"),
