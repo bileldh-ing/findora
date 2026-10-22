@@ -1,12 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome_title">BIENVENUE</string>
-    <string name="welcome_subtitle">Trouvez votre prochain espace, sentez-vous chez vous\nLà où le confort rencontre la praticité</string>
-    <string name="open_design_system">Ouvrir le design system</string>
     <string name="back">Retour</string>
+    <string name="open_design_system">Ouvrir le design system</string>
     <string name="ds_typography">Typographie</string>
     <string name="ds_colors">Couleurs</string>
     <string name="ds_buttons">Boutons</string>
     <string name="ds_chips">Puces et verre</string>
     <string name="ds_brand">Marque</string>
+
+    <string name="welcome_title">BIENVENUE</string>
+    <string name="welcome_subtitle">Trouvez votre prochain espace, sentez-vous chez vous\nLà où le confort rencontre la praticité</string>
+    <string name="action_login">Connexion</string>
+    <string name="action_sign_up">Inscription</string>
+    <string name="action_try_demo">Essayer le compte démo</string>
+    <string name="action_continue_guest">Continuer en invité</string>
+
+    <string name="field_name">Nom complet</string>
+    <string name="field_email">E-mail</string>
+    <string name="field_password">Mot de passe</string>
+    <string name="field_confirm_password">Confirmer le mot de passe</string>
+    <string name="show_password">Afficher le mot de passe</string>
+    <string name="hide_password">Masquer le mot de passe</string>
+    <string name="remember_me">Rester connecté</string>
+    <string name="rule_min_length">Au moins 8 caractères</string>
+    <string name="rule_letter">Au moins une lettre</string>
+    <string name="rule_digit">Au moins un chiffre</string>
+    <string name="rule_met">Respectée</string>
+    <string name="rule_not_met">Pas encore respectée</string>
+
+    <string name="error_name_blank">Saisissez votre nom</string>
+    <string name="error_name_too_long">60 caractères maximum</string>
+    <string name="error_email_blank">Saisissez votre e-mail</string>
+    <string name="error_email_malformed">Saisissez une adresse e-mail valide</string>
+    <string name="error_password_blank">Saisissez votre mot de passe</string>
+    <string name="error_password_rules">Votre mot de passe ne respecte pas toutes les règles ci-dessous</string>
+    <string name="error_passwords_mismatch">Les mots de passe ne correspondent pas</string>
+    <string name="error_invalid_credentials">E-mail ou mot de passe incorrect. Tentatives restantes : %1$d</string>
+    <string name="error_locked_out">Trop de tentatives. Réessayez dans %1$d s</string>
+    <string name="error_email_taken">Un compte existe déjà avec cet e-mail</string>
+    <string name="error_account_not_found">Aucun compte trouvé avec cet e-mail</string>
+    <string name="error_invalid_code">Ce code n\'est pas valide</string>
+    <string name="error_code_expired">Ce code a expiré. Demandez-en un nouveau</string>
+    <string name="error_demo_unavailable">Le compte démo est indisponible. Réinitialisez son mot de passe ou créez un compte.</string>
+    <string name="error_code_blank">Saisissez le code à 6 chiffres</string>
+
+    <string name="login_title">Bon retour</string>
+    <string name="login_subtitle">Connectez-vous pour trouver votre prochain logement</string>
+    <string name="forgot_password_link">Mot de passe oublié ?</string>
+    <string name="login_no_account">Pas encore de compte ?</string>
+
+    <string name="signup_title">Créer un compte</string>
+    <string name="signup_subtitle">Rejoignez Findora et gardez les logements que vous aimez</string>
+    <string name="signup_have_account">Vous avez déjà un compte ?</string>
+
+    <string name="forgot_title">Réinitialiser le mot de passe</string>
+    <string name="forgot_subtitle">Saisissez l\'e-mail de votre compte et nous créerons un code de réinitialisation</string>
+    <string name="forgot_send_code">Envoyer le code</string>
+    <string name="forgot_demo_notice">Mode démo : aucun e-mail n\'est envoyé. Votre code est valable 10 minutes :</string>
+    <string name="forgot_code_label">Code de réinitialisation</string>
+    <string name="forgot_new_password">Nouveau mot de passe</string>
+    <string name="forgot_success">Mot de passe mis à jour. Vous pouvez vous connecter.</string>
+    <string name="forgot_back_to_login">Retour à la connexion</string>
+
+    <string name="unlock_title">Findora est verrouillé</string>
+    <string name="unlock_subtitle">Déverrouillez avec votre empreinte, votre visage ou le verrouillage de l\'écran</string>
+    <string name="unlock_action">Déverrouiller</string>
+    <string name="unlock_prompt_title">Déverrouiller Findora</string>
+    <string name="unlock_prompt_subtitle">Confirmez votre identité</string>
+    <string name="unlock_sign_out">Se déconnecter</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="account_greeting">Bonjour, %1$s</string>
+    <string name="account_guest_title">Navigation en invité</string>
+    <string name="account_guest_body">Créez un compte pour conserver vos favoris et vos recherches.</string>
+    <string name="settings_appearance">Apparence</string>
+    <string name="theme_system">Système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="settings_security">Sécurité</string>
+    <string name="biometric_lock">Verrouillage biométrique</string>
+    <string name="biometric_lock_summary">Demander votre empreinte, votre visage ou le verrouillage de l\'écran à l\'ouverture</string>
+    <string name="biometric_requires_remember">Disponible lorsque vous restez connecté</string>
+    <string name="settings_account">Compte</string>
+    <string name="action_logout">Se déconnecter</string>
+    <string name="action_delete_account">Supprimer le compte</string>
+    <string name="delete_account_title">Supprimer votre compte ?</string>
+    <string name="delete_account_message">Votre compte, vos favoris, vos recherches et vos visites seront définitivement supprimés de cet appareil.</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_cancel">Annuler</string>
 </resources>

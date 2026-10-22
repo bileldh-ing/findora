@@ -1,12 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome_title">مرحبًا</string>
-    <string name="welcome_subtitle">اعثر على مساحتك القادمة وتشعر وكأنك في بيتك\nحيث تلتقي الراحة بالسهولة</string>
-    <string name="open_design_system">فتح نظام التصميم</string>
     <string name="back">رجوع</string>
+    <string name="open_design_system">فتح نظام التصميم</string>
     <string name="ds_typography">الخطوط</string>
     <string name="ds_colors">الألوان</string>
     <string name="ds_buttons">الأزرار</string>
     <string name="ds_chips">الشرائح والزجاج</string>
     <string name="ds_brand">العلامة</string>
+
+    <string name="welcome_title">مرحبًا</string>
+    <string name="welcome_subtitle">اعثر على مساحتك القادمة وتشعر وكأنك في بيتك\nحيث تلتقي الراحة بالسهولة</string>
+    <string name="action_login">تسجيل الدخول</string>
+    <string name="action_sign_up">إنشاء حساب</string>
+    <string name="action_try_demo">جرّب الحساب التجريبي</string>
+    <string name="action_continue_guest">المتابعة كضيف</string>
+
+    <string name="field_name">الاسم الكامل</string>
+    <string name="field_email">البريد الإلكتروني</string>
+    <string name="field_password">كلمة المرور</string>
+    <string name="field_confirm_password">تأكيد كلمة المرور</string>
+    <string name="show_password">إظهار كلمة المرور</string>
+    <string name="hide_password">إخفاء كلمة المرور</string>
+    <string name="remember_me">تذكرني</string>
+    <string name="rule_min_length">8 أحرف على الأقل</string>
+    <string name="rule_letter">حرف واحد على الأقل</string>
+    <string name="rule_digit">رقم واحد على الأقل</string>
+    <string name="rule_met">مستوفى</string>
+    <string name="rule_not_met">غير مستوفى بعد</string>
+
+    <string name="error_name_blank">أدخل اسمك</string>
+    <string name="error_name_too_long">استخدم 60 حرفًا أو أقل</string>
+    <string name="error_email_blank">أدخل بريدك الإلكتروني</string>
+    <string name="error_email_malformed">أدخل عنوان بريد إلكتروني صالحًا</string>
+    <string name="error_password_blank">أدخل كلمة المرور</string>
+    <string name="error_password_rules">كلمة المرور لا تستوفي كل القواعد أدناه</string>
+    <string name="error_passwords_mismatch">كلمتا المرور غير متطابقتين</string>
+    <string name="error_invalid_credentials">البريد الإلكتروني أو كلمة المرور غير صحيحة. المحاولات المتبقية: %1$d</string>
+    <string name="error_locked_out">محاولات كثيرة جدًا. أعد المحاولة بعد %1$d ث</string>
+    <string name="error_email_taken">يوجد حساب بهذا البريد الإلكتروني بالفعل</string>
+    <string name="error_account_not_found">لا يوجد حساب بهذا البريد الإلكتروني</string>
+    <string name="error_invalid_code">هذا الرمز غير صالح</string>
+    <string name="error_code_expired">انتهت صلاحية هذا الرمز. اطلب رمزًا جديدًا</string>
+    <string name="error_demo_unavailable">الحساب التجريبي غير متاح. أعد تعيين كلمة المرور أو أنشئ حسابًا.</string>
+    <string name="error_code_blank">أدخل الرمز المكوّن من 6 أرقام</string>
+
+    <string name="login_title">مرحبًا بعودتك</string>
+    <string name="login_subtitle">سجّل الدخول للعثور على منزلك القادم</string>
+    <string name="forgot_password_link">نسيت كلمة المرور؟</string>
+    <string name="login_no_account">ليس لديك حساب؟</string>
+
+    <string name="signup_title">إنشاء حساب</string>
+    <string name="signup_subtitle">انضم إلى Findora واحتفظ بالمنازل التي تحبها</string>
+    <string name="signup_have_account">لديك حساب بالفعل؟</string>
+
+    <string name="forgot_title">إعادة تعيين كلمة المرور</string>
+    <string name="forgot_subtitle">أدخل البريد الإلكتروني لحسابك وسننشئ رمز إعادة التعيين</string>
+    <string name="forgot_send_code">إرسال الرمز</string>
+    <string name="forgot_demo_notice">الوضع التجريبي: لا يُرسل أي بريد. رمزك صالح لمدة 10 دقائق:</string>
+    <string name="forgot_code_label">رمز إعادة التعيين</string>
+    <string name="forgot_new_password">كلمة المرور الجديدة</string>
+    <string name="forgot_success">تم تحديث كلمة المرور. يمكنك تسجيل الدخول الآن.</string>
+    <string name="forgot_back_to_login">العودة إلى تسجيل الدخول</string>
+
+    <string name="unlock_title">Findora مقفل</string>
+    <string name="unlock_subtitle">افتح القفل ببصمتك أو وجهك أو قفل الشاشة</string>
+    <string name="unlock_action">فتح القفل</string>
+    <string name="unlock_prompt_title">فتح قفل Findora</string>
+    <string name="unlock_prompt_subtitle">أكّد هويتك</string>
+    <string name="unlock_sign_out">تسجيل الخروج بدلًا من ذلك</string>
+
+    <string name="settings_title">الإعدادات</string>
+    <string name="account_greeting">مرحبًا، %1$s</string>
+    <string name="account_guest_title">تتصفح كضيف</string>
+    <string name="account_guest_body">أنشئ حسابًا للاحتفاظ بمفضلاتك وعمليات بحثك.</string>
+    <string name="settings_appearance">المظهر</string>
+    <string name="theme_system">النظام</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+    <string name="settings_security">الأمان</string>
+    <string name="biometric_lock">القفل البيومتري</string>
+    <string name="biometric_lock_summary">طلب البصمة أو الوجه أو قفل الشاشة عند فتح Findora</string>
+    <string name="biometric_requires_remember">متاح عند البقاء متصلًا عبر خيار تذكرني</string>
+    <string name="settings_account">الحساب</string>
+    <string name="action_logout">تسجيل الخروج</string>
+    <string name="action_delete_account">حذف الحساب</string>
+    <string name="delete_account_title">حذف حسابك؟</string>
+    <string name="delete_account_message">سيؤدي ذلك إلى حذف حسابك ومفضلاتك وعمليات بحثك ومواعيد المعاينة نهائيًا من هذا الجهاز.</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_cancel">إلغاء</string>
 </resources>

@@ -1,13 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Findora</string>
-    <string name="welcome_title">WELCOME</string>
-    <string name="welcome_subtitle">Find your next space, feel at home\nWhere comfort meets convenience</string>
-    <string name="open_design_system">Open design system</string>
+    <string name="brand_name" translatable="false">FINDORA</string>
+    <string name="brand_tagline" translatable="false">Dream House</string>
     <string name="back">Back</string>
+    <string name="open_design_system">Open design system</string>
     <string name="ds_typography">Typography</string>
     <string name="ds_colors">Colors</string>
     <string name="ds_buttons">Buttons</string>
     <string name="ds_chips">Chips and glass</string>
     <string name="ds_brand">Brand</string>
+
+    <!-- Welcome -->
+    <string name="welcome_title">WELCOME</string>
+    <string name="welcome_subtitle">Find your next space, feel at home\nWhere comfort meets convenience</string>
+    <string name="action_login">Login</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_try_demo">Try demo account</string>
+    <string name="action_continue_guest">Continue as guest</string>
+
+    <!-- Form fields -->
+    <string name="field_name">Full name</string>
+    <string name="field_email">Email</string>
+    <string name="field_password">Password</string>
+    <string name="field_confirm_password">Confirm password</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="rule_min_length">At least 8 characters</string>
+    <string name="rule_letter">At least one letter</string>
+    <string name="rule_digit">At least one number</string>
+    <string name="rule_met">Met</string>
+    <string name="rule_not_met">Not met yet</string>
+
+    <!-- Errors -->
+    <string name="error_name_blank">Enter your name</string>
+    <string name="error_name_too_long">Use 60 characters or fewer</string>
+    <string name="error_email_blank">Enter your email</string>
+    <string name="error_email_malformed">Enter a valid email address</string>
+    <string name="error_password_blank">Enter your password</string>
+    <string name="error_password_rules">Your password does not meet every rule below</string>
+    <string name="error_passwords_mismatch">Passwords do not match</string>
+    <string name="error_invalid_credentials">Incorrect email or password. Attempts left: %1$d</string>
+    <string name="error_locked_out">Too many attempts. Try again in %1$d s</string>
+    <string name="error_email_taken">An account with this email already exists</string>
+    <string name="error_account_not_found">No account found with this email</string>
+    <string name="error_invalid_code">That code is not valid</string>
+    <string name="error_code_expired">That code has expired. Request a new one</string>
+    <string name="error_demo_unavailable">The demo account is unavailable. Reset its password or create an account.</string>
+    <string name="error_code_blank">Enter the 6-digit code</string>
+
+    <!-- Login -->
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Log in to find your next home</string>
+    <string name="forgot_password_link">Forgot password?</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+
+    <!-- Sign up -->
+    <string name="signup_title">Create account</string>
+    <string name="signup_subtitle">Join Findora and keep the homes you love</string>
+    <string name="signup_have_account">Already have an account?</string>
+
+    <!-- Forgot password -->
+    <string name="forgot_title">Reset password</string>
+    <string name="forgot_subtitle">Enter your account email and we will create a reset code</string>
+    <string name="forgot_send_code">Send reset code</string>
+    <string name="forgot_demo_notice">Demo mode: no email is sent. Your reset code is valid for 10 minutes:</string>
+    <string name="forgot_code_label">Reset code</string>
+    <string name="forgot_new_password">New password</string>
+    <string name="forgot_success">Password updated. You can log in now.</string>
+    <string name="forgot_back_to_login">Back to login</string>
+
+    <!-- Biometric unlock -->
+    <string name="unlock_title">Findora is locked</string>
+    <string name="unlock_subtitle">Unlock with your fingerprint, face or screen lock</string>
+    <string name="unlock_action">Unlock</string>
+    <string name="unlock_prompt_title">Unlock Findora</string>
+    <string name="unlock_prompt_subtitle">Confirm it is you</string>
+    <string name="unlock_sign_out">Sign out instead</string>
+
+    <!-- Settings and account -->
+    <string name="settings_title">Settings</string>
+    <string name="account_greeting">Hello, %1$s</string>
+    <string name="account_guest_title">Browsing as guest</string>
+    <string name="account_guest_body">Create an account to keep your favourites and searches.</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_security">Security</string>
+    <string name="biometric_lock">Biometric lock</string>
+    <string name="biometric_lock_summary">Ask for your fingerprint, face or screen lock when Findora opens</string>
+    <string name="biometric_requires_remember">Available when you stay signed in with Remember me</string>
+    <string name="settings_account">Account</string>
+    <string name="action_logout">Log out</string>
+    <string name="action_delete_account">Delete account</string>
+    <string name="delete_account_title">Delete your account?</string>
+    <string name="delete_account_message">This permanently removes your account, favourites, searches and viewings from this device.</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_cancel">Cancel</string>
 </resources>
