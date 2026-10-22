@@ -28,6 +28,7 @@ import com.findora.app.core.data.repository.RoomFavoritesRepository
 import com.findora.app.core.data.repository.RoomInteractionRepository
 import com.findora.app.core.data.repository.RoomMessageRepository
 import com.findora.app.core.data.repository.RoomSearchHistoryRepository
+import com.findora.app.core.data.repository.RoomViewingRepository
 import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.data.seed.AssetSeedReader
 import com.findora.app.core.data.seed.SeedReader
@@ -41,6 +42,13 @@ import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.RegionRepository
 import com.findora.app.core.domain.repository.SearchHistoryRepository
 import com.findora.app.core.domain.repository.SettingsRepository
+import com.findora.app.core.domain.repository.ViewingReminderScheduler
+import com.findora.app.core.domain.repository.ViewingRepository
+import com.findora.app.core.reminder.AndroidViewingReminderNotifier
+import com.findora.app.core.reminder.ViewingReminderNotifier
+import com.findora.app.core.reminder.WorkManagerViewingReminderScheduler
+import androidx.work.WorkManager
+import java.time.ZoneId
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -86,6 +94,15 @@ abstract class DataBindingsModule {
 
     @Binds
     abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
+
+    @Binds
+    abstract fun bindViewingRepository(impl: RoomViewingRepository): ViewingRepository
+
+    @Binds
+    abstract fun bindViewingReminderScheduler(impl: WorkManagerViewingReminderScheduler): ViewingReminderScheduler
+
+    @Binds
+    abstract fun bindViewingReminderNotifier(impl: AndroidViewingReminderNotifier): ViewingReminderNotifier
 }
 
 @Module
@@ -103,6 +120,15 @@ object DataModule {
 
     @Provides
     fun provideClock(): AppClock = SystemAppClock
+
+    /** Read on every injection so a time-zone change on the device is picked up by new screens and workers. */
+    @Provides
+    fun provideZoneId(): ZoneId = ZoneId.systemDefault()
+
+    @Provides
+    fun provideWorkManager(
+        @ApplicationContext context: Context,
+    ): WorkManager = WorkManager.getInstance(context)
 
     @Provides
     @Singleton
