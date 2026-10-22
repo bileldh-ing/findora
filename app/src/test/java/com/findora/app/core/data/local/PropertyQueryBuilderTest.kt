@@ -14,7 +14,8 @@ class PropertyQueryBuilderTest {
     fun defaultFilterOnlyScopesTheRegionAndRanksBestMatchFirst() {
         val query = PropertyQueryBuilder.build("kerala", PropertyFilter())
         assertEquals(
-            "SELECT * FROM properties WHERE region_id = ? ORDER BY verified DESC, rating DESC, reviews_count DESC, id ASC",
+            "SELECT * FROM properties WHERE region_id = ? " +
+                "ORDER BY verified DESC, rating DESC, reviews_count DESC, id ASC",
             query.sql,
         )
         assertEquals(listOf<Any>("kerala"), query.args)
