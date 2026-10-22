@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.findora.app.core.designsystem.theme.FindoraTheme
 
@@ -85,7 +86,8 @@ fun SlidingChipRow(
         if (target != null) {
             Box(
                 Modifier
-                    .offset(x = pillOffset)
+                    // positionInParent is measured from the left edge in every layout direction, hence absolute.
+                    .absoluteOffset { IntOffset(pillOffset.roundToPx(), 0) }
                     .width(pillWidth)
                     .height(ChipHeight)
                     .clip(FindoraTheme.shapes.chip)

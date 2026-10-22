@@ -92,7 +92,14 @@
     <string name="home_new_house">منزلك الجديد</string>
     <string name="search_placeholder">ابحث عن مكان…</string>
     <string name="cd_filters">عوامل التصفية</string>
-    <string name="cd_filters_active">عوامل التصفية، النشطة: %1$d</string>
+    <plurals name="cd_filters_active">
+        <item quantity="zero">عوامل التصفية، لا يوجد عامل نشط</item>
+        <item quantity="one">عوامل التصفية، عامل واحد نشط</item>
+        <item quantity="two">عوامل التصفية، عاملان نشطان</item>
+        <item quantity="few">عوامل التصفية، %1$d عوامل نشطة</item>
+        <item quantity="many">عوامل التصفية، %1$d عاملًا نشطًا</item>
+        <item quantity="other">عوامل التصفية، %1$d عامل نشط</item>
+    </plurals>
     <string name="category_rental_house">منازل للإيجار</string>
     <string name="category_apartment">شقة</string>
     <string name="category_houses">منازل</string>
@@ -101,7 +108,14 @@
     <string name="per_month">شهر</string>
     <string name="cd_change_location">تغيير الموقع، الحالي: %1$s</string>
     <string name="cd_notifications">الإشعارات</string>
-    <string name="cd_notifications_unread">الإشعارات، غير المقروءة: %1$d</string>
+    <plurals name="cd_notifications_unread">
+        <item quantity="zero">الإشعارات، لا يوجد غير مقروء</item>
+        <item quantity="one">الإشعارات، إشعار واحد غير مقروء</item>
+        <item quantity="two">الإشعارات، إشعاران غير مقروءين</item>
+        <item quantity="few">الإشعارات، %1$d إشعارات غير مقروءة</item>
+        <item quantity="many">الإشعارات، %1$d إشعارًا غير مقروء</item>
+        <item quantity="other">الإشعارات، %1$d إشعار غير مقروء</item>
+    </plurals>
     <string name="cd_profile">الملف الشخصي والإعدادات</string>
     <string name="cd_clear_search">مسح البحث</string>
     <string name="card_description">%1$s، %2$s. %3$s شهريًا. التقييم %4$s.</string>

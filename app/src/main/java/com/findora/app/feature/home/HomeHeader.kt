@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -108,7 +109,7 @@ fun HomeTopBar(
         Spacer(Modifier.weight(1f, fill = true).width(FindoraTheme.spacing.xs))
         val bellDescription =
             if (unreadCount > 0) {
-                stringResource(R.string.cd_notifications_unread, unreadCount)
+                pluralStringResource(R.plurals.cd_notifications_unread, unreadCount, unreadCount)
             } else {
                 stringResource(R.string.cd_notifications)
             }
@@ -298,7 +299,7 @@ private fun FilterButton(
         if (activeFilters >
             0
         ) {
-            stringResource(R.string.cd_filters_active, activeFilters)
+            pluralStringResource(R.plurals.cd_filters_active, activeFilters, activeFilters)
         } else {
             stringResource(R.string.cd_filters)
         }

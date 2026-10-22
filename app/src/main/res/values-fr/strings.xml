@@ -92,7 +92,11 @@
     <string name="home_new_house">Votre nouveau logement</string>
     <string name="search_placeholder">Rechercher un lieu…</string>
     <string name="cd_filters">Filtres</string>
-    <string name="cd_filters_active">Filtres, %1$d actifs</string>
+    <plurals name="cd_filters_active">
+        <item quantity="one">Filtres, %1$d actif</item>
+        <item quantity="many">Filtres, %1$d actifs</item>
+        <item quantity="other">Filtres, %1$d actifs</item>
+    </plurals>
     <string name="category_rental_house">Location</string>
     <string name="category_apartment">Appartement</string>
     <string name="category_houses">Maisons</string>
@@ -101,7 +105,11 @@
     <string name="per_month">Mois</string>
     <string name="cd_change_location">Changer de lieu, actuel : %1$s</string>
     <string name="cd_notifications">Notifications</string>
-    <string name="cd_notifications_unread">Notifications, %1$d non lues</string>
+    <plurals name="cd_notifications_unread">
+        <item quantity="one">Notifications, %1$d non lue</item>
+        <item quantity="many">Notifications, %1$d non lues</item>
+        <item quantity="other">Notifications, %1$d non lues</item>
+    </plurals>
     <string name="cd_profile">Profil et paramètres</string>
     <string name="cd_clear_search">Effacer la recherche</string>
     <string name="card_description">%1$s, %2$s. %3$s par mois. Note %4$s.</string>

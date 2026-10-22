@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.findora.app.R
 import com.findora.app.core.designsystem.icon.FindoraIcons
@@ -125,7 +126,7 @@ fun FloatingNavPill(
             }
             Box(
                 Modifier
-                    .offset(x = indicatorX)
+                    .offset { IntOffset(indicatorX.roundToPx(), 0) }
                     .width(IndicatorWidth)
                     .height(IndicatorHeight)
                     .clip(RoundedCornerShape(bottomStart = IndicatorHeight, bottomEnd = IndicatorHeight))
