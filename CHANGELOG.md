@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.0] Phase 3: Home exact UI
+- **Home**, faithful to the reference: pin-house icon and black location pill (opens a region picker), light-grey bell with a blue unread dot (opens a notifications sheet; swipe a notification to mark it read), avatar with initials, "Discover / Your New House", 56 dp search pill with a filter icon and a popping active-filter badge, Rental House / Apartment / Houses / Rooms chips with one selected pill that slides between them, "Nearby Rental Houses" and a two-column grid of reference cards (verified shield, glass price pill, glass rating chip, name, locality).
+- **Paging 3 over Room**: `PropertyQueryBuilder` turns the shared `PropertyFilter` into one parameterised query (type, text, rent, bedrooms, bathrooms, area, furnished, pets, parking, verified, amenities, sort; LIKE input escaped) served by `PropertySearchDao` (`@RawQuery` PagingSource, invalidated by table changes).
+- Pull to refresh, shimmer skeletons, empty state with "Clear filters", full error state with Retry when nothing is cached, and an offline banner over the cached feed.
+- Motion: the title fades and shrinks as the grid scrolls and a compact search bar pins to the top; cards fade and rise with a stagger on first load, `animateItem` on filter and sort changes, a heart burst on double-tap; all decorative motion is skipped when system animations are off.
+- **Filter sheet**: rent and area range sliders bounded by the region's listings (m² and sq ft), bedrooms, bathrooms, furnished, pet friendly, parking, verified only, 20 amenities, five sort orders, Reset and Show results.
+- **Search**: full-screen, focused field, 300 ms debounced suggestions (neighbourhoods first, then home names), "no matches" hint, recent searches per user (tap to reuse, swipe or TalkBack action to delete, Clear all).
+- **Favourites**: heart on every card, double-tap the photo to save with a burst, a Saved tab, all stored per user.
+- **Locations tab** (until the map arrives in Phase 6): region packs with their neighbourhoods; a neighbourhood becomes the Home search.
+- **Main shell**: floating white navigation pill (Home, Locations, Saved, Settings) with a spring indicator that slides between tabs; every tab has bottom padding for the pill. Chat joins in Phase 6, so no dead tab is shown.
+- Accessibility: one TalkBack summary per card (name, locality, currency-formatted rent, rating, verified, saved) with Save / Remove as a custom action, headings, selectable tabs and chips, 48 dp targets.
+- The Home filter is shared by Home, Search, the sheet and Locations, and resets when another user signs in.
+- English, French and Arabic strings for every new screen.
+- Tests: PropertyQueryBuilderTest, PropertySearchDaoTest (Room + Paging `asSnapshot`), HomeViewModelTest, SearchViewModelTest, Saved and Locations ViewModel tests (Turbine), message and search-history repository tests, Compose tests for the Home header, chip filtering, favourite toggle, filter sheet, empty/error/offline states, Search, the nav pill, Saved and Locations; the instrumented journey now lands on Home, filters by chip and walks the tabs.
+
 ## [0.3.0] Phase 2: Welcome and authentication
 - Welcome screen matching the reference: hero photo with a concave arc (`ConcaveArcShape`), logo badge, FINDORA / Dream House, WELCOME in Syne, subtitle, Login and Sign Up pills, demo-account and guest shortcuts; Ken Burns, overshoot badge, staggered entrance and parallax, skipped when animations are off.
 - Login, Sign Up and Forgot password (local reset code) with inline validation, password-rules checklist, Remember me and a 5-failure / 30-second lockout countdown.
