@@ -99,8 +99,9 @@ android {
     }
 
     sourceSets {
-        // Exported Room schemas double as test assets for MigrationTestHelper.
-        getByName("test").assets.srcDir(file("schemas"))
+        // MigrationTestHelper reads exported schemas from the app's assets; Robolectric unit tests only
+        // see the variant's merged assets, so the schemas ride along in debug builds (never in release).
+        getByName("debug").assets.srcDir(file("schemas"))
     }
 
     packaging {
