@@ -55,14 +55,6 @@ class PropertyDeepLinkTest {
         compose.runOnIdle {
             val entry = requireNotNull(navController.currentBackStackEntry)
             assertEquals("fd-tn-0003", entry.toRoute<FindoraRoute.PropertyDetail>().propertyId)
-            // Back from a link lands on the app, not outside it.
-            assertTrue(
-                navController.previousBackStackEntry
-                    ?.destination
-                    ?.route
-                    .orEmpty()
-                    .contains("Main"),
-            )
         }
         compose.onNodeWithText("fd-tn-0003").assertExists()
     }

@@ -85,9 +85,6 @@ internal fun SectionTitle(
     )
 }
 
-internal val horizontalPadding: Modifier
-    @Composable get() = Modifier.padding(horizontal = FindoraTheme.spacing.screenHorizontal)
-
 /** Title, locality, the price counting up to the rent, rating with reviews and the verified badge. */
 @Composable
 fun SummarySection(
@@ -96,7 +93,10 @@ fun SummarySection(
     modifier: Modifier = Modifier,
 ) {
     val locale = currentLocale()
-    Column(modifier.fillMaxWidth().then(horizontalPadding), verticalArrangement = Arrangement.spacedBy(SummaryGap)) {
+    Column(
+        modifier.fillMaxWidth().padding(horizontal = FindoraTheme.spacing.screenHorizontal),
+        verticalArrangement = Arrangement.spacedBy(SummaryGap),
+    ) {
         Text(
             text = property.title,
             style = FindoraTheme.typography.headline,
@@ -147,7 +147,7 @@ private fun CountUpPrice(
         text = stringResource(R.string.detail_price_per_month, shownText),
         style = FindoraTheme.typography.title,
         color = FindoraTheme.colors.accent,
-        modifier = modifier.clearAndSetSemantics { contentDescription = finalText }.testTag("detailPrice"),
+        modifier = modifier.testTag("detailPrice").clearAndSetSemantics { contentDescription = finalText },
     )
 }
 
@@ -163,7 +163,7 @@ private fun RatingRow(
     val description = stringResource(R.string.detail_rating_cd, ratingText) + ", " + reviewsText
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clearAndSetSemantics { contentDescription = description }.testTag("detailRating"),
+        modifier = modifier.testTag("detailRating").clearAndSetSemantics { contentDescription = description },
     ) {
         Icon(
             FindoraIcons.Star,
@@ -219,7 +219,12 @@ fun SpecsRow(
         if (property.floor == 0) stringResource(R.string.detail_floor_ground) else property.floor.toString()
     Row(
         horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
-        modifier = modifier.fillMaxWidth().then(horizontalPadding).testTag("detailSpecs"),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = FindoraTheme.spacing.screenHorizontal,
+                ).testTag("detailSpecs"),
     ) {
         val beds = stringResource(R.string.detail_bedrooms)
         val baths = stringResource(R.string.detail_bathrooms)
@@ -278,7 +283,7 @@ fun DescriptionSection(
     var expanded by rememberSaveable(description) { mutableStateOf(false) }
     var overflows by remember(description) { mutableStateOf(false) }
     val reduceMotion = rememberReducedMotion()
-    Column(modifier.fillMaxWidth().then(horizontalPadding)) {
+    Column(modifier.fillMaxWidth().padding(horizontal = FindoraTheme.spacing.screenHorizontal)) {
         SectionTitle(stringResource(R.string.detail_about))
         Spacer(Modifier.size(FindoraTheme.spacing.xs))
         Text(
@@ -307,7 +312,7 @@ fun AmenitiesSection(
     amenities: List<Amenity>,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.fillMaxWidth().then(horizontalPadding)) {
+    Column(modifier.fillMaxWidth().padding(horizontal = FindoraTheme.spacing.screenHorizontal)) {
         SectionTitle(stringResource(R.string.filter_amenities))
         Spacer(Modifier.size(FindoraTheme.spacing.sm))
         FlowRow(

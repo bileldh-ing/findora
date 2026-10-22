@@ -1,6 +1,7 @@
 package com.findora.app.feature.detail
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
@@ -58,8 +59,7 @@ class DetailViewModelTest {
         runTest(main.dispatcher) {
             val vm = viewModel()
             vm.state.test {
-                assertEquals(DetailUiState.Loading, awaitItem())
-                val content = awaitItem() as DetailUiState.Content
+                val content = awaitSettled() as DetailUiState.Content
                 assertEquals(georgie, content.property)
                 assertFalse(content.isFavorite)
                 assertTrue(content.similar.isNotEmpty())
@@ -80,8 +80,7 @@ class DetailViewModelTest {
     fun anUnknownListingIsNotFound() =
         runTest(main.dispatcher) {
             viewModel(id = "fd-missing-0001").state.test {
-                assertEquals(DetailUiState.Loading, awaitItem())
-                assertEquals(DetailUiState.Error(DetailError.NotFound), awaitItem())
+                assertEquals(DetailUiState.Error(DetailError.NotFound), awaitSettled())
                 cancelAndIgnoreRemainingEvents()
             }
         }
@@ -92,11 +91,9 @@ class DetailViewModelTest {
             val flaky = FlakyPropertyRepository(failures = 1)
             val vm = viewModel(properties = flaky)
             vm.state.test {
-                assertEquals(DetailUiState.Loading, awaitItem())
-                assertEquals(DetailUiState.Error(DetailError.Unavailable), awaitItem())
+                assertEquals(DetailUiState.Error(DetailError.Unavailable), awaitSettled())
                 vm.onEvent(DetailUiEvent.Retry)
-                assertEquals(DetailUiState.Loading, awaitItem())
-                assertEquals(georgie, (awaitItem() as DetailUiState.Content).property)
+                assertEquals(georgie, (awaitSettled() as DetailUiState.Content).property)
                 cancelAndIgnoreRemainingEvents()
             }
         }
@@ -107,8 +104,7 @@ class DetailViewModelTest {
             auth.signIn()
             val vm = viewModel()
             vm.state.test {
-                skipItems(1)
-                assertFalse((awaitItem() as DetailUiState.Content).isFavorite)
+                assertFalse((awaitSettled() as DetailUiState.Content).isFavorite)
                 vm.onEvent(DetailUiEvent.ToggleFavorite)
                 assertTrue((awaitItem() as DetailUiState.Content).isFavorite)
                 assertEquals(setOf(georgie.id), favorites.observeFavoriteIds(auth.account.id).first())
@@ -177,11 +173,17 @@ class DetailViewModelTest {
                     clock = { Instant.EPOCH },
                 )
             vm.state.test {
-                skipItems(1)
-                assertTrue(awaitItem() is DetailUiState.Content)
+                assertTrue(awaitSettled() is DetailUiState.Content)
                 cancelAndIgnoreRemainingEvents()
             }
         }
+}
+
+/** The next state that is not Loading (an unconfined dispatcher may resolve before the first collection). */
+private suspend fun ReceiveTurbine<DetailUiState>.awaitSettled(): DetailUiState {
+    var state = awaitItem()
+    while (state == DetailUiState.Loading) state = awaitItem()
+    return state
 }
 
 /** Keeps every recorded event in memory; [fail] makes every write throw. */

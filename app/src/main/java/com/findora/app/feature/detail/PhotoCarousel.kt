@@ -168,8 +168,8 @@ private fun PageIndicator(
                 .clip(FindoraTheme.shapes.chip)
                 .background(Color.Black.copy(alpha = INDICATOR_SCRIM_ALPHA))
                 .padding(horizontal = FindoraTheme.spacing.xs, vertical = FindoraTheme.spacing.xxs)
-                .clearAndSetSemantics { contentDescription = description }
-                .testTag("detailPageIndicator"),
+                .testTag("detailPageIndicator")
+                .clearAndSetSemantics { contentDescription = description },
     ) {
         repeat(count) { index ->
             val selected = index == current

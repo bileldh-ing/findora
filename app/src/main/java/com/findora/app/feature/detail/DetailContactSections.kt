@@ -114,7 +114,7 @@ fun AgentCard(
         }
     val callLabel = stringResource(R.string.detail_call_cd, agent.name)
     val emailLabel = stringResource(R.string.detail_email_cd, agent.name)
-    Column(modifier.fillMaxWidth().then(horizontalPadding)) {
+    Column(modifier.fillMaxWidth().padding(horizontal = FindoraTheme.spacing.screenHorizontal)) {
         SectionTitle(stringResource(R.string.detail_agent))
         Spacer(Modifier.size(FindoraTheme.spacing.sm))
         Column(
@@ -189,7 +189,12 @@ fun LocationSection(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
-        modifier = modifier.fillMaxWidth().then(horizontalPadding).testTag("detailLocation"),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = FindoraTheme.spacing.screenHorizontal,
+                ).testTag("detailLocation"),
     ) {
         SectionTitle(stringResource(R.string.detail_location))
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.semantics(mergeDescendants = true) {}) {
@@ -231,7 +236,10 @@ fun SimilarSection(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxWidth()) {
-        SectionTitle(stringResource(R.string.detail_similar), horizontalPadding)
+        SectionTitle(
+            stringResource(R.string.detail_similar),
+            Modifier.padding(horizontal = FindoraTheme.spacing.screenHorizontal),
+        )
         Spacer(Modifier.size(FindoraTheme.spacing.sm))
         LazyRow(
             contentPadding = PaddingValues(horizontal = FindoraTheme.spacing.screenHorizontal),
