@@ -68,6 +68,7 @@ class HomeScreenTest {
         runBlocking { SeedRegionRepository(fileSeedReader(), Dispatchers.Unconfined).region("kerala")!! }
     }
     private val events = mutableListOf<HomeUiEvent>()
+    private val opened = mutableListOf<String>()
 
     /** Home wired to an in-memory feed: chips, favourites and filters really change what the grid shows. */
     @Composable
@@ -120,6 +121,7 @@ class HomeScreenTest {
                 },
                 onOpenSearch = { events += HomeUiEvent.Refresh },
                 onOpenProfile = {},
+                onOpenProperty = { opened += it },
                 reduceMotion = true,
             )
         }
@@ -207,6 +209,11 @@ class HomeScreenTest {
         assertEquals("Remove from saved", action.label)
         action.action()
         assertEquals(2, events.count { it == HomeUiEvent.ToggleFavorite(georgie.id) })
+        // Activating the card (tap or TalkBack double-tap) opens the listing.
+        val open = saved[SemanticsActions.OnClick]
+        assertEquals("Open listing", open.label)
+        open.action?.invoke()
+        assertEquals(listOf(georgie.id), opened)
     }
 
     @Test

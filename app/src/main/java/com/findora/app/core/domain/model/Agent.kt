@@ -10,7 +10,17 @@ data class Agent(
     val phone: String,
     val avatar: InitialsAvatar,
     val responseTimeMinutes: Int,
-)
+) {
+    /**
+     * Contact address for the listing enquiry. Seed agents are fictional, so the address lives on the
+     * reserved `.example` domain (RFC 2606) and can never reach a real person.
+     */
+    val email: String get() = "$id@$SAMPLE_EMAIL_DOMAIN"
+
+    companion object {
+        const val SAMPLE_EMAIL_DOMAIN = "agents.findora.example"
+    }
+}
 
 /** Generated avatar: up to two letters on a solid background colour (ARGB). */
 @Immutable

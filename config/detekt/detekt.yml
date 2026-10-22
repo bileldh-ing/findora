@@ -47,6 +47,8 @@ Compose:
       - LocalFindoraShapes
       - LocalFindoraElevation
       - LocalFindoraMotion
+      - LocalSharedTransitionScope
+      - LocalNavAnimatedVisibilityScope
   ModifierMissing:
     active: true
   ViewModelForwarding:

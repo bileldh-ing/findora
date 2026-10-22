@@ -40,6 +40,7 @@ import com.findora.app.feature.settings.SettingsRoute
 @Composable
 fun MainShell(
     onOpenSearch: () -> Unit,
+    onOpenProperty: (String) -> Unit,
     onSignedOut: () -> Unit,
     onCreateAccount: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
@@ -74,6 +75,7 @@ fun MainShell(
                 HomeRoute(
                     onOpenSearch = onOpenSearch,
                     onOpenProfile = { selectTab(MainTab.Settings) },
+                    onOpenProperty = onOpenProperty,
                     contentPadding = contentPadding,
                 )
             }
@@ -81,7 +83,7 @@ fun MainShell(
                 LocationsRoute(onShowHome = { selectTab(MainTab.Home) }, contentPadding = contentPadding)
             }
             composable<MainRoute.Saved> {
-                SavedRoute(contentPadding = contentPadding)
+                SavedRoute(onOpenProperty = onOpenProperty, contentPadding = contentPadding)
             }
             composable<MainRoute.Settings> {
                 SettingsRoute(

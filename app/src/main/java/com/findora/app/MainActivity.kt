@@ -16,6 +16,7 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.navigation.AppViewModel
 import com.findora.app.navigation.FindoraNavHost
+import com.findora.app.navigation.FindoraRoute
 import com.findora.app.navigation.LaunchState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +48,12 @@ class MainActivity : FragmentActivity() {
                 onDispose {}
             }
             FindoraTheme(darkTheme = darkTheme) {
-                (launchState as? LaunchState.Ready)?.let { FindoraNavHost(startDestination = it.startDestination) }
+                (launchState as? LaunchState.Ready)?.let { ready ->
+                    // A listing link is honoured only for a restored session going straight to the app. It is
+                    // dropped behind the biometric lock or on Welcome, so a link can never skip the route guard.
+                    if (ready.startDestination != FindoraRoute.Main) intent?.data = null
+                    FindoraNavHost(startDestination = ready.startDestination)
+                }
             }
         }
     }

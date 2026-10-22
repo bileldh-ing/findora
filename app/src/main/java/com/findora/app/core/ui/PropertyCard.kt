@@ -21,7 +21,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,8 +40,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -74,14 +79,16 @@ private const val BURST_MILLIS = 450
 /**
  * The listing card from the reference: full-bleed photo (dominant-colour placeholder, offline fallback),
  * bottom scrim, verified shield, glass price pill, glass rating chip, name and locality. A heart button and
- * a double-tap on the photo save the home (double-tap only adds, with a heart burst). TalkBack reads one
- * summary and offers Save / Remove as a custom action.
+ * a double-tap on the photo save the home (double-tap only adds, with a heart burst); a single tap opens the
+ * listing ([onClick]). TalkBack reads one summary, activates [onClick] and offers Save / Remove as a custom
+ * action. The photo is the shared element that grows into the detail page.
  */
 @Composable
 fun PropertyCard(
     property: Property,
     isFavorite: Boolean,
     onToggleFavorite: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
@@ -96,6 +103,8 @@ fun PropertyCard(
             if (isFavorite) append(' ').append(stringResource(R.string.card_saved))
         }
     val actionLabel = stringResource(if (isFavorite) R.string.action_unsave else R.string.action_save)
+    val openLabel = stringResource(R.string.action_open_listing)
+    val currentOnClick by rememberUpdatedState(onClick)
     val burst = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
     Box(
@@ -107,6 +116,11 @@ fun PropertyCard(
                 .background(Color(property.coverImage.dominantColorArgb))
                 .semantics(mergeDescendants = true) {
                     contentDescription = summary
+                    role = Role.Button
+                    onClick(label = openLabel) {
+                        currentOnClick()
+                        true
+                    }
                     customActions =
                         listOf(
                             CustomAccessibilityAction(actionLabel) {
@@ -116,6 +130,7 @@ fun PropertyCard(
                         )
                 }.pointerInput(isFavorite) {
                     detectTapGestures(
+                        onTap = { currentOnClick() },
                         onDoubleTap = {
                             if (!isFavorite) onToggleFavorite()
                             scope.launch {
@@ -127,7 +142,7 @@ fun PropertyCard(
                     )
                 }.testTag("card_${property.id}"),
     ) {
-        CardPhoto(property)
+        SharedPropertyPhoto(propertyId = property.id) { photoModifier -> CardPhoto(property, photoModifier) }
         Box(
             Modifier
                 .fillMaxSize()

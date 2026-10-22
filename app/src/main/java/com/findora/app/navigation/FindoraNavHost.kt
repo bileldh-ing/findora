@@ -1,23 +1,35 @@
 package com.findora.app.navigation
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import com.findora.app.BuildConfig
+import com.findora.app.core.ui.LocalNavAnimatedVisibilityScope
+import com.findora.app.core.ui.LocalSharedTransitionScope
 import com.findora.app.feature.auth.forgot.ForgotPasswordRoute
 import com.findora.app.feature.auth.login.LoginRoute
 import com.findora.app.feature.auth.signup.SignUpRoute
 import com.findora.app.feature.auth.unlock.UnlockRoute
 import com.findora.app.feature.auth.welcome.WelcomeRoute
 import com.findora.app.feature.designsystem.DesignSystemScreen
+import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.search.SearchRoute
 
+/**
+ * The root graph. A [SharedTransitionLayout] wraps it so a listing photo can travel from its card (inside the
+ * Main tabs) into the detail page; [PropertyDeepLink] links open [FindoraRoute.PropertyDetail] directly.
+ */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun FindoraNavHost(
     startDestination: FindoraRoute,
@@ -27,7 +39,10 @@ fun FindoraNavHost(
 ) {
     val toMain = { navController.navigateClearingBackStack(FindoraRoute.Main) }
     val toWelcome = { navController.navigateClearingBackStack(FindoraRoute.Welcome) }
-    NavHost(navController = navController, startDestination = startDestination, modifier = modifier) {
+    val openProperty: (String) -> Unit = { id -> navController.navigate(FindoraRoute.PropertyDetail(id)) }
+    SharedTransitionLayout(modifier = modifier) {
+        CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+            NavHost(navController = navController, startDestination = startDestination) {
         composable<FindoraRoute.Welcome> {
             WelcomeRoute(
                 onLogin = { navController.navigate(FindoraRoute.Login) },
@@ -64,8 +79,10 @@ fun FindoraNavHost(
             UnlockRoute(onUnlock = toMain, onSignedOut = toWelcome)
         }
         composable<FindoraRoute.Main> {
+            CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
             MainShell(
                 onOpenSearch = { navController.navigate(FindoraRoute.Search) },
+                onOpenProperty = openProperty,
                 onSignedOut = toWelcome,
                 onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
                 onOpenDesignSystem =
@@ -75,6 +92,14 @@ fun FindoraNavHost(
                         null
                     },
             )
+            }
+        }
+        composable<FindoraRoute.PropertyDetail>(
+            deepLinks = listOf(navDeepLink<FindoraRoute.PropertyDetail>(basePath = PropertyDeepLink.BASE_PATH)),
+        ) {
+            CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
+                DetailRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
+            }
         }
         composable<FindoraRoute.Search>(
             enterTransition = { fadeIn(tween(SEARCH_FADE_MILLIS)) },
@@ -86,6 +111,8 @@ fun FindoraNavHost(
             composable<FindoraRoute.DesignSystem> {
                 DesignSystemScreen(onBack = { navController.popBackStack() })
             }
+        }
+    }
         }
     }
 }

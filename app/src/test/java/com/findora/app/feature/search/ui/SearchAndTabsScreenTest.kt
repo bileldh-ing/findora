@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
@@ -167,12 +168,14 @@ class SearchAndTabsScreenTest {
     fun savedShowsAnEmptyStateThenTheSavedHomes() {
         var state by mutableStateOf(SavedUiState(isLoading = false, homes = emptyList()))
         val removed = mutableListOf<String>()
+        val opened = mutableListOf<String>()
         compose.setContent {
             FindoraTheme(darkTheme = true) {
-                SavedScreen(state = state, onToggleFavorite = {
-                    removed +=
-                        it
-                })
+                SavedScreen(
+                    state = state,
+                    onToggleFavorite = { removed += it },
+                    onOpenProperty = { opened += it },
+                )
             }
         }
         compose.onNodeWithText("No saved homes yet").assertIsDisplayed()
@@ -181,6 +184,8 @@ class SearchAndTabsScreenTest {
         compose.onNodeWithText(home.title).assertIsDisplayed()
         compose.onNodeWithTag("heart_${home.id}").performClick()
         assertEquals(listOf(home.id), removed)
+        compose.onNodeWithTag("card_${home.id}").performSemanticsAction(SemanticsActions.OnClick)
+        assertEquals(listOf(home.id), opened)
     }
 
     @Test
