@@ -77,7 +77,11 @@ class PropertySearchDaoTest {
         runTest {
             val repo = repository()
             val apartments =
-                repo.pagedProperties("kerala", PropertyFilter(type = PropertyType.Apartment)).asSnapshot { scrollTo(40) }
+                repo
+                    .pagedProperties(
+                        "kerala",
+                        PropertyFilter(type = PropertyType.Apartment),
+                    ).asSnapshot { scrollTo(40) }
             assertEquals(kerala.count { it.type == "apartment" }, apartments.size)
             assertTrue(apartments.all { it.type == PropertyType.Apartment })
 
@@ -89,7 +93,12 @@ class PropertySearchDaoTest {
             assertTrue(fortKochi.all { it.locality.contains("Fort Kochi") || it.title.contains("Fort Kochi", true) })
 
             val refined =
-                PropertyFilter(minBedrooms = 2, furnishedOnly = true, verifiedOnly = true, amenities = setOf(Amenity.Wifi))
+                PropertyFilter(
+                    minBedrooms = 2,
+                    furnishedOnly = true,
+                    verifiedOnly = true,
+                    amenities = setOf(Amenity.Wifi),
+                )
             val expected =
                 kerala.count { it.bedrooms >= 2 && it.furnished && it.verified && "wifi" in it.amenities }
             val result = repo.pagedProperties("kerala", refined).asSnapshot { scrollTo(40) }
@@ -102,10 +111,19 @@ class PropertySearchDaoTest {
         runTest {
             val repo = repository()
             val cheapFirst =
-                repo.pagedProperties("kerala", PropertyFilter(sort = SortOrder.PriceLowToHigh)).asSnapshot { scrollTo(40) }
+                repo
+                    .pagedProperties(
+                        "kerala",
+                        PropertyFilter(sort = SortOrder.PriceLowToHigh),
+                    ).asSnapshot { scrollTo(40) }
             assertEquals(cheapFirst.map { it.rent.amount }.sorted(), cheapFirst.map { it.rent.amount })
             val maxRent = kerala.maxOf { it.rentAmount }
-            val capped = repo.pagedProperties("kerala", PropertyFilter(maxRent = maxRent / 2)).asSnapshot { scrollTo(40) }
+            val capped =
+                repo
+                    .pagedProperties(
+                        "kerala",
+                        PropertyFilter(maxRent = maxRent / 2),
+                    ).asSnapshot { scrollTo(40) }
             assertTrue(capped.all { it.rent.amount <= maxRent / 2 })
         }
 

@@ -69,7 +69,7 @@ object PropertyQueryBuilder {
             vararg values: Any,
         ) {
             clauses += clause
-            args += values
+            args.addAll(values)
         }
     }
 

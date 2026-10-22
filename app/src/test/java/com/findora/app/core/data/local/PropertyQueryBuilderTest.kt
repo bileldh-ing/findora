@@ -39,7 +39,11 @@ class PropertyQueryBuilderTest {
                 amenities = setOf(Amenity.Wifi, Amenity.Gym),
             )
         val query = PropertyQueryBuilder.build("kerala", filter)
-        val where = query.sql.substringAfter("WHERE ").substringBefore(" ORDER BY").split(" AND ")
+        val where =
+            query.sql
+                .substringAfter("WHERE ")
+                .substringBefore(" ORDER BY")
+                .split(" AND ")
         assertEquals(
             listOf(
                 "region_id = ?",
