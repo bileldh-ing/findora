@@ -43,7 +43,11 @@ fun StateMessage(
     onAction: () -> Unit = {},
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(FindoraTheme.spacing.lg).semantics { liveRegion = LiveRegionMode.Polite },
+        modifier =
+            modifier.fillMaxWidth().padding(FindoraTheme.spacing.lg).semantics {
+                liveRegion =
+                    LiveRegionMode.Polite
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -51,15 +55,34 @@ fun StateMessage(
             Modifier.size(StateIconBadge).clip(CircleShape).background(FindoraTheme.colors.surface),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(icon, contentDescription = null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(StateIcon))
+            Icon(
+                icon,
+                contentDescription = null,
+                tint = FindoraTheme.colors.onSurfaceMuted,
+                modifier = Modifier.size(StateIcon),
+            )
         }
         Spacer(Modifier.height(FindoraTheme.spacing.md))
-        Text(text = title, style = FindoraTheme.typography.section, color = FindoraTheme.colors.onBackground, textAlign = TextAlign.Center)
+        Text(
+            text = title,
+            style = FindoraTheme.typography.section,
+            color = FindoraTheme.colors.onBackground,
+            textAlign = TextAlign.Center,
+        )
         Spacer(Modifier.height(FindoraTheme.spacing.xxs))
-        Text(text = body, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onSurfaceMuted, textAlign = TextAlign.Center)
+        Text(
+            text = body,
+            style = FindoraTheme.typography.body,
+            color = FindoraTheme.colors.onSurfaceMuted,
+            textAlign = TextAlign.Center,
+        )
         if (actionLabel != null) {
             Spacer(Modifier.height(FindoraTheme.spacing.md))
-            SecondaryPillButton(text = actionLabel, onClick = onAction, modifier = Modifier.padding(horizontal = FindoraTheme.spacing.xl))
+            SecondaryPillButton(
+                text = actionLabel,
+                onClick = onAction,
+                modifier = Modifier.padding(horizontal = FindoraTheme.spacing.xl),
+            )
         }
     }
 }
@@ -83,7 +106,12 @@ fun InlineBanner(
     ) {
         Icon(FindoraIcons.AlertCircle, contentDescription = null, tint = FindoraTheme.colors.onSurfaceMuted)
         Spacer(Modifier.width(FindoraTheme.spacing.xs))
-        Text(text = text, style = FindoraTheme.typography.caption, color = FindoraTheme.colors.onBackground, modifier = Modifier.weight(1f))
+        Text(
+            text = text,
+            style = FindoraTheme.typography.caption,
+            color = FindoraTheme.colors.onBackground,
+            modifier = Modifier.weight(1f),
+        )
         TextLink(text = actionLabel, onClick = onAction, color = FindoraTheme.colors.accent)
     }
 }

@@ -217,7 +217,12 @@ private fun CardOverlay(
         Spacer(Modifier.weight(1f))
         GlassChip {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(FindoraIcons.Star, contentDescription = null, tint = FindoraTheme.colors.star, modifier = Modifier.size(StarSize))
+                Icon(
+                    FindoraIcons.Star,
+                    contentDescription = null,
+                    tint = FindoraTheme.colors.star,
+                    modifier = Modifier.size(StarSize),
+                )
                 Spacer(Modifier.width(FindoraTheme.spacing.xxs))
                 Text(text = rating, style = FindoraTheme.typography.label, color = onPhoto)
             }

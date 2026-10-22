@@ -73,7 +73,11 @@ fun SlidingChipRow(
                         text = labels[index],
                         style = FindoraTheme.typography.bodyMedium,
                         color = Color.Transparent,
-                        modifier = Modifier.padding(horizontal = FindoraTheme.spacing.md, vertical = FindoraTheme.spacing.xs),
+                        modifier =
+                            Modifier.padding(
+                                horizontal = FindoraTheme.spacing.md,
+                                vertical = FindoraTheme.spacing.xs,
+                            ),
                     )
                 }
             }
@@ -107,7 +111,8 @@ fun SlidingChipRow(
                             .clip(FindoraTheme.shapes.chip)
                             .onPlaced { coordinates ->
                                 with(density) {
-                                    bounds[index] = coordinates.positionInParent().x.toDp() to coordinates.size.width.toDp()
+                                    bounds[index] =
+                                        coordinates.positionInParent().x.toDp() to coordinates.size.width.toDp()
                                 }
                             }.selectable(selected = selected, role = Role.Tab, onClick = { onSelect(index) })
                             .testTag("chip_$index"),
@@ -116,7 +121,11 @@ fun SlidingChipRow(
                         text = label,
                         style = FindoraTheme.typography.bodyMedium,
                         color = textColor,
-                        modifier = Modifier.padding(horizontal = FindoraTheme.spacing.md, vertical = FindoraTheme.spacing.xs),
+                        modifier =
+                            Modifier.padding(
+                                horizontal = FindoraTheme.spacing.md,
+                                vertical = FindoraTheme.spacing.xs,
+                            ),
                     )
                 }
             }

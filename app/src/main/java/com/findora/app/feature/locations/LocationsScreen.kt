@@ -1,11 +1,11 @@
 package com.findora.app.feature.locations
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -145,7 +145,12 @@ private fun RegionCard(
                     .padding(vertical = FindoraTheme.spacing.xs)
                     .testTag("selectRegion_${region.id}"),
         ) {
-            Icon(FindoraIcons.MapPinHouse, null, tint = FindoraTheme.colors.onBackground, modifier = Modifier.size(RegionIconSize))
+            Icon(
+                FindoraIcons.MapPinHouse,
+                null,
+                tint = FindoraTheme.colors.onBackground,
+                modifier = Modifier.size(RegionIconSize),
+            )
             Spacer(Modifier.width(FindoraTheme.spacing.sm))
             Text(
                 text = region.name,
@@ -165,7 +170,12 @@ private fun RegionCard(
                             .padding(horizontal = FindoraTheme.spacing.sm, vertical = FindoraTheme.spacing.xxs),
                 )
             } else {
-                Icon(FindoraIcons.ChevronEnd, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(RegionIconSize))
+                Icon(
+                    FindoraIcons.ChevronEnd,
+                    null,
+                    tint = FindoraTheme.colors.onSurfaceMuted,
+                    modifier = Modifier.size(RegionIconSize),
+                )
             }
         }
         FlowRow(

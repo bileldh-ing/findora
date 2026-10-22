@@ -21,8 +21,49 @@ object PropertyQueryBuilder {
         regionId: String,
         filter: PropertyFilter,
     ): SqlQuery {
-        val clauses = mutableListOf("region_id = ?")
-        val args = mutableListOf<Any>(regionId)
+        val where = Where()
+        where.add("region_id = ?", regionId)
+        filter.type?.let { where.add("type = ?", it.id) }
+        filter.query.trim().takeIf(String::isNotEmpty)?.let { text ->
+            val pattern = "%${escapeLike(text)}%"
+            where.add("(title LIKE ? ESCAPE '$ESCAPE' OR locality LIKE ? ESCAPE '$ESCAPE')", pattern, pattern)
+        }
+        addRanges(where, filter)
+        addFlags(where, filter)
+        filter.amenities.sortedBy { it.id }.forEach { where.add("amenities LIKE ?", "%\"${it.id}\"%") }
+        val sql = "SELECT * FROM properties WHERE ${where.clauses.joinToString(
+            " AND ",
+        )} ORDER BY ${orderBy(filter.sort)}"
+        return SqlQuery(sql, where.args)
+    }
+
+    private fun addRanges(
+        where: Where,
+        filter: PropertyFilter,
+    ) {
+        filter.minRent?.let { where.add("rent_amount >= ?", it) }
+        filter.maxRent?.let { where.add("rent_amount <= ?", it) }
+        filter.minBedrooms?.let { where.add("bedrooms >= ?", it) }
+        filter.minBathrooms?.let { where.add("bathrooms >= ?", it) }
+        filter.minAreaSqm?.let { where.add("area_sqm >= ?", it) }
+        filter.maxAreaSqm?.let { where.add("area_sqm <= ?", it) }
+    }
+
+    private fun addFlags(
+        where: Where,
+        filter: PropertyFilter,
+    ) {
+        if (filter.furnishedOnly) where.add("furnished = 1")
+        if (filter.petFriendlyOnly) where.add("pet_friendly = 1")
+        if (filter.parkingOnly) where.add("parking = 1")
+        if (filter.verifiedOnly) where.add("verified = 1")
+    }
+
+    /** Collects AND-ed clauses with their bound arguments in order. */
+    private class Where {
+        val clauses = mutableListOf<String>()
+        val args = mutableListOf<Any>()
+
         fun add(
             clause: String,
             vararg values: Any,
@@ -30,24 +71,6 @@ object PropertyQueryBuilder {
             clauses += clause
             args += values
         }
-        filter.type?.let { add("type = ?", it.id) }
-        filter.query.trim().takeIf(String::isNotEmpty)?.let { text ->
-            val pattern = "%${escapeLike(text)}%"
-            add("(title LIKE ? ESCAPE '$ESCAPE' OR locality LIKE ? ESCAPE '$ESCAPE')", pattern, pattern)
-        }
-        filter.minRent?.let { add("rent_amount >= ?", it) }
-        filter.maxRent?.let { add("rent_amount <= ?", it) }
-        filter.minBedrooms?.let { add("bedrooms >= ?", it) }
-        filter.minBathrooms?.let { add("bathrooms >= ?", it) }
-        filter.minAreaSqm?.let { add("area_sqm >= ?", it) }
-        filter.maxAreaSqm?.let { add("area_sqm <= ?", it) }
-        if (filter.furnishedOnly) clauses += "furnished = 1"
-        if (filter.petFriendlyOnly) clauses += "pet_friendly = 1"
-        if (filter.parkingOnly) clauses += "parking = 1"
-        if (filter.verifiedOnly) clauses += "verified = 1"
-        filter.amenities.sortedBy { it.id }.forEach { add("amenities LIKE ?", "%\"${it.id}\"%") }
-        val sql = "SELECT * FROM properties WHERE ${clauses.joinToString(" AND ")} ORDER BY ${orderBy(filter.sort)}"
-        return SqlQuery(sql, args)
     }
 
     fun orderBy(sort: SortOrder): String =

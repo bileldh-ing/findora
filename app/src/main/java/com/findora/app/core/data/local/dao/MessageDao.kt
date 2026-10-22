@@ -33,7 +33,12 @@ interface MessageDao {
         readAtMillis: Long,
     ): Int
 
-    @Query("UPDATE messages SET read_at = :readAtMillis WHERE id = :messageId AND recipient_id = :readerId AND read_at IS NULL")
+    @Query(
+        """
+        UPDATE messages SET read_at = :readAtMillis
+        WHERE id = :messageId AND recipient_id = :readerId AND read_at IS NULL
+        """,
+    )
     suspend fun markRead(
         messageId: String,
         readerId: String,

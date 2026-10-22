@@ -114,7 +114,12 @@ fun HomeTopBar(
             }
         CircleButton(onClick = onBellClick, description = bellDescription, modifier = Modifier.testTag("bell")) {
             Box {
-                Icon(FindoraIcons.Bell, null, tint = FindoraTheme.colors.onBackground, modifier = Modifier.size(HeaderIconSize))
+                Icon(
+                    FindoraIcons.Bell,
+                    null,
+                    tint = FindoraTheme.colors.onBackground,
+                    modifier = Modifier.size(HeaderIconSize),
+                )
                 if (unreadCount > 0) {
                     Box(
                         Modifier
@@ -137,9 +142,18 @@ fun HomeTopBar(
             modifier = Modifier.testTag("avatar"),
         ) {
             if (userInitials != null) {
-                Text(userInitials, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.onPrimaryAction)
+                Text(
+                    userInitials,
+                    style = FindoraTheme.typography.bodyMedium,
+                    color = FindoraTheme.colors.onPrimaryAction,
+                )
             } else {
-                Icon(FindoraIcons.User, null, tint = FindoraTheme.colors.onPrimaryAction, modifier = Modifier.size(HeaderIconSize))
+                Icon(
+                    FindoraIcons.User,
+                    null,
+                    tint = FindoraTheme.colors.onPrimaryAction,
+                    modifier = Modifier.size(HeaderIconSize),
+                )
             }
         }
     }
@@ -231,7 +245,12 @@ fun SearchPill(
                     .padding(start = FindoraTheme.spacing.md)
                     .testTag("searchPill"),
         ) {
-            Icon(FindoraIcons.Search, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(HeaderIconSize))
+            Icon(
+                FindoraIcons.Search,
+                null,
+                tint = FindoraTheme.colors.onSurfaceMuted,
+                modifier = Modifier.size(HeaderIconSize),
+            )
             Spacer(Modifier.width(FindoraTheme.spacing.sm))
             Text(
                 text = query.ifBlank { stringResource(R.string.search_placeholder) },
@@ -256,7 +275,12 @@ fun SearchPill(
                             role = Role.Button
                         }.testTag("clearQuery"),
             ) {
-                Icon(FindoraIcons.Close, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(ClearIconSize))
+                Icon(
+                    FindoraIcons.Close,
+                    null,
+                    tint = FindoraTheme.colors.onSurfaceMuted,
+                    modifier = Modifier.size(ClearIconSize),
+                )
             }
         }
         Box(Modifier.width(1.dp).height(DividerHeight).background(FindoraTheme.colors.outline))
@@ -271,7 +295,13 @@ private fun FilterButton(
     modifier: Modifier = Modifier,
 ) {
     val description =
-        if (activeFilters > 0) stringResource(R.string.cd_filters_active, activeFilters) else stringResource(R.string.cd_filters)
+        if (activeFilters >
+            0
+        ) {
+            stringResource(R.string.cd_filters_active, activeFilters)
+        } else {
+            stringResource(R.string.cd_filters)
+        }
     // The badge pops slightly every time the count changes.
     val pop = remember { Animatable(1f) }
     val bouncy = FindoraTheme.motion.bouncy<Float>()
@@ -293,12 +323,21 @@ private fun FilterButton(
                     role = Role.Button
                 }.testTag("filterButton"),
     ) {
-        Icon(FindoraIcons.Sliders, null, tint = FindoraTheme.colors.onBackground, modifier = Modifier.size(HeaderIconSize))
+        Icon(
+            FindoraIcons.Sliders,
+            null,
+            tint = FindoraTheme.colors.onBackground,
+            modifier = Modifier.size(HeaderIconSize),
+        )
         AnimatedVisibility(
             visible = activeFilters > 0,
             enter = scaleIn(FindoraTheme.motion.bouncy()),
             exit = scaleOut(),
-            modifier = Modifier.align(Alignment.TopEnd).padding(top = FindoraTheme.spacing.xs, end = FindoraTheme.spacing.xs),
+            modifier =
+                Modifier
+                    .align(
+                        Alignment.TopEnd,
+                    ).padding(top = FindoraTheme.spacing.xs, end = FindoraTheme.spacing.xs),
         ) {
             Box(
                 contentAlignment = Alignment.Center,

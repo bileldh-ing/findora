@@ -183,7 +183,13 @@ private fun LazyListScope.suggestionItems(
             icon = if (suggestion.kind == SearchSuggestion.Kind.Locality) FindoraIcons.MapPin else FindoraIcons.Home,
             caption =
                 stringResource(
-                    if (suggestion.kind == SearchSuggestion.Kind.Locality) R.string.suggestion_locality else R.string.suggestion_property,
+                    if (suggestion.kind ==
+                        SearchSuggestion.Kind.Locality
+                    ) {
+                        R.string.suggestion_locality
+                    } else {
+                        R.string.suggestion_property
+                    },
                 ),
             onClick = { onEvent(SearchUiEvent.Submit(suggestion.text)) },
             modifier =
@@ -229,7 +235,12 @@ private fun SearchField(
             onClick = onBack,
             modifier = Modifier.testTag("searchBack"),
         ) {
-            Icon(FindoraIcons.ArrowBack, null, tint = FindoraTheme.colors.onBackground, modifier = Modifier.size(IconSize))
+            Icon(
+                FindoraIcons.ArrowBack,
+                null,
+                tint = FindoraTheme.colors.onBackground,
+                modifier = Modifier.size(IconSize),
+            )
         }
         Spacer(Modifier.width(FindoraTheme.spacing.xs))
         Row(
@@ -242,12 +253,22 @@ private fun SearchField(
                     .background(FindoraTheme.colors.surface)
                     .padding(start = FindoraTheme.spacing.md),
         ) {
-            Icon(FindoraIcons.Search, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(IconSize))
+            Icon(
+                FindoraIcons.Search,
+                null,
+                tint = FindoraTheme.colors.onSurfaceMuted,
+                modifier = Modifier.size(IconSize),
+            )
             Spacer(Modifier.width(FindoraTheme.spacing.sm))
             val placeholder = stringResource(R.string.search_placeholder)
             Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
                 if (query.isEmpty()) {
-                    Text(placeholder, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onSurfaceMuted, maxLines = 1)
+                    Text(
+                        placeholder,
+                        style = FindoraTheme.typography.body,
+                        color = FindoraTheme.colors.onSurfaceMuted,
+                        maxLines = 1,
+                    )
                 }
                 BasicTextField(
                     value = query,
@@ -270,7 +291,12 @@ private fun SearchField(
                     onClick = { onQueryChange("") },
                     modifier = Modifier.testTag("searchClear"),
                 ) {
-                    Icon(FindoraIcons.Close, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(IconSize))
+                    Icon(
+                        FindoraIcons.Close,
+                        null,
+                        tint = FindoraTheme.colors.onSurfaceMuted,
+                        modifier = Modifier.size(IconSize),
+                    )
                 }
             }
         }

@@ -1,5 +1,10 @@
 package com.findora.app.core.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.findora.app.core.common.AppClock
 import com.findora.app.core.data.local.PropertyQueryBuilder
 import com.findora.app.core.data.local.dao.BoundsRow
@@ -11,11 +16,6 @@ import com.findora.app.core.data.remote.RemoteDataSource
 import com.findora.app.core.data.remote.RemoteException
 import com.findora.app.core.data.seed.ListingDto
 import com.findora.app.core.di.IoDispatcher
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.map
-import androidx.sqlite.db.SimpleSQLiteQuery
 import com.findora.app.core.domain.model.ListingBounds
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.PropertyFilter
@@ -81,7 +81,11 @@ class OfflineFirstPropertyRepository
             val query = PropertyQueryBuilder.build(regionId, filter)
             return Pager(
                 config = PagingConfig(pageSize = policy.pageSize, enablePlaceholders = false),
-                pagingSourceFactory = { searchDao.pagingSource(SimpleSQLiteQuery(query.sql, query.args.toTypedArray())) },
+                pagingSourceFactory = {
+                    searchDao.pagingSource(
+                        SimpleSQLiteQuery(query.sql, query.args.toTypedArray()),
+                    )
+                },
             ).flow.map { page -> page.map { it.toDomain() } }
         }
 

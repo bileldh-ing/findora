@@ -8,7 +8,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
-/** JSON column converters. Lists are small, read whole and never queried by element. */
+/** JSON column converters. Lists are small and read whole; the Home filter matches amenity ids inside the JSON text. */
 class Converters {
     @TypeConverter
     fun stringsToJson(value: List<String>): String = json.encodeToString(strings, value)

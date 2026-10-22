@@ -25,9 +25,10 @@ class RoomMessageRepository
         override fun observeUnread(userId: String): Flow<List<InboxMessage>> =
             dao
                 .observeUnread(userId)
-                .map { rows -> rows.map { InboxMessage(it.id, it.propertyId, it.body, Instant.ofEpochMilli(it.sentAtMillis)) } }
-                .flowOn(ioDispatcher)
-    
+                .map { rows ->
+                    rows.map { InboxMessage(it.id, it.propertyId, it.body, Instant.ofEpochMilli(it.sentAtMillis)) }
+                }.flowOn(ioDispatcher)
+
         override suspend fun markRead(
             userId: String,
             messageId: String,

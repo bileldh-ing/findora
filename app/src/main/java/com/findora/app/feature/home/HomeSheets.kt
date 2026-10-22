@@ -119,10 +119,19 @@ fun RegionSheetContent(
                         .padding(horizontal = FindoraTheme.spacing.xs)
                         .testTag("region_${region.id}"),
             ) {
-                Icon(FindoraIcons.MapPin, null, tint = FindoraTheme.colors.onSurfaceMuted, modifier = Modifier.size(RowIconSize))
+                Icon(
+                    FindoraIcons.MapPin,
+                    null,
+                    tint = FindoraTheme.colors.onSurfaceMuted,
+                    modifier = Modifier.size(RowIconSize),
+                )
                 Spacer(Modifier.width(FindoraTheme.spacing.sm))
                 Column(Modifier.weight(1f)) {
-                    Text(region.name, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.onBackground)
+                    Text(
+                        region.name,
+                        style = FindoraTheme.typography.bodyMedium,
+                        color = FindoraTheme.colors.onBackground,
+                    )
                     Text(
                         text = region.localities.take(PREVIEW_LOCALITIES).joinToString(" · ") { it.name },
                         style = FindoraTheme.typography.caption,
@@ -131,7 +140,12 @@ fun RegionSheetContent(
                     )
                 }
                 if (selected) {
-                    Icon(FindoraIcons.Check, null, tint = FindoraTheme.colors.accent, modifier = Modifier.size(RowIconSize))
+                    Icon(
+                        FindoraIcons.Check,
+                        null,
+                        tint = FindoraTheme.colors.accent,
+                        modifier = Modifier.size(RowIconSize),
+                    )
                 }
             }
         }
@@ -160,7 +174,12 @@ fun NotificationsSheetContent(
         SheetTitle(stringResource(R.string.notifications_title))
         if (messages.isEmpty()) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.heightIn(min = RowMinHeight)) {
-                Icon(FindoraIcons.Check, null, tint = FindoraTheme.colors.success, modifier = Modifier.size(RowIconSize))
+                Icon(
+                    FindoraIcons.Check,
+                    null,
+                    tint = FindoraTheme.colors.success,
+                    modifier = Modifier.size(RowIconSize),
+                )
                 Spacer(Modifier.width(FindoraTheme.spacing.sm))
                 Text(
                     text = stringResource(R.string.notifications_empty),

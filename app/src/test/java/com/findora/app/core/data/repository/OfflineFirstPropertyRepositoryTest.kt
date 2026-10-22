@@ -51,6 +51,7 @@ class OfflineFirstPropertyRepositoryTest {
         OfflineFirstPropertyRepository(
             remote = FakeRemoteDataSource(fileSeedReader(), config, Random(1)),
             dao = db.propertyDao(),
+            searchDao = db.propertySearchDao(),
             clock = clock,
             policy = CachePolicy(maxAge = Duration.ofMinutes(15), pageSize = 7),
             ioDispatcher = dispatcher,

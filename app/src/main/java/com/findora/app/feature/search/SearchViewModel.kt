@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
@@ -101,7 +100,11 @@ class SearchViewModel
                     recents = recents,
                     suggestionsLoaded = current && forText.isNotEmpty(),
                 )
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), SearchUiState(query = query.value))
+            }.stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
+                SearchUiState(query = query.value),
+            )
 
         private val effectChannel = Channel<SearchUiEffect>(Channel.BUFFERED)
         val effects: Flow<SearchUiEffect> = effectChannel.receiveAsFlow()

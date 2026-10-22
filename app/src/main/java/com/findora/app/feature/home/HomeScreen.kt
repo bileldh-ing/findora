@@ -325,7 +325,7 @@ private fun LazyGridScope.feedItems(
                         index = index,
                         isFavorite = property.id in state.favoriteIds,
                         animateEntrance = animateEntrance(property.id),
-                        onRevealed = { onRevealed(property.id) },
+                        onReveal = { onRevealed(property.id) },
                         onToggleFavorite = { onEvent(HomeUiEvent.ToggleFavorite(property.id)) },
                         modifier = Modifier.animateItem(),
                     )
@@ -348,19 +348,19 @@ private fun FeedCard(
     index: Int,
     isFavorite: Boolean,
     animateEntrance: Boolean,
-    onRevealed: () -> Unit,
+    onReveal: () -> Unit,
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val animate = animateEntrance && index < STAGGERED_ITEMS
     val progress = remember(property.id) { Animatable(if (animate) 0f else 1f) }
-    val currentOnRevealed by rememberUpdatedState(onRevealed)
+    val currentOnReveal by rememberUpdatedState(onReveal)
     LaunchedEffect(property.id) {
         if (progress.value < 1f) {
             delay(index * STAGGER_MILLIS)
             progress.animateTo(1f, tween(ENTRANCE_MILLIS))
         }
-        currentOnRevealed()
+        currentOnReveal()
     }
     val rise = with(LocalDensity.current) { EntranceRise.toPx() }
     PropertyCard(

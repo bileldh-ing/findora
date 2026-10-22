@@ -38,7 +38,11 @@ data class PropertyFilter(
 ) {
     init {
         if (minRent != null && maxRent != null) require(minRent <= maxRent) { "minRent must not exceed maxRent" }
-        if (minAreaSqm != null && maxAreaSqm != null) require(minAreaSqm <= maxAreaSqm) { "minArea must not exceed maxArea" }
+        if (minAreaSqm != null &&
+            maxAreaSqm != null
+        ) {
+            require(minAreaSqm <= maxAreaSqm) { "minArea must not exceed maxArea" }
+        }
     }
 
     /** Refinements set in the filter sheet (badge on the filter icon); category and search text are not counted. */

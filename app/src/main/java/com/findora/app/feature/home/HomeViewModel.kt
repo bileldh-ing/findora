@@ -61,7 +61,11 @@ data class HomeUiState(
 
     /** "Kochi, Kerala": the region's first neighbourhood and its name, as in the reference header. */
     val locationLabel: String
-        get() = region?.let { pack -> listOfNotNull(pack.localities.firstOrNull()?.name, pack.name).distinct().joinToString(", ") }.orEmpty()
+        get() =
+            region
+                ?.let { pack ->
+                    listOfNotNull(pack.localities.firstOrNull()?.name, pack.name).distinct().joinToString(", ")
+                }.orEmpty()
 }
 
 sealed interface HomeUiEvent {
@@ -153,7 +157,10 @@ class HomeViewModel
             viewModelScope.launch { userId.collect(filters::claim) }
             viewModelScope.launch { regionList.value = currentRegion.all() }
             viewModelScope.launch {
-                currentRegion.region.map { it.id }.distinctUntilChanged().collect { refresh(it, force = false) }
+                currentRegion.region
+                    .map { it.id }
+                    .distinctUntilChanged()
+                    .collect { refresh(it, force = false) }
             }
         }
 

@@ -176,7 +176,16 @@ fun FilterSheetContent(
                     text = stringResource(amenity.labelRes()),
                     selected = selected,
                     onClick = {
-                        draft = draft.copy(amenities = if (selected) draft.amenities - amenity else draft.amenities + amenity)
+                        draft =
+                            draft.copy(
+                                amenities =
+                                    if (selected) {
+                                        draft.amenities - amenity
+                                    } else {
+                                        draft.amenities +
+                                            amenity
+                                    },
+                            )
                     },
                 )
             }
@@ -220,7 +229,11 @@ private fun CountOptions(
     onSelect: (Int?) -> Unit,
 ) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
-        CategoryChip(text = stringResource(R.string.filter_any), selected = selected == null, onClick = { onSelect(null) })
+        CategoryChip(
+            text = stringResource(R.string.filter_any),
+            selected = selected == null,
+            onClick = { onSelect(null) },
+        )
         options.forEach { count ->
             CategoryChip(
                 text = stringResource(R.string.filter_at_least, count),

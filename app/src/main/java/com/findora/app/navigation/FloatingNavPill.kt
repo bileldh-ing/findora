@@ -71,7 +71,13 @@ enum class MainTab(
     val tag: String,
 ) {
     Home(MainRoute.Home, R.string.nav_home, FindoraIcons.Home, FindoraIcons.HomeFilled, "nav_home"),
-    Locations(MainRoute.Locations, R.string.nav_locations, FindoraIcons.MapPinHouse, FindoraIcons.MapPinHouse, "nav_locations"),
+    Locations(
+        MainRoute.Locations,
+        R.string.nav_locations,
+        FindoraIcons.MapPinHouse,
+        FindoraIcons.MapPinHouse,
+        "nav_locations",
+    ),
     Saved(MainRoute.Saved, R.string.nav_saved, FindoraIcons.Heart, FindoraIcons.HeartFilled, "nav_saved"),
     Settings(MainRoute.Settings, R.string.settings_title, FindoraIcons.Settings, FindoraIcons.Settings, "nav_settings"),
 }
