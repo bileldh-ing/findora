@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0] Phase 2: Welcome and authentication
+- Welcome screen matching the reference: hero photo with a concave arc (`ConcaveArcShape`), logo badge, FINDORA / Dream House, WELCOME in Syne, subtitle, Login and Sign Up pills, demo-account and guest shortcuts; Ken Burns, overshoot badge, staggered entrance and parallax, skipped when animations are off.
+- Login, Sign Up and Forgot password (local reset code) with inline validation, password-rules checklist, Remember me and a 5-failure / 30-second lockout countdown.
+- `AuthRepository` + `LocalAuthRepository`: PBKDF2WithHmacSHA256 (16-byte salt, 120k iterations, constant-time compare), case-insensitive unique e-mail, persisted throttling (Room schema v2, auto-migration), Keystore AES-GCM encrypted session token, 30-day remembered sessions, guest sessions, demo account `demo@findora.app` / `Demo1234`, logout and delete account. ADR 0003.
+- Route guard (`AppViewModel` holds the splash while restoring the session) and an optional biometric lock screen (androidx.biometric).
+- Settings first cut: theme applied app-wide, biometric lock toggle, log out, delete account.
+- Thin-stroke icon set, text fields, switches, segmented control; French and Arabic strings for everything.
+- Tests: PasswordHasherTest, CredentialValidatorTest, AuthRepositoryTest, EncryptedSessionStoreTest, ViewModel tests with Turbine, Compose UI tests for Welcome/Login/Sign Up, schema v1 to v2 migration test, instrumented guest journey.
+- Build: Kover now really excludes Hilt/Dagger generated classes and DI modules; CI runs `build_seed.py --check` (offline, no dependencies) and uploads the exported Room schemas.
+
+
 ## [0.2.0] Phase 1: Data and images
 
 ### Data and images

@@ -216,6 +216,10 @@ Bundled offline pack (`app/src/main/assets/offline/`, WebP, max 1280 px, quality
 | 203 | [Spacious modern dining room featuring a large wooden table and contemporary design elements.](https://www.pexels.com/photo/wooden-table-in-stylish-apartment-6908358/) | [Max Vakhtbovych](https://www.pexels.com/@artbovich/) | [Pexels License](https://www.pexels.com/license/) |  |
 | 204 | [Facade of a yellow apartment building showcasing multiple balconies and windows.](https://www.pexels.com/photo/yellow-apartment-building-with-balconies-32587066/) | [Henry Acevedo](https://www.pexels.com/@henry-acevedo-382866382/) | [Pexels License](https://www.pexels.com/license/) |  |
 
+## App artwork
+
+The Welcome screen hero (`app/src/main/res/drawable-nodpi/welcome_hero.webp`) is [Black Wooden House Under Blue Sky](https://www.pexels.com/photo/black-wooden-house-under-blue-sky-5766483/) by [Eva Bronzini](https://www.pexels.com/@eva-bronzini/), [Pexels License](https://www.pexels.com/license/).
+
 ## Fonts
 
 Syne and Poppins are bundled under the SIL Open Font License 1.1, see [`licenses/`](licenses).

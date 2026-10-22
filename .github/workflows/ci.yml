@@ -60,6 +60,10 @@ jobs:
           java-version: 17
       - uses: gradle/actions/setup-gradle@v6
 
+      # Offline and dependency-free: compares the committed seed, regions and credits with a fresh generation.
+      - name: Seed dataset is current
+        run: python3 scripts/build_seed/build_seed.py --check
+
       - name: detekt, Spotless, unit tests, Android Lint, Kover
         run: |
           set -o pipefail
@@ -81,6 +85,7 @@ jobs:
             gradle-check.log
             app/build/reports
             build/reports
+            app/schemas
 
   instrumented:
     name: Instrumented tests (emulator API 34)

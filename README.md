@@ -20,13 +20,34 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 |---|---|---|
 | 0 | Bootstrap: build system, design system, navigation, CI | Done |
 | 1 | Data layer and property imagery | Done |
-| 2 | Welcome and authentication | Next |
-| 3 | Home screen, pixel-faithful to the reference design | Planned |
+| 2 | Welcome and authentication | Done |
+| 3 | Home screen, pixel-faithful to the reference design | Next |
 | 4 | Property detail and viewing bookings | Planned |
 | 5 | Best-match recommendations | Planned |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 2 ships
+
+- **Welcome**, faithful to the reference: full-bleed hero photo cut by a concave arc (`ConcaveArcShape`,
+  `Path.quadraticTo`), logo badge, FINDORA / Dream House over a soft scrim, WELCOME in Syne, subtitle,
+  Login and Sign Up pills, plus "Try demo account" and "Continue as guest". Ken Burns drift, a bouncy badge,
+  staggered entrance and photo parallax on scroll, all skipped when system animations are off.
+- **Login, Sign Up, Forgot password** with inline validation (e-mail format, password rules checklist,
+  matching confirmation), "Remember me", a 5-failure / 30-second lockout with a live countdown, and a local
+  reset-code flow (no e-mail is sent; the code is shown in-app).
+- **Local auth** (`core/data/auth`, see [ADR 0003](docs/adr/0003-local-authentication.md)): PBKDF2WithHmacSHA256
+  (16-byte salt, 120,000 iterations, constant-time compare), case-insensitive unique e-mail, persisted
+  throttling (Room schema v2 auto-migration), session token encrypted with an Android Keystore AES-GCM key,
+  30-day remembered sessions, guest sessions, the pre-seeded demo account `demo@findora.app` / `Demo1234`,
+  logout and delete account (removes every row keyed by the user id).
+- **Route guard**: a valid session at launch skips Welcome; with the biometric lock on, the app opens on an
+  Unlock screen (`androidx.biometric`, fingerprint/face or screen lock).
+- **Settings (first cut)**: account card, theme (system/light/dark, applied app-wide), biometric lock toggle,
+  log out, delete account with confirmation. Until Home lands in Phase 3 this is the signed-in screen.
+- English, French and Arabic strings for everything; icons are a thin-stroke set drawn in code, with
+  auto-mirroring for directional icons in RTL.
 
 ## What Phase 1 ships
 
@@ -58,7 +79,7 @@ pip install pillow
 python3 scripts/build_seed/build_seed.py                  # regenerate listings, regions, CREDITS.md
 python3 scripts/build_seed/build_seed.py --refresh-photos  # re-download and re-verify every photo
 python3 scripts/build_seed/build_seed.py --offline-pack    # rebuild the WebP offline pack
-python3 scripts/build_seed/build_seed.py --check           # fail if committed outputs are stale
+python3 scripts/build_seed/build_seed.py --check           # fail if committed outputs are stale (offline, runs in CI)
 ```
 
 ## What Phase 0 ships
@@ -104,16 +125,20 @@ flowchart LR
 app/src/main/java/com/findora/app
 ├── core
 │   ├── designsystem/theme      colours, type, tokens, contrast, FindoraTheme
-│   ├── designsystem/component  pill buttons, chips, logo
+│   ├── designsystem/component  pill buttons, chips, logo, text fields, arc shape, controls
+│   ├── designsystem/icon       thin-stroke icon set (ImageVector)
 │   ├── common                  injectable clock
 │   ├── domain                  models, repository interfaces, PriceFormatter (pure Kotlin)
 │   ├── data                    Room, DataStore, seed DTOs, fake remote, repositories, Hilt modules
+│   ├── data/auth               password hashing, Keystore session cipher, local AuthRepository
+│   ├── security                biometric availability
 │   ├── image                   Coil ImageLoader and offline fallback
 │   └── di                      coroutine dispatchers module
 ├── feature
-│   ├── bootstrap               themed landing screen
+│   ├── auth                    welcome, login, sign up, forgot password, biometric unlock
+│   ├── settings                account, theme, biometric lock, logout, delete account
 │   └── designsystem            debug-only component showcase
-└── navigation                  type-safe routes and NavHost
+└── navigation                  type-safe routes, NavHost and the launch route guard
 ```
 
 ## Tech stack
@@ -129,6 +154,7 @@ app/src/main/java/com/findora/app
 | kotlinx.serialization JSON | Seed and DTO parsing, JSON columns, type-safe routes |
 | Kotlin Coroutines + Flow | Async work and reactive streams from Room to UI |
 | Coil 3 (compose, network-okhttp) + OkHttp | Image loading with memory/disk cache and crossfade |
+| androidx.biometric | Fingerprint, face or screen-lock prompt for the optional app lock |
 | Turbine, MockK, kotlinx-coroutines-test | Flow assertions, mocking and virtual-time coroutine tests |
 | Robolectric + Compose UI test | Compose UI tests on the JVM, in CI |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
@@ -143,16 +169,26 @@ app/src/main/java/com/findora/app
 | `PriceFormatterTest` | Design style, INR lakh grouping, USD, EUR, TND, Arabic/RTL isolation |
 | `DomainModelTest` | Money arithmetic, stable ids, bounds, filters |
 | `PropertyDaoTest`, `UserDataDaoTest`, `ActivityDaoTest` | Every DAO against in-memory Room (Robolectric): filters, ordering, per-user favourites, unique e-mail, double-booking guard, recent-search de-duplication and trimming |
-| `DatabaseSchemaTest` | Exported schema committed and identical to the entities (`MigrationTestHelper`) |
+| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v2 migration keeps data (`MigrationTestHelper`) |
 | `FakeRemoteDataSourceTest` | Latency window, paging, not found, fail-next / always / random error injection |
 | `OfflineFirstPropertyRepositoryTest` | First load, TTL, forced refresh, failures keep the cache, filters |
 | `RoomRepositoriesTest` | Favourites, search history, interactions, region packs |
 | `DataStoreSettingsRepositoryTest` | Defaults and persistence of every setting |
 | `OfflineFallbackInterceptorTest` | Fallback to the bundled WebP on failure, 250 MB disk cache |
+| `PasswordHasherTest` | PBKDF2 parameters (>= 120k iterations, 16-byte salt), unique salts, wrong passwords, malformed hashes |
+| `CredentialValidatorTest` | E-mail normalisation and format, password rules, names, initials |
+| `AuthRepositoryTest` | Sign-up, case-insensitive duplicates, lockout with a fake clock (and across restarts), remembered and process-only sessions, expiry, demo, guest, reset codes, delete account |
+| `EncryptedSessionStoreTest` | Round trip, no plaintext on disk, undecryptable data treated as signed out |
+| `AuthViewModelsTest` | Login (validation, attempts left, lockout countdown), sign-up, forgot password, welcome (Turbine) |
+| `SettingsViewModelTest`, `AppViewModelTest` | Theme, biometric rules, logout/delete; launch route guard |
+| `AuthScreensTest` | Welcome content and buttons, light/dark, login and sign-up inline validation (Compose, Robolectric) |
+| `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Settings and back |
 
 ## Credits
 
 Property photos are from [Pexels](https://www.pexels.com/license/); every photographer is listed in
 [CREDITS.md](CREDITS.md). Listings, agents and prices are fictional sample data.
+The Welcome hero photo is [Black Wooden House Under Blue Sky](https://www.pexels.com/photo/black-wooden-house-under-blue-sky-5766483/)
+by [Eva Bronzini](https://www.pexels.com/@eva-bronzini/) (Pexels License).
 Syne and Poppins are bundled under the SIL Open Font License 1.1 (see [`licenses/`](licenses)).
 Code is released under the [MIT License](LICENSE).

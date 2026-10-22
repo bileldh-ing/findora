@@ -451,6 +451,13 @@ def credits_markdown(seed: dict, pack: list[dict]) -> str:
     del offline
     lines += [
         "",
+        "## App artwork",
+        "",
+        "The Welcome screen hero (`app/src/main/res/drawable-nodpi/welcome_hero.webp`) is "
+        "[Black Wooden House Under Blue Sky](https://www.pexels.com/photo/black-wooden-house-under-blue-sky-5766483/) "
+        "by [Eva Bronzini](https://www.pexels.com/@eva-bronzini/), "
+        "[Pexels License](https://www.pexels.com/license/).",
+        "",
         "## Fonts",
         "",
         "Syne and Poppins are bundled under the SIL Open Font License 1.1, see [`licenses/`](licenses).",

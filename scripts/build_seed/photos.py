@@ -26,7 +26,15 @@ import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:  # `build_seed.py --check` only reads committed JSON and needs neither Pillow nor network.
+    Image = None
+
+
+def _require_pillow() -> None:
+    if Image is None:
+        raise SystemExit("Pillow is required to verify photos or build the offline pack: pip install pillow")
 
 MIN_LONG_SIDE = 1200
 REQUEST_WIDTH = 1280
@@ -152,6 +160,7 @@ def _verify_one(candidate: dict, cache_dir: Path) -> dict:
 
 
 def verify(candidates: list[dict], cache_dir: Path, workers: int = 12) -> tuple[list[dict], list[dict]]:
+    _require_pillow()
     cache_dir.mkdir(parents=True, exist_ok=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
         results = list(pool.map(lambda c: _verify_one(c, cache_dir), candidates))
@@ -178,6 +187,7 @@ def verify(candidates: list[dict], cache_dir: Path, workers: int = 12) -> tuple[
 
 
 def build_offline_pack(photos: list[dict], cache_dir: Path, out_dir: Path, max_side: int = 1280, quality: int = 85) -> list[dict]:
+    _require_pillow()
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("*.webp"):
         stale.unlink()
