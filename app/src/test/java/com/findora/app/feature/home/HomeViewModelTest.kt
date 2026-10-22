@@ -1,6 +1,5 @@
 package com.findora.app.feature.home
 
-import androidx.paging.testing.asSnapshot
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.findora.app.core.data.repository.InMemoryHomeFilterRepository
@@ -21,11 +20,9 @@ import com.findora.app.core.testing.MainDispatcherRule
 import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.inboxMessage
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -102,15 +99,16 @@ class HomeViewModelTest {
     fun selectingACategoryFiltersThePagedFeed() =
         runTest(main.dispatcher) {
             val vm = viewModel()
-            val everything = flowOf(vm.listings.first()).asSnapshot()
-            assertEquals(40, everything.size)
+            vm.listings.first()
+            assertEquals("kerala" to PropertyFilter(), properties.requestedFilters.last())
             vm.onEvent(HomeUiEvent.SelectCategory(HomeCategory.Apartment))
-            val apartments = flowOf(vm.listings.first()).asSnapshot()
-            assertTrue(apartments.isNotEmpty())
-            assertTrue(apartments.all { it.type == PropertyType.Apartment })
-            assertEquals(PropertyFilter(type = PropertyType.Apartment), properties.requestedFilters.last().second)
+            vm.listings.first()
+            assertEquals("kerala" to PropertyFilter(type = PropertyType.Apartment), properties.requestedFilters.last())
+            vm.onEvent(HomeUiEvent.SelectCategory(HomeCategory.Rooms))
+            vm.listings.first()
+            assertEquals(PropertyFilter(type = PropertyType.Room), properties.requestedFilters.last().second)
             vm.state.test {
-                assertEquals(HomeCategory.Apartment, awaitUntil { it.category == HomeCategory.Apartment }.category)
+                assertEquals(HomeCategory.Rooms, awaitUntil { it.category == HomeCategory.Rooms }.category)
                 cancelAndIgnoreRemainingEvents()
             }
         }

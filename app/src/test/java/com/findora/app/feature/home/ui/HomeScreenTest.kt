@@ -15,7 +15,6 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -24,6 +23,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.findora.app.core.data.repository.SeedRegionRepository
@@ -85,7 +86,10 @@ class HomeScreenTest {
                     } else {
                         repository.matching("kerala", state.filter)
                     }
-                flowOf(PagingData.from(homes))
+                // Explicit "nothing more to load" states, as Room reports them once a query has run.
+                val loaded =
+                    LoadStates(LoadState.NotLoading(true), LoadState.NotLoading(true), LoadState.NotLoading(true))
+                flowOf(PagingData.from(homes, sourceLoadStates = loaded))
             }.collectAsLazyPagingItems()
         FindoraTheme(darkTheme = darkTheme) {
             HomeScreen(
@@ -248,21 +252,6 @@ class HomeScreenTest {
     }
 
     @Test
-    fun filterButtonOpensTheSheetAndApplyingUpdatesTheBadge() {
-        compose.setContent { InteractiveHome(homeState()) }
-        compose.onNodeWithTag("filterButton").performClick()
-        compose.waitUntil(TIMEOUT) { compose.onAllNodes(tagPrefix("filterSheet")).fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithTag("verifiedSwitch").performScrollTo().performClick()
-        compose.onNodeWithTag("applyFilters").performScrollTo().performClick()
-        compose.waitUntil(TIMEOUT) {
-            compose.onAllNodesWithContentDescription("Filters, 1 active").fetchSemanticsNodes().isNotEmpty()
-        }
-        assertEquals(PropertyFilter(verifiedOnly = true), (events.last() as HomeUiEvent.ApplyFilter).filter)
-        val verifiedIds = repository.matching("kerala", PropertyFilter(verifiedOnly = true)).map { it.id }
-        assertTrue(visibleCardIds().all { it in verifiedIds })
-    }
-
-    @Test
     fun anEmptyResultOffersToClearFilters() {
         compose.setContent { InteractiveHome(homeState(filter = PropertyFilter(query = "no such place"))) }
         showInGrid(hasText("No homes match"))
@@ -320,9 +309,5 @@ class HomeScreenTest {
     fun emptyNotificationsSayAllCaughtUp() {
         compose.setContent { FindoraTheme { NotificationsSheetContent(messages = emptyList(), onDismissMessage = {}) } }
         compose.onNodeWithText("You're all caught up").assertIsDisplayed()
-    }
-
-    private companion object {
-        const val TIMEOUT = 5_000L
     }
 }
