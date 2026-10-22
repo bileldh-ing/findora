@@ -33,16 +33,16 @@ fun SharedPropertyPhoto(
     val sharedScope = LocalSharedTransitionScope.current
     val visibilityScope = LocalNavAnimatedVisibilityScope.current
     val reduceMotion = rememberReducedMotion()
-    if (sharedScope == null || visibilityScope == null || reduceMotion) {
-        content(modifier)
-    } else {
-        with(sharedScope) {
-            content(
+    val photoModifier =
+        if (sharedScope == null || visibilityScope == null || reduceMotion) {
+            modifier
+        } else {
+            with(sharedScope) {
                 modifier.sharedElement(
                     state = rememberSharedContentState(key = propertyPhotoKey(propertyId)),
                     animatedVisibilityScope = visibilityScope,
-                ),
-            )
+                )
+            }
         }
-    }
+    content(photoModifier)
 }

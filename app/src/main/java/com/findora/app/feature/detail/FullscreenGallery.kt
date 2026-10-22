@@ -2,6 +2,7 @@ package com.findora.app.feature.detail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -148,6 +149,7 @@ fun FullscreenGallery(
 }
 
 /** A photo that zooms with pinch (1x to 4x) or double-tap (toggles 2.5x around the tap) and pans while zoomed. */
+@OptIn(ExperimentalFoundationApi::class) // transformable(canPan): single-finger drags reach the pager when not zoomed.
 @Composable
 private fun ZoomableImage(
     image: PropertyImage,
