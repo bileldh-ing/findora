@@ -86,6 +86,7 @@ enum class HomeSheet { None, Filters, Regions, Notifications }
 fun HomeRoute(
     onOpenSearch: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenProperty: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = hiltViewModel(),
@@ -98,6 +99,7 @@ fun HomeRoute(
         onEvent = viewModel::onEvent,
         onOpenSearch = onOpenSearch,
         onOpenProfile = onOpenProfile,
+        onOpenProperty = onOpenProperty,
         modifier = modifier,
         contentPadding = contentPadding,
     )
@@ -117,6 +119,7 @@ fun HomeScreen(
     onEvent: (HomeUiEvent) -> Unit,
     onOpenSearch: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenProperty: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     reduceMotion: Boolean = rememberReducedMotion(),
@@ -222,6 +225,7 @@ fun HomeScreen(
                     listings = listings,
                     state = state,
                     onEvent = onEvent,
+                    onOpenProperty = onOpenProperty,
                     animateEntrance = { id -> !reduceMotion && id !in revealed },
                     onRevealed = { id -> revealed += id },
                 )
@@ -280,6 +284,7 @@ private fun LazyGridScope.feedItems(
     listings: LazyPagingItems<Property>,
     state: HomeUiState,
     onEvent: (HomeUiEvent) -> Unit,
+    onOpenProperty: (String) -> Unit,
     animateEntrance: (String) -> Boolean,
     onRevealed: (String) -> Unit,
 ) {
@@ -327,6 +332,7 @@ private fun LazyGridScope.feedItems(
                         animateEntrance = animateEntrance(property.id),
                         onReveal = { onRevealed(property.id) },
                         onToggleFavorite = { onEvent(HomeUiEvent.ToggleFavorite(property.id)) },
+                        onClick = { onOpenProperty(property.id) },
                         modifier = Modifier.animateItem(),
                     )
                 }
@@ -350,6 +356,7 @@ private fun FeedCard(
     animateEntrance: Boolean,
     onReveal: () -> Unit,
     onToggleFavorite: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val animate = animateEntrance && index < STAGGERED_ITEMS
@@ -367,6 +374,7 @@ private fun FeedCard(
         property = property,
         isFavorite = isFavorite,
         onToggleFavorite = onToggleFavorite,
+        onClick = onClick,
         modifier =
             modifier.graphicsLayer {
                 alpha = progress.value

@@ -28,6 +28,12 @@ sealed interface FindoraRoute {
     @Serializable
     data object Search : FindoraRoute
 
+    /** A listing's detail page, opened from a card or from a `findora://property/{propertyId}` link. */
+    @Serializable
+    data class PropertyDetail(
+        val propertyId: String,
+    ) : FindoraRoute
+
     /** Debug-only catalogue of every design-system component. */
     @Serializable
     data object DesignSystem : FindoraRoute

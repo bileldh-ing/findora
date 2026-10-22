@@ -33,6 +33,7 @@ private const val SKELETON_COUNT = 4
 
 @Composable
 fun SavedRoute(
+    onOpenProperty: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: SavedViewModel = hiltViewModel(),
@@ -41,6 +42,7 @@ fun SavedRoute(
     SavedScreen(
         state = state,
         onToggleFavorite = viewModel::toggleFavorite,
+        onOpenProperty = onOpenProperty,
         modifier = modifier,
         contentPadding = contentPadding,
     )
@@ -51,6 +53,7 @@ fun SavedRoute(
 fun SavedScreen(
     state: SavedUiState,
     onToggleFavorite: (String) -> Unit,
+    onOpenProperty: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -98,6 +101,7 @@ fun SavedScreen(
                         property = home,
                         isFavorite = true,
                         onToggleFavorite = { onToggleFavorite(home.id) },
+                        onClick = { onOpenProperty(home.id) },
                         modifier = Modifier.animateItem(),
                     )
                 }

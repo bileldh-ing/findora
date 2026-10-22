@@ -170,6 +170,74 @@ object FindoraIcons {
         )
     }
 
+    val Share: ImageVector by lazy {
+        outline(
+            "Share",
+            circle(18f, 5f, 3f),
+            circle(6f, 12f, 3f),
+            circle(18f, 19f, 3f),
+            "M8.59 13.51 15.42 17.49",
+            "M15.41 6.51 8.59 10.49",
+        )
+    }
+
+    val Phone: ImageVector by lazy {
+        outline(
+            "Phone",
+            "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67" +
+                "A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11" +
+                "L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z",
+        )
+    }
+
+    val Bed: ImageVector by lazy { outline("Bed", "M2 4v16", "M2 8h18a2 2 0 0 1 2 2v10", "M2 17h20", "M6 8v9") }
+
+    val Bath: ImageVector by lazy {
+        outline(
+            "Bath",
+            "M10 4 8 6",
+            "M17 19v2",
+            "M2 12h20",
+            "M7 19v2",
+            "M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5",
+        )
+    }
+
+    /** Four corners: floor area. */
+    val Area: ImageVector by lazy {
+        outline(
+            "Area",
+            "M8 3H5a2 2 0 0 0-2 2v3",
+            "M21 8V5a2 2 0 0 0-2-2h-3",
+            "M3 16v3a2 2 0 0 0 2 2h3",
+            "M16 21h3a2 2 0 0 0 2-2v-3",
+        )
+    }
+
+    /** Stacked layers: the floor a home is on. */
+    val Layers: ImageVector by lazy {
+        outline(
+            "Layers",
+            "M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9" +
+                "a1 1 0 0 0 0-1.83Z",
+            "M22 17.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65",
+            "M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65",
+        )
+    }
+
+    val Clock: ImageVector by lazy { outline("Clock", circle(12f, 12f, 10f), "M12 6v6l4 2") }
+
+    val FoldedMap: ImageVector by lazy {
+        outline(
+            "FoldedMap",
+            "M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277" +
+                "a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618" +
+                "a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z",
+            "M15 5.764v15",
+            "M9 3.236v15",
+        )
+    }
+
     /** Blue shield with a white check: the verified badge on cards (not tinted). */
     val VerifiedBadge: ImageVector by lazy {
         ImageVector
