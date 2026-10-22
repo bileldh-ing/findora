@@ -53,6 +53,8 @@ class DataStoreSettingsRepositoryTest {
                 assertEquals(null, awaitItem().currencyOverride)
                 repo.setOnboardingCompleted(true)
                 assertEquals(true, awaitItem().onboardingCompleted)
+                repo.setBiometricLockEnabled(true)
+                assertEquals(true, awaitItem().biometricLockEnabled)
                 cancelAndIgnoreRemainingEvents()
             }
         }
