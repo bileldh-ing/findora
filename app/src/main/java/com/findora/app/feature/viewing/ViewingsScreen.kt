@@ -112,8 +112,9 @@ fun ViewingsScreen(
         }
         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter).navigationBarsPadding())
     }
-    (state as? ViewingsUiState.Content)?.pendingCancel?.let { item ->
-        CancelDialog(item = item, zone = state.zone, onEvent = onEvent)
+    val content = state as? ViewingsUiState.Content
+    content?.pendingCancel?.let { item ->
+        CancelDialog(item = item, zone = content.zone, onEvent = onEvent)
     }
 }
 
