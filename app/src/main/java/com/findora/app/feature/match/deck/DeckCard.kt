@@ -1,5 +1,8 @@
 package com.findora.app.feature.match.deck
 
+import com.findora.app.core.ui.rentPerMonthText
+import com.findora.app.core.ui.rentText
+import com.findora.app.core.ui.areaText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -89,7 +92,7 @@ fun DeckCard(
     val currentOnOpen by rememberUpdatedState(onOpen)
     val property = entry.property
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
-    val spokenPrice = PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
+    val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
     val rating = String.format(locale, "%.1f", property.rating)
     val summary =
         buildString {
@@ -196,7 +199,7 @@ fun DeckCardContent(
 ) {
     val property = entry.property
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
-    val price = PriceFormatter.formatPerMonth(property.rent, locale, stringResource(R.string.per_month))
+    val price = rentPerMonthText(property.rent, locale)
     val onPhoto = FindoraTheme.colors.onPhoto
     Box(modifier.fillMaxSize()) {
         ListingCoverPhoto(property, Modifier.fillMaxSize())
@@ -241,7 +244,7 @@ fun DeckCardContent(
                 Spec(FindoraIcons.MapPin, property.locality)
                 Spec(FindoraIcons.Bed, property.bedrooms.toString())
                 Spec(FindoraIcons.Bath, property.bathrooms.toString())
-                Spec(FindoraIcons.Area, stringResource(R.string.detail_area_value, property.areaSqm))
+                Spec(FindoraIcons.Area, areaText(property.areaSqm))
             }
         }
     }

@@ -1,5 +1,8 @@
 package com.findora.app.feature.detail
 
+import com.findora.app.core.domain.format.PriceStyle
+import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.ui.displayMoney
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -113,6 +116,21 @@ fun AffordabilityForm(
             style = FindoraTheme.typography.body,
             color = FindoraTheme.colors.onSurfaceMuted,
         )
+        // Income, rent and every result stay in the listing's currency, so nothing is compared across a rate.
+        val converted = displayMoney(state.rent)
+        if (converted.approximate) {
+            Text(
+                text =
+                    stringResource(
+                        R.string.afford_currency_note,
+                        state.rent.currency.code,
+                        PriceFormatter.formatDisplay(converted, locale, PriceStyle.Localized),
+                    ),
+                style = FindoraTheme.typography.caption,
+                color = FindoraTheme.colors.onSurfaceMuted,
+                modifier = Modifier.testTag("affordabilityCurrencyNote"),
+            )
+        }
         FindoraTextField(
             value = state.incomeText,
             onValueChange = { onEvent(AffordabilityEvent.IncomeChanged(it)) },

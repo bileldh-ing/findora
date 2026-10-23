@@ -1,5 +1,7 @@
 package com.findora.app.feature.match.quiz
 
+import com.findora.app.core.domain.format.PriceStyle
+import com.findora.app.core.ui.rentText
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -101,8 +103,8 @@ private fun BudgetStep(
                 } else {
                     stringResource(
                         R.string.filter_range_value,
-                        PriceFormatter.format(Money(low, state.currency), locale),
-                        PriceFormatter.format(Money(high, state.currency), locale),
+                        rentText(Money(low, state.currency), PriceStyle.Design, locale),
+                        rentText(Money(high, state.currency), PriceStyle.Design, locale),
                     )
                 },
             style = FindoraTheme.typography.title,

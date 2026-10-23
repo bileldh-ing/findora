@@ -1,5 +1,6 @@
 package com.findora.app.feature.chat
 
+import com.findora.app.core.ui.rentPerMonthText
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -263,7 +264,7 @@ fun ListingAttachmentCard(
 ) {
     val openLabel = stringResource(R.string.chat_open_listing)
     val locale = appLocale()
-    val price = property?.let { PriceFormatter.formatPerMonth(it.rent, locale, stringResource(R.string.per_month)) }
+    val price = property?.let { rentPerMonthText(it.rent, locale) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =

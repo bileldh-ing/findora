@@ -138,7 +138,6 @@
     <string name="filter_bedrooms">غرف النوم</string>
     <string name="filter_bathrooms">الحمّامات</string>
     <string name="filter_area">المساحة</string>
-    <string name="filter_area_value">%1$d–%2$d م² (%3$d–%4$d قدم²)</string>
     <string name="filter_range_value">%1$s – %2$s</string>
     <string name="filter_any">الكل</string>
     <string name="filter_at_least">%1$d+</string>
@@ -204,7 +203,7 @@
     <string name="map_empty_area">لا توجد منازل في هذه المنطقة</string>
     <string name="map_region_switcher">المنطقة</string>
     <string name="map_card_specs">غرف: %1$d · حمّامات: %2$d · %3$s</string>
-    <string name="map_card_specs_cd">غرف النوم: %1$d، الحمّامات: %2$d، المساحة: %3$s متر مربع</string>
+    <string name="map_card_specs_cd">غرف النوم: %1$d، الحمّامات: %2$d، المساحة: %3$s</string>
     <string name="map_marker_action">عرض %1$s، %2$s</string>
     <plurals name="map_homes_count">
         <item quantity="zero">لا توجد منازل</item>
@@ -251,7 +250,6 @@
     <string name="detail_bedrooms">غرف النوم</string>
     <string name="detail_bathrooms">الحمّامات</string>
     <string name="detail_area">المساحة</string>
-    <string name="detail_area_value">%1$d م²</string>
     <string name="detail_floor">الطابق</string>
     <string name="detail_floor_ground">الأرضي</string>
     <string name="detail_agent">وكيل الإعلان</string>
@@ -629,7 +627,7 @@
     <string name="agent_reply_parking_no">لا يوجد موقف سيارات مخصص لهذا المنزل.</string>
     <string name="agent_reply_furnished_yes">المنزل مفروش.</string>
     <string name="agent_reply_furnished_no">المنزل غير مفروش.</string>
-    <string name="agent_reply_size">يضم %1$s و%2$s ومساحة سكنية قدرها %3$d م².</string>
+    <string name="agent_reply_size">يضم %1$s و%2$s ومساحة سكنية قدرها %3$s.</string>
     <string name="agent_reply_thanks">على الرحب والسعة! أخبرني إن كان لديك أي سؤال آخر.</string>
     <string name="agent_reply_help">يمكنني إفادتك بشأن التوفر والإيجار ومواعيد المعاينة والحيوانات الأليفة وموقف السيارات والأثاث ومساحة المنزل. ماذا تود أن تعرف؟</string>
     <string name="agent_reply_listing_gone">لم يعد هذا الإعلان على Findora، لذا لا يمكنني مشاركة تفاصيله هنا.</string>
@@ -674,5 +672,87 @@
         <item quantity="few">%1$d رسائل غير مقروءة</item>
         <item quantity="many">%1$d رسالة غير مقروءة</item>
         <item quantity="other">%1$d رسالة غير مقروءة</item>
+    </plurals>
+
+    <!-- Phase 6C: settings (language, currency, units, notifications, accessibility, privacy and data), About -->
+    <string name="area_value_sqm">%1$s م²</string>
+    <string name="area_value_sqft">%1$s قدم²</string>
+    <string name="settings_language_units">اللغة والوحدات</string>
+    <string name="settings_language">اللغة</string>
+    <string name="language_system">لغة النظام</string>
+    <string name="settings_currency">عملة العرض</string>
+    <string name="currency_listing">عملة الإعلان</string>
+    <string name="currency_option">%1$s · %2$s</string>
+    <string name="settings_currency_note_listing">تُعرض الأسعار بعملة كل إعلان.</string>
+    <string name="settings_rates_note">أسعار صرف تقريبية بتاريخ %1$s. تُسبق الأسعار المحوّلة بالعلامة ≈، والمعتمد هو سعر الوكيل بعملة الإعلان.</string>
+    <string name="settings_rates_unavailable">أسعار الصرف غير متاحة، لذا تبقى الأسعار بعملة كل إعلان.</string>
+    <string name="settings_area_unit">وحدة المساحة</string>
+    <string name="area_unit_metric">متر مربع (م²)</string>
+    <string name="area_unit_imperial">قدم مربع (قدم²)</string>
+    <string name="settings_notifications">الإشعارات</string>
+    <string name="notify_messages">الرسائل</string>
+    <string name="notify_messages_summary">ردود الوكلاء عندما تكون المحادثة مغلقة</string>
+    <string name="notify_reminders">تذكيرات المعاينة</string>
+    <string name="notify_reminders_summary">قبل كل معاينة بساعة</string>
+    <string name="notify_in_app">الإشعارات داخل التطبيق</string>
+    <string name="notify_in_app_summary">إدخالات جديدة في مركز الإشعارات</string>
+    <string name="notify_system_settings">إعدادات الإشعارات في النظام</string>
+    <string name="settings_accessibility">سهولة الاستخدام</string>
+    <string name="reduce_motion">تقليل الحركة</string>
+    <string name="reduce_motion_system">النظام</string>
+    <string name="reduce_motion_on">تشغيل</string>
+    <string name="reduce_motion_off">إيقاف</string>
+    <string name="reduce_motion_summary">يتخطى الحركات الزخرفية مثل تكبير الصور والظهور التدريجي والعدّادات. خيار النظام يتبع إعداد أندرويد لإزالة الرسوم المتحركة.</string>
+    <string name="text_size_title">حجم النص</string>
+    <string name="text_size_preview">شقة مشرقة بغرفتي نوم، على بعد خمس دقائق من الحديقة.</string>
+    <string name="text_size_note">يتبع Findora حجم خط النظام، وهو حاليًا %1$d%%. يمكنك تغييره من إعدادات أندرويد، العرض.</string>
+    <string name="settings_privacy">الخصوصية والبيانات</string>
+    <string name="clear_search_history">مسح سجل البحث</string>
+    <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
+    <string name="clear_cache_summary">تُنزَّل الصور ومربعات الخريطة من جديد عند الحاجة</string>
+    <string name="export_data">تصدير بياناتي</string>
+    <string name="export_data_summary">ملف JSON يضم ملفك الشخصي ومفضلاتك ومعايناتك ومحادثاتك</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="settings_msg_history_cleared">تم مسح سجل البحث</string>
+    <string name="settings_msg_cache_cleared">تم مسح ذاكرة التخزين المؤقت</string>
+    <string name="settings_msg_export_saved">تم تصدير بياناتك</string>
+    <string name="settings_msg_export_failed">تعذّر حفظ الملف المصدَّر. جرّب مكانًا آخر.</string>
+    <string name="about_title">حول Findora</string>
+    <string name="about_version">الإصدار %1$s</string>
+    <string name="about_body">Findora تطبيق إيجار تجريبي. الإعلانات والوكلاء وردودهم بيانات نموذجية تبقى على جهازك.</string>
+    <string name="about_rates_title">أسعار الصرف</string>
+    <string name="about_rates_body">تعتمد الأسعار المحوّلة على جدول مدمج لأسعار صرف تقريبية بتاريخ %1$s (%2$s)، ولا يُحدَّث عبر الإنترنت.</string>
+    <string name="about_map_title">بيانات الخريطة</string>
+    <string name="about_map_body">مربعات الخريطة وبياناتها: %1$s، متاحة بموجب %2$s.</string>
+    <string name="about_photos_title">صور الإعلانات</string>
+    <string name="about_photos_body">صور الإعلانات النموذجية مصدرها %1$s بموجب %2$s. الأماكن المصوّرة ليست العقارات المعروضة.</string>
+    <string name="about_libraries_title">مكتبات مفتوحة المصدر</string>
+    <string name="about_library_summary">%1$s · %2$s</string>
+    <string name="compare_row_price_sqft">السعر لكل قدم²</string>
+    <string name="compare_price_sqft_value">%1$s/قدم²</string>
+    <string name="afford_currency_note">المبالغ هنا بعملة الإعلان %1$s، لذا أدخل دخلك بعملة %1$s. بعملة العرض لديك يبلغ الإيجار %2$s شهريًا.</string>
+    <plurals name="area_spoken_sqm">
+        <item quantity="zero">%1$s متر مربع</item>
+        <item quantity="one">متر مربع واحد</item>
+        <item quantity="two">متران مربعان</item>
+        <item quantity="few">%1$s أمتار مربعة</item>
+        <item quantity="many">%1$s مترًا مربعًا</item>
+        <item quantity="other">%1$s متر مربع</item>
+    </plurals>
+    <plurals name="area_spoken_sqft">
+        <item quantity="zero">%1$s قدم مربعة</item>
+        <item quantity="one">قدم مربعة واحدة</item>
+        <item quantity="two">قدمان مربعتان</item>
+        <item quantity="few">%1$s أقدام مربعة</item>
+        <item quantity="many">%1$s قدمًا مربعة</item>
+        <item quantity="other">%1$s قدم مربعة</item>
+    </plurals>
+    <plurals name="about_photo_count">
+        <item quantity="zero">%1$d صورة</item>
+        <item quantity="one">صورة واحدة</item>
+        <item quantity="two">صورتان</item>
+        <item quantity="few">%1$d صور</item>
+        <item quantity="many">%1$d صورة</item>
+        <item quantity="other">%1$d صورة</item>
     </plurals>
 </resources>

@@ -1,5 +1,15 @@
 package com.findora.app.feature.compare
 
+import kotlin.math.roundToLong
+import java.math.BigDecimal
+import java.math.RoundingMode
+import com.findora.app.core.ui.rentText
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.LocalDisplayPreferences
+import com.findora.app.core.domain.model.AreaUnit
+import com.findora.app.core.domain.format.DisplayMoney
+import com.findora.app.core.domain.format.CurrencyConverter
+import com.findora.app.core.domain.format.AreaFormatter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -399,7 +409,7 @@ private fun MetricRow(
     properties: List<Property>,
     modifier: Modifier = Modifier,
 ) {
-    val label = stringResource(row.metric.labelRes())
+    val label = row.metric.label()
     val bestLabel = stringResource(R.string.compare_best)
     TableRow(label = label, modifier = modifier.testTag("compareRow_${row.metric.name}")) {
         row.values.forEachIndexed { index, value ->
@@ -502,23 +512,60 @@ private fun formatValue(
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     if (value == null) return stringResource(R.string.compare_unknown)
     return when (metric) {
-        CompareMetric.Price -> PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
-        CompareMetric.Area -> stringResource(R.string.detail_area_value, value.roundToInt())
-        CompareMetric.PricePerSqm ->
-            stringResource(
-                R.string.compare_price_sqm_value,
-                PriceFormatter.format(
-                    Money(value.roundToInt().toLong(), property.rent.currency),
-                    locale,
-                    PriceStyle.Localized,
-                ),
-            )
+        CompareMetric.Price -> rentText(property.rent, PriceStyle.Localized, locale)
+        CompareMetric.Area -> areaText(value.roundToInt(), locale = locale)
+        CompareMetric.PricePerSqm -> pricePerAreaText(value, property, locale)
         CompareMetric.Rating -> String.format(locale, "%.1f", value)
         CompareMetric.Match -> stringResource(R.string.compare_match_value, value.roundToInt())
         CompareMetric.Bedrooms, CompareMetric.Bathrooms, CompareMetric.Amenities ->
             String.format(locale, "%d", value.roundToInt())
     }
 }
+
+/**
+ * Price per area in the display unit and currency: the per-m² figure is converted with the same rates as the
+ * rent (unrounded, so the "≈" figure matches the rent's conversion) and divided by about 10.76 for sq ft.
+ */
+@Composable
+private fun pricePerAreaText(
+    pricePerSqm: Double,
+    property: Property,
+    locale: Locale,
+): String {
+    val display = LocalDisplayPreferences.current
+    val unit = display.areaUnit
+    val perUnit = AreaFormatter.perArea(pricePerSqm, unit)
+    val source = property.rent.currency
+    val target = display.currency?.takeIf { display.converts && it != source }
+    val converted =
+        target?.let { currency ->
+            display.rates
+                ?.let(::CurrencyConverter)
+                ?.convertExact(BigDecimal.valueOf(perUnit), source, currency)
+                ?.let { DisplayMoney(Money(it.setScale(0, RoundingMode.HALF_UP).toLong(), currency), approximate = true) }
+        }
+    val exact = converted ?: DisplayMoney(Money(perUnit.roundToLong().coerceAtLeast(0L), source), approximate = false)
+    val format =
+        when (unit) {
+            AreaUnit.Metric -> R.string.compare_price_sqm_value
+            AreaUnit.Imperial -> R.string.compare_price_sqft_value
+        }
+    return stringResource(format, PriceFormatter.formatDisplay(exact, locale, PriceStyle.Localized))
+}
+
+/** The row label; the price-per-area row follows the unit chosen in Settings. */
+@Composable
+fun CompareMetric.label(): String =
+    when (this) {
+        CompareMetric.PricePerSqm ->
+            stringResource(
+                when (LocalDisplayPreferences.current.areaUnit) {
+                    AreaUnit.Metric -> R.string.compare_row_price_sqm
+                    AreaUnit.Imperial -> R.string.compare_row_price_sqft
+                },
+            )
+        else -> stringResource(labelRes())
+    }
 
 fun CompareMetric.labelRes(): Int =
     when (this) {

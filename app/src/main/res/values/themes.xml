@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Findora" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- AppCompat parent: MainActivity is an AppCompatActivity (per-app language below Android 13). Compose draws
+         everything, so only the window background matters here. -->
+    <style name="Theme.Findora" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/findora_background</item>
     </style>
 

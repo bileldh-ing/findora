@@ -1,5 +1,15 @@
 package com.findora.app.core.data.di
 
+import com.findora.app.core.data.reference.AssetReferenceDataRepository
+import com.findora.app.core.domain.repository.ReferenceDataRepository
+import com.findora.app.core.locale.AppCompatLanguageController
+import com.findora.app.core.domain.repository.LanguageController
+import com.findora.app.core.image.AndroidCacheCleaner
+import com.findora.app.core.domain.repository.CacheCleaner
+import com.findora.app.core.data.export.JsonUserDataExporter
+import com.findora.app.core.domain.repository.UserDataExporter
+import com.findora.app.core.data.export.ContentResolverDocumentWriter
+import com.findora.app.core.domain.repository.DocumentWriter
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -109,6 +119,26 @@ abstract class DataBindingsModule {
 }
 
 /** Chat with the demo agent and the in-app notifications center. */
+/** Settings support: bundled reference data, per-app language and the privacy & data controls. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class SettingsBindingsModule {
+    @Binds
+    abstract fun bindReferenceDataRepository(impl: AssetReferenceDataRepository): ReferenceDataRepository
+
+    @Binds
+    abstract fun bindLanguageController(impl: AppCompatLanguageController): LanguageController
+
+    @Binds
+    abstract fun bindCacheCleaner(impl: AndroidCacheCleaner): CacheCleaner
+
+    @Binds
+    abstract fun bindUserDataExporter(impl: JsonUserDataExporter): UserDataExporter
+
+    @Binds
+    abstract fun bindDocumentWriter(impl: ContentResolverDocumentWriter): DocumentWriter
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ChatBindingsModule {

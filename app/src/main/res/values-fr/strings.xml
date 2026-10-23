@@ -132,7 +132,6 @@
     <string name="filter_bedrooms">Chambres</string>
     <string name="filter_bathrooms">Salles de bain</string>
     <string name="filter_area">Surface</string>
-    <string name="filter_area_value">%1$d–%2$d m² (%3$d–%4$d pi²)</string>
     <string name="filter_range_value">%1$s – %2$s</string>
     <string name="filter_any">Tous</string>
     <string name="filter_at_least">%1$d+</string>
@@ -198,7 +197,7 @@
     <string name="map_empty_area">Aucun logement dans cette zone</string>
     <string name="map_region_switcher">Région</string>
     <string name="map_card_specs">Chambres : %1$d · SdB : %2$d · %3$s</string>
-    <string name="map_card_specs_cd">Chambres : %1$d, salles de bain : %2$d, surface : %3$s mètres carrés</string>
+    <string name="map_card_specs_cd">Chambres : %1$d, salles de bain : %2$d, surface : %3$s</string>
     <string name="map_marker_action">Afficher %1$s, %2$s</string>
     <plurals name="map_homes_count">
         <item quantity="one">%1$d logement</item>
@@ -236,7 +235,6 @@
     <string name="detail_bedrooms">Chambres</string>
     <string name="detail_bathrooms">Salles de bain</string>
     <string name="detail_area">Surface</string>
-    <string name="detail_area_value">%1$d m²</string>
     <string name="detail_floor">Étage</string>
     <string name="detail_floor_ground">RDC</string>
     <string name="detail_agent">Agent de l\'annonce</string>
@@ -593,7 +591,7 @@
     <string name="agent_reply_parking_no">Ce logement n’a pas de place de stationnement.</string>
     <string name="agent_reply_furnished_yes">Il est loué meublé.</string>
     <string name="agent_reply_furnished_no">Il est loué non meublé.</string>
-    <string name="agent_reply_size">Il compte %1$s, %2$s et %3$d m² habitables.</string>
+    <string name="agent_reply_size">Il compte %1$s, %2$s et %3$s habitables.</string>
     <string name="agent_reply_thanks">Avec plaisir ! N’hésitez pas si vous avez d’autres questions.</string>
     <string name="agent_reply_help">Je peux vous renseigner sur la disponibilité, le loyer, les créneaux de visite, les animaux, le stationnement, l’ameublement et la surface. Que souhaitez-vous savoir ?</string>
     <string name="agent_reply_listing_gone">Cette annonce n’est plus sur Findora, je ne peux donc pas donner de détails ici.</string>
@@ -626,5 +624,78 @@
         <item quantity="one">%1$d message non lu</item>
         <item quantity="many">%1$d messages non lus</item>
         <item quantity="other">%1$d messages non lus</item>
+    </plurals>
+
+    <!-- Phase 6C: settings (language, currency, units, notifications, accessibility, privacy and data), About -->
+    <string name="area_value_sqm">%1$s m²</string>
+    <string name="area_value_sqft">%1$s pi²</string>
+    <string name="settings_language_units">Langue et unités</string>
+    <string name="settings_language">Langue</string>
+    <string name="language_system">Langue du système</string>
+    <string name="settings_currency">Devise d\'affichage</string>
+    <string name="currency_listing">Devise de l\'annonce</string>
+    <string name="currency_option">%1$s · %2$s</string>
+    <string name="settings_currency_note_listing">Les prix sont affichés dans la devise de chaque annonce.</string>
+    <string name="settings_rates_note">Taux indicatifs au %1$s. Les prix convertis sont précédés de ≈ ; seul le prix de l\'agent dans la devise de l\'annonce fait foi.</string>
+    <string name="settings_rates_unavailable">Les taux de change sont indisponibles, les prix restent dans la devise de chaque annonce.</string>
+    <string name="settings_area_unit">Unité de surface</string>
+    <string name="area_unit_metric">Mètres carrés (m²)</string>
+    <string name="area_unit_imperial">Pieds carrés (pi²)</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="notify_messages">Messages</string>
+    <string name="notify_messages_summary">Réponses des agents quand la discussion est fermée</string>
+    <string name="notify_reminders">Rappels de visite</string>
+    <string name="notify_reminders_summary">Une heure avant chaque visite</string>
+    <string name="notify_in_app">Notifications dans l\'app</string>
+    <string name="notify_in_app_summary">Nouvelles entrées dans le centre de notifications</string>
+    <string name="notify_system_settings">Réglages de notification du système</string>
+    <string name="settings_accessibility">Accessibilité</string>
+    <string name="reduce_motion">Réduire les animations</string>
+    <string name="reduce_motion_system">Système</string>
+    <string name="reduce_motion_on">Activé</string>
+    <string name="reduce_motion_off">Désactivé</string>
+    <string name="reduce_motion_summary">Supprime les animations décoratives (zoom des photos, entrées, compteurs). Système suit le réglage Android Supprimer les animations.</string>
+    <string name="text_size_title">Taille du texte</string>
+    <string name="text_size_preview">Appartement lumineux de deux chambres, à cinq minutes du parc.</string>
+    <string name="text_size_note">Findora suit la taille de police du système, actuellement %1$d %%. Modifiez-la dans Paramètres Android, Affichage.</string>
+    <string name="settings_privacy">Confidentialité et données</string>
+    <string name="clear_search_history">Effacer l\'historique de recherche</string>
+    <string name="clear_cache">Vider le cache</string>
+    <string name="clear_cache_summary">Les photos et tuiles de carte se retéléchargent au besoin</string>
+    <string name="export_data">Exporter mes données</string>
+    <string name="export_data_summary">Un fichier JSON avec votre profil, vos favoris, visites et discussions</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="settings_msg_history_cleared">Historique de recherche effacé</string>
+    <string name="settings_msg_cache_cleared">Cache vidé</string>
+    <string name="settings_msg_export_saved">Vos données ont été exportées</string>
+    <string name="settings_msg_export_failed">L\'export n\'a pas pu être enregistré. Essayez un autre emplacement.</string>
+    <string name="about_title">À propos de Findora</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">Findora est une application de location de démonstration. Les annonces, les agents et leurs réponses sont des données d\'exemple qui restent sur votre appareil.</string>
+    <string name="about_rates_title">Taux de change</string>
+    <string name="about_rates_body">Les prix convertis utilisent une table intégrée de taux indicatifs au %1$s (%2$s). Elle n\'est pas mise à jour en ligne.</string>
+    <string name="about_map_title">Données cartographiques</string>
+    <string name="about_map_body">Tuiles et données de carte : %1$s, sous licence %2$s.</string>
+    <string name="about_photos_title">Photos des annonces</string>
+    <string name="about_photos_body">Les photos des annonces d\'exemple proviennent de %1$s sous %2$s. Les lieux photographiés ne sont pas les biens proposés.</string>
+    <string name="about_libraries_title">Bibliothèques open source</string>
+    <string name="about_library_summary">%1$s · %2$s</string>
+    <string name="compare_row_price_sqft">Prix au pi²</string>
+    <string name="compare_price_sqft_value">%1$s/pi²</string>
+    <string name="afford_currency_note">Les montants sont en %1$s, la devise de l\'annonce : saisissez votre revenu en %1$s. Dans votre devise d\'affichage, le loyer est de %2$s par mois.</string>
+    <plurals name="area_spoken_sqm">
+        <item quantity="one">%1$s mètre carré</item>
+        <item quantity="many">%1$s mètres carrés</item>
+        <item quantity="other">%1$s mètres carrés</item>
+    </plurals>
+    <plurals name="area_spoken_sqft">
+        <item quantity="one">%1$s pied carré</item>
+        <item quantity="many">%1$s pieds carrés</item>
+        <item quantity="other">%1$s pieds carrés</item>
+    </plurals>
+    <plurals name="about_photo_count">
+        <item quantity="one">%1$d photo</item>
+        <item quantity="many">%1$d photos</item>
+        <item quantity="other">%1$d photos</item>
     </plurals>
 </resources>

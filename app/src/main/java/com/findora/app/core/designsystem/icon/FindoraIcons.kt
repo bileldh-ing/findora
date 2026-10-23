@@ -340,6 +340,52 @@ object FindoraIcons {
         )
     }
 
+    val Globe: ImageVector by lazy {
+        outline("Globe", circle(12f, 12f, 10f), "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", "M2 12h20")
+    }
+
+    val Coins: ImageVector by lazy {
+        outline(
+            "Coins",
+            circle(8f, 8f, 6f),
+            "M18.09 10.37A6 6 0 1 1 10.34 18",
+            "M7 6h1v4",
+            "m16.71 13.88.7.71-2.82 2.82",
+        )
+    }
+
+    val Ruler: ImageVector by lazy {
+        outline(
+            "Ruler",
+            "M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6" +
+                "a2.41 2.41 0 0 1 3.4 0Z",
+            "m14.5 12.5 2-2",
+            "m11.5 9.5 2-2",
+            "m8.5 6.5 2-2",
+            "m17.5 15.5 2-2",
+        )
+    }
+
+    val Download: ImageVector by lazy {
+        outline("Download", "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", "m7 10 5 5 5-5", "M12 15V3")
+    }
+
+    val Info: ImageVector by lazy { outline("Info", circle(12f, 12f, 10f), "M12 16v-4", "M12 8h.01") }
+
+    val ShieldCheck: ImageVector by lazy { outline("ShieldCheck", SHIELD, "m9 12 2 2 4-4") }
+
+    val ExternalLink: ImageVector by lazy {
+        outline(
+            "ExternalLink",
+            "M15 3h6v6",
+            "M10 14 21 3",
+            "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
+            autoMirror = true,
+        )
+    }
+
+    val TextSize: ImageVector by lazy { outline("TextSize", "M4 7V4h16v3", "M9 20h6", "M12 4v16") }
+
     /** Blue shield with a white check: the verified badge on cards (not tinted). */
     val VerifiedBadge: ImageVector by lazy {
         ImageVector
