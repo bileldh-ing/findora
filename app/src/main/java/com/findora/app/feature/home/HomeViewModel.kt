@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.findora.app.core.domain.match.BestMatchRanking
+import com.findora.app.core.domain.match.MatchContext
+import com.findora.app.core.domain.match.ObserveMatchContext
 import com.findora.app.core.domain.model.HomeCategory
 import com.findora.app.core.domain.model.InboxMessage
 import com.findora.app.core.domain.model.ListingBounds
@@ -11,6 +14,7 @@ import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.RefreshResult
 import com.findora.app.core.domain.model.RegionPack
+import com.findora.app.core.domain.model.SortOrder
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
@@ -21,13 +25,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -53,6 +60,10 @@ data class HomeUiState(
     val bounds: ListingBounds? = null,
     val unread: List<InboxMessage> = emptyList(),
     val refresh: RefreshStatus = RefreshStatus.Idle,
+    /** Null until known; false shows the "Find my best match" banner, true offers the Best match sort. */
+    val hasMatchProfile: Boolean? = null,
+    /** Match percentage per listing id (listings missing a must-have have none), for the card badges. */
+    val matchScores: Map<String, Int> = emptyMap(),
 ) {
     val category: HomeCategory get() = HomeCategory.of(filter.type)
 
@@ -111,19 +122,56 @@ class HomeViewModel
         private val auth: AuthRepository,
         private val currentRegion: CurrentRegion,
         private val messages: MessageRepository,
+        observeMatchContext: ObserveMatchContext,
     ) : ViewModel() {
         private val userId: Flow<String> =
             auth.session.map { it?.userId ?: AuthRepository.GUEST_USER_ID }.distinctUntilChanged()
         private val refreshStatus = MutableStateFlow<RefreshStatus>(RefreshStatus.Idle)
         private val regionList = MutableStateFlow<List<RegionPack>>(emptyList())
 
-        /** The paged feed for the current region and filter; survives configuration changes. */
+        private val regionId: Flow<String> = currentRegion.region.map { it.id }.distinctUntilChanged()
+
+        /** The user's match context (null without a profile), shared by the feed and the badges. */
+        private val matchContext: SharedFlow<MatchContext?> =
+            observeMatchContext().shareIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), 1)
+
+        /**
+         * The paged feed for the current region and filter; survives configuration changes. With a profile and
+         * the Best match sort the region's listings are ranked by match score in memory (a region holds a few
+         * dozen homes); every other sort pages straight from Room.
+         */
         val listings: Flow<PagingData<Property>> =
-            combine(currentRegion.region.map { it.id }.distinctUntilChanged(), filters.filter) { regionId, filter ->
-                regionId to filter
+            combine(regionId, filters.filter, matchContext.map { it != null }.distinctUntilChanged()) {
+                region,
+                filter,
+                hasProfile,
+                ->
+                FeedQuery(region, filter, ranked = hasProfile && filter.sort == SortOrder.BestMatch)
             }.distinctUntilChanged()
-                .flatMapLatest { (regionId, filter) -> properties.pagedProperties(regionId, filter) }
-                .cachedIn(viewModelScope)
+                .flatMapLatest { query ->
+                    if (query.ranked) {
+                        bestMatches(query.regionId, query.filter)
+                    } else {
+                        properties.pagedProperties(query.regionId, query.filter)
+                    }
+                }.cachedIn(viewModelScope)
+
+        private fun bestMatches(
+            regionId: String,
+            filter: PropertyFilter,
+        ): Flow<PagingData<Property>> =
+            combine(
+                properties.observeProperties(regionId, PropertyFilter(type = filter.type)),
+                matchContext.filterNotNull(),
+            ) { homes, context -> PagingData.from(BestMatchRanking.rank(homes, filter, context)) }
+
+        private val matchParts: Flow<MatchParts> =
+            combine(regionId.flatMapLatest { properties.observeProperties(it) }, matchContext) { homes, context ->
+                MatchParts(
+                    hasProfile = context != null,
+                    scores = context?.let { BestMatchRanking.scores(homes, it) }.orEmpty(),
+                )
+            }
 
         private val header =
             combine(
@@ -133,23 +181,27 @@ class HomeViewModel
                 userId.flatMapLatest { messages.observeUnread(it) },
             ) { region, account, favoriteIds, unread -> HeaderParts(region, account?.initials, favoriteIds, unread) }
 
-        val state: StateFlow<HomeUiState> =
+        private val feed =
             combine(
-                header,
                 filters.filter,
                 currentRegion.region.flatMapLatest { properties.observeBounds(it.id) },
                 refreshStatus,
                 regionList,
-            ) { parts, filter, bounds, refresh, regions ->
+            ) { filter, bounds, refresh, regions -> FeedParts(filter, bounds, refresh, regions) }
+
+        val state: StateFlow<HomeUiState> =
+            combine(header, feed, matchParts) { parts, feedParts, match ->
                 HomeUiState(
                     region = parts.region,
-                    regions = regions,
+                    regions = feedParts.regions,
                     userInitials = parts.initials,
-                    filter = filter,
+                    filter = feedParts.filter,
                     favoriteIds = parts.favoriteIds,
-                    bounds = bounds,
+                    bounds = feedParts.bounds,
                     unread = parts.unread,
-                    refresh = refresh,
+                    refresh = feedParts.refresh,
+                    hasMatchProfile = match.hasProfile,
+                    matchScores = match.scores,
                 )
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), HomeUiState())
 
@@ -195,6 +247,24 @@ class HomeViewModel
                 }
             }
         }
+
+        private data class FeedQuery(
+            val regionId: String,
+            val filter: PropertyFilter,
+            val ranked: Boolean,
+        )
+
+        private data class FeedParts(
+            val filter: PropertyFilter,
+            val bounds: ListingBounds?,
+            val refresh: RefreshStatus,
+            val regions: List<RegionPack>,
+        )
+
+        private data class MatchParts(
+            val hasProfile: Boolean,
+            val scores: Map<String, Int>,
+        )
 
         private data class HeaderParts(
             val region: RegionPack,

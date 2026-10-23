@@ -60,6 +60,7 @@ import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.image.offlineFallback
+import com.findora.app.core.ui.match.MatchBadge
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -80,7 +81,8 @@ private const val BURST_MILLIS = 450
  * The listing card from the reference: full-bleed photo (dominant-colour placeholder, offline fallback),
  * bottom scrim, verified shield, glass price pill, glass rating chip, name and locality. A heart button and
  * a double-tap on the photo save the home (double-tap only adds, with a heart burst); a single tap opens the
- * listing ([onClick]). TalkBack reads one summary, activates [onClick] and offers Save / Remove as a custom
+ * listing ([onClick]). [matchPercent] adds the "92% match" badge (only when the user has a preference profile).
+ * TalkBack reads one summary (including the match), activates [onClick] and offers Save / Remove as a custom
  * action. The photo is the shared element that grows into the detail page.
  */
 @Composable
@@ -90,6 +92,7 @@ fun PropertyCard(
     onToggleFavorite: () -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    matchPercent: Int? = null,
 ) {
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     val price = PriceFormatter.formatPerMonth(property.rent, locale, stringResource(R.string.per_month))
@@ -100,6 +103,7 @@ fun PropertyCard(
             val spokenPrice = PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
             append(stringResource(R.string.card_description, property.title, property.locality, spokenPrice, rating))
             if (property.verified) append(' ').append(stringResource(R.string.card_verified))
+            if (matchPercent != null) append(' ').append(stringResource(R.string.match_badge, matchPercent)).append('.')
             if (isFavorite) append(' ').append(stringResource(R.string.card_saved))
         }
     val actionLabel = stringResource(if (isFavorite) R.string.action_unsave else R.string.action_save)
@@ -153,7 +157,7 @@ fun PropertyCard(
                     ),
                 ),
         )
-        CardOverlay(property = property, price = price, rating = rating)
+        CardOverlay(property = property, price = price, rating = rating, matchPercent = matchPercent)
         HeartButton(
             isFavorite = isFavorite,
             onClick = onToggleFavorite,
@@ -210,6 +214,7 @@ private fun CardOverlay(
     property: Property,
     price: String,
     rating: String,
+    matchPercent: Int?,
     modifier: Modifier = Modifier,
 ) {
     val onPhoto = FindoraTheme.colors.onPhoto
@@ -233,17 +238,23 @@ private fun CardOverlay(
             }
         }
         Spacer(Modifier.weight(1f))
-        GlassChip {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    FindoraIcons.Star,
-                    contentDescription = null,
-                    tint = FindoraTheme.colors.star,
-                    modifier = Modifier.size(StarSize),
-                )
-                Spacer(Modifier.width(FindoraTheme.spacing.xxs))
-                Text(text = rating, style = FindoraTheme.typography.label, color = onPhoto)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xxs),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            GlassChip {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        FindoraIcons.Star,
+                        contentDescription = null,
+                        tint = FindoraTheme.colors.star,
+                        modifier = Modifier.size(StarSize),
+                    )
+                    Spacer(Modifier.width(FindoraTheme.spacing.xxs))
+                    Text(text = rating, style = FindoraTheme.typography.label, color = onPhoto)
+                }
             }
+            if (matchPercent != null) MatchBadge(percent = matchPercent)
         }
         Spacer(Modifier.size(FindoraTheme.spacing.xxs))
         Text(

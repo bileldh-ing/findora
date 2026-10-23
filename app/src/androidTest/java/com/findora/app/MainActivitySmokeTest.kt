@@ -57,6 +57,7 @@ class MainActivitySmokeTest {
             composeRule.onAllNodes(hasTestTag("home")).fetchSemanticsNodes().isNotEmpty()
         }
         composeRule.onNodeWithText("Your New House").assertIsDisplayed()
+        takeAndSkipTheMatchQuiz()
         composeRule.waitUntil(TIMEOUT_MILLIS) {
             composeRule.onAllNodes(hasTestTagPrefix("card_")).fetchSemanticsNodes().isNotEmpty()
         }
@@ -77,6 +78,18 @@ class MainActivitySmokeTest {
         composeRule.onNodeWithText("Log out").performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
         composeRule.waitUntil(TIMEOUT_MILLIS) {
             composeRule.onAllNodes(hasTestTag("welcome")).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    /** The "Find my best match" banner opens the quiz; skipping all six steps still saves a profile and hides it. */
+    private fun takeAndSkipTheMatchQuiz() {
+        waitForTag("matchBannerAction")
+        composeRule.onNodeWithTag("matchBannerAction").performClick()
+        waitForTag("matchQuiz")
+        repeat(QUIZ_STEPS) { composeRule.onNodeWithTag("quizSkip").performClick() }
+        waitForTag("home")
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodes(hasTestTag("matchBanner")).fetchSemanticsNodes().isEmpty()
         }
     }
 
@@ -123,5 +136,6 @@ class MainActivitySmokeTest {
 
     private companion object {
         const val TIMEOUT_MILLIS = 15_000L
+        const val QUIZ_STEPS = 6
     }
 }

@@ -44,6 +44,7 @@ fun MainShell(
     onSignedOut: () -> Unit,
     onCreateAccount: () -> Unit,
     onOpenViewings: () -> Unit,
+    onOpenMatchQuiz: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
@@ -77,6 +78,7 @@ fun MainShell(
                     onOpenSearch = onOpenSearch,
                     onOpenProfile = { selectTab(MainTab.Settings) },
                     onOpenProperty = onOpenProperty,
+                    onOpenMatchQuiz = onOpenMatchQuiz,
                     contentPadding = contentPadding,
                 )
             }
@@ -91,6 +93,7 @@ fun MainShell(
                     onSignedOut = onSignedOut,
                     onCreateAccount = onCreateAccount,
                     onOpenViewings = onOpenViewings,
+                    onOpenMatchPreferences = onOpenMatchQuiz,
                     onOpenDesignSystem = onOpenDesignSystem,
                     contentPadding = contentPadding,
                 )

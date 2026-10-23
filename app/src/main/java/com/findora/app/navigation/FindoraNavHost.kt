@@ -23,6 +23,7 @@ import com.findora.app.feature.auth.unlock.UnlockRoute
 import com.findora.app.feature.auth.welcome.WelcomeRoute
 import com.findora.app.feature.designsystem.DesignSystemScreen
 import com.findora.app.feature.detail.DetailRoute
+import com.findora.app.feature.match.quiz.MatchQuizRoute
 import com.findora.app.feature.search.SearchRoute
 import com.findora.app.feature.viewing.ScheduleViewingRoute
 import com.findora.app.feature.viewing.ViewingsRoute
@@ -106,6 +107,7 @@ private fun FindoraGraph(
                     onSignedOut = toWelcome,
                     onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
                     onOpenViewings = { navController.navigate(FindoraRoute.Viewings) },
+                    onOpenMatchQuiz = { navController.navigate(FindoraRoute.MatchQuiz) },
                     onOpenDesignSystem = openDesignSystem,
                 )
             }
@@ -131,6 +133,12 @@ private fun FindoraGraph(
                     }
                 },
                 onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
+            )
+        }
+        composable<FindoraRoute.MatchQuiz> {
+            MatchQuizRoute(
+                onFinish = { navController.popBackStack() },
+                onClose = { navController.popBackStack() },
             )
         }
         composable<FindoraRoute.Viewings> {

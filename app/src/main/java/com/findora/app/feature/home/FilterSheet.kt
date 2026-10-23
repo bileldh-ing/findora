@@ -51,6 +51,7 @@ private val BATHROOM_OPTIONS = listOf(1, 2, 3)
 /**
  * Filter sheet content. Edits a draft and only publishes it on "Show results"; "Reset" clears every
  * refinement (category and search text are kept). Sliders are bounded by the cached listings of the region.
+ * "Best match" is offered only when [showBestMatch] (the user has a preference profile).
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -60,6 +61,7 @@ fun FilterSheetContent(
     currency: Currency,
     onApply: (PropertyFilter) -> Unit,
     modifier: Modifier = Modifier,
+    showBestMatch: Boolean = false,
 ) {
     var draft by remember(initial) { mutableStateOf(initial) }
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
@@ -195,11 +197,12 @@ fun FilterSheetContent(
             horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
             verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
         ) {
-            SortOrder.entries.forEach { sort ->
+            SortOrder.entries.filter { it != SortOrder.BestMatch || showBestMatch }.forEach { sort ->
                 CategoryChip(
                     text = stringResource(sort.labelRes()),
                     selected = draft.sort == sort,
                     onClick = { draft = draft.copy(sort = sort) },
+                    modifier = Modifier.testTag("sort_${sort.name}"),
                 )
             }
         }
@@ -268,6 +271,7 @@ private fun sliderColors() =
 
 fun SortOrder.labelRes(): Int =
     when (this) {
+        SortOrder.Recommended -> R.string.sort_recommended
         SortOrder.BestMatch -> R.string.sort_best
         SortOrder.PriceLowToHigh -> R.string.sort_price_low
         SortOrder.PriceHighToLow -> R.string.sort_price_high

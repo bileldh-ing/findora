@@ -6,6 +6,8 @@ import app.cash.turbine.test
 import com.findora.app.core.domain.insight.AffordabilityVerdict
 import com.findora.app.core.domain.insight.NeighbourhoodScore
 import com.findora.app.core.domain.insight.PriceTrend
+import com.findora.app.core.domain.match.MustHave
+import com.findora.app.core.domain.match.PreferenceProfile
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.model.Property
@@ -15,8 +17,10 @@ import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeFavoritesRepository
+import com.findora.app.core.testing.FakeMatchProfileRepository
 import com.findora.app.core.testing.FakePropertyRepository
 import com.findora.app.core.testing.MainDispatcherRule
+import com.findora.app.core.testing.observeMatchContext
 import com.findora.app.core.testing.seedProperties
 import com.findora.app.navigation.PropertyDeepLink
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +34,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -44,6 +49,7 @@ class DetailViewModelTest {
     private val interactions = RecordingInteractionRepository()
     private val favorites = FakeFavoritesRepository()
     private val auth = FakeAuthRepository()
+    private val profiles = FakeMatchProfileRepository()
 
     private fun viewModel(
         id: String = georgie.id,
@@ -55,6 +61,7 @@ class DetailViewModelTest {
         interactions = interactions,
         auth = auth,
         clock = { Instant.EPOCH },
+        observeMatchContext = observeMatchContext(auth = auth, profiles = profiles, properties = properties),
     )
 
     @Test
@@ -174,6 +181,7 @@ class DetailViewModelTest {
                     interactions = RecordingInteractionRepository(fail = true),
                     auth = auth,
                     clock = { Instant.EPOCH },
+                    observeMatchContext = observeMatchContext(auth = auth),
                 )
             vm.state.test {
                 assertTrue(awaitSettled() is DetailUiState.Content)
@@ -238,6 +246,25 @@ class DetailViewModelTest {
                 val state = affordability()
                 assertEquals(AffordabilityFieldError.IncomeZero, state.incomeError)
                 assertEquals(null, state.report)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun theListingIsScoredOnlyOnceTheUserHasAProfile() =
+        runTest(main.dispatcher) {
+            viewModel().state.test {
+                assertNull((awaitSettled() as DetailUiState.Content).match)
+                cancelAndIgnoreRemainingEvents()
+            }
+            profiles.save(AuthRepository.GUEST_USER_ID, PreferenceProfile(mustHaves = setOf(MustHave.Verified)))
+            viewModel().state.test {
+                var content = awaitSettled() as DetailUiState.Content
+                while (content.match == null) content = awaitItem() as DetailUiState.Content
+                val match = requireNotNull(content.match)
+                assertEquals(!georgie.verified, match.excluded)
+                assertEquals(7, match.reasons.size)
+                assertTrue(match.score in 0..100)
                 cancelAndIgnoreRemainingEvents()
             }
         }

@@ -75,7 +75,8 @@ object PropertyQueryBuilder {
 
     fun orderBy(sort: SortOrder): String =
         when (sort) {
-            SortOrder.BestMatch -> "verified DESC, rating DESC, reviews_count DESC, id ASC"
+            // Best match is ranked in Kotlin by the match engine; without a profile it reads like Recommended.
+            SortOrder.Recommended, SortOrder.BestMatch -> "verified DESC, rating DESC, reviews_count DESC, id ASC"
             SortOrder.PriceLowToHigh -> "rent_amount ASC, id ASC"
             SortOrder.PriceHighToLow -> "rent_amount DESC, id ASC"
             SortOrder.Newest -> "created_at DESC, id ASC"

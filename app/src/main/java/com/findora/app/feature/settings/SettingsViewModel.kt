@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.core.domain.model.UserAccount
 import com.findora.app.core.domain.repository.AuthRepository
+import com.findora.app.core.domain.repository.MatchProfileRepository
 import com.findora.app.core.domain.repository.SettingsRepository
 import com.findora.app.core.security.BiometricAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -62,6 +63,7 @@ class SettingsViewModel
         private val auth: AuthRepository,
         private val settings: SettingsRepository,
         biometric: BiometricAvailability,
+        private val matchProfiles: MatchProfileRepository,
     ) : ViewModel() {
         private val confirmingDelete = MutableStateFlow(false)
         private val biometricAvailable = biometric.canAuthenticate()
@@ -104,6 +106,10 @@ class SettingsViewModel
                 SettingsUiEvent.DeleteAccountConfirmed ->
                     viewModelScope.launch {
                         confirmingDelete.update { false }
+                        // The quiz answers belong to the account being deleted.
+                        auth.session.value
+                            ?.userId
+                            ?.let { matchProfiles.clear(it) }
                         auth.deleteAccount()
                         // The biometric lock belonged to the deleted account.
                         settings.setBiometricLockEnabled(false)

@@ -20,6 +20,7 @@ import com.findora.app.core.data.local.dao.RecentSearchDao
 import com.findora.app.core.data.local.dao.SavedSearchDao
 import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
+import com.findora.app.core.data.match.DataStoreMatchProfileRepository
 import com.findora.app.core.data.remote.FakeRemoteDataSource
 import com.findora.app.core.data.remote.RemoteDataSource
 import com.findora.app.core.data.repository.CachePolicy
@@ -38,6 +39,7 @@ import com.findora.app.core.di.IoDispatcher
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
 import com.findora.app.core.domain.repository.InteractionRepository
+import com.findora.app.core.domain.repository.MatchProfileRepository
 import com.findora.app.core.domain.repository.MessageRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.RegionRepository
@@ -94,6 +96,14 @@ abstract class DataBindingsModule {
 
     @Binds
     abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
+}
+
+/** The Best Match engine's preference profiles. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class MatchBindingsModule {
+    @Binds
+    abstract fun bindMatchProfileRepository(impl: DataStoreMatchProfileRepository): MatchProfileRepository
 }
 
 /** Viewing bookings and their WorkManager reminders. */

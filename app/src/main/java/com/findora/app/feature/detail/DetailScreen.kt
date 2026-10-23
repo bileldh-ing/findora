@@ -53,6 +53,8 @@ import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.ui.StateMessage
+import com.findora.app.core.ui.match.MatchSummaryCard
+import com.findora.app.core.ui.match.WhyThisMatchSheet
 import kotlinx.coroutines.launch
 
 private val TopButtonSize = 48.dp
@@ -96,8 +98,9 @@ fun DetailRoute(
 
 /**
  * A listing's detail page: photo carousel (tap for the full-screen gallery) under back, share and save
- * buttons, then price, rating, verification, description, specs, amenities, agent, location and similar
- * homes. Loading shows a skeleton; a missing or unreadable listing shows a message with a way out.
+ * buttons, then price, rating, verification, the match card (with a profile), description, specs, amenities,
+ * agent, location and similar homes. Loading shows a skeleton; a missing or unreadable listing shows a message
+ * with a way out.
  */
 @Composable
 fun DetailScreen(
@@ -156,6 +159,7 @@ private fun DetailContent(
     val pagerState = rememberPagerState { property.images.size }
     var galleryPage by rememberSaveable(property.id) { mutableStateOf<Int?>(null) }
     var showVerification by rememberSaveable(property.id) { mutableStateOf(false) }
+    var showWhyMatch by rememberSaveable(property.id) { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     Box(modifier.fillMaxSize()) {
@@ -176,6 +180,15 @@ private fun DetailContent(
             }
             item(key = "summary") {
                 SummarySection(property = property, onShowVerification = { showVerification = true })
+            }
+            content.match?.let { match ->
+                item(key = "match") {
+                    MatchSummaryCard(
+                        result = match,
+                        onWhy = { showWhyMatch = true },
+                        modifier = Modifier.padding(horizontal = FindoraTheme.spacing.screenHorizontal),
+                    )
+                }
             }
             item(key = "specs") { SpecsRow(property) }
             item(key = "description") { DescriptionSection(property.description) }
@@ -231,6 +244,8 @@ private fun DetailContent(
             )
         }
         if (showVerification) VerificationSheet(onDismiss = { showVerification = false })
+        val match = content.match
+        if (showWhyMatch && match != null) WhyThisMatchSheet(result = match, onDismiss = { showWhyMatch = false })
         if (content.affordability.isOpen) {
             AffordabilitySheet(
                 state = content.affordability,

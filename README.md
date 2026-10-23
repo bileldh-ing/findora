@@ -23,10 +23,27 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 2 | Welcome and authentication | Done |
 | 3 | Home screen, pixel-faithful to the reference design | Done |
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
-| 5 | Best-match recommendations | Planned |
+| 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match deck and more (5B) | 5A done, 5B planned |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 5A ships
+
+- **Preference quiz**: six short steps (budget, beds and baths, home types, neighbourhoods or a commute
+  destination, lifestyle, must-haves) with an animated progress bar, Back and Skip. Home shows a "Find my best
+  match" banner until a profile exists; Settings > Match preferences edits it.
+- **Best Match engine** (`core/domain/match`): `MatchScoreCalculator` is pure and deterministic and returns
+  `MatchResult(score 0..100, reasons)` from seven weighted factors (budget 30, location or commute 20, size 15,
+  amenities and must-haves 15, lifestyle 10, trust and freshness 5, learned behaviour 5). A missing must-have
+  scores 0 and leaves the home out of Best match. Behaviour is learned from the recorded interactions with an
+  exponential decay (half-life 14 days, injected clock).
+- **Explainable UI**: "92% match" badges on cards (only with a profile, read by TalkBack), a "Best match" sort,
+  an animated match ring with the top three reasons on the detail page and a "Why this match?" sheet with an
+  animated bar per factor.
+- **Why DataStore, not Room, for the profile**: it is one small document per user, always read and written
+  whole and never queried or joined, so a Room table would only add a schema version and a migration. It is
+  stored as versioned JSON (`PreferenceProfileDto`) in the existing Preferences DataStore, keyed by user id.
 
 ## What Phase 3 ships
 
@@ -159,7 +176,8 @@ app/src/main/java/com/findora/app
 │   ├── search                  debounced suggestions and recent searches
 │   ├── saved                   saved homes
 │   ├── locations               region and neighbourhood picker
-│   ├── settings                account, theme, biometric lock, logout, delete account
+│   ├── match                   preference quiz (Best Match engine lives in core/domain/match)
+│   ├── settings                account, match preferences, theme, biometric lock, logout, delete account
 │   └── designsystem            debug-only component showcase
 └── navigation                  type-safe routes, NavHost, route guard, main shell and floating nav pill
 ```
@@ -218,6 +236,9 @@ app/src/main/java/com/findora/app
 | `ScheduleViewingViewModelTest`, `ViewingsViewModelTest` | Booking flow, reminder and `schedule_viewing` signal, rejected and vanished slots, calendar effect; upcoming/past split, cancel with confirmation (Turbine) |
 | `ViewingReminderWorkerTest`, `WorkManagerViewingReminderSchedulerTest` | Reminder notification and deep link, no-op when cancelled or started, denied permission; unique work per viewing, cancel, lead time |
 | `ScheduleViewingScreenTest`, `ViewingsScreenTest` | Day/time picking, taken slots, confirm to booked, guest note, Arabic RTL; viewings list, cancel dialog, empty state (Compose, Robolectric) |
+| `MatchScoreCalculatorTest`, `BestMatchRankingTest` | Property-based style checks over thousands of generated listings: score in 0..100, cheaper within budget never lowers budget fit, missing must-have always excluded, decay reduces old signals, determinism; Best match ordering, filters and badge scores |
+| `DataStoreMatchProfileRepositoryTest`, `MatchQuizViewModelTest` | Profile round trip, per user, restart, corrupt and future documents; quiz steps, skip, back, close, editing, saving (Turbine) |
+| `MatchQuizScreenTest`, `WhyThisMatchTest` | Quiz flow end to end with the real ViewModel, dark RTL; factor bars and points, top reasons, missing must-have, detail ring and sheet (Compose, Robolectric) |
 | `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, open a listing and book a viewing, My viewings, tabs, Settings and back |
 
 ## Credits
