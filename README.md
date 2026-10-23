@@ -26,7 +26,24 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
 | 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A); owner mode and adaptive layouts for tablets, foldables and landscape (7B) | Done (v0.8.0) |
-| 8 | Polish and release | Planned |
+| 8 | Polish and ship: Baseline Profile, startup Macrobenchmark, Compose stability, StrictMode/LeakCanary, accessibility checks and screenshot tests (8A); release polish (8B) | In progress (8A) |
+
+## What Phase 8A ships
+
+Performance and quality gates (details in [docs/PERFORMANCE.md](docs/PERFORMANCE.md) and [docs/TESTING.md](docs/TESTING.md)):
+
+- **Baseline Profile** from the critical journey (cold start → Home scroll → listing detail → back), generated on the CI emulator by the `:baselineprofile` module and installed by `profileinstaller`.
+- **Startup Macrobenchmark**: cold and warm start and Home-scroll frame timing of the minified build, no AOT vs Baseline Profile, on every CI run (informational on the emulator; absolute numbers need a physical device).
+- **Compose stability**: strong skipping on, the hot screen states `@Immutable`, compiler reports behind `-PcomposeMetrics`.
+- **R8** release shrinking verified by the release build and by running the minified benchmark build on the emulator.
+- **Debug diagnostics**: StrictMode (log only) and LeakCanary in debug builds.
+- **Accessibility checks**: Google's Accessibility Test Framework on Welcome, Home, detail, chat and Settings in an instrumented test.
+- **Screenshot tests**: Roborazzi goldens of the five key screens in light/dark and LTR/RTL, verified on CI.
+
+Measured on the CI emulator (API 34, software rendering, so relative numbers only): cold start time to initial
+display about 1.8 s, warm start about 0.6 s, with no measurable difference between no AOT and the Baseline Profile
+on that emulator. The spec's 800 ms cold-start target and the profile's real gain still have to be measured on a
+physical mid-range device; see [docs/PERFORMANCE.md](docs/PERFORMANCE.md).
 
 ## What Phase 7B ships
 
@@ -394,12 +411,20 @@ app/src/main/java/com/findora/app
 | androidx.hilt:hilt-work (+ hilt-compiler) | Constructor-injected `@HiltWorker` workers through `HiltWorkerFactory` |
 | Jetpack WindowManager (window, window-core) | `WindowSizeClass` breakpoints for adaptive layouts and the fold / hinge position on foldables |
 | androidx.exifinterface | Reads the orientation of picked photos so they are stored upright |
+| androidx.profileinstaller | Installs the bundled Baseline Profile so hot startup and scroll code is AOT-compiled |
+| androidx.baselineprofile plugin + benchmark-macro-junit4 + UiAutomator | `:baselineprofile` module: generates the Baseline Profile and runs the startup Macrobenchmark on a device |
+| LeakCanary (debug only) | Detects leaked activities, view models and views in debug builds |
+| Roborazzi (+ compose, junit-rule) | JVM screenshot tests of key screens with committed goldens |
+| Accessibility Test Framework | Accessibility Scanner's checks (labels, touch targets, contrast) in instrumented tests |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
 
 ## Tests
 
 | Suite | Covers |
 |---|---|
+| `KeyScreensScreenshotTest` | Roborazzi goldens of Welcome, Home, detail, Settings and chat in light/dark and English LTR / Arabic RTL |
+| `AccessibilityChecksTest` | Accessibility Test Framework errors on Welcome, Home, detail, chat and Settings (instrumented) |
+| `BaselineProfileGenerator`, `StartupBenchmark` | Baseline Profile from the critical journey; cold/warm startup and Home-scroll frames, no AOT vs profile (`:baselineprofile`, device) |
 | `DesignTokensTest` | Palette hex values, spacing/radius/motion scales, WCAG AA contrast of key pairs in light and dark |
 | `FindoraNavHostTest` | Launch screen, debug showcase navigation and back, no showcase in release |
 | `SeedIntegrityTest` | 60+ listings, unique ids, valid fields, 4 to 8 credited images, coordinates inside region bounds, design listings, price history, offline pack size |

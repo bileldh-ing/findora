@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kover) apply false
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.androidx.baselineprofile) apply false
+    alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.spotless)
 }
@@ -13,7 +16,9 @@ plugins {
 detekt {
     buildUponDefaultConfig = true
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
-    source.setFrom(files("app/src/main/java", "app/src/test/java", "app/src/androidTest/java"))
+    source.setFrom(
+        files("app/src/main/java", "app/src/test/java", "app/src/androidTest/java", "baselineprofile/src/main/java"),
+    )
     parallel = true
 }
 

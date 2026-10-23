@@ -21,3 +21,6 @@ play-*.json
 # Python seed tooling
 __pycache__/
 *.pyc
+
+# Module build outputs
+**/build/

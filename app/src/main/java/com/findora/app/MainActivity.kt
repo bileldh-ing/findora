@@ -8,9 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.findora.app.core.designsystem.component.LocalReducedMotionOverride
@@ -31,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * with AppCompatDelegate.setApplicationLocales also applies below Android 13: AppCompat recreates the activity
  * with the new locale and layout direction, so text and RTL mirroring change at once.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val appViewModel: AppViewModel by viewModels()
@@ -67,12 +74,17 @@ class MainActivity : AppCompatActivity() {
                 LocalViewerId provides viewerId,
             ) {
                 FindoraTheme(darkTheme = darkTheme) {
-                    (launchState as? LaunchState.Ready)?.let { ready ->
-                        // A listing link is honoured only for a restored session going straight to the app. It is
-                        // dropped behind the biometric lock or on Welcome, so a link can never skip the route guard.
-                        if (ready.startDestination != FindoraRoute.Main) intent?.data = null
-                        ProvideAdaptiveLayout(fold = fold) {
-                            FindoraNavHost(startDestination = ready.startDestination)
+                    // Test tags double as resource ids so UiAutomator (Baseline Profile generator, Macrobenchmark)
+                    // can drive the same screens the Compose tests address by tag.
+                    Box(Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
+                        (launchState as? LaunchState.Ready)?.let { ready ->
+                            // A listing link is honoured only for a restored session going straight to the app. It
+                            // is dropped behind the biometric lock or on Welcome, so a link can never skip the
+                            // route guard.
+                            if (ready.startDestination != FindoraRoute.Main) intent?.data = null
+                            ProvideAdaptiveLayout(fold = fold) {
+                                FindoraNavHost(startDestination = ready.startDestination)
+                            }
                         }
                     }
                 }

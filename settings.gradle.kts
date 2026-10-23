@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Findora"
 include(":app")
+// Baseline Profile generator + startup Macrobenchmark (run on an emulator or device, see docs/PERFORMANCE.md).
+include(":baselineprofile")

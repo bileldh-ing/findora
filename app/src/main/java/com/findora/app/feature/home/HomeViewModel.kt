@@ -1,5 +1,6 @@
 package com.findora.app.feature.home
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -50,6 +51,8 @@ sealed interface RefreshStatus {
     ) : RefreshStatus
 }
 
+/** Never mutated after creation (read-only collections), so Compose can skip Home children on equal state. */
+@Immutable
 data class HomeUiState(
     val region: RegionPack? = null,
     val regions: List<RegionPack> = emptyList(),

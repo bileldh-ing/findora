@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kover)
+    alias(libs.plugins.androidx.baselineprofile)
+    alias(libs.plugins.roborazzi)
 }
 
 /**
@@ -123,9 +125,12 @@ androidComponents {
             releaseVersionName?.let { output.versionName.set(it) }
         }
     }
-    // Compose UI tests need the ui-test-manifest activity, which only debug builds merge.
-    // Release-specific behaviour is covered by tests that toggle the build flag explicitly.
-    beforeVariants(selector().withBuildType("release")) { it.enableUnitTest = false }
+    // Compose UI tests need the ui-test-manifest activity, which only debug builds merge. Release-specific
+    // behaviour is covered by tests that toggle the build flag explicitly. The Baseline Profile plugin adds
+    // release-like build types (nonMinifiedRelease, benchmarkRelease) that must not re-run the unit tests either.
+    beforeVariants { variant ->
+        if (variant.buildType != "debug") variant.enableUnitTest = false
+    }
 }
 
 if (gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }) {
@@ -152,8 +157,21 @@ kotlin {
     }
 }
 
+baselineProfile {
+    // The profile is generated on an emulator (CI job "Baseline Profile", see docs/PERFORMANCE.md) and committed
+    // under src/release/generated/baselineProfiles, so regular builds never need a device.
+    automaticGenerationDuringBuild = false
+    saveInSrc = true
+}
+
+roborazzi {
+    // Golden images live with the tests; verify with -Proborazzi.test.verify=true (CI job "Screenshot tests").
+    outputDir.set(file("src/test/screenshots"))
+}
+
 composeCompiler {
-    // Enable with -PcomposeMetrics to inspect stability/recomposition reports.
+    // Off by default; enable with -PcomposeMetrics to write stability/skippability reports to build/compose_*.
+    // Strong skipping is on by default with the Kotlin 2.x Compose compiler (see the module.json featureFlags).
     if (project.hasProperty("composeMetrics")) {
         metricsDestination = layout.buildDirectory.dir("compose_metrics")
         reportsDestination = layout.buildDirectory.dir("compose_reports")
@@ -248,9 +266,12 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.window)
     implementation(libs.androidx.window.core)
+    implementation(libs.androidx.profileinstaller)
+    baselineProfile(project(":baselineprofile"))
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.leakcanary.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
@@ -264,10 +285,16 @@ dependencies {
     testImplementation(libs.androidx.glance.appwidget.testing)
     testImplementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.junit.rule)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.accessibility.test.framework)
+    // ATF exposes Guava types (ImmutableSet) in its API but declares Guava as a runtime-only dependency.
+    androidTestImplementation(libs.guava)
 }

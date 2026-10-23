@@ -1,5 +1,6 @@
 package com.findora.app.feature.detail
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,6 +56,7 @@ enum class DetailError {
 sealed interface DetailUiState {
     data object Loading : DetailUiState
 
+    @Immutable
     data class Content(
         val property: Property,
         val isFavorite: Boolean,
