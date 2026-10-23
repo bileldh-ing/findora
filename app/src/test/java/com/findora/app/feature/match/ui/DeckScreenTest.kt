@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -111,12 +111,12 @@ class DeckScreenTest {
     @Test
     fun swipesRightLeftAndUpThenShowsTheEndOfTheDeck() {
         val vm = showDeck()
-        compose.onNodeWithTag("deckProgress").assertTextEquals("1 / 3")
+        compose.onNodeWithTag("deckProgress").assertContentDescriptionEquals("Home 1 of 3")
         val first = currentId(vm)
         compose.onNodeWithTag("deckCard_$first").performTouchInput { swipeRight() }
         compose.waitForIdle()
         assertTrue(first in favoriteIds())
-        compose.onNodeWithTag("deckProgress").assertTextEquals("2 / 3")
+        compose.onNodeWithTag("deckProgress").assertContentDescriptionEquals("Home 2 of 3")
 
         val second = currentId(vm)
         compose.onNodeWithTag("deckCard_$second").performTouchInput { swipeLeft() }

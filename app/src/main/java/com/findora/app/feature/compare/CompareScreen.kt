@@ -235,8 +235,8 @@ private fun CompareTableView(
                                 Modifier
                                     .weight(1f)
                                     .heightIn(min = CellMinHeight)
-                                    .clearAndSetSemantics { contentDescription = spoken }
-                                    .testTag("amenity_${amenity.id}_$index"),
+                                    .testTag("amenity_${amenity.id}_$index")
+                                    .clearAndSetSemantics { contentDescription = spoken },
                         ) {
                             if (has) {
                                 Icon(
@@ -430,8 +430,8 @@ private fun MetricRow(
                             } else {
                                 FindoraTheme.colors.background
                             },
-                        ).clearAndSetSemantics { contentDescription = spoken }
-                        .testTag(if (isBest) "best_${row.metric.name}_$index" else "cell_${row.metric.name}_$index"),
+                        ).testTag(if (isBest) "best_${row.metric.name}_$index" else "cell_${row.metric.name}_$index")
+                        .clearAndSetSemantics { contentDescription = spoken },
             ) {
                 Text(
                     text = text,

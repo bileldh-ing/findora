@@ -53,7 +53,7 @@ class CompareViewModelTest {
                 assertTrue(state.isEmpty)
                 compare.add(guest, kerala[0].id)
                 compare.add(guest, kerala[1].id)
-                state = awaitItem()
+                while (state.count < 2) state = awaitItem()
                 assertEquals(listOf(kerala[0].id, kerala[1].id), state.table.properties.map { it.id })
                 assertFalse(state.hasMatchRow)
                 vm.onEvent(CompareUiEvent.Move(0, 1))

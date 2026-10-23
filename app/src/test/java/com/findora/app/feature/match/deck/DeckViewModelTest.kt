@@ -94,7 +94,10 @@ class DeckViewModelTest {
 
     private fun DeckViewModel.currentId(): String = requireNotNull(state.value.current).property.id
 
-    private fun lastType(): InteractionType = interactions.events.value.last().type
+    private fun lastType(): InteractionType =
+        interactions.events.value
+            .last()
+            .type
 
     private suspend fun saved(): Set<String> = favorites.observeFavoriteIds(guest).first()
 
