@@ -16,8 +16,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,6 +47,29 @@ import com.findora.app.feature.home.labelRes
 private val IconSize = 20.dp
 
 /**
+ * The name being typed in [SaveSearchDialog]: capped at [SavedSearch.MAX_NAME_LENGTH] characters while typing, and
+ * saved trimmed. [nameToSave] is null while the name is blank, which disables Save.
+ */
+@Stable
+class SearchNameState(
+    initialName: String,
+) {
+    var name: String by mutableStateOf(initialName.take(SavedSearch.MAX_NAME_LENGTH))
+        private set
+
+    val nameToSave: String?
+        get() = name.trim().takeIf { it.isNotEmpty() }
+
+    fun onNameChange(value: String) {
+        name = value.take(SavedSearch.MAX_NAME_LENGTH)
+    }
+
+    companion object {
+        val Saver: Saver<SearchNameState, String> = Saver(save = { it.name }, restore = { SearchNameState(it) })
+    }
+}
+
+/**
  * Names a search before saving it (and renames a saved one). The name is trimmed; Save is disabled while it is
  * blank, and the field is limited to [SavedSearch.MAX_NAME_LENGTH] characters.
  */
@@ -57,33 +82,16 @@ fun SaveSearchDialog(
     title: String = stringResource(R.string.saved_search_save_title),
     confirmLabel: String = stringResource(R.string.saved_search_save),
 ) {
-    var name by rememberSaveable { mutableStateOf(initialName.take(SavedSearch.MAX_NAME_LENGTH)) }
-    val canSave = name.isNotBlank()
+    val nameState = rememberSaveable(saver = SearchNameState.Saver) { SearchNameState(initialName) }
     AlertDialog(
         onDismissRequest = onDismiss,
         modifier = modifier.testTag("saveSearchDialog"),
         title = { Text(title, modifier = Modifier.semantics { heading() }) },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
-                FindoraTextField(
-                    value = name,
-                    onValueChange = { name = it.take(SavedSearch.MAX_NAME_LENGTH) },
-                    label = stringResource(R.string.saved_search_name_label),
-                    imeAction = ImeAction.Done,
-                    onImeAction = { if (canSave) onConfirm(name.trim()) },
-                    fieldTag = "saveSearchName",
-                )
-                Text(
-                    text = stringResource(R.string.saved_search_save_hint),
-                    style = FindoraTheme.typography.caption,
-                    color = FindoraTheme.colors.onSurfaceMuted,
-                )
-            }
-        },
+        text = { SaveSearchNameField(state = nameState, onDone = onConfirm) },
         confirmButton = {
             TextButton(
-                onClick = { onConfirm(name.trim()) },
-                enabled = canSave,
+                onClick = { nameState.nameToSave?.let(onConfirm) },
+                enabled = nameState.nameToSave != null,
                 modifier = Modifier.testTag("saveSearchConfirm"),
             ) {
                 Text(confirmLabel, color = FindoraTheme.colors.accent)
@@ -95,6 +103,30 @@ fun SaveSearchDialog(
             }
         },
     )
+}
+
+/** The name field and hint of [SaveSearchDialog]; the keyboard's Done saves the trimmed name unless it is blank. */
+@Composable
+fun SaveSearchNameField(
+    state: SearchNameState,
+    onDone: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
+        FindoraTextField(
+            value = state.name,
+            onValueChange = state::onNameChange,
+            label = stringResource(R.string.saved_search_name_label),
+            imeAction = ImeAction.Done,
+            onImeAction = { state.nameToSave?.let(onDone) },
+            fieldTag = "saveSearchName",
+        )
+        Text(
+            text = stringResource(R.string.saved_search_save_hint),
+            style = FindoraTheme.typography.caption,
+            color = FindoraTheme.colors.onSurfaceMuted,
+        )
+    }
 }
 
 /** A default name from what the filter narrows: "Kakkanad · Apartment · 2+ bedrooms". */

@@ -1,11 +1,13 @@
 package com.findora.app.feature.savedsearch.ui
 
-import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextReplacement
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.AlertFrequency
@@ -14,11 +16,13 @@ import com.findora.app.core.domain.model.PropertyType
 import com.findora.app.core.domain.model.SavedSearch
 import com.findora.app.feature.saved.SavedScreen
 import com.findora.app.feature.saved.SavedUiState
-import com.findora.app.feature.savedsearch.SaveSearchDialog
+import com.findora.app.feature.savedsearch.SaveSearchNameField
 import com.findora.app.feature.savedsearch.SavedSearchItem
 import com.findora.app.feature.savedsearch.SavedSearchesUiEvent
 import com.findora.app.feature.savedsearch.SavedSearchesUiState
+import com.findora.app.feature.savedsearch.SearchNameState
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -64,16 +68,6 @@ class SavedSearchesScreenTest {
         compose.onNodeWithText("Searches").performClick()
     }
 
-    /**
-     * The focused field's blinking cursor keeps the dialog window from ever going idle under Robolectric, so the
-     * clock is driven by hand while typing: frames advance a fixed amount instead of "until idle".
-     */
-    private fun typeInDialog(text: String) {
-        compose.mainClock.autoAdvance = false
-        compose.onNodeWithTag("saveSearchName").performTextReplacement(text)
-        compose.mainClock.advanceTimeBy(FRAME_STEP_MS)
-    }
-
     @Test
     fun theSearchesTabListsSearchesWithTheirActions() {
         show(listOf(SavedSearchItem(search, "Tunis")))
@@ -95,12 +89,26 @@ class SavedSearchesScreenTest {
     }
 
     @Test
-    fun renamingUsesTheNameDialog() {
+    fun renamingOpensTheNameDialogWithTheCurrentName() {
         show(listOf(SavedSearchItem(search, "Tunis")))
         compose.onNode(hasContentDescription("Rename search")).performClick()
-        typeInDialog("Beach flats")
-        compose.onNodeWithTag("saveSearchConfirm").performClick()
-        assertEquals(listOf(SavedSearchesUiEvent.Rename(3, "Beach flats")), events)
+        compose.onNodeWithTag("saveSearchName").assertTextEquals("Marsa flats")
+        compose.onNodeWithTag("saveSearchConfirm").assertIsEnabled().performClick()
+        assertEquals(listOf(SavedSearchesUiEvent.Rename(3, "Marsa flats")), events)
+        compose.onNodeWithTag("saveSearchDialog").assertDoesNotExist()
+    }
+
+    // The name field is tested outside the AlertDialog: a focused field's blinking cursor keeps a Robolectric
+    // dialog window from ever going idle, so typing is exercised on the field itself.
+    @Test
+    fun anEditedNameIsTrimmedAndSavedWithDone() {
+        val state = SearchNameState("Marsa flats")
+        var saved: String? = null
+        compose.setContent { FindoraTheme { SaveSearchNameField(state = state, onDone = { saved = it }) } }
+        compose.onNodeWithTag("saveSearchName").performTextReplacement("  Beach flats ")
+        compose.onNodeWithTag("saveSearchName").performImeAction()
+        assertEquals("Beach flats", saved)
+        assertEquals("Beach flats", state.nameToSave)
     }
 
     @Test
@@ -111,17 +119,16 @@ class SavedSearchesScreenTest {
 
     @Test
     fun aBlankNameCannotBeSaved() {
-        var saved: String? = null
-        compose.setContent {
-            FindoraTheme { SaveSearchDialog(initialName = "", onConfirm = { saved = it }, onDismiss = {}) }
-        }
-        compose.onNodeWithTag("saveSearchConfirm").assertIsNotEnabled()
-        typeInDialog("  Kochi houses ")
-        compose.onNodeWithTag("saveSearchConfirm").performClick()
-        assertEquals("Kochi houses", saved)
-    }
-
-    private companion object {
-        const val FRAME_STEP_MS = 100L
+        val state = SearchNameState("")
+        val saved = mutableListOf<String>()
+        compose.setContent { FindoraTheme { SaveSearchNameField(state = state, onDone = { saved += it }) } }
+        compose.onNodeWithTag("saveSearchName").performImeAction()
+        compose.onNodeWithTag("saveSearchName").performTextReplacement("   ")
+        compose.onNodeWithTag("saveSearchName").performImeAction()
+        assertNull(state.nameToSave)
+        assertEquals(emptyList<String>(), saved)
+        compose.onNodeWithTag("saveSearchName").performTextReplacement("  Kochi houses ")
+        compose.onNodeWithTag("saveSearchName").performImeAction()
+        assertEquals(listOf("Kochi houses"), saved)
     }
 }
