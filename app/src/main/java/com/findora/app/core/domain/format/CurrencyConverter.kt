@@ -41,11 +41,14 @@ class CurrencyConverter(
     fun convert(
         money: Money,
         to: Currency,
-    ): Money? {
-        if (money.currency == to) return money
-        val exact = convertExact(BigDecimal.valueOf(money.amount), money.currency, to) ?: return null
-        return Money(exact.setScale(0, RoundingMode.HALF_UP).longValueExact(), to)
-    }
+    ): Money? =
+        if (money.currency == to) {
+            money
+        } else {
+            convertExact(BigDecimal.valueOf(money.amount), money.currency, to)?.let { exact ->
+                Money(exact.setScale(0, RoundingMode.HALF_UP).longValueExact(), to)
+            }
+        }
 
     /** The unrounded converted amount (for derived figures such as price per square foot). */
     fun convertExact(
@@ -53,10 +56,13 @@ class CurrencyConverter(
         from: Currency,
         to: Currency,
     ): BigDecimal? {
-        if (from == to) return amount
-        val fromRate = rates.rate(from) ?: return null
-        val toRate = rates.rate(to) ?: return null
-        return amount.multiply(toRate).divide(fromRate, INTERMEDIATE_SCALE, RoundingMode.HALF_EVEN)
+        val fromRate = rates.rate(from)
+        val toRate = rates.rate(to)
+        return when {
+            from == to -> amount
+            fromRate == null || toRate == null -> null
+            else -> amount.multiply(toRate).divide(fromRate, INTERMEDIATE_SCALE, RoundingMode.HALF_EVEN)
+        }
     }
 
     companion object {

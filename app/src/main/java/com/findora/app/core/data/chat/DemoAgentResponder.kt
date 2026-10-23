@@ -54,7 +54,8 @@ data class AgentTiming(
  * The on-device demo agent. After the user sends a message it marks it delivered, then read, shows "typing"
  * for a while and stores the [AgentReplyEngine]'s answer. Messages of one thread are answered in order. When the
  * thread is not on screen the reply also lands in the notifications center and, if allowed, as a system
- * notification on the Messages channel; each is skipped when its toggle is off in Settings. Runs in the application scope, so leaving the screen does not lose it.
+ * notification on the Messages channel; each is skipped when its toggle is off in Settings. Runs in the
+ * application scope, so leaving the screen does not lose it.
  */
 @Singleton
 class DemoAgentResponder

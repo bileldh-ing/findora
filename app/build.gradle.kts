@@ -104,6 +104,12 @@ android {
         getByName("debug").assets.srcDir(file("schemas"))
     }
 
+    bundle {
+        // The language is picked inside the app (per-app locales), so every language must ship in the base APK:
+        // with language splits, Play would only install the device language and French or Arabic would be missing.
+        language { enableSplit = false }
+    }
+
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }

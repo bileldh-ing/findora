@@ -28,9 +28,12 @@ data class DisplayPreferences(
     val converts: Boolean get() = currency != null && converter != null
 
     fun display(money: Money): DisplayMoney {
-        val target = currency ?: return DisplayMoney(money, approximate = false)
-        if (target == money.currency) return DisplayMoney(money, approximate = false)
-        val converted = converter?.convert(money, target) ?: return DisplayMoney(money, approximate = false)
-        return DisplayMoney(converted, approximate = true)
+        val target = currency?.takeIf { it != money.currency }
+        val converted = target?.let { converter?.convert(money, it) }
+        return if (converted != null) {
+            DisplayMoney(converted, approximate = true)
+        } else {
+            DisplayMoney(money, approximate = false)
+        }
     }
 }
