@@ -198,8 +198,36 @@
     <string name="saved_empty_body">Tap the heart on a home, or double-tap its photo, to keep it here.</string>
     <!-- Locations -->
     <string name="locations_title">Locations</string>
-    <string name="locations_subtitle">Choose a region, or jump straight to a neighbourhood</string>
-    <string name="locations_current">Current</string>
+    <string name="map_search_this_area">Search this area</string>
+    <string name="map_show_whole_region">Show whole region</string>
+    <string name="map_area_active">Homes in the searched area</string>
+    <string name="map_view_list">List view</string>
+    <string name="map_view_map">Map view</string>
+    <string name="map_my_location">My location</string>
+    <string name="map_location_denied">Location permission denied. You can still browse by region.</string>
+    <string name="map_location_unavailable">Your location is not available right now.</string>
+    <string name="map_dismiss">Dismiss</string>
+    <string name="map_offline">Map tiles cannot load offline. The homes below come from your saved listings.</string>
+    <string name="map_attribution">© OpenStreetMap contributors</string>
+    <string name="map_empty_filtered">No homes match your filters here</string>
+    <string name="map_empty_area">No homes in this area</string>
+    <string name="map_region_switcher">Region</string>
+    <string name="map_card_specs">%1$d bd · %2$d ba · %3$d m²</string>
+    <string name="map_card_specs_cd">%1$d bedrooms, %2$d bathrooms, %3$d square metres</string>
+    <string name="map_selected">Selected</string>
+    <string name="map_marker_action">Show %1$s, %2$s</string>
+    <plurals name="map_homes_count">
+        <item quantity="one">%1$d home</item>
+        <item quantity="other">%1$d homes</item>
+    </plurals>
+    <plurals name="map_cluster_cd">
+        <item quantity="one">%1$d home here, zoom in</item>
+        <item quantity="other">%1$d homes here, zoom in</item>
+    </plurals>
+    <plurals name="map_description">
+        <item quantity="one">Map with %1$d home. Use the list view to browse it.</item>
+        <item quantity="other">Map with %1$d homes. Use the list view to browse them one by one.</item>
+    </plurals>
     <string name="notifications_mark_read">Mark as read</string>
     <!-- Property detail -->
     <string name="action_open_listing">Open listing</string>

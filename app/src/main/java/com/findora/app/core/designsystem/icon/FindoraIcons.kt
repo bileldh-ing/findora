@@ -248,6 +248,25 @@ object FindoraIcons {
         )
     }
 
+    /** Crosshair for "My location". */
+    val Locate: ImageVector by lazy {
+        outline("Locate", circle(12f, 12f, 7f), circle(12f, 12f, 3f), "M12 2v3", "M12 19v3", "M2 12h3", "M19 12h3")
+    }
+
+    /** Bulleted list for the map's list view. */
+    val ListBullets: ImageVector by lazy {
+        outline(
+            "ListBullets",
+            "M8 6h13",
+            "M8 12h13",
+            "M8 18h13",
+            "M3 6h.01",
+            "M3 12h.01",
+            "M3 18h.01",
+            autoMirror = true,
+        )
+    }
+
     /** Rising line; mirrors in right-to-left layouts, like the charts it labels. */
     val TrendUp: ImageVector by lazy {
         outline("TrendUp", "M22 7 13.5 15.5 8.5 10.5 2 17", "M16 7h6v6", autoMirror = true)

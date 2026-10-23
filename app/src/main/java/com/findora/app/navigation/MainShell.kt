@@ -87,7 +87,7 @@ fun MainShell(
                 )
             }
             composable<MainRoute.Locations> {
-                LocationsRoute(onShowHome = { selectTab(MainTab.Home) }, contentPadding = contentPadding)
+                LocationsRoute(onOpenProperty = onOpenProperty, contentPadding = contentPadding)
             }
             composable<MainRoute.Saved> {
                 SavedRoute(

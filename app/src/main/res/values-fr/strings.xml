@@ -183,8 +183,39 @@
     <string name="saved_empty_title">Aucun logement enregistré</string>
     <string name="saved_empty_body">Touchez le cœur d\'un logement, ou touchez deux fois sa photo, pour le garder ici.</string>
     <string name="locations_title">Lieux</string>
-    <string name="locations_subtitle">Choisissez une région ou allez directement à un quartier</string>
-    <string name="locations_current">Actuel</string>
+    <string name="map_search_this_area">Rechercher dans cette zone</string>
+    <string name="map_show_whole_region">Voir toute la région</string>
+    <string name="map_area_active">Logements de la zone recherchée</string>
+    <string name="map_view_list">Vue liste</string>
+    <string name="map_view_map">Vue carte</string>
+    <string name="map_my_location">Ma position</string>
+    <string name="map_location_denied">Accès à la position refusé. Vous pouvez toujours parcourir par région.</string>
+    <string name="map_location_unavailable">Votre position n\'est pas disponible pour le moment.</string>
+    <string name="map_dismiss">Fermer</string>
+    <string name="map_offline">Les fonds de carte ne se chargent pas hors ligne. Les logements ci-dessous viennent de vos annonces enregistrées.</string>
+    <string name="map_attribution">© les contributeurs d\'OpenStreetMap</string>
+    <string name="map_empty_filtered">Aucun logement ne correspond à vos filtres ici</string>
+    <string name="map_empty_area">Aucun logement dans cette zone</string>
+    <string name="map_region_switcher">Région</string>
+    <string name="map_card_specs">%1$d ch. · %2$d sdb · %3$d m²</string>
+    <string name="map_card_specs_cd">%1$d chambres, %2$d salles de bain, %3$d mètres carrés</string>
+    <string name="map_selected">Sélectionné</string>
+    <string name="map_marker_action">Afficher %1$s, %2$s</string>
+    <plurals name="map_homes_count">
+        <item quantity="one">%1$d logement</item>
+        <item quantity="many">%1$d logements</item>
+        <item quantity="other">%1$d logements</item>
+    </plurals>
+    <plurals name="map_cluster_cd">
+        <item quantity="one">%1$d logement ici, zoomer</item>
+        <item quantity="many">%1$d logements ici, zoomer</item>
+        <item quantity="other">%1$d logements ici, zoomer</item>
+    </plurals>
+    <plurals name="map_description">
+        <item quantity="one">Carte avec %1$d logement. Utilisez la vue liste pour le consulter.</item>
+        <item quantity="many">Carte avec %1$d logements. Utilisez la vue liste pour les consulter un par un.</item>
+        <item quantity="other">Carte avec %1$d logements. Utilisez la vue liste pour les consulter un par un.</item>
+    </plurals>
     <string name="notifications_mark_read">Marquer comme lu</string>
     <!-- Property detail -->
     <string name="action_open_listing">Ouvrir l\'annonce</string>

@@ -20,6 +20,7 @@ import com.findora.app.core.data.local.dao.RecentSearchDao
 import com.findora.app.core.data.local.dao.SavedSearchDao
 import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
+import com.findora.app.core.data.location.LastKnownLocationSource
 import com.findora.app.core.data.match.DataStoreMatchProfileRepository
 import com.findora.app.core.data.remote.FakeRemoteDataSource
 import com.findora.app.core.data.remote.RemoteDataSource
@@ -37,6 +38,7 @@ import com.findora.app.core.data.seed.AssetSeedReader
 import com.findora.app.core.data.seed.SeedReader
 import com.findora.app.core.data.settings.DataStoreSettingsRepository
 import com.findora.app.core.di.IoDispatcher
+import com.findora.app.core.domain.location.DeviceLocationSource
 import com.findora.app.core.domain.repository.CompareRepository
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
@@ -123,6 +125,9 @@ abstract class ViewingBindingsModule {
 
     @Binds
     abstract fun bindViewingReminderNotifier(impl: AndroidViewingReminderNotifier): ViewingReminderNotifier
+
+    @Binds
+    abstract fun bindDeviceLocationSource(impl: LastKnownLocationSource): DeviceLocationSource
 }
 
 @Module
