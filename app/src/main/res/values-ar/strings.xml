@@ -189,8 +189,47 @@
     <string name="saved_empty_title">لا توجد منازل محفوظة بعد</string>
     <string name="saved_empty_body">اضغط على القلب في أي منزل، أو اضغط مرتين على صورته، للاحتفاظ به هنا.</string>
     <string name="locations_title">المواقع</string>
-    <string name="locations_subtitle">اختر منطقة أو انتقل مباشرة إلى حي</string>
-    <string name="locations_current">الحالي</string>
+    <string name="map_search_this_area">ابحث في هذه المنطقة</string>
+    <string name="map_show_whole_region">عرض المنطقة كاملة</string>
+    <string name="map_area_active">المنازل في المنطقة المحددة</string>
+    <string name="map_view_list">عرض القائمة</string>
+    <string name="map_view_map">عرض الخريطة</string>
+    <string name="map_my_location">موقعي</string>
+    <string name="map_location_denied">تم رفض إذن الموقع. لا يزال بإمكانك التصفح حسب المنطقة.</string>
+    <string name="map_location_unavailable">موقعك غير متاح حاليًا.</string>
+    <string name="map_dismiss">إغلاق</string>
+    <string name="map_offline">لا يمكن تحميل الخريطة دون اتصال. المنازل أدناه من إعلاناتك المحفوظة.</string>
+    <string name="map_attribution">© المساهمون في OpenStreetMap</string>
+    <string name="map_empty_filtered">لا توجد منازل تطابق عوامل التصفية هنا</string>
+    <string name="map_empty_area">لا توجد منازل في هذه المنطقة</string>
+    <string name="map_region_switcher">المنطقة</string>
+    <string name="map_card_specs">غرف: %1$d · حمّامات: %2$d · %3$s</string>
+    <string name="map_card_specs_cd">غرف النوم: %1$d، الحمّامات: %2$d، المساحة: %3$s متر مربع</string>
+    <string name="map_marker_action">عرض %1$s، %2$s</string>
+    <plurals name="map_homes_count">
+        <item quantity="zero">لا توجد منازل</item>
+        <item quantity="one">منزل واحد</item>
+        <item quantity="two">منزلان</item>
+        <item quantity="few">%1$d منازل</item>
+        <item quantity="many">%1$d منزلًا</item>
+        <item quantity="other">%1$d منزل</item>
+    </plurals>
+    <plurals name="map_cluster_cd">
+        <item quantity="zero">لا توجد منازل هنا</item>
+        <item quantity="one">منزل واحد هنا، كبّر الخريطة</item>
+        <item quantity="two">منزلان هنا، كبّر الخريطة</item>
+        <item quantity="few">%1$d منازل هنا، كبّر الخريطة</item>
+        <item quantity="many">%1$d منزلًا هنا، كبّر الخريطة</item>
+        <item quantity="other">%1$d منزل هنا، كبّر الخريطة</item>
+    </plurals>
+    <plurals name="map_description">
+        <item quantity="zero">خريطة بلا منازل.</item>
+        <item quantity="one">خريطة بها منزل واحد. استخدم عرض القائمة لتصفحه.</item>
+        <item quantity="two">خريطة بها منزلان. استخدم عرض القائمة لتصفحهما.</item>
+        <item quantity="few">خريطة بها %1$d منازل. استخدم عرض القائمة لتصفحها واحدًا تلو الآخر.</item>
+        <item quantity="many">خريطة بها %1$d منزلًا. استخدم عرض القائمة لتصفحها واحدًا تلو الآخر.</item>
+        <item quantity="other">خريطة بها %1$d منزل. استخدم عرض القائمة لتصفحها واحدًا تلو الآخر.</item>
+    </plurals>
     <string name="notifications_mark_read">تحديد كمقروء</string>
     <!-- Property detail -->
     <string name="action_open_listing">فتح الإعلان</string>

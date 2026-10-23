@@ -24,9 +24,22 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 3 | Home screen, pixel-faithful to the reference design | Done |
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
-| 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
+| 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A) | In progress |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 6A ships
+
+- **Locations map**: an OpenStreetMap map (osmdroid, no API key, [ADR 0005](docs/adr/0005-openstreetmap-with-osmdroid.md))
+  centred on the current region, with price-pill markers that merge into count bubbles when zoomed out
+  (pure-Kotlin grid clustering, tap a bubble to zoom in) and the selected home highlighted.
+- **Card carousel** under the map kept in sync with the markers: swipe a card and the map pans to it, tap a pill
+  and the carousel scrolls to its card, tap a card to open the listing. Match badges appear with a preference profile.
+- **Search this area** after panning or zooming by hand, the **Home filter** applied to the map, a **region
+  switcher**, a **list / map toggle** (the accessible alternative to the map) and **My location** (approximate
+  location only, asked on tap, never in the background, no Google Play services).
+- Works offline for listings (Room); a banner explains when map tiles cannot load. Dark map, RTL carousel,
+  English, French and Arabic, TalkBack actions for every marker.
 
 ## What Phase 5C ships
 
@@ -139,7 +152,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 - **Search** with 300 ms debounced suggestions and per-user recent searches (swipe to delete, clear all).
 - **Favourites** per user: heart toggle, double-tap with a heart burst, and a Saved tab.
 - **Floating navigation pill** (Home, Locations, Saved, Settings) with a sliding spring indicator.
-  Locations is a region and neighbourhood picker until the map ships; Chat joins with Phase 6.
+  Locations became a map in Phase 6A; Chat joins with Phase 6.
 - Staggered card entrance and `animateItem`, all skipped when system animations are off; TalkBack reads one
   summary per card with Save as a custom action.
 
@@ -243,7 +256,7 @@ app/src/main/java/com/findora/app
 │   ├── designsystem/component  pill buttons, chips, logo, text fields, arc shape, controls
 │   ├── designsystem/icon       thin-stroke icon set (ImageVector)
 │   ├── common                  injectable clock
-│   ├── domain                  models, repository interfaces, PriceFormatter (pure Kotlin)
+│   ├── domain                  models, repository interfaces, PriceFormatter, map clustering and areas (pure Kotlin)
 │   ├── data                    Room, DataStore, seed DTOs, fake remote, repositories, Hilt modules
 │   ├── data/auth               password hashing, Keystore session cipher, local AuthRepository
 │   ├── security                biometric availability
@@ -256,7 +269,7 @@ app/src/main/java/com/findora/app
 │   ├── search                  debounced suggestions and recent searches
 │   ├── saved                   saved homes and Dream Match matches
 │   ├── compare                 compare tray and side-by-side compare table
-│   ├── locations               region and neighbourhood picker
+│   ├── locations               OpenStreetMap map, synced carousel, list view (clustering in core/domain/map)
 │   ├── match                   preference quiz and Dream Match deck (engine lives in core/domain/match)
 │   ├── settings                account, match preferences, theme, biometric lock, logout, delete account
 │   └── designsystem            debug-only component showcase
@@ -276,6 +289,7 @@ app/src/main/java/com/findora/app
 | kotlinx.serialization JSON | Seed and DTO parsing, JSON columns, type-safe routes |
 | Kotlin Coroutines + Flow | Async work and reactive streams from Room to UI |
 | Coil 3 (compose, network-okhttp) + OkHttp | Image loading with memory/disk cache and crossfade |
+| osmdroid | OpenStreetMap raster map view without API keys or Play services, with an on-device tile cache |
 | androidx.biometric | Fingerprint, face or screen-lock prompt for the optional app lock |
 | Paging 3 (runtime, compose, room-paging, paging-testing) | Incremental loading of the Home feed straight from Room, `LazyPagingItems` in the grid, `asSnapshot` in tests |
 | Turbine, MockK, kotlinx-coroutines-test | Flow assertions, mocking and virtual-time coroutine tests |
@@ -309,9 +323,9 @@ app/src/main/java/com/findora/app
 | `AuthScreensTest` | Welcome content and buttons, light/dark, login and sign-up inline validation (Compose, Robolectric) |
 | `PropertyQueryBuilderTest` | Every filter clause, bound arguments, LIKE escaping, sort tie-breakers |
 | `PropertySearchDaoTest` | Room + Paging 3 feed across pages, category/text/refinements in SQL, price sorts, bounds, suggestions |
-| `HomeViewModelTest`, `SearchViewModelTest`, `SavedAndLocationsViewModelTest` | Header, refresh states, category paging, favourites per user, filter reset between users, regions, notifications; debounced suggestions, submit, per-user recents; saved list; locations (Turbine) |
+| `HomeViewModelTest`, `SearchViewModelTest`, `SavedViewModelTest` | Header, refresh states, category paging, favourites per user, filter reset between users, regions, notifications; debounced suggestions, submit, per-user recents; saved list (Turbine) |
 | `HomeDataRepositoriesTest` | Unread messages per user and mark-read, recent-search delete, Home filter ownership |
-| `HomeScreenTest`, `SearchAndTabsScreenTest` | Reference header, chips filtering the grid, favourite toggle and TalkBack action, filter sheet and badge, empty/error/offline states, notifications, search, nav pill, Saved, Locations (Compose, Robolectric) |
+| `HomeScreenTest`, `SearchAndTabsScreenTest` | Reference header, chips filtering the grid, favourite toggle and TalkBack action, filter sheet and badge, empty/error/offline states, notifications, search, nav pill, Saved (Compose, Robolectric) |
 | `DetailViewModelTest`, `PropertyDeepLinkTest`, `DetailScreenTest` | Detail content, not found, retry, favourites and recorded signals, share/call/email/map effects; `findora://property/{id}` parsing and routing; detail UI, gallery and error states (Turbine, Compose, Robolectric) |
 | `ViewingSlotGeneratorTest`, `RoomViewingRepositoryTest` | Slot grid: past slots, boundaries, taken/busy, zones, DST; per-user viewings, double booking, overlaps, cancel frees the slot |
 | `ScheduleViewingViewModelTest`, `ViewingsViewModelTest` | Booking flow, reminder and `schedule_viewing` signal, rejected and vanished slots, calendar effect; upcoming/past split, cancel with confirmation (Turbine) |
@@ -327,6 +341,8 @@ app/src/main/java/com/findora/app
 | `CompareScreenTest` | Rows and highlighted best cells, amenity checklist, remove / reorder / TalkBack actions, long-press drag in RTL, empty and single states (Compose, Robolectric) |
 | `NaturalLanguageQueryParserTest` | Table-driven EN/FR/AR cases: budgets, ranges, multipliers, Arabic-Indic digits, rooms, T/F notation, areas, types, must-haves, amenities, sorts, places with aliases and typos; no false positives (negations, small numbers, common words); spans, chip removal, determinism, the in-app example prompts |
 | `SearchViewModelTest` (Ask Findora), `AskFindoraScreenTest` | Interpretation and region, chip removal reset by new text, Apply replacing the Home filter with region switch and Best match, explicit sort kept, plain-text fallback, quiz hint, currency mismatch (Turbine); examples, chips appear / remove / apply, notes, nothing-understood state, mode switch, voice button only when available (Compose, Robolectric) |
+| `GridClustererTest`, `MapAreasTest` | Grid clustering by zoom (merge, split, max zoom, determinism, Mercator pixels); visible-bounds filtering with the shared filter, inclusive edges, antimeridian, "moved enough" for Search this area |
+| `MapViewModelTest`, `LocationsScreenTest` | Region change, marker vs card selection, cluster zoom, search this area, shared filter, my location (denied, unavailable, centred), list toggle, offline tiles, open listing (Turbine); carousel, marker-driven scroll, list alternative, controls, banners, empty state, RTL with a fake map (Compose, Robolectric) |
 | `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, open a listing and book a viewing, My viewings, tabs, Settings and back |
 
 ## Credits

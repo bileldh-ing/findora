@@ -18,14 +18,10 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
-import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.RecentSearch
 import com.findora.app.core.domain.model.SearchSuggestion
-import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.seedProperties
-import com.findora.app.feature.locations.LocationsScreen
-import com.findora.app.feature.locations.LocationsUiState
 import com.findora.app.feature.saved.SavedScreen
 import com.findora.app.feature.saved.SavedUiState
 import com.findora.app.feature.search.SearchScreen
@@ -33,8 +29,6 @@ import com.findora.app.feature.search.SearchUiEvent
 import com.findora.app.feature.search.SearchUiState
 import com.findora.app.navigation.FloatingNavPill
 import com.findora.app.navigation.MainTab
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -186,24 +180,5 @@ class SearchAndTabsScreenTest {
         assertEquals(listOf(home.id), removed)
         compose.onNodeWithTag("card_${home.id}").performSemanticsAction(SemanticsActions.OnClick)
         assertEquals(listOf(home.id), opened)
-    }
-
-    @Test
-    fun locationsPicksARegionOrANeighbourhood() {
-        val regions = runBlocking { SeedRegionRepository(fileSeedReader(), Dispatchers.Unconfined).regions() }
-        val picks = mutableListOf<String>()
-        compose.setContent {
-            FindoraTheme {
-                LocationsScreen(
-                    state = LocationsUiState(regions = regions, currentRegionId = "kerala"),
-                    onSelectRegion = { picks += it },
-                    onSelectLocality = { region, locality -> picks += "$region/$locality" },
-                )
-            }
-        }
-        compose.onNodeWithText("Current").assertIsDisplayed()
-        compose.onNodeWithTag("locality_Fort Kochi").performClick()
-        compose.onNodeWithTag("selectRegion_tunis").performClick()
-        assertEquals(listOf("kerala/Fort Kochi", "tunis"), picks)
     }
 }

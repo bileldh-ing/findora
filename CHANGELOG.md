@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Phase 6A: Locations map
+- **Map** (`feature/locations`): the Locations tab is now an OpenStreetMap map (osmdroid, no API key) centred on the current region, wrapped in a Compose `AndroidView` that follows the host lifecycle (`onResume` / `onPause`, `onDetach` when it leaves composition). Tile requests use the application id as user agent, tiles are cached in the app's private cache (64 MB cap) and the "© OpenStreetMap contributors" attribution is always visible. Choice and trade-offs in ADR 0005.
+- **Price-pill markers** formatted with `PriceFormatter`, the selected one highlighted in the accent colour and drawn on top; **clusters** with a count when zoomed out (tap to zoom to their homes), from `GridClusterer`, a pure-Kotlin Web Mercator grid clustering (`core/domain/map`).
+- **Card carousel** synced with the markers: swiping settles on a card and pans the map to its marker, tapping a marker scrolls the carousel to its card, tapping a card opens the listing (`PropertyDetail`). Cards show price, name, neighbourhood, beds / baths / area and the match badge when a preference profile exists.
+- **Search this area**: after the user pans or zooms by hand, a button filters the listings to the visible bounds (`MapAreas`); "Show whole region" clears it. The **shared Home filter** (type, price, beds, amenities...) applies to the map too, with "Clear filters" when nothing matches.
+- **Region switcher** chips (shared with Home through the region setting), **list / map toggle** (the list is the accessible alternative), and **My location** with the ACCESS_COARSE_LOCATION runtime permission asked on tap: framework `LocationManager` last known fix (no Play services, no background location), a notice when denied or unavailable, and the button hidden on devices without a location provider.
+- **Offline**: listings come from Room, so the carousel and list work without network; when no tile loads for a few seconds a banner explains the blank map and offers the list view.
+- Dark theme (inverted tiles, theme-coloured markers), RTL carousel, English, French and Arabic strings (Arabic plural forms), TalkBack summary on the map with one custom action per marker, card summaries with selected state.
+- Tests: `GridClustererTest`, `MapAreasTest` (bounds filtering, antimeridian, "moved enough"), `MapViewModelTest` (Turbine: region change, marker vs card selection, cluster zoom, search this area, shared filter, my location, list / offline / open listing), `LocationsScreenTest` (Compose, Robolectric, map replaced by a fake: carousel, marker-driven scroll, list alternative, search this area, offline banner, location notices, empty state, RTL). The old region-picker tests were replaced.
+- Docs: ADR 0005, README, privacy policy (location permission and OpenStreetMap tiles).
+
 ## [0.6.0] - 2026-10-23 Phase 5: Best match, Dream Match, Compare and natural-language search
 
 ### Phase 5C: Ask Findora natural-language search
