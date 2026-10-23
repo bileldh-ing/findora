@@ -87,6 +87,37 @@ jobs:
             build/reports
             app/schemas
 
+  screenshots:
+    name: Screenshot tests (Roborazzi)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Verify key-screen goldens (light/dark, LTR/RTL)
+        run: .github/scripts/screenshots.sh
+
+      - name: Report failures as annotations
+        if: failure()
+        run: .github/scripts/annotate-failures.sh screenshots.log
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: screenshots
+          path: |
+            screenshots.log
+            app/src/test/screenshots
+            app/build/outputs/roborazzi
+            app/build/reports/tests/testDebugUnitTest
+
   instrumented:
     name: Instrumented tests (emulator API 34)
     runs-on: ubuntu-24.04
@@ -190,3 +221,69 @@ jobs:
             app/build/outputs/apk/release/*.apk
             app/build/outputs/bundle/release/*.aab
             app/build/outputs/mapping/release/mapping.txt
+
+  performance:
+    name: Baseline Profile + startup Macrobenchmark (emulator API 34)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      API_LEVEL: 34
+      TARGET: google_apis
+      ARCH: x86_64
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Build release-like app and benchmark APKs (R8)
+        run: |
+          set -o pipefail
+          ./gradlew :app:assembleNonMinifiedRelease :app:assembleBenchmarkRelease :baselineprofile:assemble --stacktrace 2>&1 | tee build-perf.log
+
+      # The Google APIs image (userdebug) supports profile generation without root on API 33+; aosp_atd does not.
+      - name: Generate Baseline Profile, then run the startup benchmark
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ env.API_LEVEL }}
+          target: ${{ env.TARGET }}
+          arch: ${{ env.ARCH }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: .github/scripts/perf.sh
+
+      - name: Benchmark status (informational)
+        if: always()
+        run: |
+          status=$(cat benchmark-status.txt 2>/dev/null || echo "not run")
+          if [ "$status" != "0" ]; then
+            echo "::warning title=Macrobenchmark::Startup benchmark did not complete on the emulator (status: $status); see benchmark.log in the performance artifact. Not a merge gate."
+          fi
+          python3 .github/scripts/benchmark-summary.py >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Report failures as annotations
+        if: failure()
+        run: .github/scripts/annotate-failures.sh build-perf.log baseline-profile.log
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: performance
+          path: |
+            build-perf.log
+            baseline-profile.log
+            benchmark.log
+            app/src/release/generated/baselineProfiles
+            baselineprofile/build/outputs/connected_android_test_additional_output
+            baselineprofile/build/outputs/androidTest-results

@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Phase 8A: Performance and quality gates
+- **Baseline Profile**: new `:baselineprofile` module (`com.android.test`, androidx.baselineprofile plugin, Macrobenchmark, UiAutomator). `BaselineProfileGenerator` records cold start → Home grid flings → listing detail → back (guest on a fresh install), also as the startup profile; the app consumes it through `androidx.profileinstaller`. Saved in `app/src/release/generated/baselineProfiles` (`saveInSrc`, never generated during normal builds). Compose test tags are exposed as UiAutomator resource ids (`testTagsAsResourceId`) and Welcome's guest link has the `welcomeGuest` tag.
+- **Startup Macrobenchmark**: `StartupBenchmark` measures cold and warm `StartupTimingMetric` and Home-scroll `FrameTimingMetric` of the minified `benchmarkRelease` build, `CompilationMode.None` vs `Partial(baseline profile required)`.
+- **CI**: a "Baseline Profile + startup Macrobenchmark" job on the API 34 `google_apis` emulator builds the R8 builds, generates the profile (gating) and runs the benchmark (informational, never fatal: results JSON in the `performance` artifact and a Markdown table in the job summary); a "Screenshot tests" job verifies the Roborazzi goldens (records and fails when none are committed).
+- **Compose stability**: `HomeUiState`, `PropertyFilter` and `DetailUiState.Content` are `@Immutable` (read-only data classes that the compiler inferred unstable because of their collections); strong skipping is confirmed on; compiler reports stay behind `-PcomposeMetrics`.
+- **Debug diagnostics**: StrictMode (`detectAll` + `penaltyLog`, thread and VM policies) in debug builds and LeakCanary as `debugImplementation`. Unit tests are disabled for every non-debug build type, including the plugin's `nonMinifiedRelease` / `benchmarkRelease`.
+- **Accessibility**: `AccessibilityChecksTest` (instrumented) runs the Accessibility Test Framework's latest checks with a screenshot (labels, touch targets, contrast, duplicate bounds...) on Welcome, Home, detail, chat and Settings and fails on any error.
+- **Screenshot tests**: `KeyScreensScreenshotTest` (Roborazzi + Robolectric native graphics) for Welcome, Home, detail, Settings and chat in light/dark × English LTR/Arabic RTL (20 goldens in `app/src/test/screenshots`), images stubbed offline.
+- Docs: `docs/PERFORMANCE.md` (profile generation, benchmark, stability, R8, diagnostics) and `docs/TESTING.md` (screenshots, accessibility, instrumented tests).
+
 ## [0.8.0] - 2026-10-23 Phase 7: Saved-search alerts, widget, owner mode and adaptive layouts
 
 ### Phase 7B: Owner mode and adaptive layouts

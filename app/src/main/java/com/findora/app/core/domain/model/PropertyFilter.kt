@@ -1,5 +1,7 @@
 package com.findora.app.core.domain.model
 
+import androidx.compose.runtime.Immutable
+
 /**
  * How listings are ordered. "Recommended" (the default) ranks verified, well-rated, well-reviewed homes first.
  * "Best match" orders by the user's match score and leaves out homes missing a must-have; it is offered once a
@@ -23,6 +25,7 @@ enum class HomeCategory(
 }
 
 /** Structured listing filter; null or false fields do not constrain the result. */
+@Immutable
 data class PropertyFilter(
     val type: PropertyType? = null,
     val minRent: Long? = null,

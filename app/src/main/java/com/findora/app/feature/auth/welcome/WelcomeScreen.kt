@@ -311,6 +311,7 @@ private fun WelcomePanel(
                 TextLink(
                     text = stringResource(R.string.action_continue_guest),
                     onClick = onContinueAsGuest,
+                    modifier = Modifier.testTag("welcomeGuest"),
                     color = FindoraTheme.colors.onSurfaceMuted,
                     enabled = !state.isBusy,
                 )

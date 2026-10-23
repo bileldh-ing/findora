@@ -1,6 +1,7 @@
 package com.findora.app
 
 import android.app.Application
+import android.os.StrictMode
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import coil3.ImageLoader
@@ -22,6 +23,32 @@ class FindoraApplication :
     /** Lets WorkManager build @HiltWorker workers (viewing reminders) with injected dependencies. */
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
+
+    override fun onCreate() {
+        super.onCreate()
+        if (BuildConfig.DEBUG) enableStrictMode()
+    }
+
+    /**
+     * Debug builds log every main-thread disk/network access and leaked closeable, cursor or registration
+     * (penaltyLog, never a crash), so regressions show up in Logcat while developing. Release builds skip it.
+     */
+    private fun enableStrictMode() {
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy
+                .Builder()
+                .detectAll()
+                .penaltyLog()
+                .build(),
+        )
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy
+                .Builder()
+                .detectAll()
+                .penaltyLog()
+                .build(),
+        )
+    }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader.get()
 
