@@ -25,7 +25,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
-| 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A); owner mode and adaptive layouts for tablets, foldables and landscape (7B) | In progress |
+| 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A); owner mode and adaptive layouts for tablets, foldables and landscape (7B) | Done (v0.8.0) |
 | 8 | Polish and release | Planned |
 
 ## What Phase 7B ships
