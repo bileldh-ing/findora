@@ -41,8 +41,9 @@ Performance and quality gates (details in [docs/PERFORMANCE.md](docs/PERFORMANCE
 - **Screenshot tests**: Roborazzi goldens of the five key screens in light/dark and LTR/RTL, verified on CI.
 
 Measured on the CI emulator (API 34, software rendering, so relative numbers only): cold start time to initial
-display about 1.8 s, warm start about 0.6 s, before the app's own profile was committed. The spec's 800 ms cold-start
-target still has to be checked on a physical mid-range device; see [docs/PERFORMANCE.md](docs/PERFORMANCE.md).
+display about 1.8 s, warm start about 0.6 s, with no measurable difference between no AOT and the Baseline Profile
+on that emulator. The spec's 800 ms cold-start target and the profile's real gain still have to be measured on a
+physical mid-range device; see [docs/PERFORMANCE.md](docs/PERFORMANCE.md).
 
 ## What Phase 7B ships
 

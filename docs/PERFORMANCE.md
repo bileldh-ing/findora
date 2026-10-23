@@ -70,9 +70,13 @@ now committed. `startup-prof.txt` currently holds the same rules because the who
 
 Read these honestly: that run built the benchmark APK **before** the app's own profile existed, so `Partial` only
 had the profiles shipped by AndroidX libraries (Compose, etc.), and the emulator renders on the CPU
-(swiftshader), which dominates frame and startup times. The numbers are a smoke test (R8 build starts, renders
-Home, scrolls) and a trend line, not a measure of the profile's benefit. Later runs build with the committed
-profile; the job summary of each run shows its table. The spec's cold-start target (under 800 ms) is for a
+(swiftshader), which dominates frame and startup times.
+
+Second run with the committed profile in the APK (CI run 39959519996): cold start median 1818 ms (`None`) vs
+2079 ms (`Partial`), warm 598 vs 602 ms, scroll `frameDurationCpuMs` P50 79 vs 93 ms. On this emulator the profile
+shows **no measurable gain**; the spread between runs (about 100 to 250 ms) is larger than any difference. So the
+numbers are a smoke test (the R8 build starts, renders Home, scrolls) and a trend line, not evidence of the
+profile's benefit; each run's job summary shows its table. A physical device is needed to quantify it. The spec's cold-start target (under 800 ms) is for a
 physical mid-range device and has not been measured yet.
 
 ## Compose stability
