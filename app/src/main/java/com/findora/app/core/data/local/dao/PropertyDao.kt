@@ -36,26 +36,29 @@ abstract class PropertyDao {
     @Query("SELECT * FROM properties WHERE id = :id")
     abstract suspend fun findById(id: String): PropertyEntity?
 
-    @Query("SELECT COUNT(*) FROM properties WHERE region_id = :regionId")
+    @Query("SELECT COUNT(*) FROM properties WHERE region_id = :regionId AND owner_id IS NULL")
     abstract suspend fun countInRegion(regionId: String): Int
 
     /** Oldest fetch time in the region: the cache is only as fresh as its stalest row. */
-    @Query("SELECT MIN(fetched_at) FROM properties WHERE region_id = :regionId")
+    @Query("SELECT MIN(fetched_at) FROM properties WHERE region_id = :regionId AND owner_id IS NULL")
     abstract suspend fun oldestFetchInRegion(regionId: String): Long?
 
     @Upsert
     abstract suspend fun upsertAll(properties: List<PropertyEntity>)
 
-    @Query("DELETE FROM properties WHERE region_id = :regionId AND id NOT IN (:keepIds)")
+    @Query("DELETE FROM properties WHERE region_id = :regionId AND owner_id IS NULL AND id NOT IN (:keepIds)")
     abstract suspend fun deleteRegionExcept(
         regionId: String,
         keepIds: List<String>,
     )
 
-    @Query("DELETE FROM properties WHERE region_id = :regionId")
+    @Query("DELETE FROM properties WHERE region_id = :regionId AND owner_id IS NULL")
     abstract suspend fun deleteRegion(regionId: String)
 
-    /** Atomically makes the cached region equal to [properties] (listings removed upstream disappear). */
+    /**
+     * Atomically makes the cached market listings of the region equal to [properties] (listings removed upstream
+     * disappear). Listings published on this device (owner_id set) are never touched by a refresh.
+     */
     @Transaction
     open suspend fun replaceRegion(
         regionId: String,

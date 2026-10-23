@@ -180,6 +180,38 @@ object FindoraIcons {
 
     val ChevronEnd: ImageVector by lazy { outline("ChevronEnd", "m9 18 6-6-6-6", autoMirror = true) }
 
+    val ChevronStart: ImageVector by lazy { outline("ChevronStart", "m15 18-6-6 6-6", autoMirror = true) }
+
+    val Plus: ImageVector by lazy { outline("Plus", "M5 12h14", "M12 5v14") }
+
+    /** A photo: the listing wizard's photo step and picker button. */
+    val Image: ImageVector by lazy {
+        outline(
+            "Image",
+            "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+            circle(9f, 9f, 2f),
+            "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21",
+        )
+    }
+
+    val Pause: ImageVector by lazy { outline("Pause", "M7 4h3v16H7z", "M14 4h3v16h-3z") }
+
+    val Play: ImageVector by lazy { outline("Play", "M6 3 20 12 6 21Z") }
+
+    /** A building with a key: owner mode. */
+    val Building: ImageVector by lazy {
+        outline(
+            "Building",
+            "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z",
+            "M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2",
+            "M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2",
+            "M10 6h4",
+            "M10 10h4",
+            "M10 14h4",
+            "M10 18h4",
+        )
+    }
+
     val Fingerprint: ImageVector by lazy {
         outline(
             "Fingerprint",

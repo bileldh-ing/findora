@@ -17,6 +17,8 @@ import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeBiometricAvailability
 import com.findora.app.core.testing.FakeLanguageController
 import com.findora.app.core.testing.FakeMatchProfileRepository
+import com.findora.app.core.testing.FakeOwnerListingRepository
+import com.findora.app.core.testing.FakeOwnerModeRepository
 import com.findora.app.core.testing.FakeReferenceDataRepository
 import com.findora.app.core.testing.FakeSearchHistoryRepository
 import com.findora.app.core.testing.FakeSettingsRepository
@@ -46,6 +48,8 @@ class SettingsViewModelTest {
     private val cache = RecordingCacheCleaner()
     private val exporter = RecordingExporter()
     private val documents = RecordingDocumentWriter()
+    private val ownerModes = FakeOwnerModeRepository()
+    private val ownerListings = FakeOwnerListingRepository()
     private val now = Instant.parse("2026-10-23T08:00:00Z")
 
     private fun viewModel(canAuthenticate: Boolean = true) =
@@ -62,7 +66,58 @@ class SettingsViewModelTest {
             documents = documents,
             clock = { now },
             zone = ZoneId.of("Africa/Tunis"),
+            ownerModes = ownerModes,
+            ownerListings = ownerListings,
         )
+
+    @Test
+    fun ownerModeOpensTheDashboardForASignedInUser() =
+        runTest(main.dispatcher) {
+            auth.signIn()
+            val vm = viewModel()
+            vm.effects.test {
+                vm.onEvent(AccountEvent.OwnerModeToggled(true))
+                assertEquals(SettingsUiEffect.OpenOwnerDashboard, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+            assertTrue(ownerModes.ownerMode.value)
+            vm.state.test {
+                var state = awaitItem()
+                while (!state.ownerModeActive) state = awaitItem()
+                vm.onEvent(AccountEvent.OwnerModeToggled(false))
+                assertFalse(awaitItem().ownerModeActive)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun guestsAreAskedToCreateAnAccountInsteadOfOwnerMode() =
+        runTest(main.dispatcher) {
+            auth.continueAsGuest()
+            val vm = viewModel()
+            vm.state.test {
+                awaitItem()
+                vm.onEvent(AccountEvent.OwnerModeToggled(true))
+                var state = awaitItem()
+                while (!state.ownerNeedsAccount) state = awaitItem()
+                assertFalse(state.ownerModeActive)
+                vm.onEvent(AccountEvent.OwnerPromptDismissed)
+                assertFalse(awaitItem().ownerNeedsAccount)
+                cancelAndIgnoreRemainingEvents()
+            }
+            assertFalse(ownerModes.ownerMode.value)
+        }
+
+    @Test
+    fun deletingTheAccountDeletesItsListingsAndTurnsOwnerModeOff() =
+        runTest(main.dispatcher) {
+            auth.signIn()
+            ownerModes.setOwnerMode(true)
+            val vm = viewModel()
+            vm.onEvent(AccountEvent.DeleteAccountConfirmed)
+            assertEquals(listOf(auth.account.id), ownerListings.deletedFor)
+            assertFalse(ownerModes.ownerMode.value)
+        }
 
     @Test
     fun showsTheAccountAndChangesTheTheme() =

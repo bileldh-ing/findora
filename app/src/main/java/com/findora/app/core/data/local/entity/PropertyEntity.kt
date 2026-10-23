@@ -7,13 +7,17 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
-/** Cached listing. Lists (images, amenities, history) are stored as JSON columns via [Converters]. */
+/**
+ * Cached listing. Lists (images, amenities, history) are stored as JSON columns via [Converters]. [ownerId] is set on
+ * listings published by a user of this device (never replaced or removed by a market refresh), null otherwise.
+ */
 @Entity(
     tableName = "properties",
     indices = [
         Index(value = ["region_id", "created_at"]),
         Index(value = ["region_id", "rent_amount"]),
         Index(value = ["type"]),
+        Index(value = ["owner_id"]),
     ],
 )
 data class PropertyEntity(
@@ -47,6 +51,8 @@ data class PropertyEntity(
     @ColumnInfo(name = "price_history") val priceHistory: List<PricePointColumns>,
     @ColumnInfo(name = "sample_data") val sampleData: Boolean,
     @ColumnInfo(name = "fetched_at") val fetchedAtMillis: Long,
+    @ColumnInfo(name = "owner_id") val ownerId: String? = null,
+    @ColumnInfo(name = "deposit_amount") val depositAmount: Long? = null,
 )
 
 data class AgentColumns(

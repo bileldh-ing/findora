@@ -65,6 +65,12 @@ class AppViewModel
                     }
                 }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+        /** The signed-in (or guest) user's id, provided to the UI as LocalViewerId. */
+        val viewerId: StateFlow<String?> =
+            auth.session
+                .map { it?.userId }
+                .stateIn(viewModelScope, SharingStarted.Eagerly, auth.session.value?.userId)
+
         init {
             viewModelScope.launch { mutableLaunchState.value = LaunchState.Ready(resolveStart()) }
         }

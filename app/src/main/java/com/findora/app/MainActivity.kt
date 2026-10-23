@@ -17,6 +17,9 @@ import com.findora.app.core.designsystem.component.LocalReducedMotionOverride
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.core.ui.LocalDisplayPreferences
+import com.findora.app.core.ui.LocalViewerId
+import com.findora.app.core.ui.adaptive.ProvideAdaptiveLayout
+import com.findora.app.core.ui.adaptive.rememberFoldPosture
 import com.findora.app.navigation.AppViewModel
 import com.findora.app.navigation.FindoraNavHost
 import com.findora.app.navigation.FindoraRoute
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             val launchState by appViewModel.launchState.collectAsStateWithLifecycle()
             val displayPreferences by appViewModel.displayPreferences.collectAsStateWithLifecycle()
             val reducedMotionOverride by appViewModel.reducedMotionOverride.collectAsStateWithLifecycle()
+            val viewerId by appViewModel.viewerId.collectAsStateWithLifecycle()
+            val fold = rememberFoldPosture(this)
             val darkTheme =
                 when (themeMode) {
                     ThemeMode.System -> isSystemInDarkTheme()
@@ -59,13 +64,16 @@ class MainActivity : AppCompatActivity() {
             CompositionLocalProvider(
                 LocalDisplayPreferences provides displayPreferences,
                 LocalReducedMotionOverride provides reducedMotionOverride,
+                LocalViewerId provides viewerId,
             ) {
                 FindoraTheme(darkTheme = darkTheme) {
                     (launchState as? LaunchState.Ready)?.let { ready ->
                         // A listing link is honoured only for a restored session going straight to the app. It is
                         // dropped behind the biometric lock or on Welcome, so a link can never skip the route guard.
                         if (ready.startDestination != FindoraRoute.Main) intent?.data = null
-                        FindoraNavHost(startDestination = ready.startDestination)
+                        ProvideAdaptiveLayout(fold = fold) {
+                            FindoraNavHost(startDestination = ready.startDestination)
+                        }
                     }
                 }
             }

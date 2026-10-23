@@ -52,6 +52,8 @@ fun FindoraTextField(
     trailing: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     fieldTag: String? = null,
+    minLines: Int = 1,
+    supportingText: String? = null,
 ) {
     val colors = FindoraTheme.colors
     Column(modifier = modifier.fillMaxWidth()) {
@@ -65,7 +67,8 @@ fun FindoraTextField(
             value = value,
             onValueChange = onValueChange,
             enabled = enabled,
-            singleLine = true,
+            singleLine = minLines == 1,
+            minLines = minLines,
             isError = error != null,
             textStyle = FindoraTheme.typography.body,
             leadingIcon = leadingIcon?.let { icon -> { Icon(icon, contentDescription = null) } },
@@ -111,6 +114,13 @@ fun FindoraTextField(
                 text = error,
                 style = FindoraTheme.typography.caption,
                 color = colors.error,
+                modifier = Modifier.padding(top = FindoraTheme.spacing.xxs, start = FindoraTheme.spacing.xs),
+            )
+        } else if (supportingText != null) {
+            Text(
+                text = supportingText,
+                style = FindoraTheme.typography.caption,
+                color = colors.onSurfaceMuted,
                 modifier = Modifier.padding(top = FindoraTheme.spacing.xxs, start = FindoraTheme.spacing.xs),
             )
         }

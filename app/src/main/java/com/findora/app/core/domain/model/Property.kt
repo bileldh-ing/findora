@@ -3,7 +3,10 @@ package com.findora.app.core.domain.model
 import androidx.compose.runtime.Immutable
 import java.time.Instant
 
-/** A rental listing. Seed listings are fictional sample data ([isSampleData]). */
+/**
+ * A rental listing. Seed listings are fictional sample data ([isSampleData]). A listing published on this device by
+ * one of its users carries that user's id in [ownerId] (null for market listings) and may state a [deposit].
+ */
 @Immutable
 data class Property(
     val id: String,
@@ -33,6 +36,11 @@ data class Property(
     val createdAt: Instant,
     val priceHistory: List<PricePoint>,
     val isSampleData: Boolean,
+    val ownerId: String? = null,
+    val deposit: Money? = null,
 ) {
     val coverImage: PropertyImage get() = images.first()
+
+    /** True when [viewerId] published this listing ("Listed by you"). */
+    fun isListedBy(viewerId: String?): Boolean = ownerId != null && ownerId == viewerId
 }

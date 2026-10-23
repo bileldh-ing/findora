@@ -99,12 +99,14 @@ fun PropertyCard(
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     val price = rentPerMonthText(property.rent, locale)
     val rating = String.format(locale, "%.1f", property.rating)
+    val listedByYou = property.isListedBy(LocalViewerId.current)
     val summary =
         buildString {
             // TalkBack reads a currency-formatted amount ("₹10,000") rather than the design's "10.000/ Month".
             val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
             append(stringResource(R.string.card_description, property.title, property.locality, spokenPrice, rating))
             if (property.verified) append(' ').append(stringResource(R.string.card_verified))
+            if (listedByYou) append(' ').append(stringResource(R.string.card_listed_by_you)).append('.')
             if (matchPercent != null) append(' ').append(stringResource(R.string.match_badge, matchPercent)).append('.')
             if (isFavorite) append(' ').append(stringResource(R.string.card_saved))
         }
@@ -170,7 +172,13 @@ fun PropertyCard(
                     ),
                 ),
         )
-        CardOverlay(property = property, price = price, rating = rating, matchPercent = matchPercent)
+        CardOverlay(
+            property = property,
+            price = price,
+            rating = rating,
+            matchPercent = matchPercent,
+            listedByYou = listedByYou,
+        )
         HeartButton(
             isFavorite = isFavorite,
             onClick = onToggleFavorite,
@@ -229,6 +237,7 @@ private fun CardOverlay(
     price: String,
     rating: String,
     matchPercent: Int?,
+    listedByYou: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val onPhoto = FindoraTheme.colors.onPhoto
@@ -257,15 +266,34 @@ private fun CardOverlay(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             GlassChip {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        FindoraIcons.Star,
-                        contentDescription = null,
-                        tint = FindoraTheme.colors.star,
-                        modifier = Modifier.size(StarSize),
+                if (property.reviewsCount == 0) {
+                    // A listing published on the device has no reviews yet: "New" instead of a 0.0 rating.
+                    Text(
+                        text = stringResource(R.string.card_new),
+                        style = FindoraTheme.typography.label,
+                        color = onPhoto,
                     )
-                    Spacer(Modifier.width(FindoraTheme.spacing.xxs))
-                    Text(text = rating, style = FindoraTheme.typography.label, color = onPhoto)
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            FindoraIcons.Star,
+                            contentDescription = null,
+                            tint = FindoraTheme.colors.star,
+                            modifier = Modifier.size(StarSize),
+                        )
+                        Spacer(Modifier.width(FindoraTheme.spacing.xxs))
+                        Text(text = rating, style = FindoraTheme.typography.label, color = onPhoto)
+                    }
+                }
+            }
+            if (listedByYou) {
+                GlassChip(modifier = Modifier.testTag("listedByYou_${property.id}")) {
+                    Text(
+                        text = stringResource(R.string.card_listed_by_you),
+                        style = FindoraTheme.typography.label,
+                        color = onPhoto,
+                        maxLines = 1,
+                    )
                 }
             }
             if (matchPercent != null) MatchBadge(percent = matchPercent)

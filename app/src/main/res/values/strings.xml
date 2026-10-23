@@ -747,4 +747,159 @@
     <string name="widget_open_app">Open Findora</string>
     <string name="widget_preview_row">Georgie House · ₹10,000</string>
     <string name="widget_preview_viewing">Next viewing: Tue 14:00</string>
+
+    <!-- Phase 7B: owner mode and adaptive layouts -->
+    <string name="action_close">Close</string>
+    <string name="action_create_account">Create account</string>
+    <string name="action_not_now">Not now</string>
+    <string name="card_listed_by_you">Listed by you</string>
+    <string name="card_new">New</string>
+    <string name="detail_deposit">Deposit: %1$s</string>
+    <string name="detail_listed_by_you_body">This is your listing. Other people using Findora on this device can see, save and enquire about it.</string>
+    <string name="owner_amenities_hint">Select everything the home offers.</string>
+    <string name="owner_basics_hint">What are you renting out?</string>
+    <string name="owner_char_count">%1$d / %2$d</string>
+    <string name="owner_chart_title">Views, last 14 days</string>
+    <string name="owner_confirm_delete_body">The listing, its photos and its stats are removed from this device. This cannot be undone.</string>
+    <string name="owner_confirm_delete_title">Delete “%1$s”?</string>
+    <string name="owner_confirm_pause_body">It disappears from Home, search and the map until you resume it. Its stats are kept.</string>
+    <string name="owner_confirm_pause_title">Pause “%1$s”?</string>
+    <string name="owner_confirm_unpublish_body">It goes back to your drafts and is hidden from everyone until you publish it again.</string>
+    <string name="owner_confirm_unpublish_title">Unpublish “%1$s”?</string>
+    <string name="owner_dashboard_title">Owner dashboard</string>
+    <string name="owner_deposit_hint">Optional. At most %1$d months of rent.</string>
+    <string name="owner_draft_saved">Draft saved</string>
+    <string name="owner_edit">Edit</string>
+    <string name="owner_edit_listing">Edit listing</string>
+    <string name="owner_edit_step">Edit %1$s</string>
+    <string name="owner_empty">You have no listings yet. List your first property: it takes a few minutes and your draft is saved as you go.</string>
+    <string name="owner_enquiries">Enquiries</string>
+    <string name="owner_enquiries_empty">No enquiries yet. Messages about your listings appear here.</string>
+    <string name="owner_enquiries_note">Messages people on this device sent about your listings. They are answered by Findora’s automated demo assistant.</string>
+    <string name="owner_error_choose">Choose one</string>
+    <string name="owner_error_deposit_high">A deposit can be at most %1$d months of rent</string>
+    <string name="owner_error_max_chars">At most %1$d characters</string>
+    <string name="owner_error_min_chars">At least %1$d characters</string>
+    <string name="owner_error_photos">Add at least one photo</string>
+    <string name="owner_error_photos_max">At most %1$d photos</string>
+    <string name="owner_error_pin">Tap the map or place the pin at the neighbourhood</string>
+    <string name="owner_error_pin_outside">The pin must be inside %1$s</string>
+    <string name="owner_error_range">Enter a number from %1$d to %2$d</string>
+    <string name="owner_error_rent">Enter a monthly rent above 0</string>
+    <string name="owner_error_required">Required</string>
+    <string name="owner_field_area">Area (m²)</string>
+    <string name="owner_field_bathrooms">Bathrooms</string>
+    <string name="owner_field_bedrooms">Bedrooms</string>
+    <string name="owner_field_currency">Currency</string>
+    <string name="owner_field_deposit">Deposit (%1$s)</string>
+    <string name="owner_field_description">Description</string>
+    <string name="owner_field_floor">Floor</string>
+    <string name="owner_field_furnished">Furnished</string>
+    <string name="owner_field_locality">Neighbourhood</string>
+    <string name="owner_field_parking">Parking</string>
+    <string name="owner_field_pets">Pets allowed</string>
+    <string name="owner_field_pin">Exact location</string>
+    <string name="owner_field_region">Region</string>
+    <string name="owner_field_rent">Monthly rent (%1$s)</string>
+    <string name="owner_field_title">Title</string>
+    <string name="owner_field_type">Property type</string>
+    <string name="owner_guest_message">Listing a property needs an account, so your listings stay yours. Create one in a minute; your browsing is kept.</string>
+    <string name="owner_list_property">List a property</string>
+    <string name="owner_listing_not_found">This listing is not available.</string>
+    <string name="owner_location_hint">Only the neighbourhood and the pin are shown to others.</string>
+    <string name="owner_map_cd">Map. Tap to place the listing pin.</string>
+    <string name="owner_mode">Owner mode</string>
+    <string name="owner_mode_summary">List your property and follow its views, saves and enquiries</string>
+    <string name="owner_msg_deleted">Listing deleted</string>
+    <string name="owner_msg_paused">Listing paused</string>
+    <string name="owner_msg_published">Listing published</string>
+    <string name="owner_msg_unpublished">Listing moved to drafts</string>
+    <string name="owner_my_listings">My listings</string>
+    <string name="owner_next">Next</string>
+    <string name="owner_pause">Pause</string>
+    <string name="owner_photo_cd">Photo %1$d of %2$d</string>
+    <string name="owner_photo_cd_cover">Photo %1$d of %2$d, cover photo</string>
+    <string name="owner_photo_cover">Cover</string>
+    <string name="owner_photo_make_cover">Make cover photo</string>
+    <string name="owner_photo_move_earlier">Move earlier</string>
+    <string name="owner_photo_move_later">Move later</string>
+    <string name="owner_photo_remove">Remove photo</string>
+    <string name="owner_photos_full">Photo limit reached</string>
+    <string name="owner_photos_hint">Up to %1$d photos. They are resized and stored only on this device; the first one is the cover.</string>
+    <string name="owner_photos_over_limit">Only %1$d photos fit in a listing; the extra ones were left out.</string>
+    <string name="owner_pin_at">Pin at %1$s</string>
+    <string name="owner_pin_at_locality">Place the pin at %1$s</string>
+    <string name="owner_pin_none">No pin yet</string>
+    <string name="owner_preview_hint">This is how your listing will look. Tap a section to change it.</string>
+    <string name="owner_publish">Publish</string>
+    <string name="owner_publish_changes">Publish changes</string>
+    <string name="owner_resume">Resume</string>
+    <string name="owner_saving">Saving…</string>
+    <string name="owner_section">Owner</string>
+    <string name="owner_status_draft">Draft</string>
+    <string name="owner_status_paused">Paused</string>
+    <string name="owner_status_published">Published</string>
+    <string name="owner_step_amenities">Amenities</string>
+    <string name="owner_step_basics">Basics</string>
+    <string name="owner_step_details">Details</string>
+    <string name="owner_step_location">Location</string>
+    <string name="owner_step_of">Step %1$d of %2$d · %3$s</string>
+    <string name="owner_step_photos">Photos</string>
+    <string name="owner_step_preview">Preview</string>
+    <string name="owner_step_price">Price</string>
+    <string name="owner_unpublish">Unpublish</string>
+    <string name="owner_unpublished_changes">Edits not published yet</string>
+    <string name="owner_untitled">Untitled draft</string>
+    <string name="owner_view_listing">View listing</string>
+    <string name="owner_wizard_title_new">List your property</string>
+    <string name="pane_empty_conversation">Choose a conversation to read it here.</string>
+    <string name="pane_empty_listing">Choose a home to see it here.</string>
+    <plurals name="owner_add_photos">
+        <item quantity="one">Add photos (%1$d left)</item>
+        <item quantity="other">Add photos (%1$d left)</item>
+    </plurals>
+    <plurals name="owner_amenities_count">
+        <item quantity="one">%1$d amenity</item>
+        <item quantity="other">%1$d amenities</item>
+    </plurals>
+    <plurals name="owner_bathrooms">
+        <item quantity="one">%1$d bathroom</item>
+        <item quantity="other">%1$d bathrooms</item>
+    </plurals>
+    <plurals name="owner_bedrooms">
+        <item quantity="one">%1$d bedroom</item>
+        <item quantity="other">%1$d bedrooms</item>
+    </plurals>
+    <plurals name="owner_chart_cd">
+        <item quantity="one">%1$d view in the last %2$d days. Busiest day: %3$s with %4$d.</item>
+        <item quantity="other">%1$d views in the last %2$d days. Busiest day: %3$s with %4$d.</item>
+    </plurals>
+    <plurals name="owner_chart_cd_empty">
+        <item quantity="one">No views in the last %1$d day.</item>
+        <item quantity="other">No views in the last %1$d days.</item>
+    </plurals>
+    <plurals name="owner_photos_count">
+        <item quantity="one">%1$d photo</item>
+        <item quantity="other">%1$d photos</item>
+    </plurals>
+    <plurals name="owner_photos_failed">
+        <item quantity="one">%1$d item could not be added as a photo.</item>
+        <item quantity="other">%1$d items could not be added as photos.</item>
+    </plurals>
+    <plurals name="owner_photos_importing">
+        <item quantity="one">Adding %1$d photo…</item>
+        <item quantity="other">Adding %1$d photos…</item>
+    </plurals>
+    <plurals name="owner_stat_enquiries">
+        <item quantity="one">%1$d enquiry</item>
+        <item quantity="other">%1$d enquiries</item>
+    </plurals>
+    <plurals name="owner_stat_saves">
+        <item quantity="one">%1$d save</item>
+        <item quantity="other">%1$d saves</item>
+    </plurals>
+    <plurals name="owner_stat_views">
+        <item quantity="one">%1$d view</item>
+        <item quantity="other">%1$d views</item>
+    </plurals>
 </resources>

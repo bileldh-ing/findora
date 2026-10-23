@@ -49,6 +49,12 @@ abstract class AccountDao {
     @Query("DELETE FROM notifications WHERE user_id = :userId")
     protected abstract suspend fun deleteNotifications(userId: String)
 
+    @Query("DELETE FROM properties WHERE owner_id = :userId")
+    protected abstract suspend fun deletePublishedListings(userId: String)
+
+    @Query("DELETE FROM owner_listings WHERE owner_id = :userId")
+    protected abstract suspend fun deleteOwnerListings(userId: String)
+
     @Query("DELETE FROM users WHERE id = :userId")
     protected abstract suspend fun deleteUser(userId: String): Int
 
@@ -80,5 +86,7 @@ abstract class AccountDao {
         deleteMessages(userId)
         deleteConversations(userId)
         deleteNotifications(userId)
+        deletePublishedListings(userId)
+        deleteOwnerListings(userId)
     }
 }
