@@ -49,11 +49,11 @@ import com.findora.app.core.domain.chat.ChatAgent
 import com.findora.app.core.domain.chat.ChatMessage
 import com.findora.app.core.domain.chat.DeliveryStatus
 import com.findora.app.core.domain.chat.QuickReply
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
 import com.findora.app.core.ui.TimeLabels
 import com.findora.app.core.ui.appLocale
+import com.findora.app.core.ui.rentPerMonthText
 import java.time.ZoneId
 
 private val BubbleMaxWidth = 300.dp
@@ -263,7 +263,7 @@ fun ListingAttachmentCard(
 ) {
     val openLabel = stringResource(R.string.chat_open_listing)
     val locale = appLocale()
-    val price = property?.let { PriceFormatter.formatPerMonth(it.rent, locale, stringResource(R.string.per_month)) }
+    val price = property?.let { rentPerMonthText(it.rent, locale) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =

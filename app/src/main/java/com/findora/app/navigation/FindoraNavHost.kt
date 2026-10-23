@@ -16,6 +16,7 @@ import androidx.navigation.navDeepLink
 import com.findora.app.BuildConfig
 import com.findora.app.core.ui.LocalNavAnimatedVisibilityScope
 import com.findora.app.core.ui.LocalSharedTransitionScope
+import com.findora.app.feature.about.AboutRoute
 import com.findora.app.feature.auth.forgot.ForgotPasswordRoute
 import com.findora.app.feature.auth.login.LoginRoute
 import com.findora.app.feature.auth.signup.SignUpRoute
@@ -114,6 +115,7 @@ private fun FindoraGraph(
                     onSignedOut = toWelcome,
                     onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
                     onOpenViewings = { navController.navigate(FindoraRoute.Viewings) },
+                    onOpenAbout = { navController.navigate(FindoraRoute.About) },
                     onOpenMatchQuiz = { navController.navigate(FindoraRoute.MatchQuiz) },
                     onOpenDreamMatch = { navController.navigate(FindoraRoute.DreamMatch) },
                     onOpenCompare = { navController.navigate(FindoraRoute.Compare) },
@@ -197,6 +199,9 @@ private fun FindoraGraph(
                 onFinish = { navController.popBackStack() },
                 onClose = { navController.popBackStack() },
             )
+        }
+        composable<FindoraRoute.About> {
+            AboutRoute(onBack = { navController.popBackStack() })
         }
         composable<FindoraRoute.Viewings> {
             ViewingsRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)

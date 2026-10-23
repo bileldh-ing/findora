@@ -4,7 +4,10 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import app.cash.turbine.test
 import com.findora.app.core.domain.model.AppLanguage
 import com.findora.app.core.domain.model.AppSettings
+import com.findora.app.core.domain.model.AreaUnit
 import com.findora.app.core.domain.model.Currency
+import com.findora.app.core.domain.model.NotificationToggle
+import com.findora.app.core.domain.model.ReduceMotion
 import com.findora.app.core.domain.model.ThemeMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -55,6 +58,16 @@ class DataStoreSettingsRepositoryTest {
                 assertEquals(true, awaitItem().onboardingCompleted)
                 repo.setBiometricLockEnabled(true)
                 assertEquals(true, awaitItem().biometricLockEnabled)
+                repo.setAreaUnit(AreaUnit.Imperial)
+                assertEquals(AreaUnit.Imperial, awaitItem().areaUnit)
+                repo.setReduceMotion(ReduceMotion.On)
+                assertEquals(ReduceMotion.On, awaitItem().reduceMotion)
+                repo.setNotificationEnabled(NotificationToggle.Messages, false)
+                assertEquals(false, awaitItem().messageNotifications)
+                repo.setNotificationEnabled(NotificationToggle.ViewingReminders, false)
+                assertEquals(false, awaitItem().viewingReminderNotifications)
+                repo.setNotificationEnabled(NotificationToggle.InApp, false)
+                assertEquals(false, awaitItem().inAppNotifications)
                 cancelAndIgnoreRemainingEvents()
             }
         }

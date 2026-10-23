@@ -17,7 +17,28 @@ enum class AppLanguage(
     }
 }
 
-/** User-facing settings persisted in DataStore. A null [currencyOverride] means "use the region's currency". */
+/** How areas are shown. Listings store square metres; imperial converts to square feet for display only. */
+enum class AreaUnit { Metric, Imperial }
+
+/** Reduce-motion override: follow the system animator scale, or force decorative motion off or on. */
+enum class ReduceMotion { System, On, Off }
+
+/** Which notifications the user wants. Each one is respected by the code that would post it. */
+enum class NotificationToggle {
+    /** System notifications for agent replies. */
+    Messages,
+
+    /** System notifications an hour before a viewing. */
+    ViewingReminders,
+
+    /** New entries in the in-app notifications center. */
+    InApp,
+}
+
+/**
+ * User-facing settings persisted in DataStore. A null [currencyOverride] means "show each listing in its own
+ * currency"; a value converts every displayed rent to that currency with the bundled indicative rates.
+ */
 data class AppSettings(
     val themeMode: ThemeMode = ThemeMode.System,
     val language: AppLanguage = AppLanguage.System,
@@ -25,4 +46,16 @@ data class AppSettings(
     val currencyOverride: Currency? = null,
     val onboardingCompleted: Boolean = false,
     val biometricLockEnabled: Boolean = false,
-)
+    val areaUnit: AreaUnit = AreaUnit.Metric,
+    val reduceMotion: ReduceMotion = ReduceMotion.System,
+    val messageNotifications: Boolean = true,
+    val viewingReminderNotifications: Boolean = true,
+    val inAppNotifications: Boolean = true,
+) {
+    fun isEnabled(toggle: NotificationToggle): Boolean =
+        when (toggle) {
+            NotificationToggle.Messages -> messageNotifications
+            NotificationToggle.ViewingReminders -> viewingReminderNotifications
+            NotificationToggle.InApp -> inAppNotifications
+        }
+}

@@ -62,12 +62,12 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.compare.CompareMetric
 import com.findora.app.core.domain.compare.CompareRow
 import com.findora.app.core.domain.compare.CompareTable
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
-import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
 import com.findora.app.core.ui.StateMessage
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.rentText
 import com.findora.app.feature.home.labelRes
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -399,7 +399,7 @@ private fun MetricRow(
     properties: List<Property>,
     modifier: Modifier = Modifier,
 ) {
-    val label = stringResource(row.metric.labelRes())
+    val label = row.metric.label()
     val bestLabel = stringResource(R.string.compare_best)
     TableRow(label = label, modifier = modifier.testTag("compareRow_${row.metric.name}")) {
         row.values.forEachIndexed { index, value ->
@@ -502,17 +502,9 @@ private fun formatValue(
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     if (value == null) return stringResource(R.string.compare_unknown)
     return when (metric) {
-        CompareMetric.Price -> PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
-        CompareMetric.Area -> stringResource(R.string.detail_area_value, value.roundToInt())
-        CompareMetric.PricePerSqm ->
-            stringResource(
-                R.string.compare_price_sqm_value,
-                PriceFormatter.format(
-                    Money(value.roundToInt().toLong(), property.rent.currency),
-                    locale,
-                    PriceStyle.Localized,
-                ),
-            )
+        CompareMetric.Price -> rentText(property.rent, PriceStyle.Localized, locale)
+        CompareMetric.Area -> areaText(value.roundToInt(), locale = locale)
+        CompareMetric.PricePerSqm -> pricePerAreaText(value, property.rent.currency, locale)
         CompareMetric.Rating -> String.format(locale, "%.1f", value)
         CompareMetric.Match -> stringResource(R.string.compare_match_value, value.roundToInt())
         CompareMetric.Bedrooms, CompareMetric.Bathrooms, CompareMetric.Amenities ->

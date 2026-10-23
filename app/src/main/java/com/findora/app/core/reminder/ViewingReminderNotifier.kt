@@ -15,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.findora.app.MainActivity
 import com.findora.app.R
+import com.findora.app.core.locale.LocalizedContext
 import com.findora.app.navigation.PropertyDeepLink
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -39,6 +40,7 @@ class AndroidViewingReminderNotifier
     @Inject
     constructor(
         @ApplicationContext private val context: Context,
+        private val localized: LocalizedContext,
     ) : ViewingReminderNotifier {
         private val manager = NotificationManagerCompat.from(context)
 
@@ -51,9 +53,9 @@ class AndroidViewingReminderNotifier
                 NotificationCompat
                     .Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_stat_viewing)
-                    .setContentTitle(context.getString(R.string.reminder_title))
+                    .setContentTitle(localized.get().getString(R.string.reminder_title))
                     .setContentText(
-                        context.getString(R.string.reminder_body, reminder.propertyTitle, reminder.timeText),
+                        localized.get().getString(R.string.reminder_body, reminder.propertyTitle, reminder.timeText),
                     ).setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setAutoCancel(true)
@@ -75,9 +77,9 @@ class AndroidViewingReminderNotifier
             val channel =
                 NotificationChannel(
                     CHANNEL_ID,
-                    context.getString(R.string.reminder_channel_name),
+                    localized.get().getString(R.string.reminder_channel_name),
                     NotificationManager.IMPORTANCE_DEFAULT,
-                ).apply { description = context.getString(R.string.reminder_channel_description) }
+                ).apply { description = localized.get().getString(R.string.reminder_channel_description) }
             manager.createNotificationChannel(channel)
         }
 

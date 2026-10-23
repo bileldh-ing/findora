@@ -1,0 +1,12 @@
+{
+ "asOf": "2026-10-23",
+ "base": "USD",
+ "source": "ExchangeRate-API open access (open.er-api.com), daily reference rates",
+ "rates": {
+  "USD": "1",
+  "EUR": "0.891529",
+  "INR": "94.901331",
+  "TND": "2.998732",
+  "AED": "3.6725"
+ }
+}

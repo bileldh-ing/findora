@@ -143,7 +143,6 @@
     <string name="filter_bedrooms">Bedrooms</string>
     <string name="filter_bathrooms">Bathrooms</string>
     <string name="filter_area">Area</string>
-    <string name="filter_area_value">%1$d–%2$d m² (%3$d–%4$d sq ft)</string>
     <string name="filter_range_value">%1$s – %2$s</string>
     <string name="filter_any">Any</string>
     <string name="filter_at_least">%1$d+</string>
@@ -213,7 +212,7 @@
     <string name="map_empty_area">No homes in this area</string>
     <string name="map_region_switcher">Region</string>
     <string name="map_card_specs">Beds %1$d · Baths %2$d · %3$s</string>
-    <string name="map_card_specs_cd">Bedrooms: %1$d, bathrooms: %2$d, area: %3$s square metres</string>
+    <string name="map_card_specs_cd">Bedrooms: %1$d, bathrooms: %2$d, area: %3$s</string>
     <string name="map_marker_action">Show %1$s, %2$s</string>
     <plurals name="map_homes_count">
         <item quantity="one">%1$d home</item>
@@ -248,7 +247,6 @@
     <string name="detail_bedrooms">Bedrooms</string>
     <string name="detail_bathrooms">Bathrooms</string>
     <string name="detail_area">Area</string>
-    <string name="detail_area_value">%1$d m²</string>
     <string name="detail_floor">Floor</string>
     <string name="detail_floor_ground">Ground</string>
     <string name="detail_agent">Listing agent</string>
@@ -598,7 +596,7 @@
     <string name="agent_reply_parking_no">There is no dedicated parking with this home.</string>
     <string name="agent_reply_furnished_yes">It comes furnished.</string>
     <string name="agent_reply_furnished_no">It is rented unfurnished.</string>
-    <string name="agent_reply_size">It has %1$s, %2$s and %3$d m² of living space.</string>
+    <string name="agent_reply_size">It has %1$s, %2$s and %3$s of living space.</string>
     <string name="agent_reply_thanks">You’re welcome! Let me know if anything else comes up.</string>
     <string name="agent_reply_help">I can tell you about availability, the rent, viewing times, pets, parking, furnishing and the size of the home. What would you like to know?</string>
     <string name="agent_reply_listing_gone">This listing is no longer on Findora, so I can’t share details about it here.</string>
@@ -627,5 +625,78 @@
     <plurals name="chat_unread_cd">
         <item quantity="one">%1$d unread message</item>
         <item quantity="other">%1$d unread messages</item>
+    </plurals>
+
+    <!-- Phase 6C: settings (language, currency, units, notifications, accessibility, privacy and data), About -->
+    <string name="area_value_sqm">%1$s m²</string>
+    <string name="area_value_sqft">%1$s sq ft</string>
+    <string name="settings_language_units">Language and units</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system">System default</string>
+    <string name="settings_currency">Display currency</string>
+    <string name="currency_listing">Listing currency</string>
+    <string name="currency_option">%1$s · %2$s</string>
+    <string name="settings_currency_note_listing">Prices are shown in each listing\'s own currency.</string>
+    <string name="settings_rates_note">Indicative rates as of %1$s. Converted prices are marked ≈ and the agent\'s price in the listing currency is what counts.</string>
+    <string name="settings_rates_unavailable">Exchange rates are unavailable, so prices stay in each listing\'s currency.</string>
+    <string name="settings_area_unit">Area unit</string>
+    <string name="area_unit_metric">Square metres (m²)</string>
+    <string name="area_unit_imperial">Square feet (sq ft)</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="notify_messages">Messages</string>
+    <string name="notify_messages_summary">Agent replies while the chat is closed</string>
+    <string name="notify_reminders">Viewing reminders</string>
+    <string name="notify_reminders_summary">An hour before each viewing</string>
+    <string name="notify_in_app">In-app notifications</string>
+    <string name="notify_in_app_summary">New entries in the notifications center</string>
+    <string name="notify_system_settings">System notification settings</string>
+    <string name="settings_accessibility">Accessibility</string>
+    <string name="reduce_motion">Reduce motion</string>
+    <string name="reduce_motion_system">System</string>
+    <string name="reduce_motion_on">On</string>
+    <string name="reduce_motion_off">Off</string>
+    <string name="reduce_motion_summary">Skips decorative animations such as photo zooms, entrances and count-ups. System follows Android\'s Remove animations setting.</string>
+    <string name="text_size_title">Text size</string>
+    <string name="text_size_preview">Bright two-bedroom apartment, five minutes from the park.</string>
+    <string name="text_size_note">Findora follows your system font size, currently %1$d%%. Change it in Android Settings, Display.</string>
+    <string name="settings_privacy">Privacy and data</string>
+    <string name="clear_search_history">Clear search history</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="clear_cache_summary">Photos and map tiles download again when needed</string>
+    <string name="export_data">Export my data</string>
+    <string name="export_data_summary">A JSON file with your profile, favourites, viewings and chats</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="settings_msg_history_cleared">Search history cleared</string>
+    <string name="settings_msg_cache_cleared">Cache cleared</string>
+    <string name="settings_msg_export_saved">Your data was exported</string>
+    <string name="settings_msg_export_failed">The export could not be saved. Try another location.</string>
+    <string name="about_title">About Findora</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">Findora is a portfolio rental app. Listings, agents and their replies are sample data that stay on your device.</string>
+    <string name="about_rates_title">Exchange rates</string>
+    <string name="about_rates_body">Converted prices use a bundled table of indicative rates as of %1$s (%2$s). They are not updated online.</string>
+    <string name="about_map_title">Map data</string>
+    <string name="about_map_body">Map tiles and data: %1$s, available under the %2$s.</string>
+    <string name="about_photos_title">Listing photos</string>
+    <string name="about_photos_body">Photos of the sample listings come from %1$s under the %2$s. The places pictured are not the listed properties.</string>
+    <string name="about_libraries_title">Open-source libraries</string>
+    <string name="about_library_summary">%1$s · %2$s</string>
+    <string name="compare_row_price_sqft">Price per sq ft</string>
+    <string name="compare_price_sqft_value">%1$s/sq ft</string>
+    <string name="afford_currency_note">Amounts here are in %1$s, the listing\'s currency, so enter your income in %1$s. In your display currency the rent is %2$s a month.</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_french" translatable="false">Français</string>
+    <string name="language_arabic" translatable="false">العربية</string>
+    <plurals name="area_spoken_sqm">
+        <item quantity="one">%1$s square metre</item>
+        <item quantity="other">%1$s square metres</item>
+    </plurals>
+    <plurals name="area_spoken_sqft">
+        <item quantity="one">%1$s square foot</item>
+        <item quantity="other">%1$s square feet</item>
+    </plurals>
+    <plurals name="about_photo_count">
+        <item quantity="one">%1$d photo</item>
+        <item quantity="other">%1$d photos</item>
     </plurals>
 </resources>

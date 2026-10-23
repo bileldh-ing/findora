@@ -2,9 +2,12 @@ package com.findora.app.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.findora.app.core.domain.format.DisplayPreferences
+import com.findora.app.core.domain.model.ReduceMotion
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.SettingsRepository
+import com.findora.app.core.domain.usecase.ObserveDisplayPreferences
 import com.findora.app.core.security.BiometricAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +40,7 @@ class AppViewModel
         private val auth: AuthRepository,
         private val settings: SettingsRepository,
         private val biometric: BiometricAvailability,
+        displayPreferences: ObserveDisplayPreferences,
     ) : ViewModel() {
         private val mutableLaunchState = MutableStateFlow<LaunchState>(LaunchState.Loading)
         val launchState: StateFlow<LaunchState> = mutableLaunchState.asStateFlow()
@@ -45,6 +49,21 @@ class AppViewModel
             settings.settings
                 .map { it.themeMode }
                 .stateIn(viewModelScope, SharingStarted.Eagerly, ThemeMode.System)
+
+        /** Display currency and area unit, provided to the whole UI through LocalDisplayPreferences. */
+        val displayPreferences: StateFlow<DisplayPreferences> =
+            displayPreferences().stateIn(viewModelScope, SharingStarted.Eagerly, DisplayPreferences())
+
+        /** The reduce-motion override: null follows the system. */
+        val reducedMotionOverride: StateFlow<Boolean?> =
+            settings.settings
+                .map {
+                    when (it.reduceMotion) {
+                        ReduceMotion.System -> null
+                        ReduceMotion.On -> true
+                        ReduceMotion.Off -> false
+                    }
+                }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
         init {
             viewModelScope.launch { mutableLaunchState.value = LaunchState.Ready(resolveStart()) }

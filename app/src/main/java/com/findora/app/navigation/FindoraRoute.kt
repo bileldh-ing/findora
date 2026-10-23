@@ -76,6 +76,10 @@ sealed interface FindoraRoute {
     @Serializable
     data object Notifications : FindoraRoute
 
+    /** Version, licences, photo credits and map attribution (from Settings). */
+    @Serializable
+    data object About : FindoraRoute
+
     /** Debug-only catalogue of every design-system component. */
     @Serializable
     data object DesignSystem : FindoraRoute

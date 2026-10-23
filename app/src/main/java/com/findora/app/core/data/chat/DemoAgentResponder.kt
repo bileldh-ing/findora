@@ -9,12 +9,15 @@ import com.findora.app.core.domain.chat.AgentReplyFormatter
 import com.findora.app.core.domain.chat.AgentReplyRequest
 import com.findora.app.core.domain.chat.AgentResponder
 import com.findora.app.core.domain.chat.Conversation
+import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.notification.NewNotification
 import com.findora.app.core.domain.notification.NotificationKind
 import com.findora.app.core.domain.repository.ChatRepository
 import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
+import com.findora.app.core.domain.repository.SettingsRepository
 import com.findora.app.core.domain.repository.ViewingRepository
+import com.findora.app.core.domain.usecase.ObserveDisplayPreferences
 import com.findora.app.core.domain.viewing.ViewingSlotGenerator
 import com.findora.app.core.notification.ChatNotification
 import com.findora.app.core.notification.ChatNotifier
@@ -51,7 +54,8 @@ data class AgentTiming(
  * The on-device demo agent. After the user sends a message it marks it delivered, then read, shows "typing"
  * for a while and stores the [AgentReplyEngine]'s answer. Messages of one thread are answered in order. When the
  * thread is not on screen the reply also lands in the notifications center and, if allowed, as a system
- * notification on the Messages channel. Runs in the application scope, so leaving the screen does not lose it.
+ * notification on the Messages channel; each is skipped when its toggle is off in Settings. Runs in the
+ * application scope, so leaving the screen does not lose it.
  */
 @Singleton
 class DemoAgentResponder
@@ -69,6 +73,8 @@ class DemoAgentResponder
         private val clock: AppClock,
         private val zone: ZoneId,
         private val timing: AgentTiming,
+        private val settings: SettingsRepository,
+        private val displayPreferences: ObserveDisplayPreferences,
         @ApplicationScope private val scope: CoroutineScope,
     ) : AgentResponder {
         private val typingIds = MutableStateFlow<Set<String>>(emptySet())
@@ -139,7 +145,7 @@ class DemoAgentResponder
                     ),
                 )
             delay(engine.typingDelay(reply).toMillis())
-            return formatter.format(reply, zone)
+            return formatter.format(reply, zone, displayPreferences().first())
         }
 
         private suspend fun deliver(
@@ -150,19 +156,24 @@ class DemoAgentResponder
                 chats.markConversationRead(conversation.userId, conversation.id)
                 return
             }
-            notifications.add(
-                conversation.userId,
-                NewNotification(
-                    kind = NotificationKind.NewMessage,
-                    subject = conversation.agent.name,
-                    propertyId = conversation.propertyId,
-                    preview = body,
-                    conversationId = conversation.id,
-                ),
-            )
-            notifier.post(
-                ChatNotification(conversation.id, conversation.agent.name, conversation.propertyTitle, body),
-            )
+            val prefs = settings.settings.first()
+            if (prefs.isEnabled(NotificationToggle.InApp)) {
+                notifications.add(
+                    conversation.userId,
+                    NewNotification(
+                        kind = NotificationKind.NewMessage,
+                        subject = conversation.agent.name,
+                        propertyId = conversation.propertyId,
+                        preview = body,
+                        conversationId = conversation.id,
+                    ),
+                )
+            }
+            if (prefs.isEnabled(NotificationToggle.Messages)) {
+                notifier.post(
+                    ChatNotification(conversation.id, conversation.agent.name, conversation.propertyTitle, body),
+                )
+            }
         }
 
         private fun lockFor(conversationId: String): Mutex =

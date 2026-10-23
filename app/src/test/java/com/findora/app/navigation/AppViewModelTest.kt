@@ -2,8 +2,10 @@ package com.findora.app.navigation
 
 import com.findora.app.core.domain.model.AppSettings
 import com.findora.app.core.domain.model.Session
+import com.findora.app.core.domain.usecase.ObserveDisplayPreferences
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeBiometricAvailability
+import com.findora.app.core.testing.FakeReferenceDataRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
@@ -25,7 +27,12 @@ class AppViewModelTest {
     ): LaunchState {
         val auth = FakeAuthRepository().apply { restoredSession = session }
         val settings = FakeSettingsRepository(AppSettings(biometricLockEnabled = biometricLock))
-        return AppViewModel(auth, settings, FakeBiometricAvailability(canAuthenticate)).launchState.value
+        return AppViewModel(
+            auth,
+            settings,
+            FakeBiometricAvailability(canAuthenticate),
+            ObserveDisplayPreferences(settings, FakeReferenceDataRepository()),
+        ).launchState.value
     }
 
     @Test

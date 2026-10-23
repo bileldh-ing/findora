@@ -38,8 +38,8 @@ android {
         applicationId = "com.findora.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 5
-        versionName = "0.5.0"
+        versionCode = 7
+        versionName = "0.7.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
@@ -102,6 +102,12 @@ android {
         // MigrationTestHelper reads exported schemas from the app's assets; Robolectric unit tests only
         // see the variant's merged assets, so the schemas ride along in debug builds (never in release).
         getByName("debug").assets.srcDir(file("schemas"))
+    }
+
+    bundle {
+        // The language is picked inside the app (per-app locales), so every language must ship in the base APK:
+        // with language splits, Play would only install the device language and French or Arabic would be missing.
+        language { enableSplit = false }
     }
 
     packaging {
@@ -203,6 +209,7 @@ kover {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)

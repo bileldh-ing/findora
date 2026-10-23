@@ -47,11 +47,14 @@ import com.findora.app.core.designsystem.component.TextLink
 import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.domain.format.DisplayMoney
 import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Amenity
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.Property
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.displayMoney
 import com.findora.app.feature.home.labelRes
 import java.util.Locale
 import kotlin.math.roundToLong
@@ -107,7 +110,7 @@ fun SummarySection(
             Spacer(Modifier.width(FindoraTheme.spacing.xxs))
             Text(property.locality, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onSurfaceMuted)
         }
-        CountUpPrice(money = property.rent, locale = locale)
+        CountUpPrice(display = displayMoney(property.rent), locale = locale)
         Row(verticalAlignment = Alignment.CenterVertically) {
             RatingRow(rating = property.rating, reviews = property.reviewsCount, locale = locale)
             Spacer(Modifier.weight(1f))
@@ -119,11 +122,12 @@ fun SummarySection(
 /** The rent animates from zero on first display (skipped with reduced motion); TalkBack reads the final amount. */
 @Composable
 private fun CountUpPrice(
-    money: Money,
+    display: DisplayMoney,
     locale: Locale,
     modifier: Modifier = Modifier,
 ) {
     val reduceMotion = rememberReducedMotion()
+    val money = display.money
     val target = money.amount.toFloat()
     val animated = remember(money) { Animatable(if (reduceMotion) target else 0f) }
     LaunchedEffect(money, reduceMotion) {
@@ -135,8 +139,11 @@ private fun CountUpPrice(
     }
     val shown = Money(animated.value.roundToLong().coerceIn(0L, money.amount), money.currency)
     val finalText =
-        stringResource(R.string.detail_price_per_month, PriceFormatter.format(money, locale, PriceStyle.Localized))
-    val shownText = PriceFormatter.format(shown, locale, PriceStyle.Localized)
+        stringResource(
+            R.string.detail_price_per_month,
+            PriceFormatter.formatDisplay(display, locale, PriceStyle.Localized),
+        )
+    val shownText = PriceFormatter.formatDisplay(DisplayMoney(shown, display.approximate), locale, PriceStyle.Localized)
     Text(
         text = stringResource(R.string.detail_price_per_month, shownText),
         style = FindoraTheme.typography.title,
@@ -226,7 +233,7 @@ fun SpecsRow(
         SpecItem(FindoraIcons.Bath, property.bathrooms.toString(), baths, Modifier.weight(1f))
         SpecItem(
             FindoraIcons.Area,
-            stringResource(R.string.detail_area_value, property.areaSqm),
+            areaText(property.areaSqm),
             stringResource(R.string.detail_area),
             Modifier.weight(1f),
         )

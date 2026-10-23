@@ -50,6 +50,8 @@ Compose:
       - LocalFindoraMotion
       - LocalSharedTransitionScope
       - LocalNavAnimatedVisibilityScope
+      - LocalDisplayPreferences
+      - LocalReducedMotionOverride
   ModifierMissing:
     active: true
   ViewModelForwarding:

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
+    <!-- Every user-facing string ships in English, French and Arabic: a missing translation or a hardcoded
+         layout string fails the build (warningsAsErrors already covers HardcodedText; stated for clarity). -->
+    <issue id="MissingTranslation" severity="fatal" />
+    <issue id="HardcodedText" severity="error" />
     <!-- The adaptive launcher icon stays in mipmap-anydpi-v26: aapt2 rejects an
          unqualified anydpi adaptive-icon, so the v26 qualifier is required. -->
     <issue id="ObsoleteSdkInt">

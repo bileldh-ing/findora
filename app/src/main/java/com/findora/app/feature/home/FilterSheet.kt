@@ -33,18 +33,19 @@ import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.component.SwitchRow
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Amenity
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.ListingBounds
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.SortOrder
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.rentText
 import java.util.Locale
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-private const val SQFT_PER_SQM = 10.7639
 private val BEDROOM_OPTIONS = listOf(1, 2, 3, 4)
 private val BATHROOM_OPTIONS = listOf(1, 2, 3)
 
@@ -89,8 +90,8 @@ fun FilterSheetContent(
                 text =
                     stringResource(
                         R.string.filter_range_value,
-                        PriceFormatter.format(Money(low, currency), locale),
-                        PriceFormatter.format(Money(high, currency), locale),
+                        rentText(Money(low, currency), PriceStyle.Design, locale),
+                        rentText(Money(high, currency), PriceStyle.Design, locale),
                     ),
                 style = FindoraTheme.typography.caption,
                 color = FindoraTheme.colors.onSurfaceMuted,
@@ -122,11 +123,9 @@ fun FilterSheetContent(
             Text(
                 text =
                     stringResource(
-                        R.string.filter_area_value,
-                        low,
-                        high,
-                        (low * SQFT_PER_SQM).roundToInt(),
-                        (high * SQFT_PER_SQM).roundToInt(),
+                        R.string.filter_range_value,
+                        areaText(low, locale = locale),
+                        areaText(high, locale = locale),
                     ),
                 style = FindoraTheme.typography.caption,
                 color = FindoraTheme.colors.onSurfaceMuted,

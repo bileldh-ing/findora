@@ -30,12 +30,15 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.findora.app.BuildConfig
 import com.findora.app.R
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.domain.format.DisplayPreferences
 import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.map.MapAreas
 import com.findora.app.core.domain.map.MapCluster
 import com.findora.app.core.domain.map.MapViewport
 import com.findora.app.core.domain.model.GeoPoint
 import com.findora.app.core.domain.model.Property
+import com.findora.app.core.image.CacheLocations
+import com.findora.app.core.ui.LocalDisplayPreferences
 import com.findora.app.feature.locations.CameraRequest
 import com.findora.app.feature.locations.MapUiEvent
 import com.findora.app.feature.locations.MapUiState
@@ -88,6 +91,7 @@ fun OsmListingsMap(
     val lifecycleOwner = LocalLifecycleOwner.current
     val density = LocalDensity.current.density
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
+    val display = LocalDisplayPreferences.current
     val colors = FindoraTheme.colors
     val currentOnEvent by rememberUpdatedState(onEvent)
     val tracker = remember { MapTracker() }
@@ -140,13 +144,13 @@ fun OsmListingsMap(
         mapView.invalidate()
     }
 
-    LaunchedEffect(mapView, bitmaps, state.clusters, state.selectedId, state.myLocation, locale) {
-        markerLayer.render(mapView, state, bitmaps, locale) { currentOnEvent(it) }
+    LaunchedEffect(mapView, bitmaps, state.clusters, state.selectedId, state.myLocation, locale, display) {
+        markerLayer.render(mapView, state, bitmaps, locale, display) { currentOnEvent(it) }
         mapView.invalidate()
     }
 
     val description = pluralStringResource(R.plurals.map_description, state.listings.size, state.listings.size)
-    val actions = markerActions(state.clusters, locale) { currentOnEvent(MapUiEvent.SelectCluster(it)) }
+    val actions = markerActions(state.clusters, locale, display) { currentOnEvent(MapUiEvent.SelectCluster(it)) }
     AndroidView(
         factory = { mapView },
         modifier =
@@ -163,6 +167,7 @@ fun OsmListingsMap(
 private fun markerActions(
     clusters: List<MapCluster<Property>>,
     locale: Locale,
+    display: DisplayPreferences,
     onSelect: (String) -> Unit,
 ): List<CustomAccessibilityAction> {
     val resources = LocalContext.current.resources
@@ -174,7 +179,7 @@ private fun markerActions(
                 resources.getString(
                     R.string.map_marker_action,
                     home.title,
-                    PriceFormatter.formatPerMonth(home.rent, locale, perMonth),
+                    PriceFormatter.formatDisplayPerMonth(display.display(home.rent), locale, perMonth),
                 )
             } else {
                 resources.getQuantityString(R.plurals.map_cluster_cd, cluster.size, cluster.size)
@@ -240,6 +245,7 @@ private fun FolderOverlay.render(
     state: MapUiState,
     bitmaps: MarkerBitmaps,
     locale: Locale,
+    display: DisplayPreferences,
     onEvent: (MapUiEvent) -> Unit,
 ) {
     items.clear()
@@ -259,7 +265,7 @@ private fun FolderOverlay.render(
         .forEach { cluster ->
             val selected = cluster.isSingle && cluster.key == state.selectedId
             add(
-                clusterMarker(mapView, cluster, selected, bitmaps, locale) {
+                clusterMarker(mapView, cluster, selected, bitmaps, locale, display) {
                     onEvent(
                         if (cluster.isSingle) {
                             MapUiEvent.SelectMarker(
@@ -280,13 +286,15 @@ private fun clusterMarker(
     selected: Boolean,
     bitmaps: MarkerBitmaps,
     locale: Locale,
+    display: DisplayPreferences,
     onClick: () -> Unit,
 ): Marker =
     Marker(mapView).apply {
         position = cluster.center.toOsm()
         if (cluster.isSingle) {
             // The bitmap is one left-to-right run, so the RTL isolation marks are not needed (or drawable).
-            val price = PriceFormatter.format(cluster.items.first().rent, locale).filterNot { it == LRI || it == PDI }
+            val rent = display.display(cluster.items.first().rent)
+            val price = PriceFormatter.formatDisplay(rent, locale).filterNot { it == LRI || it == PDI }
             icon = BitmapDrawable(mapView.resources, bitmaps.pricePill(price, selected))
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             title = cluster.items.first().title
@@ -306,9 +314,9 @@ private fun createMapView(context: Context): MapView {
     val configuration = Configuration.getInstance()
     configuration.load(context, context.getSharedPreferences("osmdroid", Context.MODE_PRIVATE))
     configuration.userAgentValue = BuildConfig.APPLICATION_ID
-    val base = File(context.cacheDir, "osmdroid")
+    val base = File(context.cacheDir, CacheLocations.MAP_BASE)
     configuration.osmdroidBasePath = base
-    configuration.osmdroidTileCache = File(base, "tiles")
+    configuration.osmdroidTileCache = File(base, CacheLocations.MAP_TILES)
     configuration.tileFileSystemCacheMaxBytes = TILE_CACHE_MAX_BYTES
     configuration.tileFileSystemCacheTrimBytes = TILE_CACHE_TRIM_BYTES
     return MapView(context).apply {

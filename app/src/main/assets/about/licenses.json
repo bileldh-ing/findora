@@ -1,0 +1,556 @@
+{
+ "libraries": [
+  {
+   "name": "AndroidX (Core, AppCompat, Activity, Lifecycle, Navigation, Room, DataStore, Paging, WorkManager, Biometric, SplashScreen)",
+   "author": "The Android Open Source Project",
+   "license": "Apache License 2.0",
+   "url": "https://developer.android.com/jetpack/androidx"
+  },
+  {
+   "name": "Jetpack Compose and Material 3",
+   "author": "The Android Open Source Project",
+   "license": "Apache License 2.0",
+   "url": "https://developer.android.com/jetpack/compose"
+  },
+  {
+   "name": "Dagger Hilt",
+   "author": "Google",
+   "license": "Apache License 2.0",
+   "url": "https://dagger.dev/hilt/"
+  },
+  {
+   "name": "Kotlin standard library and kotlinx.coroutines",
+   "author": "JetBrains",
+   "license": "Apache License 2.0",
+   "url": "https://kotlinlang.org"
+  },
+  {
+   "name": "kotlinx.serialization",
+   "author": "JetBrains",
+   "license": "Apache License 2.0",
+   "url": "https://github.com/Kotlin/kotlinx.serialization"
+  },
+  {
+   "name": "Coil",
+   "author": "Coil Contributors",
+   "license": "Apache License 2.0",
+   "url": "https://coil-kt.github.io/coil/"
+  },
+  {
+   "name": "OkHttp and Okio",
+   "author": "Square, Inc.",
+   "license": "Apache License 2.0",
+   "url": "https://square.github.io/okhttp/"
+  },
+  {
+   "name": "osmdroid",
+   "author": "osmdroid contributors",
+   "license": "Apache License 2.0",
+   "url": "https://github.com/osmdroid/osmdroid"
+  },
+  {
+   "name": "Syne (font)",
+   "author": "Bonjour Monde",
+   "license": "SIL Open Font License 1.1",
+   "url": "https://fonts.google.com/specimen/Syne"
+  },
+  {
+   "name": "Poppins (font)",
+   "author": "Indian Type Foundry",
+   "license": "SIL Open Font License 1.1",
+   "url": "https://fonts.google.com/specimen/Poppins"
+  }
+ ],
+ "photos": {
+  "source": "Pexels",
+  "license": "Pexels License",
+  "licenseUrl": "https://www.pexels.com/license/",
+  "photographers": [
+   {
+    "name": "Max Vakhtbovych",
+    "url": "https://www.pexels.com/@artbovich/",
+    "photos": 83
+   },
+   {
+    "name": "Michael D Beckwith",
+    "url": "https://www.pexels.com/@michael-d-beckwith-2150568551/",
+    "photos": 6
+   },
+   {
+    "name": "Curtis Adams",
+    "url": "https://www.pexels.com/@curtis-adams-1694007/",
+    "photos": 4
+   },
+   {
+    "name": "Mateusz Pielech",
+    "url": "https://www.pexels.com/@mateusz-pielech-1032276948/",
+    "photos": 3
+   },
+   {
+    "name": "Nguyễn Thị Minh Nghi",
+    "url": "https://www.pexels.com/@gatranro/",
+    "photos": 3
+   },
+   {
+    "name": "Peter Vang",
+    "url": "https://www.pexels.com/@peter-vang-2157328093/",
+    "photos": 3
+   },
+   {
+    "name": "Pixabay",
+    "url": "https://www.pexels.com/@pixabay/",
+    "photos": 3
+   },
+   {
+    "name": "Alexey Demidov",
+    "url": "https://www.pexels.com/@alexeydemidov/",
+    "photos": 2
+   },
+   {
+    "name": "cami",
+    "url": "https://www.pexels.com/@casnafu/",
+    "photos": 2
+   },
+   {
+    "name": "Jan van der Wolf",
+    "url": "https://www.pexels.com/@jan-van-der-wolf-11680885/",
+    "photos": 2
+   },
+   {
+    "name": "Jonathan Borba",
+    "url": "https://www.pexels.com/@jonathanborba/",
+    "photos": 2
+   },
+   {
+    "name": "La Miko",
+    "url": "https://www.pexels.com/@lamiko/",
+    "photos": 2
+   },
+   {
+    "name": "Lisa Anna",
+    "url": "https://www.pexels.com/@lisa-anna-901356985/",
+    "photos": 2
+   },
+   {
+    "name": "Moussa Idrissi",
+    "url": "https://www.pexels.com/@mographe/",
+    "photos": 2
+   },
+   {
+    "name": "Ryan Lansdown",
+    "url": "https://www.pexels.com/@ryanlans/",
+    "photos": 2
+   },
+   {
+    "name": "shaza jocarlos",
+    "url": "https://www.pexels.com/@shaza-jocarlos-841367558/",
+    "photos": 2
+   },
+   {
+    "name": "TurnKey Apartments",
+    "url": "https://www.pexels.com/@turnkey-apartments-1077810297/",
+    "photos": 2
+   },
+   {
+    "name": "Алан Албегов",
+    "url": "https://www.pexels.com/@albeg/",
+    "photos": 2
+   },
+   {
+    "name": "aboodi vesakaran",
+    "url": "https://www.pexels.com/@aboodi/",
+    "photos": 1
+   },
+   {
+    "name": "Adrien Olichon",
+    "url": "https://www.pexels.com/@adrien-olichon-1257089/",
+    "photos": 1
+   },
+   {
+    "name": "Ahmet ÇÖTÜR",
+    "url": "https://www.pexels.com/@ahmetcotur/",
+    "photos": 1
+   },
+   {
+    "name": "aksinfo7 universe",
+    "url": "https://www.pexels.com/@aksinfo7/",
+    "photos": 1
+   },
+   {
+    "name": "Alan Quirván",
+    "url": "https://www.pexels.com/@quirva/",
+    "photos": 1
+   },
+   {
+    "name": "Alesha",
+    "url": "https://www.pexels.com/@alesha-260500796/",
+    "photos": 1
+   },
+   {
+    "name": "Alex Tyson",
+    "url": "https://www.pexels.com/@alex-tyson-919593032/",
+    "photos": 1
+   },
+   {
+    "name": "Alexander Mass",
+    "url": "https://www.pexels.com/@rebornfilmes/",
+    "photos": 1
+   },
+   {
+    "name": "Alexey K.",
+    "url": "https://www.pexels.com/@alexey-k-458081116/",
+    "photos": 1
+   },
+   {
+    "name": "Alpha En",
+    "url": "https://www.pexels.com/@alphaen/",
+    "photos": 1
+   },
+   {
+    "name": "Ana Miranda",
+    "url": "https://www.pexels.com/@thisisanamirandahi/",
+    "photos": 1
+   },
+   {
+    "name": "Andrea Davis",
+    "url": "https://www.pexels.com/@andreaedavis/",
+    "photos": 1
+   },
+   {
+    "name": "Andrew Levytskyi",
+    "url": "https://www.pexels.com/@andrew-levytskyi-84228/",
+    "photos": 1
+   },
+   {
+    "name": "Artem Makarov",
+    "url": "https://www.pexels.com/@artem-makarov-289670876/",
+    "photos": 1
+   },
+   {
+    "name": "Athena Sandrini",
+    "url": "https://www.pexels.com/@athena/",
+    "photos": 1
+   },
+   {
+    "name": "Beyza Kılıçdere",
+    "url": "https://www.pexels.com/@beyza-kilicdere-1855080990/",
+    "photos": 1
+   },
+   {
+    "name": "Bilal Mansuri",
+    "url": "https://www.pexels.com/@perqued/",
+    "photos": 1
+   },
+   {
+    "name": "Brandon Alexander",
+    "url": "https://www.pexels.com/@brandon-alexander-263452033/",
+    "photos": 1
+   },
+   {
+    "name": "cottonbro studio",
+    "url": "https://www.pexels.com/@cottonbro/",
+    "photos": 1
+   },
+   {
+    "name": "dada _design",
+    "url": "https://www.pexels.com/@dada-_design-240566386/",
+    "photos": 1
+   },
+   {
+    "name": "Damir K",
+    "url": "https://www.pexels.com/@damir/",
+    "photos": 1
+   },
+   {
+    "name": "DARKMODE CINEMA",
+    "url": "https://www.pexels.com/@darkmodecinema/",
+    "photos": 1
+   },
+   {
+    "name": "David McElwee",
+    "url": "https://www.pexels.com/@davidmcelwee/",
+    "photos": 1
+   },
+   {
+    "name": "David Underland",
+    "url": "https://www.pexels.com/@david-underland/",
+    "photos": 1
+   },
+   {
+    "name": "Diana ✨",
+    "url": "https://www.pexels.com/@didsss/",
+    "photos": 1
+   },
+   {
+    "name": "Dongdilac",
+    "url": "https://www.pexels.com/@dongdilac/",
+    "photos": 1
+   },
+   {
+    "name": "Doğan Alpaslan Demir",
+    "url": "https://www.pexels.com/@izafi/",
+    "photos": 1
+   },
+   {
+    "name": "Dylan Leagh",
+    "url": "https://www.pexels.com/@dylan-leagh-86004871/",
+    "photos": 1
+   },
+   {
+    "name": "Efrem Efre",
+    "url": "https://www.pexels.com/@efrem-efre-2786187/",
+    "photos": 1
+   },
+   {
+    "name": "Egor Komarov",
+    "url": "https://www.pexels.com/@egorkomarov/",
+    "photos": 1
+   },
+   {
+    "name": "Emre Gencer",
+    "url": "https://www.pexels.com/@reojuve/",
+    "photos": 1
+   },
+   {
+    "name": "Erdem ÖZDEMİR",
+    "url": "https://www.pexels.com/@erdemozdemir/",
+    "photos": 1
+   },
+   {
+    "name": "Erick Lie",
+    "url": "https://www.pexels.com/@erick-lie-2153031333/",
+    "photos": 1
+   },
+   {
+    "name": "Erik Mclean",
+    "url": "https://www.pexels.com/@introspectivedsgn/",
+    "photos": 1
+   },
+   {
+    "name": "Eva Bronzini",
+    "url": "https://www.pexels.com/@eva-bronzini/",
+    "photos": 1
+   },
+   {
+    "name": "Faruk Tokluoğlu",
+    "url": "https://www.pexels.com/@faruktokluoglu/",
+    "photos": 1
+   },
+   {
+    "name": "Fuat Ertuş",
+    "url": "https://www.pexels.com/@fuat-ertus-521355943/",
+    "photos": 1
+   },
+   {
+    "name": "Gagan Architects",
+    "url": "https://www.pexels.com/@gagan-architects-2158402383/",
+    "photos": 1
+   },
+   {
+    "name": "George Turmanidze",
+    "url": "https://www.pexels.com/@george-turmanidze-660738/",
+    "photos": 1
+   },
+   {
+    "name": "Gustavo Galeano Maz",
+    "url": "https://www.pexels.com/@fotografiagmazg/",
+    "photos": 1
+   },
+   {
+    "name": "Hatice Dikçe",
+    "url": "https://www.pexels.com/@hatice-dikce-2149369647/",
+    "photos": 1
+   },
+   {
+    "name": "Henry Acevedo",
+    "url": "https://www.pexels.com/@henry-acevedo-382866382/",
+    "photos": 1
+   },
+   {
+    "name": "Hert Niks",
+    "url": "https://www.pexels.com/@hert/",
+    "photos": 1
+   },
+   {
+    "name": "hi room",
+    "url": "https://www.pexels.com/@hiroom/",
+    "photos": 1
+   },
+   {
+    "name": "Jaycee300s",
+    "url": "https://www.pexels.com/@jaycee300s-3059779/",
+    "photos": 1
+   },
+   {
+    "name": "Juan Pablo Daniel",
+    "url": "https://www.pexels.com/@who0ne/",
+    "photos": 1
+   },
+   {
+    "name": "juliane Monari",
+    "url": "https://www.pexels.com/@julianemonarifotografia/",
+    "photos": 1
+   },
+   {
+    "name": "Karolina K",
+    "url": "https://www.pexels.com/@karolina-k-2149378526/",
+    "photos": 1
+   },
+   {
+    "name": "Keegan Checks",
+    "url": "https://www.pexels.com/@keeganjchecks/",
+    "photos": 1
+   },
+   {
+    "name": "Kirti Phadke",
+    "url": "https://www.pexels.com/@kirti-phadke-316475723/",
+    "photos": 1
+   },
+   {
+    "name": "Lisa Aßlaber",
+    "url": "https://www.pexels.com/@lazergraphy/",
+    "photos": 1
+   },
+   {
+    "name": "Maria Orlova",
+    "url": "https://www.pexels.com/@orlovamaria/",
+    "photos": 1
+   },
+   {
+    "name": "McFollis",
+    "url": "https://www.pexels.com/@thisismcfollis/",
+    "photos": 1
+   },
+   {
+    "name": "Mehul",
+    "url": "https://www.pexels.com/@mehul-2025855431/",
+    "photos": 1
+   },
+   {
+    "name": "Meral Oral",
+    "url": "https://www.pexels.com/@meraloral21/",
+    "photos": 1
+   },
+   {
+    "name": "Miguel Saddi Vitorino",
+    "url": "https://www.pexels.com/@arcanjosaddi/",
+    "photos": 1
+   },
+   {
+    "name": "ML Design Cuisines",
+    "url": "https://www.pexels.com/@ml-design-cuisines-806269471/",
+    "photos": 1
+   },
+   {
+    "name": "Muharrem Alper",
+    "url": "https://www.pexels.com/@muharrem-alper-428087426/",
+    "photos": 1
+   },
+   {
+    "name": "Nadin Sh",
+    "url": "https://www.pexels.com/@nadin-sh-78971847/",
+    "photos": 1
+   },
+   {
+    "name": "Peter Caretta",
+    "url": "https://www.pexels.com/@peter-caretta-2150230261/",
+    "photos": 1
+   },
+   {
+    "name": "Peter Xie",
+    "url": "https://www.pexels.com/@peter-xie-371876898/",
+    "photos": 1
+   },
+   {
+    "name": "Pew Nguyen",
+    "url": "https://www.pexels.com/@nguyendesigner/",
+    "photos": 1
+   },
+   {
+    "name": "Studio Pépite",
+    "url": "https://www.pexels.com/@studio-pepite-193599117/",
+    "photos": 1
+   },
+   {
+    "name": "Sue Hsu",
+    "url": "https://www.pexels.com/@sue-hsu-721218065/",
+    "photos": 1
+   },
+   {
+    "name": "Tranmautritam",
+    "url": "https://www.pexels.com/@tranmautritam/",
+    "photos": 1
+   },
+   {
+    "name": "Uday Ahir",
+    "url": "https://www.pexels.com/@aumgraphy/",
+    "photos": 1
+   },
+   {
+    "name": "Ulrike Häßler",
+    "url": "https://www.pexels.com/@ulrike-hassler-159445/",
+    "photos": 1
+   },
+   {
+    "name": "UMUT 🆁🅰🆆",
+    "url": "https://www.pexels.com/@umudicreative/",
+    "photos": 1
+   },
+   {
+    "name": "Valeri Mak",
+    "url": "https://www.pexels.com/@valeri-mak-2319397/",
+    "photos": 1
+   },
+   {
+    "name": "Viaceslav Kat",
+    "url": "https://www.pexels.com/@fotoaibe/",
+    "photos": 1
+   },
+   {
+    "name": "Viktoriia Kondratiuk",
+    "url": "https://www.pexels.com/@viktoriia-kondratiuk-458099300/",
+    "photos": 1
+   },
+   {
+    "name": "Vincent Rivaud",
+    "url": "https://www.pexels.com/@vince/",
+    "photos": 1
+   },
+   {
+    "name": "Waqas ilyas",
+    "url": "https://www.pexels.com/@waqas-ilyas-81841622/",
+    "photos": 1
+   },
+   {
+    "name": "Wilcle Nunes",
+    "url": "https://www.pexels.com/@wilcle-nunes-38713774/",
+    "photos": 1
+   },
+   {
+    "name": "Zaid Pathan",
+    "url": "https://www.pexels.com/@iamzaid/",
+    "photos": 1
+   },
+   {
+    "name": "Đậu Photograph",
+    "url": "https://www.pexels.com/@dauphotographer/",
+    "photos": 1
+   },
+   {
+    "name": "Екатерина Cтепаненко",
+    "url": "https://www.pexels.com/@c-914608489/",
+    "photos": 1
+   },
+   {
+    "name": "Наталья Умнова",
+    "url": "https://www.pexels.com/@591756069/",
+    "photos": 1
+   }
+  ]
+ },
+ "map": {
+  "attribution": "© OpenStreetMap contributors",
+  "license": "Open Database License (ODbL)",
+  "url": "https://www.openstreetmap.org/copyright"
+ }
+}

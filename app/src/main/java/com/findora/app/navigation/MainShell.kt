@@ -47,6 +47,7 @@ fun MainShell(
     onSignedOut: () -> Unit,
     onCreateAccount: () -> Unit,
     onOpenViewings: () -> Unit,
+    onOpenAbout: () -> Unit,
     onOpenMatchQuiz: () -> Unit,
     onOpenDreamMatch: () -> Unit,
     onOpenCompare: () -> Unit,
@@ -113,6 +114,7 @@ fun MainShell(
                     onCreateAccount = onCreateAccount,
                     onOpenViewings = onOpenViewings,
                     onOpenMatchPreferences = onOpenMatchQuiz,
+                    onOpenAbout = onOpenAbout,
                     onOpenDesignSystem = onOpenDesignSystem,
                     contentPadding = contentPadding,
                 )

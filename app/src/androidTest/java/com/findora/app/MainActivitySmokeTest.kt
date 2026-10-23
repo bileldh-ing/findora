@@ -2,6 +2,7 @@ package com.findora.app
 
 import android.Manifest
 import android.os.Build
+import android.os.SystemClock
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
@@ -102,8 +103,8 @@ class MainActivitySmokeTest {
                 Manifest.permission.POST_NOTIFICATIONS,
             )
         }
-        waitForTag("card_", prefix = true)
-        composeRule.onAllNodes(hasTestTagPrefix("card_"))[0].performClick()
+        val firstCard = waitForSettledFirstCard()
+        composeRule.onNodeWithTag(firstCard).performScrollTo().performClick()
         waitForTag("detailSchedule")
         composeRule.onNodeWithTag("detailSchedule").performClick()
         waitForTag("slot_", prefix = true)
@@ -119,6 +120,32 @@ class MainActivitySmokeTest {
         waitForTag("detailBack")
         composeRule.onNodeWithTag("detailBack").performClick()
         waitForTag("home")
+    }
+
+    /**
+     * After the quiz the Home grid re-filters and re-sorts by match, so the first card can change for a few frames.
+     * Waits until the same card has stayed first for [SETTLE_MILLIS] and returns its tag, so the tap targets a
+     * node that is no longer moving (tapping by index while the list settled made this test flaky).
+     */
+    private fun waitForSettledFirstCard(): String {
+        var first: String? = null
+        var since = 0L
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            val current =
+                composeRule
+                    .onAllNodes(hasTestTagPrefix("card_"))
+                    .fetchSemanticsNodes()
+                    .firstOrNull()
+                    ?.config
+                    ?.getOrNull(SemanticsProperties.TestTag)
+            val now = SystemClock.uptimeMillis()
+            if (current == null || current != first) {
+                first = current
+                since = now
+            }
+            current != null && now - since >= SETTLE_MILLIS
+        }
+        return checkNotNull(first)
     }
 
     private fun waitForTag(
@@ -137,5 +164,6 @@ class MainActivitySmokeTest {
     private companion object {
         const val TIMEOUT_MILLIS = 15_000L
         const val QUIZ_STEPS = 6
+        const val SETTLE_MILLIS = 750L
     }
 }

@@ -8,7 +8,10 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.findora.app.core.domain.model.AppLanguage
 import com.findora.app.core.domain.model.AppSettings
+import com.findora.app.core.domain.model.AreaUnit
 import com.findora.app.core.domain.model.Currency
+import com.findora.app.core.domain.model.NotificationToggle
+import com.findora.app.core.domain.model.ReduceMotion
 import com.findora.app.core.domain.model.RegionPack
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.core.domain.repository.SettingsRepository
@@ -20,7 +23,11 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Settings in Preferences DataStore. Unknown or corrupted values fall back to defaults instead of crashing. */
+/**
+ * Settings in Preferences DataStore. Unknown or corrupted values fall back to defaults instead of crashing.
+ * One setter per setting is what makes the class wider than the detekt default.
+ */
+@Suppress("TooManyFunctions")
 @Singleton
 class DataStoreSettingsRepository
     @Inject
@@ -56,6 +63,23 @@ class DataStoreSettingsRepository
             dataStore.edit { it[Keys.biometric] = enabled }
         }
 
+        override suspend fun setAreaUnit(unit: AreaUnit) = put(Keys.areaUnit, unit.name)
+
+        override suspend fun setReduceMotion(mode: ReduceMotion) = put(Keys.reduceMotion, mode.name)
+
+        override suspend fun setNotificationEnabled(
+            toggle: NotificationToggle,
+            enabled: Boolean,
+        ) {
+            val key =
+                when (toggle) {
+                    NotificationToggle.Messages -> Keys.notifyMessages
+                    NotificationToggle.ViewingReminders -> Keys.notifyReminders
+                    NotificationToggle.InApp -> Keys.notifyInApp
+                }
+            dataStore.edit { it[key] = enabled }
+        }
+
         private suspend fun put(
             key: Preferences.Key<String>,
             value: String,
@@ -74,6 +98,12 @@ class DataStoreSettingsRepository
                     },
                 onboardingCompleted = prefs[Keys.onboarding] ?: false,
                 biometricLockEnabled = prefs[Keys.biometric] ?: false,
+                areaUnit = AreaUnit.entries.firstOrNull { it.name == prefs[Keys.areaUnit] } ?: AreaUnit.Metric,
+                reduceMotion =
+                    ReduceMotion.entries.firstOrNull { it.name == prefs[Keys.reduceMotion] } ?: ReduceMotion.System,
+                messageNotifications = prefs[Keys.notifyMessages] ?: true,
+                viewingReminderNotifications = prefs[Keys.notifyReminders] ?: true,
+                inAppNotifications = prefs[Keys.notifyInApp] ?: true,
             )
 
         private object Keys {
@@ -83,5 +113,10 @@ class DataStoreSettingsRepository
             val currency = stringPreferencesKey("currency_override")
             val onboarding = booleanPreferencesKey("onboarding_completed")
             val biometric = booleanPreferencesKey("biometric_lock")
+            val areaUnit = stringPreferencesKey("area_unit")
+            val reduceMotion = stringPreferencesKey("reduce_motion")
+            val notifyMessages = booleanPreferencesKey("notify_messages")
+            val notifyReminders = booleanPreferencesKey("notify_viewing_reminders")
+            val notifyInApp = booleanPreferencesKey("notify_in_app")
         }
     }

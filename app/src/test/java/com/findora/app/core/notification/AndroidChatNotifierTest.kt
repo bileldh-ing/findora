@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
+import com.findora.app.core.locale.LocalizedContext
+import com.findora.app.core.testing.FakeLanguageController
 import com.findora.app.navigation.ChatDeepLink
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -23,7 +25,7 @@ import org.robolectric.annotation.ConscryptMode
 class AndroidChatNotifierTest {
     private val context: Application = ApplicationProvider.getApplicationContext()
     private val manager = context.getSystemService(NotificationManager::class.java)
-    private val notifier = AndroidChatNotifier(context)
+    private val notifier = AndroidChatNotifier(context, LocalizedContext(context, FakeLanguageController()))
     private val message = ChatNotification("conv-1", "Anu Thomas", "Georgie House", "Yes, it is still available.")
 
     @Test

@@ -8,6 +8,7 @@ import com.findora.app.core.domain.model.BookingError
 import com.findora.app.core.domain.model.BookingResult
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
+import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.TimeRange
 import com.findora.app.core.domain.model.Viewing
@@ -17,6 +18,7 @@ import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
+import com.findora.app.core.domain.repository.SettingsRepository
 import com.findora.app.core.domain.repository.ViewingReminderScheduler
 import com.findora.app.core.domain.repository.ViewingRepository
 import com.findora.app.core.domain.viewing.ViewingDay
@@ -134,6 +136,7 @@ class ScheduleViewingViewModel
         private val generator: ViewingSlotGenerator,
         private val clock: AppClock,
         private val zone: ZoneId,
+        private val settings: SettingsRepository,
     ) : ViewModel() {
         val propertyId: String = requireNotNull(savedStateHandle.get<String>(PROPERTY_ID_KEY)) { "propertyId missing" }
 
@@ -254,6 +257,8 @@ class ScheduleViewingViewModel
                 interactions.record(InteractionEvent(user, propertyId, InteractionType.ScheduledViewing, clock.now()))
             }
             bestEffort("add notification") {
+                // The notifications center entry respects the in-app toggle in Settings.
+                if (!settings.settings.first().isEnabled(NotificationToggle.InApp)) return@bestEffort
                 val title =
                     properties
                         .observeProperty(propertyId)

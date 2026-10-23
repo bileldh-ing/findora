@@ -46,11 +46,14 @@ import androidx.core.os.ConfigurationCompat
 import com.findora.app.R
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
+import com.findora.app.core.ui.areaText
 import com.findora.app.core.ui.match.MatchBadge
+import com.findora.app.core.ui.rentPerMonthText
+import com.findora.app.core.ui.rentText
+import com.findora.app.core.ui.spokenAreaText
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -151,12 +154,18 @@ fun MapListingCard(
 ) {
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     val colors = FindoraTheme.colors
-    val price = PriceFormatter.formatPerMonth(property.rent, locale, stringResource(R.string.per_month))
-    val area = String.format(locale, "%d", property.areaSqm)
-    val specs = stringResource(R.string.map_card_specs, property.bedrooms, property.bathrooms, "$area m²")
-    val spokenSpecs = stringResource(R.string.map_card_specs_cd, property.bedrooms, property.bathrooms, area)
+    val price = rentPerMonthText(property.rent, locale)
+    val specs =
+        stringResource(R.string.map_card_specs, property.bedrooms, property.bathrooms, areaText(property.areaSqm))
+    val spokenSpecs =
+        stringResource(
+            R.string.map_card_specs_cd,
+            property.bedrooms,
+            property.bathrooms,
+            spokenAreaText(property.areaSqm),
+        )
     val rating = String.format(locale, "%.1f", property.rating)
-    val spokenPrice = PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
+    val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
     val summary =
         buildString {
             append(stringResource(R.string.card_description, property.title, property.locality, spokenPrice, rating))

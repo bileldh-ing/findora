@@ -15,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.findora.app.MainActivity
 import com.findora.app.R
+import com.findora.app.core.locale.LocalizedContext
 import com.findora.app.navigation.ChatDeepLink
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -42,6 +43,7 @@ class AndroidChatNotifier
     @Inject
     constructor(
         @ApplicationContext private val context: Context,
+        private val localized: LocalizedContext,
     ) : ChatNotifier {
         private val manager = NotificationManagerCompat.from(context)
 
@@ -83,9 +85,9 @@ class AndroidChatNotifier
             val channel =
                 NotificationChannel(
                     CHANNEL_ID,
-                    context.getString(R.string.messages_channel_name),
+                    localized.get().getString(R.string.messages_channel_name),
                     NotificationManager.IMPORTANCE_HIGH,
-                ).apply { description = context.getString(R.string.messages_channel_description) }
+                ).apply { description = localized.get().getString(R.string.messages_channel_description) }
             manager.createNotificationChannel(channel)
         }
 

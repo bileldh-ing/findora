@@ -51,11 +51,13 @@ import com.findora.app.R
 import com.findora.app.core.designsystem.component.GlassChip
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.match.DeckEntry
 import com.findora.app.core.ui.ListingCoverPhoto
+import com.findora.app.core.ui.areaText
 import com.findora.app.core.ui.match.MatchBadge
+import com.findora.app.core.ui.rentPerMonthText
+import com.findora.app.core.ui.rentText
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.abs
@@ -89,7 +91,7 @@ fun DeckCard(
     val currentOnOpen by rememberUpdatedState(onOpen)
     val property = entry.property
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
-    val spokenPrice = PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
+    val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
     val rating = String.format(locale, "%.1f", property.rating)
     val summary =
         buildString {
@@ -196,7 +198,7 @@ fun DeckCardContent(
 ) {
     val property = entry.property
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
-    val price = PriceFormatter.formatPerMonth(property.rent, locale, stringResource(R.string.per_month))
+    val price = rentPerMonthText(property.rent, locale)
     val onPhoto = FindoraTheme.colors.onPhoto
     Box(modifier.fillMaxSize()) {
         ListingCoverPhoto(property, Modifier.fillMaxSize())
@@ -241,7 +243,7 @@ fun DeckCardContent(
                 Spec(FindoraIcons.MapPin, property.locality)
                 Spec(FindoraIcons.Bed, property.bedrooms.toString())
                 Spec(FindoraIcons.Bath, property.bathrooms.toString())
-                Spec(FindoraIcons.Area, stringResource(R.string.detail_area_value, property.areaSqm))
+                Spec(FindoraIcons.Area, areaText(property.areaSqm))
             }
         }
     }

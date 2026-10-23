@@ -5,12 +5,17 @@ import com.findora.app.core.domain.chat.AgentReply
 import com.findora.app.core.domain.chat.AgentReplyEngine
 import com.findora.app.core.domain.chat.AgentReplyFormatter
 import com.findora.app.core.domain.chat.DeliveryStatus
+import com.findora.app.core.domain.format.DisplayPreferences
+import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.notification.NotificationKind
 import com.findora.app.core.domain.repository.AuthRepository
+import com.findora.app.core.domain.usecase.ObserveDisplayPreferences
 import com.findora.app.core.domain.viewing.ViewingSlotGenerator
 import com.findora.app.core.testing.FakeChatRepository
 import com.findora.app.core.testing.FakeNotificationRepository
 import com.findora.app.core.testing.FakePropertyRepository
+import com.findora.app.core.testing.FakeReferenceDataRepository
+import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.FakeViewingRepository
 import com.findora.app.core.testing.RecordingChatNotifier
 import com.findora.app.core.testing.seedProperties
@@ -36,6 +41,7 @@ class DemoAgentResponderTest {
     private val notifier = RecordingChatNotifier()
     private val active = ActiveConversation()
     private val timing = AgentTiming(deliverMillis = 500, readMillis = 1_000)
+    private val settings = FakeSettingsRepository()
 
     /** Writes the parts' class names, so the tests can see what the engine decided. */
     private val formatter =
@@ -43,6 +49,7 @@ class DemoAgentResponderTest {
             override fun format(
                 reply: AgentReply,
                 zone: ZoneId,
+                display: DisplayPreferences,
             ): String = reply.parts.joinToString(" ") { it::class.simpleName.orEmpty() }
 
             override fun listingGone(): String = "gone"
@@ -62,6 +69,8 @@ class DemoAgentResponderTest {
             clock = { now },
             zone = zone,
             timing = timing,
+            settings = settings,
+            displayPreferences = ObserveDisplayPreferences(settings, FakeReferenceDataRepository()),
             scope = backgroundScope,
         )
 
@@ -159,6 +168,38 @@ class DemoAgentResponderTest {
                     .last()
                     .body,
             )
+        }
+
+    @Test
+    fun turnedOffNotificationsAreNotPostedNorListed() =
+        runTest {
+            settings.setNotificationEnabled(NotificationToggle.Messages, false)
+            settings.setNotificationEnabled(NotificationToggle.InApp, false)
+            val agent = responder()
+            val (thread, message) = send("Is it still available?")
+            agent.onUserMessage(guest, thread, message, "Is it still available?")
+            finishAgentWork()
+            // The reply itself is still stored; only the notifications are skipped.
+            assertEquals(
+                "Greeting Availability",
+                chats.messages.value
+                    .last()
+                    .body,
+            )
+            assertTrue(notifier.posted.isEmpty())
+            assertTrue(notifications.observeNotifications(guest).first().isEmpty())
+        }
+
+    @Test
+    fun messageNotificationsCanBeOffWhileTheCenterStillListsTheReply() =
+        runTest {
+            settings.setNotificationEnabled(NotificationToggle.Messages, false)
+            val agent = responder()
+            val (thread, message) = send("Is it still available?")
+            agent.onUserMessage(guest, thread, message, "Is it still available?")
+            finishAgentWork()
+            assertTrue(notifier.posted.isEmpty())
+            assertEquals(1, notifications.observeNotifications(guest).first().size)
         }
 
     private companion object {
