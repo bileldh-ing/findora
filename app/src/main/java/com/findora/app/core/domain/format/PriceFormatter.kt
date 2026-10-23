@@ -25,6 +25,9 @@ enum class PriceStyle {
 object PriceFormatter {
     const val DEFAULT_PERIOD_LABEL = "Month"
 
+    /** "≈" and a no-break space. */
+    const val APPROX = "\u2248\u00A0"
+
     private const val LRI = '\u2066'
     private const val PDI = '\u2069'
     private const val GROUP = 3
@@ -50,6 +53,24 @@ object PriceFormatter {
         periodLabel: String = DEFAULT_PERIOD_LABEL,
         style: PriceStyle = PriceStyle.Design,
     ): String = "${format(money, locale, style)}/ $periodLabel"
+
+    /** A displayed rent; a converted amount is prefixed with "≈" so it never reads as the listed price. */
+    fun formatDisplay(
+        display: DisplayMoney,
+        locale: Locale,
+        style: PriceStyle = PriceStyle.Design,
+    ): String {
+        val text = format(display.money, locale, style)
+        return if (display.approximate) "$APPROX$text" else text
+    }
+
+    /** "≈ 120/ Month" for a converted rent, "10.000/ Month" otherwise. */
+    fun formatDisplayPerMonth(
+        display: DisplayMoney,
+        locale: Locale,
+        periodLabel: String = DEFAULT_PERIOD_LABEL,
+        style: PriceStyle = PriceStyle.Design,
+    ): String = "${formatDisplay(display, locale, style)}/ $periodLabel"
 
     fun isRtl(locale: Locale): Boolean = locale.language in rtlLanguages
 

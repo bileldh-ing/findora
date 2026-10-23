@@ -12,10 +12,15 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.workDataOf
+import com.findora.app.core.domain.model.AppLanguage
+import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.Viewing
 import com.findora.app.core.domain.notification.NotificationKind
+import com.findora.app.core.locale.LocalizedContext
+import com.findora.app.core.testing.FakeLanguageController
 import com.findora.app.core.testing.FakeNotificationRepository
 import com.findora.app.core.testing.FakePropertyRepository
+import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.FakeViewingRepository
 import com.findora.app.core.testing.seedProperties
 import com.findora.app.navigation.PropertyDeepLink
@@ -43,7 +48,10 @@ class ViewingReminderWorkerTest {
     private val now = Instant.parse("2026-10-26T09:00:00Z")
     private val viewings = FakeViewingRepository { now }
     private val georgie = seedProperties.first { it.title == "Georgie House" }
-    private val notifier = AndroidViewingReminderNotifier(context)
+    private val language = FakeLanguageController()
+    private val localized = LocalizedContext(context, language)
+    private val notifier = AndroidViewingReminderNotifier(context, localized)
+    private val settings = FakeSettingsRepository()
     private val inApp = FakeNotificationRepository { now }
     private val notifications get() = shadowOf(context.getSystemService(NotificationManager::class.java))
 
@@ -69,6 +77,8 @@ class ViewingReminderWorkerTest {
                         inApp,
                         { now },
                         ZoneId.of("Africa/Tunis"),
+                        settings,
+                        localized,
                     )
             }
         val input = viewingId?.let { workDataOf(ViewingReminderWorker.KEY_VIEWING_ID to it) } ?: workDataOf()
@@ -142,4 +152,35 @@ class ViewingReminderWorkerTest {
         assertFalse(posted)
         assertTrue(notifications.allNotifications.isEmpty())
     }
+
+    @Test
+    fun turnedOffRemindersPostNothingButTheCenterStillListsThem() =
+        runTest {
+            settings.setNotificationEnabled(NotificationToggle.ViewingReminders, false)
+            val viewing = bookIn(Duration.ofHours(1))
+            assertEquals(ListenableWorker.Result.success(), worker(viewing.id).doWork())
+            assertTrue(notifications.allNotifications.isEmpty())
+            assertEquals(1, inApp.observeNotifications("ada").first().size)
+        }
+
+    @Test
+    fun turnedOffInAppNotificationsKeepTheCenterEmpty() =
+        runTest {
+            settings.setNotificationEnabled(NotificationToggle.InApp, false)
+            val viewing = bookIn(Duration.ofHours(1))
+            assertEquals(ListenableWorker.Result.success(), worker(viewing.id).doWork())
+            assertEquals(1, notifications.allNotifications.size)
+            assertTrue(inApp.observeNotifications("ada").first().isEmpty())
+        }
+
+    @Test
+    fun theReminderIsWrittenInTheLanguageChosenInSettings() =
+        runTest {
+            settings.setLanguage(AppLanguage.French)
+            language.language = AppLanguage.French
+            val viewing = bookIn(Duration.ofHours(1))
+            worker(viewing.id).doWork()
+            val posted = notifications.allNotifications.single()
+            assertEquals("Visite dans une heure", posted.extras.getString(NotificationCompat.EXTRA_TITLE))
+        }
 }

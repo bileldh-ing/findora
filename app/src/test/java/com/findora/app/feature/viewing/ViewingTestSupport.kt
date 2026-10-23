@@ -8,6 +8,7 @@ import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.viewing.ViewingSlotGenerator
+import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeNotificationRepository
 import com.findora.app.core.testing.FakePropertyRepository
@@ -33,6 +34,7 @@ class ViewingTestEnv(
     val interactions = RecordingInteractions()
     val notifications = FakeNotificationRepository { now }
     val properties: PropertyRepository = FakePropertyRepository()
+    val settings = FakeSettingsRepository()
     val georgie: Property = seedProperties.first { it.title == "Georgie House" }
 
     fun scheduleViewModel(id: String = georgie.id) =
@@ -47,6 +49,7 @@ class ViewingTestEnv(
             generator = ViewingSlotGenerator(clock, TUNIS),
             clock = clock,
             zone = TUNIS,
+            settings = settings,
         )
 
     fun viewingsViewModel() =

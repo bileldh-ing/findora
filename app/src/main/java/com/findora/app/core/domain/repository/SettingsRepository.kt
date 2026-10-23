@@ -2,7 +2,10 @@ package com.findora.app.core.domain.repository
 
 import com.findora.app.core.domain.model.AppLanguage
 import com.findora.app.core.domain.model.AppSettings
+import com.findora.app.core.domain.model.AreaUnit
 import com.findora.app.core.domain.model.Currency
+import com.findora.app.core.domain.model.NotificationToggle
+import com.findora.app.core.domain.model.ReduceMotion
 import com.findora.app.core.domain.model.ThemeMode
 import kotlinx.coroutines.flow.Flow
 
@@ -21,4 +24,13 @@ interface SettingsRepository {
 
     /** Ask for a biometric (or device credential) unlock before showing the app when a session is restored. */
     suspend fun setBiometricLockEnabled(enabled: Boolean)
+
+    suspend fun setAreaUnit(unit: AreaUnit)
+
+    suspend fun setReduceMotion(mode: ReduceMotion)
+
+    suspend fun setNotificationEnabled(
+        toggle: NotificationToggle,
+        enabled: Boolean,
+    )
 }
