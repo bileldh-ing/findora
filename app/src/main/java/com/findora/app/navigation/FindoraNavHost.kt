@@ -137,7 +137,7 @@ private fun FindoraGraph(
         }
         composable<FindoraRoute.MatchQuiz> {
             MatchQuizRoute(
-                onFinished = { navController.popBackStack() },
+                onFinish = { navController.popBackStack() },
                 onClose = { navController.popBackStack() },
             )
         }

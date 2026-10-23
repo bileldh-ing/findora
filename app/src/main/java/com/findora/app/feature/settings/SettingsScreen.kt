@@ -78,7 +78,8 @@ fun SettingsRoute(
 
 /**
  * Account and app settings. Only working controls are shown: viewings, match preferences (the quiz), theme,
- * biometric lock (when the device supports it), log out and delete account. [onOpenDesignSystem] is null in release builds, so that row disappears.
+ * biometric lock (when the device supports it), log out and delete account. [onOpenDesignSystem] is null in
+ * release builds, so that row disappears.
  */
 @Composable
 fun SettingsScreen(

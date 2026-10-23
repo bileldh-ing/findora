@@ -370,7 +370,7 @@
     <string name="match_title">Votre compatibilité</string>
     <string name="match_why">Pourquoi ce score ?</string>
     <string name="match_excluded">Il manque un indispensable : %1$s</string>
-    <string name="match_points">%1$d sur %2$d points</string>
+    <string name="match_points">Points : %1$d/%2$d</string>
     <string name="match_sheet_body">Chaque barre indique les points obtenus par un critère sur son poids.</string>
     <string name="match_factor_budget">Budget</string>
     <string name="match_factor_location">Emplacement</string>

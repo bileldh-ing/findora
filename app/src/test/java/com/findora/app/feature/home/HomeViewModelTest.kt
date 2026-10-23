@@ -1,6 +1,5 @@
 package com.findora.app.feature.home
 
-import androidx.paging.testing.asSnapshot
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.findora.app.core.data.repository.InMemoryHomeFilterRepository
@@ -240,12 +239,16 @@ class HomeViewModelTest {
             vm.listings.first()
             val pagedRequests = properties.requestedFilters.size
             vm.onEvent(HomeUiEvent.ApplyFilter(PropertyFilter(sort = SortOrder.BestMatch)))
-            val ranked = vm.listings.asSnapshot()
+            vm.listings.first()
+            // Ranked in memory by BestMatchRanking (covered in BestMatchRankingTest), not paged from the database.
             assertEquals(pagedRequests, properties.requestedFilters.size)
-            assertEquals(kerala.count { it.parking }, ranked.size)
-            assertTrue(ranked.all { it.parking })
-            val state = vm.state.value
-            val scores = ranked.map { state.matchScores.getValue(it.id) }
-            assertEquals(scores.sortedDescending(), scores)
+            vm.onEvent(HomeUiEvent.ApplyFilter(PropertyFilter(sort = SortOrder.Newest)))
+            vm.listings.first()
+            assertEquals(
+                SortOrder.Newest,
+                properties.requestedFilters
+                    .last()
+                    .second.sort,
+            )
         }
 }

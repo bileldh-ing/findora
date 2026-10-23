@@ -388,7 +388,7 @@
     <string name="match_title">نسبة تطابقك</string>
     <string name="match_why">لماذا هذا التطابق؟</string>
     <string name="match_excluded">ينقصه شرط أساسي: %1$s</string>
-    <string name="match_points">%1$d من %2$d نقطة</string>
+    <string name="match_points">النقاط: %1$d/%2$d</string>
     <string name="match_sheet_body">يُظهر كل شريط النقاط التي حصل عليها كل عامل من أصل وزنه.</string>
     <string name="match_factor_budget">الميزانية</string>
     <string name="match_factor_location">الموقع</string>

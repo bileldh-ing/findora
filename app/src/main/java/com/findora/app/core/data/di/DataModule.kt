@@ -96,7 +96,12 @@ abstract class DataBindingsModule {
 
     @Binds
     abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
+}
 
+/** The Best Match engine's preference profiles. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class MatchBindingsModule {
     @Binds
     abstract fun bindMatchProfileRepository(impl: DataStoreMatchProfileRepository): MatchProfileRepository
 }

@@ -106,7 +106,8 @@ class DataStoreMatchProfileRepositoryTest {
 
             store.edit {
                 it[stringPreferencesKey("match_profile_user-1")] =
-                    """{"version":2,"lifestyle":["quiet","astronaut"],"mustHaves":["pool","parking"],"types":["castle"]}"""
+                    """{"version":2,"lifestyle":["quiet","astronaut"],""" +
+                    """"mustHaves":["pool","parking"],"types":["castle"]}"""
             }
             assertEquals(
                 PreferenceProfile(lifestyle = setOf(LifestyleTag.Quiet), mustHaves = setOf(MustHave.Parking)),

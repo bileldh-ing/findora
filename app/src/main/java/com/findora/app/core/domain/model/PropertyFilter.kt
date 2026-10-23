@@ -76,12 +76,15 @@ data class PropertyFilter(
         return (type == null || property.type == type) &&
             (text.isEmpty() || property.title.contains(text, true) || property.locality.contains(text, true)) &&
             acceptsRanges(property) &&
-            (!furnishedOnly || property.furnished) &&
-            (!petFriendlyOnly || property.petFriendly) &&
-            (!parkingOnly || property.parking) &&
-            (!verifiedOnly || property.verified) &&
+            acceptsFlags(property) &&
             property.amenities.containsAll(amenities)
     }
+
+    private fun acceptsFlags(property: Property): Boolean =
+        (!furnishedOnly || property.furnished) &&
+            (!petFriendlyOnly || property.petFriendly) &&
+            (!parkingOnly || property.parking) &&
+            (!verifiedOnly || property.verified)
 
     private fun acceptsRanges(property: Property): Boolean {
         val rent = property.rent.amount

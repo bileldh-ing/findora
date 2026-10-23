@@ -70,19 +70,12 @@ internal object FactorScoring {
         profile: PreferenceProfile,
     ): Reason {
         val factor = MatchFactor.BudgetFit
-        val budget = profile.budget ?: return full(factor, ReasonLabel.NoBudget)
-        if (budget.currency != property.rent.currency) {
-            return Reason(factor, ReasonLabel.BudgetOtherCurrency, positive = true, points = factor.weight * HALF)
-        }
-        val rent = property.rent.amount
-        val points = budgetPoints(rent, budget)
+        val budget = profile.budget
         return when {
-            rent > budget.max -> {
-                val percentOver = ((rent - budget.max) * PERCENT / budget.max).toInt().coerceAtLeast(1)
-                reason(factor, ReasonLabel.OverBudget, points, value = percentOver)
-            }
-            budget.min != null && rent < budget.min -> reason(factor, ReasonLabel.BelowBudgetRange, points)
-            else -> reason(factor, ReasonLabel.WithinBudget, points)
+            budget == null -> full(factor, ReasonLabel.NoBudget)
+            budget.currency != property.rent.currency ->
+                Reason(factor, ReasonLabel.BudgetOtherCurrency, positive = true, points = factor.weight * HALF)
+            else -> budgetReason(property.rent.amount, budget, budgetPoints(property.rent.amount, budget))
         }
     }
 
@@ -91,47 +84,14 @@ internal object FactorScoring {
         profile: PreferenceProfile,
     ): Reason {
         val factor = MatchFactor.LocationOrCommute
-        if (profile.anchors.isEmpty()) return full(factor, ReasonLabel.NoLocation)
         val distances = profile.anchors.map { it to it.point.distanceKmTo(property.location) }
-        if (distances.all { (_, km) -> km > OTHER_REGION_KM }) {
-            return Reason(factor, ReasonLabel.LocationOtherRegion, positive = true, points = factor.weight * HALF)
+        return when {
+            distances.isEmpty() -> full(factor, ReasonLabel.NoLocation)
+            distances.all { (_, km) -> km > OTHER_REGION_KM } ->
+                Reason(factor, ReasonLabel.LocationOtherRegion, positive = true, points = factor.weight * HALF)
+            else -> nearestAnchorReason(property, distances)
         }
-        val (anchor, km) =
-            distances.maxWith(
-                compareBy<Pair<LocationAnchor, Double>> { (anchor, km) -> anchorShare(anchor, property, km) }
-                    .thenByDescending { (_, km) -> km },
-            )
-        val share = anchorShare(anchor, property, km)
-        val points = factor.weight * share
-        val kilometres = km.roundToInt().coerceAtLeast(1)
-        val label =
-            when (anchor.kind) {
-                LocationAnchor.Kind.Commute -> if (share >= HALF) ReasonLabel.ShortCommute else ReasonLabel.LongCommute
-                LocationAnchor.Kind.Neighbourhood ->
-                    when {
-                        anchor.name.equals(property.locality, ignoreCase = true) -> ReasonLabel.InPreferredArea
-                        share >= HALF -> ReasonLabel.NearPreferredArea
-                        else -> ReasonLabel.FarFromPreferredArea
-                    }
-            }
-        val value = if (label == ReasonLabel.InPreferredArea) null else kilometres
-        return reason(factor, label, points, value)
     }
-
-    private fun anchorShare(
-        anchor: LocationAnchor,
-        property: Property,
-        km: Double,
-    ): Double =
-        when (anchor.kind) {
-            LocationAnchor.Kind.Neighbourhood ->
-                if (anchor.name.equals(property.locality, ignoreCase = true)) {
-                    1.0
-                } else {
-                    linearShare(km, NEIGHBOURHOOD_NEAR_KM, NEIGHBOURHOOD_FAR_KM)
-                }
-            LocationAnchor.Kind.Commute -> linearShare(km, COMMUTE_NEAR_KM, COMMUTE_FAR_KM)
-        }
 
     fun size(
         property: Property,
@@ -154,16 +114,6 @@ internal object FactorScoring {
             }
         return reason(factor, label, beds + baths + type)
     }
-
-    private fun roomShare(
-        actual: Int,
-        wanted: Int?,
-    ): Double =
-        if (wanted == null || actual >= wanted) {
-            1.0
-        } else {
-            (1 - (wanted - actual) / ROOMS_SHORT_FOR_ZERO).coerceAtLeast(0.0)
-        }
 
     fun amenities(
         property: Property,
@@ -271,4 +221,70 @@ private fun linearShare(
         km <= near -> 1.0
         km >= far -> 0.0
         else -> (far - km) / (far - near)
+    }
+
+private fun budgetReason(
+    rent: Long,
+    budget: BudgetRange,
+    points: Double,
+): Reason {
+    val factor = MatchFactor.BudgetFit
+    return when {
+        rent > budget.max -> {
+            val percentOver = ((rent - budget.max) * PERCENT / budget.max).toInt().coerceAtLeast(1)
+            reason(factor, ReasonLabel.OverBudget, points, value = percentOver)
+        }
+        budget.min != null && rent < budget.min -> reason(factor, ReasonLabel.BelowBudgetRange, points)
+        else -> reason(factor, ReasonLabel.WithinBudget, points)
+    }
+}
+
+/** Scores location by the anchor the listing suits best (ties go to the closer anchor). */
+private fun nearestAnchorReason(
+    property: Property,
+    distances: List<Pair<LocationAnchor, Double>>,
+): Reason {
+    val factor = MatchFactor.LocationOrCommute
+    val (anchor, km) =
+        distances.maxWith(
+            compareBy<Pair<LocationAnchor, Double>> { (anchor, km) -> anchorShare(anchor, property, km) }
+                .thenByDescending { (_, km) -> km },
+        )
+    val share = anchorShare(anchor, property, km)
+    val inArea = anchor.kind == LocationAnchor.Kind.Neighbourhood && anchor.name.equals(property.locality, true)
+    val label =
+        when {
+            anchor.kind == LocationAnchor.Kind.Commute ->
+                if (share >= HALF) ReasonLabel.ShortCommute else ReasonLabel.LongCommute
+            inArea -> ReasonLabel.InPreferredArea
+            share >= HALF -> ReasonLabel.NearPreferredArea
+            else -> ReasonLabel.FarFromPreferredArea
+        }
+    val value = if (inArea) null else km.roundToInt().coerceAtLeast(1)
+    return reason(factor, label, factor.weight * share, value)
+}
+
+private fun anchorShare(
+    anchor: LocationAnchor,
+    property: Property,
+    km: Double,
+): Double =
+    when (anchor.kind) {
+        LocationAnchor.Kind.Neighbourhood ->
+            if (anchor.name.equals(property.locality, ignoreCase = true)) {
+                1.0
+            } else {
+                linearShare(km, NEIGHBOURHOOD_NEAR_KM, NEIGHBOURHOOD_FAR_KM)
+            }
+        LocationAnchor.Kind.Commute -> linearShare(km, COMMUTE_NEAR_KM, COMMUTE_FAR_KM)
+    }
+
+private fun roomShare(
+    actual: Int,
+    wanted: Int?,
+): Double =
+    if (wanted == null || actual >= wanted) {
+        1.0
+    } else {
+        (1 - (wanted - actual) / ROOMS_SHORT_FOR_ZERO).coerceAtLeast(0.0)
     }

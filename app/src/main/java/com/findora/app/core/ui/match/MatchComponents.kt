@@ -108,8 +108,8 @@ fun MatchRing(
         modifier =
             modifier
                 .size(size)
-                .clearAndSetSemantics { contentDescription = description }
-                .testTag("matchRing"),
+                .testTag("matchRing")
+                .clearAndSetSemantics { contentDescription = description },
     ) {
         Canvas(Modifier.size(size)) {
             val stroke = Stroke(width = RingStroke.toPx(), cap = StrokeCap.Round)
@@ -313,8 +313,8 @@ private fun FactorRow(
         modifier =
             modifier
                 .fillMaxWidth()
-                .clearAndSetSemantics { contentDescription = "$factor. $sentence. $points" }
-                .testTag("factor_${reason.factor.name}"),
+                .testTag("factor_${reason.factor.name}")
+                .clearAndSetSemantics { contentDescription = "$factor. $sentence. $points" },
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(

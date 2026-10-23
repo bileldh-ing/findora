@@ -61,7 +61,7 @@ class WhyThisMatchTest {
         val budget = match.reasons.first()
         compose
             .onNodeWithContentDescription(
-                "Budget. Within your budget. ${budget.points.roundToInt()} of 30 points",
+                "Budget. Within your budget. Points: ${budget.points.roundToInt()}/30",
             ).assertExists()
     }
 

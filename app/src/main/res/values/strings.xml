@@ -381,7 +381,7 @@
     <string name="match_title">Your match</string>
     <string name="match_why">Why this match?</string>
     <string name="match_excluded">Missing a must-have: %1$s</string>
-    <string name="match_points">%1$d of %2$d points</string>
+    <string name="match_points">Points: %1$d/%2$d</string>
     <string name="match_sheet_body">Each bar shows how many points a factor earned out of its weight.</string>
     <string name="match_factor_budget">Budget</string>
     <string name="match_factor_location">Location</string>

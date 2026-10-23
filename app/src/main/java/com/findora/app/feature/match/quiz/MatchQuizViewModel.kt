@@ -66,9 +66,10 @@ data class QuizDraft(
     ): PreferenceProfile {
         val ceiling = budgetMax ?: bounds?.maxRent
         val byName = localities.associateBy { it.name }
+        val answeredBudget = budgetMin != null || budgetMax != null
         return PreferenceProfile(
             budget =
-                if ((budgetMin != null || budgetMax != null) && ceiling != null && ceiling > 0) {
+                if (answeredBudget && ceiling != null && ceiling > 0) {
                     BudgetRange(budgetMin?.coerceAtMost(ceiling), ceiling, currency)
                 } else {
                     null

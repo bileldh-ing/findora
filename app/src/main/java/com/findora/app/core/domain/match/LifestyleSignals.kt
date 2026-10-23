@@ -13,23 +13,39 @@ object LifestyleSignals {
         tag: LifestyleTag,
         property: Property,
     ): Boolean {
-        val tags = property.tags.map { it.lowercase() }
-        val amenities = property.amenities.toSet()
-
-        fun hasTag(vararg words: String) = tags.any { text -> words.any { it in text } }
+        val listing = ListingSignals(property)
         return when (tag) {
-            LifestyleTag.Quiet -> hasTag("quiet", "gated") || Amenity.Garden in amenities
-            LifestyleTag.Family ->
-                hasTag("family", "school") || Amenity.PlayArea in amenities || property.bedrooms >= FAMILY_BEDROOMS
+            LifestyleTag.Quiet -> listing.hasTag("quiet", "gated") || listing.has(Amenity.Garden)
+            LifestyleTag.Family -> listing.suitsFamily()
             LifestyleTag.PetOwner -> property.petFriendly
-            LifestyleTag.RemoteWorker ->
-                Amenity.HomeOffice in amenities || (Amenity.Wifi in amenities && Amenity.PowerBackup in amenities)
-            LifestyleTag.Student -> hasTag("budget", "metro", "cafe") || property.type == PropertyType.Room
-            LifestyleTag.Nightlife -> hasTag("city living", "cafe", "mall", "market")
-            LifestyleTag.Nature ->
-                hasTag("park", "waterfront", "sea view") ||
-                    amenities.any { it == Amenity.Garden || it == Amenity.SeaView || it == Amenity.BackwaterView }
+            LifestyleTag.RemoteWorker -> listing.suitsRemoteWork()
+            LifestyleTag.Student -> listing.hasTag("budget", "metro", "cafe") || property.type == PropertyType.Room
+            LifestyleTag.Nightlife -> listing.hasTag("city living", "cafe", "mall", "market")
+            LifestyleTag.Nature -> listing.suitsNatureLover()
         }
+    }
+
+    /** A listing's lower-cased tags and amenity set, read once per check. */
+    private class ListingSignals(
+        private val property: Property,
+    ) {
+        private val tags = property.tags.map { it.lowercase() }
+        private val amenities = property.amenities.toSet()
+
+        fun hasTag(vararg words: String): Boolean = tags.any { text -> words.any { it in text } }
+
+        fun has(amenity: Amenity): Boolean = amenity in amenities
+
+        fun suitsFamily(): Boolean =
+            hasTag("family", "school") || has(Amenity.PlayArea) || property.bedrooms >= FAMILY_BEDROOMS
+
+        fun suitsRemoteWork(): Boolean = has(Amenity.HomeOffice) || (has(Amenity.Wifi) && has(Amenity.PowerBackup))
+
+        fun suitsNatureLover(): Boolean =
+            hasTag("park", "waterfront", "sea view") ||
+                has(Amenity.Garden) ||
+                has(Amenity.SeaView) ||
+                has(Amenity.BackwaterView)
     }
 
     /** Amenities that make daily life easier for someone with these [tags]. */

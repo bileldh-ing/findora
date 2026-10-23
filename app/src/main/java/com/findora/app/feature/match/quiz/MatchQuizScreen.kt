@@ -64,18 +64,18 @@ private val BackIconSize = 22.dp
 
 @Composable
 fun MatchQuizRoute(
-    onFinished: () -> Unit,
+    onFinish: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MatchQuizViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val currentOnFinished by rememberUpdatedState(onFinished)
+    val currentOnFinish by rememberUpdatedState(onFinish)
     val currentOnClose by rememberUpdatedState(onClose)
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
-                MatchQuizUiEffect.Finished -> currentOnFinished()
+                MatchQuizUiEffect.Finished -> currentOnFinish()
                 MatchQuizUiEffect.Closed -> currentOnClose()
             }
         }
