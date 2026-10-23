@@ -217,6 +217,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
@@ -245,6 +248,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.mockk)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.androidx.work.testing)
     testImplementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.androidx.compose.ui.test.junit4)
 

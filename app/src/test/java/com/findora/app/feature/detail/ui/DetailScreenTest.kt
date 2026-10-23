@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
@@ -44,6 +45,7 @@ class DetailScreenTest {
     private val similar = seedProperties.filter { it.type == georgie.type && it.id != georgie.id }.take(3)
     private val events = mutableListOf<DetailUiEvent>()
     private val opened = mutableListOf<String>()
+    private var schedules = 0
 
     private fun showContent(darkTheme: Boolean = false) {
         var state by mutableStateOf<DetailUiState>(
@@ -64,6 +66,7 @@ class DetailScreenTest {
                     },
                     onBack = {},
                     onOpenProperty = { opened += it },
+                    onScheduleViewing = { schedules++ },
                 )
             }
         }
@@ -139,6 +142,7 @@ class DetailScreenTest {
                     onEvent = { events += it },
                     onBack = { backs++ },
                     onOpenProperty = {},
+                    onScheduleViewing = {},
                 )
             }
         }
@@ -157,10 +161,20 @@ class DetailScreenTest {
                     onEvent = { events += it },
                     onBack = {},
                     onOpenProperty = {},
+                    onScheduleViewing = {},
                 )
             }
         }
         compose.onNodeWithText("Retry").performClick()
         assertEquals(listOf<DetailUiEvent>(DetailUiEvent.Retry), events)
+    }
+
+    @Test
+    fun schedulingAViewingIsThePinnedPrimaryAction() {
+        showContent()
+        compose.onNodeWithTag("detailSchedule").assertIsDisplayed().assertHasClickAction()
+        compose.onNodeWithText("Schedule a viewing").performClick()
+        assertEquals(1, schedules)
+        assertTrue(events.isEmpty())
     }
 }

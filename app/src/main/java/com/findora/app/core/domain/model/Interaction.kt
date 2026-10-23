@@ -12,6 +12,7 @@ enum class InteractionType(
     Shared("shared"),
     ContactedAgent("contacted_agent"),
     Dismissed("dismissed"),
+    ScheduledViewing("schedule_viewing"),
     ;
 
     companion object {

@@ -22,7 +22,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 1 | Data layer and property imagery | Done |
 | 2 | Welcome and authentication | Done |
 | 3 | Home screen, pixel-faithful to the reference design | Done |
-| 4 | Property detail (done: gallery, agent contact, share links, similar homes); viewing bookings next | In progress |
+| 4 | Property detail (gallery, agent contact, share links, similar homes) and viewing bookings (slots, reminders, calendar, My viewings) | Done |
 | 5 | Best-match recommendations | Planned |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
@@ -181,6 +181,8 @@ app/src/main/java/com/findora/app
 | Paging 3 (runtime, compose, room-paging, paging-testing) | Incremental loading of the Home feed straight from Room, `LazyPagingItems` in the grid, `asSnapshot` in tests |
 | Turbine, MockK, kotlinx-coroutines-test | Flow assertions, mocking and virtual-time coroutine tests |
 | Robolectric + Compose UI test | Compose UI tests on the JVM, in CI |
+| WorkManager (work-runtime-ktx, work-testing) | Viewing reminders that survive process death and reboots; `TestListenableWorkerBuilder` and the test WorkManager in unit tests |
+| androidx.hilt:hilt-work (+ hilt-compiler) | Constructor-injected `@HiltWorker` workers through `HiltWorkerFactory` |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
 
 ## Tests
@@ -212,7 +214,11 @@ app/src/main/java/com/findora/app
 | `HomeDataRepositoriesTest` | Unread messages per user and mark-read, recent-search delete, Home filter ownership |
 | `HomeScreenTest`, `SearchAndTabsScreenTest` | Reference header, chips filtering the grid, favourite toggle and TalkBack action, filter sheet and badge, empty/error/offline states, notifications, search, nav pill, Saved, Locations (Compose, Robolectric) |
 | `DetailViewModelTest`, `PropertyDeepLinkTest`, `DetailScreenTest` | Detail content, not found, retry, favourites and recorded signals, share/call/email/map effects; `findora://property/{id}` parsing and routing; detail UI, gallery and error states (Turbine, Compose, Robolectric) |
-| `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, tabs, Settings and back |
+| `ViewingSlotGeneratorTest`, `RoomViewingRepositoryTest` | Slot grid: past slots, boundaries, taken/busy, zones, DST; per-user viewings, double booking, overlaps, cancel frees the slot |
+| `ScheduleViewingViewModelTest`, `ViewingsViewModelTest` | Booking flow, reminder and `schedule_viewing` signal, rejected and vanished slots, calendar effect; upcoming/past split, cancel with confirmation (Turbine) |
+| `ViewingReminderWorkerTest`, `WorkManagerViewingReminderSchedulerTest` | Reminder notification and deep link, no-op when cancelled or started, denied permission; unique work per viewing, cancel, lead time |
+| `ScheduleViewingScreenTest`, `ViewingsScreenTest` | Day/time picking, taken slots, confirm to booked, guest note, Arabic RTL; viewings list, cancel dialog, empty state (Compose, Robolectric) |
+| `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, open a listing and book a viewing, My viewings, tabs, Settings and back |
 
 ## Credits
 

@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.findora.app.R
+import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
@@ -55,6 +56,9 @@ import com.findora.app.core.ui.StateMessage
 import kotlinx.coroutines.launch
 
 private val TopButtonSize = 48.dp
+
+/** Pill (56dp) plus its vertical padding. */
+private val ScheduleBarHeight = 80.dp
 private val TopIconSize = 22.dp
 private const val TOP_BUTTON_SCRIM_ALPHA = 0.38f
 private val SkeletonLine = 20.dp
@@ -64,6 +68,7 @@ private const val SKELETON_LINES = 4
 fun DetailRoute(
     onBack: () -> Unit,
     onOpenProperty: (String) -> Unit,
+    onScheduleViewing: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
@@ -83,6 +88,7 @@ fun DetailRoute(
         onEvent = viewModel::onEvent,
         onBack = onBack,
         onOpenProperty = onOpenProperty,
+        onScheduleViewing = { onScheduleViewing(viewModel.propertyId) },
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -99,6 +105,7 @@ fun DetailScreen(
     onEvent: (DetailUiEvent) -> Unit,
     onBack: () -> Unit,
     onOpenProperty: (String) -> Unit,
+    onScheduleViewing: () -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -114,7 +121,13 @@ fun DetailScreen(
             is DetailUiState.Error ->
                 DetailErrorMessage(state.error, onRetry = { onEvent(DetailUiEvent.Retry) }, onBack = onBack)
             is DetailUiState.Content ->
-                DetailContent(content = state, onEvent = onEvent, onBack = onBack, onOpenProperty = onOpenProperty)
+                DetailContent(
+                    content = state,
+                    onEvent = onEvent,
+                    onBack = onBack,
+                    onOpenProperty = onOpenProperty,
+                    onScheduleViewing = onScheduleViewing,
+                )
         }
         if (state !is DetailUiState.Content) {
             TopIconButton(
@@ -135,6 +148,7 @@ private fun DetailContent(
     onEvent: (DetailUiEvent) -> Unit,
     onBack: () -> Unit,
     onOpenProperty: (String) -> Unit,
+    onScheduleViewing: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val property = content.property
@@ -147,7 +161,8 @@ private fun DetailContent(
     Box(modifier.fillMaxSize()) {
         LazyColumn(
             state = listState,
-            contentPadding = PaddingValues(bottom = bottomInset + FindoraTheme.spacing.xl),
+            // Leaves room for the sticky "Schedule a viewing" bar.
+            contentPadding = PaddingValues(bottom = bottomInset + ScheduleBarHeight + FindoraTheme.spacing.xl),
             verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.lg),
             modifier = Modifier.fillMaxSize().testTag("detailList"),
         ) {
@@ -186,6 +201,7 @@ private fun DetailContent(
                 }
             }
         }
+        ScheduleBar(onClick = onScheduleViewing, modifier = Modifier.align(Alignment.BottomCenter))
         DetailTopBar(
             isFavorite = content.isFavorite,
             onBack = onBack,
@@ -203,6 +219,28 @@ private fun DetailContent(
             )
         }
         if (showVerification) VerificationSheet(onDismiss = { showVerification = false })
+    }
+}
+
+/** The page's primary action, pinned above the navigation bar on a surface so it reads over any section. */
+@Composable
+private fun ScheduleBar(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(FindoraTheme.colors.background)
+                .navigationBarsPadding()
+                .padding(horizontal = FindoraTheme.spacing.screenHorizontal, vertical = FindoraTheme.spacing.sm),
+    ) {
+        PrimaryPillButton(
+            text = stringResource(R.string.schedule_title),
+            onClick = onClick,
+            modifier = Modifier.testTag("detailSchedule"),
+        )
     }
 }
 

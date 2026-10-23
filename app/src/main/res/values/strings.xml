@@ -246,4 +246,53 @@
         <item quantity="one">%1$d review</item>
         <item quantity="other">%1$d reviews</item>
     </plurals>
+    <!-- Viewings (Phase 4B) -->
+    <string name="schedule_title">Schedule a viewing</string>
+    <string name="schedule_pick_day">Choose a day</string>
+    <string name="schedule_pick_time">Choose a time</string>
+    <string name="schedule_today">Today</string>
+    <string name="schedule_day_full_cd">%1$s, fully booked</string>
+    <plurals name="schedule_day_cd">
+        <item quantity="one">%1$s, %2$d free time</item>
+        <item quantity="other">%1$s, %2$d free times</item>
+    </plurals>
+    <string name="schedule_slot_taken_cd">%1$s, already booked</string>
+    <string name="schedule_slot_busy_cd">%1$s, you have another viewing then</string>
+    <string name="schedule_no_slots">No free times on this day. Try another day.</string>
+    <string name="schedule_note_label">Note for the agent (optional)</string>
+    <string name="schedule_note_counter">%1$d/%2$d</string>
+    <string name="schedule_select_time">Select a time</string>
+    <string name="schedule_confirm_at">Confirm viewing at %1$s</string>
+    <string name="schedule_confirming">Booking…</string>
+    <string name="schedule_guest_note">Browsing as a guest: this viewing stays on this device until you log out.</string>
+    <string name="schedule_error_taken">That time was just booked. Please pick another one.</string>
+    <string name="schedule_error_overlap">You already have a viewing at that time.</string>
+    <string name="schedule_error_past">That time has passed. Please pick another one.</string>
+    <string name="schedule_error_failed">Couldn\'t book the viewing</string>
+    <string name="booked_title">Viewing booked</string>
+    <string name="booked_when">%1$s at %2$s</string>
+    <string name="booked_reminder">We\'ll remind you an hour before.</string>
+    <string name="booked_add_calendar">Add to calendar</string>
+    <string name="booked_my_viewings">See my viewings</string>
+    <string name="action_done">Done</string>
+    <string name="calendar_event_title">Viewing: %1$s</string>
+    <string name="calendar_event_description">Booked with Findora: %1$s</string>
+    <string name="viewings_title">My viewings</string>
+    <string name="viewings_upcoming">Upcoming</string>
+    <string name="viewings_past">Past</string>
+    <string name="viewings_empty_title">No viewings yet</string>
+    <string name="viewings_empty_body">Open a listing and tap “Schedule a viewing” to book a visit.</string>
+    <string name="viewings_cancel">Cancel viewing</string>
+    <string name="viewings_cancel_title">Cancel this viewing?</string>
+    <string name="viewings_cancel_message">Your viewing of %1$s on %2$s will be cancelled and the time freed.</string>
+    <string name="viewings_keep">Keep it</string>
+    <string name="viewings_cancelled">Viewing cancelled</string>
+    <string name="viewings_cancel_failed">Couldn\'t cancel the viewing. Please try again.</string>
+    <string name="viewings_listing_unavailable">Listing no longer available</string>
+    <string name="viewings_note">Note: %1$s</string>
+    <string name="reminder_channel_name">Viewing reminders</string>
+    <string name="reminder_channel_description">A reminder an hour before each viewing you book.</string>
+    <string name="reminder_title">Viewing in one hour</string>
+    <string name="reminder_body">%1$s at %2$s. Tap to see the listing.</string>
+    <string name="reminder_fallback_title">Your viewing</string>
 </resources>

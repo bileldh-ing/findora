@@ -4,6 +4,8 @@
 
     <!-- Listing photos are loaded over HTTPS (Coil + OkHttp); the bundled WebP pack covers offline use. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Viewing reminders (asked at booking time on Android 13+; booking works without it). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".FindoraApplication"
@@ -36,6 +38,18 @@
                     android:scheme="findora" />
             </intent-filter>
         </activity>
+
+        <!-- WorkManager is initialised on demand by FindoraApplication (Configuration.Provider + HiltWorkerFactory). -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
     </application>
 
 </manifest>

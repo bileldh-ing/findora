@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.findora.app.core.common.AppClock
 import com.findora.app.core.common.SystemAppClock
 import com.findora.app.core.data.local.FindoraDatabase
@@ -28,6 +29,7 @@ import com.findora.app.core.data.repository.RoomFavoritesRepository
 import com.findora.app.core.data.repository.RoomInteractionRepository
 import com.findora.app.core.data.repository.RoomMessageRepository
 import com.findora.app.core.data.repository.RoomSearchHistoryRepository
+import com.findora.app.core.data.repository.RoomViewingRepository
 import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.data.seed.AssetSeedReader
 import com.findora.app.core.data.seed.SeedReader
@@ -41,6 +43,11 @@ import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.RegionRepository
 import com.findora.app.core.domain.repository.SearchHistoryRepository
 import com.findora.app.core.domain.repository.SettingsRepository
+import com.findora.app.core.domain.repository.ViewingReminderScheduler
+import com.findora.app.core.domain.repository.ViewingRepository
+import com.findora.app.core.reminder.AndroidViewingReminderNotifier
+import com.findora.app.core.reminder.ViewingReminderNotifier
+import com.findora.app.core.reminder.WorkManagerViewingReminderScheduler
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -51,6 +58,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
+import java.time.ZoneId
 import javax.inject.Singleton
 import kotlin.random.Random
 
@@ -88,6 +96,20 @@ abstract class DataBindingsModule {
     abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
 }
 
+/** Viewing bookings and their WorkManager reminders. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class ViewingBindingsModule {
+    @Binds
+    abstract fun bindViewingRepository(impl: RoomViewingRepository): ViewingRepository
+
+    @Binds
+    abstract fun bindViewingReminderScheduler(impl: WorkManagerViewingReminderScheduler): ViewingReminderScheduler
+
+    @Binds
+    abstract fun bindViewingReminderNotifier(impl: AndroidViewingReminderNotifier): ViewingReminderNotifier
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
@@ -103,6 +125,15 @@ object DataModule {
 
     @Provides
     fun provideClock(): AppClock = SystemAppClock
+
+    /** Read on every injection so a time-zone change on the device is picked up by new screens and workers. */
+    @Provides
+    fun provideZoneId(): ZoneId = ZoneId.systemDefault()
+
+    @Provides
+    fun provideWorkManager(
+        @ApplicationContext context: Context,
+    ): WorkManager = WorkManager.getInstance(context)
 
     @Provides
     @Singleton

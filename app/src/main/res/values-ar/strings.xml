@@ -241,4 +241,57 @@
         <item quantity="many">%1$d مراجعة</item>
         <item quantity="other">%1$d مراجعة</item>
     </plurals>
+    <!-- المعاينات (المرحلة 4ب) -->
+    <string name="schedule_title">حجز معاينة</string>
+    <string name="schedule_pick_day">اختر يومًا</string>
+    <string name="schedule_pick_time">اختر وقتًا</string>
+    <string name="schedule_today">اليوم</string>
+    <string name="schedule_day_full_cd">%1$s، محجوز بالكامل</string>
+    <plurals name="schedule_day_cd">
+        <item quantity="zero">%1$s، لا توجد أوقات متاحة</item>
+        <item quantity="one">%1$s، وقت واحد متاح</item>
+        <item quantity="two">%1$s، وقتان متاحان</item>
+        <item quantity="few">%1$s، %2$d أوقات متاحة</item>
+        <item quantity="many">%1$s، %2$d وقتًا متاحًا</item>
+        <item quantity="other">%1$s، %2$d وقت متاح</item>
+    </plurals>
+    <string name="schedule_slot_taken_cd">%1$s، محجوز مسبقًا</string>
+    <string name="schedule_slot_busy_cd">%1$s، لديك معاينة أخرى في هذا الوقت</string>
+    <string name="schedule_no_slots">لا توجد أوقات متاحة في هذا اليوم. جرّب يومًا آخر.</string>
+    <string name="schedule_note_label">ملاحظة للوكيل (اختياري)</string>
+    <string name="schedule_note_counter">%1$d/%2$d</string>
+    <string name="schedule_select_time">اختر وقتًا</string>
+    <string name="schedule_confirm_at">تأكيد المعاينة في %1$s</string>
+    <string name="schedule_confirming">جارٍ الحجز…</string>
+    <string name="schedule_guest_note">أنت تتصفح كضيف: تبقى هذه المعاينة على هذا الجهاز حتى تسجيل الخروج.</string>
+    <string name="schedule_error_taken">تم حجز هذا الوقت للتو. يرجى اختيار وقت آخر.</string>
+    <string name="schedule_error_overlap">لديك معاينة أخرى في هذا الوقت.</string>
+    <string name="schedule_error_past">انقضى هذا الوقت. يرجى اختيار وقت آخر.</string>
+    <string name="schedule_error_failed">تعذّر حجز المعاينة</string>
+    <string name="booked_title">تم حجز المعاينة</string>
+    <string name="booked_when">%1$s الساعة %2$s</string>
+    <string name="booked_reminder">سنذكّرك قبل الموعد بساعة.</string>
+    <string name="booked_add_calendar">إضافة إلى التقويم</string>
+    <string name="booked_my_viewings">عرض معايناتي</string>
+    <string name="action_done">تم</string>
+    <string name="calendar_event_title">معاينة: %1$s</string>
+    <string name="calendar_event_description">تم الحجز عبر Findora: %1$s</string>
+    <string name="viewings_title">معايناتي</string>
+    <string name="viewings_upcoming">القادمة</string>
+    <string name="viewings_past">السابقة</string>
+    <string name="viewings_empty_title">لا توجد معاينات بعد</string>
+    <string name="viewings_empty_body">افتح إعلانًا واضغط «حجز معاينة» لحجز زيارة.</string>
+    <string name="viewings_cancel">إلغاء المعاينة</string>
+    <string name="viewings_cancel_title">إلغاء هذه المعاينة؟</string>
+    <string name="viewings_cancel_message">سيتم إلغاء معاينتك لـ %1$s يوم %2$s وتحرير الموعد.</string>
+    <string name="viewings_keep">الإبقاء عليها</string>
+    <string name="viewings_cancelled">تم إلغاء المعاينة</string>
+    <string name="viewings_cancel_failed">تعذّر إلغاء المعاينة. حاول مرة أخرى.</string>
+    <string name="viewings_listing_unavailable">الإعلان لم يعد متاحًا</string>
+    <string name="viewings_note">ملاحظة: %1$s</string>
+    <string name="reminder_channel_name">تذكيرات المعاينة</string>
+    <string name="reminder_channel_description">تذكير قبل كل معاينة تحجزها بساعة.</string>
+    <string name="reminder_title">معاينة بعد ساعة</string>
+    <string name="reminder_body">%1$s الساعة %2$s. اضغط لعرض الإعلان.</string>
+    <string name="reminder_fallback_title">معاينتك</string>
 </resources>
