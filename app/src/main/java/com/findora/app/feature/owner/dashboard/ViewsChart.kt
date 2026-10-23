@@ -59,7 +59,7 @@ fun ViewsChart(
     val bar = FindoraTheme.colors.accent
     val empty = FindoraTheme.colors.outline
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    Column(modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = description }.testTag("viewsChart")) {
+    Column(modifier.fillMaxWidth().testTag("viewsChart").clearAndSetSemantics { contentDescription = description }) {
         Canvas(Modifier.fillMaxWidth().height(ChartHeight)) {
             if (days.isEmpty()) return@Canvas
             val max = days.maxOf { it.count }.coerceAtLeast(1)

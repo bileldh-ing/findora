@@ -114,7 +114,7 @@ class ListingWizardScreenTest {
         compose.onNodeWithTag("fakeMap").assertExists()
         assertTrue(events.contains(WizardEvent.PinPlaced(GeoPoint(9.97, 76.28))))
         compose.onNodeWithTag("pinAtLocality").performScrollTo().performClick()
-        compose.onNodeWithTag("region_tunis").performClick()
+        compose.onNodeWithTag("region_tunis").performScrollTo().performClick()
         assertTrue(events.contains(WizardEvent.PinAtLocality))
         assertTrue(events.contains(WizardEvent.RegionSelected("tunis")))
     }

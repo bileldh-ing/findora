@@ -26,6 +26,10 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -58,16 +62,19 @@ fun MainScaffold(
 ) {
     val statusBar = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val navigationBar = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    // Moving between the pill and the rail (a fold or a rotation) keeps the tab content's state.
+    val currentContent by rememberUpdatedState(content)
+    val movableContent = remember { movableContentOf { padding: PaddingValues -> currentContent(padding) } }
     if (useRail) {
         Row(modifier.fillMaxSize().testTag("mainShell")) {
             MainNavigationRail(selected = selected, onSelect = onSelect, badges = badges)
             ProvideAdaptiveLayout(Modifier.weight(1f).fillMaxHeight()) {
-                content(PaddingValues(top = statusBar, bottom = navigationBar + NavPillMargin))
+                movableContent(PaddingValues(top = statusBar, bottom = navigationBar + NavPillMargin))
             }
         }
     } else {
         Box(modifier.fillMaxSize().testTag("mainShell")) {
-            content(PaddingValues(top = statusBar, bottom = navigationBar + NavPillHeight + NavPillMargin * 2))
+            movableContent(PaddingValues(top = statusBar, bottom = navigationBar + NavPillHeight + NavPillMargin * 2))
             FloatingNavPill(
                 selected = selected,
                 onSelect = onSelect,

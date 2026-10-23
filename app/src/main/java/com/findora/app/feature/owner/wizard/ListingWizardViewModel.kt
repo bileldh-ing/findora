@@ -451,13 +451,14 @@ class ListingWizardViewModel
 
         private fun publish() {
             val current = state.value
-            val listingId = current.listingId ?: return
-            if (current.publishing) return
-            ListingValidator.firstInvalidStep(current.draft, current.regionBounds())?.let { step ->
+            val listingId = current.listingId
+            if (listingId == null || current.publishing) return
+            val invalidStep = ListingValidator.firstInvalidStep(current.draft, current.regionBounds())
+            if (invalidStep != null) {
                 mutableState.update {
                     it.copy(
-                        step = step,
-                        errors = ListingValidator.validate(step, current.draft, current.regionBounds()),
+                        step = invalidStep,
+                        errors = ListingValidator.validate(invalidStep, current.draft, current.regionBounds()),
                     )
                 }
                 return

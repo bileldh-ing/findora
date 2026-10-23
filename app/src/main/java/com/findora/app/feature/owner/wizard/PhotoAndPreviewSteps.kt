@@ -82,7 +82,12 @@ internal fun PhotosStep(
             modifier = Modifier.semantics { heading() },
         )
         Text(
-            text = stringResource(R.string.owner_photos_hint, ListingValidator.PHOTOS_MAX),
+            text =
+                pluralStringResource(
+                    R.plurals.owner_photos_hint,
+                    ListingValidator.PHOTOS_MAX,
+                    ListingValidator.PHOTOS_MAX,
+                ),
             style = FindoraTheme.typography.caption,
             color = FindoraTheme.colors.onSurfaceMuted,
         )

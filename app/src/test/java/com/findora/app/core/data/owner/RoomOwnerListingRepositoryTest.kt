@@ -172,7 +172,8 @@ class RoomOwnerListingRepositoryTest {
             )
             sql.execSQL(
                 "INSERT INTO messages (id, conversation_id, property_id, sender_id, recipient_id, body, sent_at, " +
-                    "read_at, status) VALUES ('m1', 'c1', '$id', 'u2', 'agent:owner-owner-1', 'Is it free in May?', 7000, NULL, 'sent')",
+                    "read_at, status) VALUES ('m1', 'c1', '$id', 'u2', 'agent:owner-owner-1', 'Is it free in May?', " +
+                    "7000, NULL, 'sent')",
             )
             sql.execSQL(
                 "INSERT INTO viewings (user_id, property_id, start_at, duration_minutes, status, note, created_at) " +

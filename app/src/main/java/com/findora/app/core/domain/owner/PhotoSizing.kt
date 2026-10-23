@@ -11,7 +11,9 @@ object PhotoSizing {
     /** JPEG quality of stored photos. */
     const val JPEG_QUALITY = 82
 
-    /** Largest power of two that keeps both edges at or above [maxEdge] after subsampling (BitmapFactory inSampleSize). */
+    /**
+     * Largest power of two that keeps both edges at or above [maxEdge] after subsampling (BitmapFactory inSampleSize).
+     */
     fun sampleSize(
         width: Int,
         height: Int,

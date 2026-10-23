@@ -228,7 +228,7 @@ private fun FindoraGraph(
         composable<FindoraRoute.ListingEditor> {
             ListingWizardRoute(
                 onClose = { navController.popBackStack() },
-                onOpenPublished = { id ->
+                onOpenListing = { id ->
                     navController.navigate(FindoraRoute.PropertyDetail(id)) {
                         popUpTo<FindoraRoute.ListingEditor> { inclusive = true }
                     }

@@ -60,7 +60,7 @@ private val MaxContentWidth = 720.dp
 @Composable
 fun ListingWizardRoute(
     onClose: () -> Unit,
-    onOpenPublished: (String) -> Unit,
+    onOpenListing: (String) -> Unit,
     onCreateAccount: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ListingWizardViewModel = hiltViewModel(),
@@ -68,19 +68,21 @@ fun ListingWizardRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val currentOnClose by rememberUpdatedState(onClose)
-    val currentOnOpenPublished by rememberUpdatedState(onOpenPublished)
+    val currentOnOpenListing by rememberUpdatedState(onOpenListing)
     val resources = LocalContext.current.resources
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 WizardEffect.Close -> currentOnClose()
-                is WizardEffect.Published -> currentOnOpenPublished(effect.listingId)
+                is WizardEffect.Published -> currentOnOpenListing(effect.listingId)
                 is WizardEffect.PhotosFailed ->
                     snackbarHostState.showSnackbar(
                         resources.getQuantityString(R.plurals.owner_photos_failed, effect.count, effect.count),
                     )
                 is WizardEffect.PhotosOverLimit ->
-                    snackbarHostState.showSnackbar(resources.getString(R.string.owner_photos_over_limit, effect.max))
+                    snackbarHostState.showSnackbar(
+                        resources.getQuantityString(R.plurals.owner_photos_over_limit, effect.max, effect.max),
+                    )
             }
         }
     }

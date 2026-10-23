@@ -99,9 +99,11 @@ class FakeOwnerListingRepository(
         listingId: String,
     ): PublishResult {
         val current = owned(owner.id, listingId) ?: return PublishResult.NotFound
-        ListingValidator.firstInvalidStep(current.draft)?.let { return PublishResult.Invalid(it) }
-        put(current.copy(status = ListingStatus.Published, publishedAt = current.publishedAt ?: now()))
-        return PublishResult.Published(listingId)
+        val invalidStep = ListingValidator.firstInvalidStep(current.draft)
+        if (invalidStep == null) {
+            put(current.copy(status = ListingStatus.Published, publishedAt = current.publishedAt ?: now()))
+        }
+        return invalidStep?.let { PublishResult.Invalid(it) } ?: PublishResult.Published(listingId)
     }
 
     override suspend fun pause(

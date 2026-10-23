@@ -19,6 +19,8 @@ object OwnerDraftJson {
     private val json =
         Json {
             ignoreUnknownKeys = true
+            // The version (a default) is always written; unset optional fields are left out.
+            encodeDefaults = true
             explicitNulls = false
         }
 

@@ -1,5 +1,6 @@
 package com.findora.app.feature.owner.wizard
 
+import androidx.annotation.PluralsRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -7,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
@@ -30,31 +32,49 @@ internal fun errorText(
     field: ListingField,
 ): String? {
     val error = state.errors[field] ?: return null
-    return when (error) {
-        ListingError.Required ->
-            when (field) {
-                ListingField.Type, ListingField.Region, ListingField.Locality, ListingField.Currency ->
-                    stringResource(R.string.owner_error_choose)
-                ListingField.Pin -> stringResource(R.string.owner_error_pin)
-                ListingField.Photos -> stringResource(R.string.owner_error_photos)
-                else -> stringResource(R.string.owner_error_required)
-            }
-        ListingError.TooShort ->
-            stringResource(
-                R.string.owner_error_min_chars,
-                if (field == ListingField.Title) ListingValidator.TITLE_MIN else ListingValidator.DESCRIPTION_MIN,
-            )
-        ListingError.TooLong ->
-            stringResource(
-                R.string.owner_error_max_chars,
-                if (field == ListingField.Title) ListingValidator.TITLE_MAX else ListingValidator.DESCRIPTION_MAX,
-            )
-        ListingError.OutOfRange -> rangeText(field)
-        ListingError.OutsideRegion -> stringResource(R.string.owner_error_pin_outside, state.region?.name.orEmpty())
-        ListingError.TooMany -> stringResource(R.string.owner_error_photos_max, ListingValidator.PHOTOS_MAX)
-        ListingError.TooHigh -> stringResource(R.string.owner_error_deposit_high, ListingValidator.MAX_DEPOSIT_MONTHS)
+    val countLimit = countLimits[error]
+    return when {
+        error == ListingError.Required -> requiredText(field)
+        error == ListingError.OutOfRange -> rangeText(field)
+        error == ListingError.OutsideRegion ->
+            stringResource(R.string.owner_error_pin_outside, state.region?.name.orEmpty())
+        countLimit != null -> {
+            val count = countLimit.count(field)
+            pluralStringResource(countLimit.plural, count, count)
+        }
+        else -> stringResource(R.string.owner_error_required)
     }
 }
+
+/** An error whose message names a count: the plural to show and the limit it states for a field. */
+private class CountLimit(
+    @param:PluralsRes val plural: Int,
+    val count: (ListingField) -> Int,
+)
+
+private val countLimits: Map<ListingError, CountLimit> =
+    mapOf(
+        ListingError.TooShort to
+            CountLimit(R.plurals.owner_error_min_chars) { field ->
+                if (field == ListingField.Title) ListingValidator.TITLE_MIN else ListingValidator.DESCRIPTION_MIN
+            },
+        ListingError.TooLong to
+            CountLimit(R.plurals.owner_error_max_chars) { field ->
+                if (field == ListingField.Title) ListingValidator.TITLE_MAX else ListingValidator.DESCRIPTION_MAX
+            },
+        ListingError.TooMany to CountLimit(R.plurals.owner_error_photos_max) { ListingValidator.PHOTOS_MAX },
+        ListingError.TooHigh to CountLimit(R.plurals.owner_error_deposit_high) { ListingValidator.MAX_DEPOSIT_MONTHS },
+    )
+
+@Composable
+private fun requiredText(field: ListingField): String =
+    when (field) {
+        ListingField.Type, ListingField.Region, ListingField.Locality, ListingField.Currency ->
+            stringResource(R.string.owner_error_choose)
+        ListingField.Pin -> stringResource(R.string.owner_error_pin)
+        ListingField.Photos -> stringResource(R.string.owner_error_photos)
+        else -> stringResource(R.string.owner_error_required)
+    }
 
 @Composable
 internal fun rangeText(field: ListingField): String {

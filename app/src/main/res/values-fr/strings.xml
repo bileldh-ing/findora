@@ -768,7 +768,11 @@
     <string name="owner_confirm_unpublish_body">Elle retourne dans vos brouillons et n’est plus visible jusqu’à sa republication.</string>
     <string name="owner_confirm_unpublish_title">Dépublier « %1$s » ?</string>
     <string name="owner_dashboard_title">Espace propriétaire</string>
-    <string name="owner_deposit_hint">Facultatif. %1$d mois de loyer au maximum.</string>
+    <plurals name="owner_deposit_hint">
+        <item quantity="one">Facultatif. %1$d mois de loyer au maximum.</item>
+        <item quantity="many">Facultatif. %1$d mois de loyer au maximum.</item>
+        <item quantity="other">Facultatif. %1$d mois de loyer au maximum.</item>
+    </plurals>
     <string name="owner_draft_saved">Brouillon enregistré</string>
     <string name="owner_edit">Modifier</string>
     <string name="owner_edit_listing">Modifier l’annonce</string>
@@ -778,11 +782,27 @@
     <string name="owner_enquiries_empty">Aucune demande pour le moment. Les messages sur vos annonces apparaissent ici.</string>
     <string name="owner_enquiries_note">Messages envoyés depuis cet appareil au sujet de vos annonces. L’assistant de démonstration automatique de Findora y répond.</string>
     <string name="owner_error_choose">Choisissez une option</string>
-    <string name="owner_error_deposit_high">La caution ne peut dépasser %1$d mois de loyer</string>
-    <string name="owner_error_max_chars">%1$d caractères au maximum</string>
-    <string name="owner_error_min_chars">Au moins %1$d caractères</string>
+    <plurals name="owner_error_deposit_high">
+        <item quantity="one">La caution ne peut dépasser %1$d mois de loyer</item>
+        <item quantity="many">La caution ne peut dépasser %1$d mois de loyer</item>
+        <item quantity="other">La caution ne peut dépasser %1$d mois de loyer</item>
+    </plurals>
+    <plurals name="owner_error_max_chars">
+        <item quantity="one">%1$d caractère au maximum</item>
+        <item quantity="many">%1$d caractères au maximum</item>
+        <item quantity="other">%1$d caractères au maximum</item>
+    </plurals>
+    <plurals name="owner_error_min_chars">
+        <item quantity="one">Au moins %1$d caractère</item>
+        <item quantity="many">Au moins %1$d caractères</item>
+        <item quantity="other">Au moins %1$d caractères</item>
+    </plurals>
     <string name="owner_error_photos">Ajoutez au moins une photo</string>
-    <string name="owner_error_photos_max">%1$d photos au maximum</string>
+    <plurals name="owner_error_photos_max">
+        <item quantity="one">%1$d photo au maximum</item>
+        <item quantity="many">%1$d photos au maximum</item>
+        <item quantity="other">%1$d photos au maximum</item>
+    </plurals>
     <string name="owner_error_pin">Touchez la carte ou placez le repère sur le quartier</string>
     <string name="owner_error_pin_outside">Le repère doit se trouver dans %1$s</string>
     <string name="owner_error_range">Saisissez un nombre entre %1$d et %2$d</string>
@@ -826,8 +846,16 @@
     <string name="owner_photo_move_later">Déplacer après</string>
     <string name="owner_photo_remove">Retirer la photo</string>
     <string name="owner_photos_full">Limite de photos atteinte</string>
-    <string name="owner_photos_hint">Jusqu’à %1$d photos. Elles sont redimensionnées et stockées uniquement sur cet appareil ; la première sert de couverture.</string>
-    <string name="owner_photos_over_limit">Une annonce contient au plus %1$d photos ; les autres n’ont pas été ajoutées.</string>
+    <plurals name="owner_photos_hint">
+        <item quantity="one">Jusqu’à %1$d photo. Elle est redimensionnée et stockée uniquement sur cet appareil ; elle sert de couverture.</item>
+        <item quantity="many">Jusqu’à %1$d photos. Elles sont redimensionnées et stockées uniquement sur cet appareil ; la première sert de couverture.</item>
+        <item quantity="other">Jusqu’à %1$d photos. Elles sont redimensionnées et stockées uniquement sur cet appareil ; la première sert de couverture.</item>
+    </plurals>
+    <plurals name="owner_photos_over_limit">
+        <item quantity="one">Une annonce contient au plus %1$d photo ; les autres n’ont pas été ajoutées.</item>
+        <item quantity="many">Une annonce contient au plus %1$d photos ; les autres n’ont pas été ajoutées.</item>
+        <item quantity="other">Une annonce contient au plus %1$d photos ; les autres n’ont pas été ajoutées.</item>
+    </plurals>
     <string name="owner_pin_at">Repère : %1$s</string>
     <string name="owner_pin_at_locality">Placer le repère sur %1$s</string>
     <string name="owner_pin_none">Aucun repère pour l’instant</string>

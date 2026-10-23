@@ -767,7 +767,10 @@
     <string name="owner_confirm_unpublish_body">It goes back to your drafts and is hidden from everyone until you publish it again.</string>
     <string name="owner_confirm_unpublish_title">Unpublish “%1$s”?</string>
     <string name="owner_dashboard_title">Owner dashboard</string>
-    <string name="owner_deposit_hint">Optional. At most %1$d months of rent.</string>
+    <plurals name="owner_deposit_hint">
+        <item quantity="one">Optional. At most %1$d month of rent.</item>
+        <item quantity="other">Optional. At most %1$d months of rent.</item>
+    </plurals>
     <string name="owner_draft_saved">Draft saved</string>
     <string name="owner_edit">Edit</string>
     <string name="owner_edit_listing">Edit listing</string>
@@ -777,11 +780,23 @@
     <string name="owner_enquiries_empty">No enquiries yet. Messages about your listings appear here.</string>
     <string name="owner_enquiries_note">Messages people on this device sent about your listings. They are answered by Findora’s automated demo assistant.</string>
     <string name="owner_error_choose">Choose one</string>
-    <string name="owner_error_deposit_high">A deposit can be at most %1$d months of rent</string>
-    <string name="owner_error_max_chars">At most %1$d characters</string>
-    <string name="owner_error_min_chars">At least %1$d characters</string>
+    <plurals name="owner_error_deposit_high">
+        <item quantity="one">A deposit can be at most %1$d month of rent</item>
+        <item quantity="other">A deposit can be at most %1$d months of rent</item>
+    </plurals>
+    <plurals name="owner_error_max_chars">
+        <item quantity="one">At most %1$d character</item>
+        <item quantity="other">At most %1$d characters</item>
+    </plurals>
+    <plurals name="owner_error_min_chars">
+        <item quantity="one">At least %1$d character</item>
+        <item quantity="other">At least %1$d characters</item>
+    </plurals>
     <string name="owner_error_photos">Add at least one photo</string>
-    <string name="owner_error_photos_max">At most %1$d photos</string>
+    <plurals name="owner_error_photos_max">
+        <item quantity="one">At most %1$d photo</item>
+        <item quantity="other">At most %1$d photos</item>
+    </plurals>
     <string name="owner_error_pin">Tap the map or place the pin at the neighbourhood</string>
     <string name="owner_error_pin_outside">The pin must be inside %1$s</string>
     <string name="owner_error_range">Enter a number from %1$d to %2$d</string>
@@ -825,8 +840,14 @@
     <string name="owner_photo_move_later">Move later</string>
     <string name="owner_photo_remove">Remove photo</string>
     <string name="owner_photos_full">Photo limit reached</string>
-    <string name="owner_photos_hint">Up to %1$d photos. They are resized and stored only on this device; the first one is the cover.</string>
-    <string name="owner_photos_over_limit">Only %1$d photos fit in a listing; the extra ones were left out.</string>
+    <plurals name="owner_photos_hint">
+        <item quantity="one">Up to %1$d photo. It is resized and stored only on this device; it is the cover.</item>
+        <item quantity="other">Up to %1$d photos. They are resized and stored only on this device; the first one is the cover.</item>
+    </plurals>
+    <plurals name="owner_photos_over_limit">
+        <item quantity="one">Only %1$d photo fits in a listing; the extra ones were left out.</item>
+        <item quantity="other">Only %1$d photos fit in a listing; the extra ones were left out.</item>
+    </plurals>
     <string name="owner_pin_at">Pin at %1$s</string>
     <string name="owner_pin_at_locality">Place the pin at %1$s</string>
     <string name="owner_pin_none">No pin yet</string>
