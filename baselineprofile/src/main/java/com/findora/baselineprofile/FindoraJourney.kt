@@ -14,6 +14,7 @@ val targetAppId: String
             ?: error("targetAppId instrumentation argument is missing (run through Gradle, see docs/PERFORMANCE.md)")
 
 private const val TIMEOUT_MILLIS = 15_000L
+private const val SHORT_WAIT_MILLIS = 2_000L
 private const val SCROLL_FLINGS = 2
 
 /** Gestures start a fifth of the screen width in from each edge (system back gesture, floating nav pill). */
@@ -32,7 +33,13 @@ fun MacrobenchmarkScope.waitForFirstScreen() {
 /** Welcome -> "Continue as guest" -> Home, when the app opened on Welcome. */
 fun MacrobenchmarkScope.continueAsGuestIfNeeded() {
     if (device.hasObject(By.res("welcome"))) {
-        device.wait(Until.findObject(By.res("welcomeGuest")), TIMEOUT_MILLIS)?.click()
+        // On short screens the link sits below the fold of Welcome's scrolling panel.
+        val guest =
+            device.wait(Until.findObject(By.res("welcomeGuest")), SHORT_WAIT_MILLIS)
+                ?: device
+                    .findObject(By.scrollable(true))
+                    ?.scrollUntil(Direction.DOWN, Until.findObject(By.res("welcomeGuest")))
+        checkNotNull(guest) { "Continue as guest not found on Welcome" }.click()
     }
     check(device.wait(Until.hasObject(By.res("home")), TIMEOUT_MILLIS)) { "Home did not open" }
 }

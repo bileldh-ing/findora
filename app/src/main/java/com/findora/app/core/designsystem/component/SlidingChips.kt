@@ -1,7 +1,8 @@
 package com.findora.app.core.designsystem.component
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.VectorConverter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +19,12 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +40,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import kotlinx.coroutines.launch
 
 private val ChipHeight = 40.dp
 
@@ -55,8 +60,22 @@ fun SlidingChipRow(
     val bounds = remember { mutableStateMapOf<Int, Pair<Dp, Dp>>() }
     val target = bounds[selectedIndex]
     val motion = FindoraTheme.motion
-    val pillOffset by animateDpAsState(target?.first ?: 0.dp, motion.snappy(), label = "pillOffset")
-    val pillWidth by animateDpAsState(target?.second ?: 0.dp, motion.snappy(), label = "pillWidth")
+    val pillOffset = remember { Animatable(0.dp, Dp.VectorConverter) }
+    val pillWidth = remember { Animatable(0.dp, Dp.VectorConverter) }
+    var pillPlaced by remember { mutableStateOf(false) }
+    LaunchedEffect(target) {
+        val (offset, width) = target ?: return@LaunchedEffect
+        if (pillPlaced) {
+            launch { pillOffset.animateTo(offset, motion.snappy()) }
+            pillWidth.animateTo(width, motion.snappy())
+        } else {
+            // The first position is applied at once: animating from 0 made the pill fly in from the left edge,
+            // which in RTL is the far end of the row.
+            pillOffset.snapTo(offset)
+            pillWidth.snapTo(width)
+            pillPlaced = true
+        }
+    }
     Box(
         modifier =
             modifier
@@ -87,14 +106,14 @@ fun SlidingChipRow(
                 }
             }
         }
-        if (target != null) {
+        if (pillPlaced) {
             Box(
                 Modifier
                     // positionInParent is measured from the left edge in every layout direction, so the pill is
                     // anchored to the left edge and offset absolutely (start-aligned it sat off-screen in RTL).
                     .align(AbsoluteAlignment.TopLeft)
-                    .absoluteOffset { IntOffset(pillOffset.roundToPx(), 0) }
-                    .width(pillWidth)
+                    .absoluteOffset { IntOffset(pillOffset.value.roundToPx(), 0) }
+                    .width(pillWidth.value)
                     .height(ChipHeight)
                     .clip(FindoraTheme.shapes.chip)
                     .background(FindoraTheme.colors.primaryAction),

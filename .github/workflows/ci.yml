@@ -261,6 +261,8 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          # A phone-sized screen (1080 x 2400) so the journey and the frame metrics match a real handset.
+          profile: pixel_6
           script: .github/scripts/perf.sh
 
       - name: Benchmark status (informational)

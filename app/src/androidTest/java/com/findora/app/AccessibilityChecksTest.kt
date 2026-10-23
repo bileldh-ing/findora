@@ -2,6 +2,7 @@ package com.findora.app
 
 import android.Manifest
 import android.os.Build
+import android.os.SystemClock
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
@@ -9,7 +10,6 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -50,21 +50,21 @@ class AccessibilityChecksTest {
         composeRule.waitUntil(TIMEOUT_MILLIS) { exists("welcome") || exists("mainShell") }
         if (exists("welcome")) {
             check("Welcome")
-            composeRule.onNodeWithTag("welcomeGuest").performScrollTo().performClick()
+            composeRule.onNodeWithTag("welcomeGuest").performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
         }
         waitFor("home")
         composeRule.waitUntil(TIMEOUT_MILLIS) { exists("card_", prefix = true) }
         check("Home")
 
+        // Semantics clicks: on short emulator screens a scrolled-to node can sit under the floating nav pill.
         composeRule
-            .onAllNodes(hasTestTagPrefix("card_"))
-            .onFirst()
+            .onNodeWithTag(waitForSettledFirstCard())
             .performScrollTo()
-            .performClick()
+            .performSemanticsAction(SemanticsActions.OnClick)
         waitFor("detailList")
         check("Detail")
 
-        composeRule.onNodeWithTag("detailMessage").performScrollTo().performClick()
+        composeRule.onNodeWithTag("detailMessage").performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
         waitFor("chat")
         check("Chat")
         composeRule.onNodeWithTag("chatBack").performClick()
@@ -129,6 +129,28 @@ class AccessibilityChecksTest {
         return composeRule.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()
     }
 
+    /** The feed can re-sort for a few frames after it loads; returns the first card once it stopped moving. */
+    private fun waitForSettledFirstCard(): String {
+        var first: String? = null
+        var since = 0L
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            val current =
+                composeRule
+                    .onAllNodes(hasTestTagPrefix("card_"))
+                    .fetchSemanticsNodes()
+                    .firstOrNull()
+                    ?.config
+                    ?.getOrNull(SemanticsProperties.TestTag)
+            val now = SystemClock.uptimeMillis()
+            if (current == null || current != first) {
+                first = current
+                since = now
+            }
+            current != null && now - since >= SETTLE_MILLIS
+        }
+        return checkNotNull(first)
+    }
+
     private fun hasTestTagPrefix(prefix: String) =
         SemanticsMatcher("test tag starts with $prefix") {
             it.config.getOrNull(SemanticsProperties.TestTag)?.startsWith(prefix) == true
@@ -141,5 +163,6 @@ class AccessibilityChecksTest {
     private companion object {
         const val TIMEOUT_MILLIS = 15_000L
         const val IDLE_MILLIS = 500L
+        const val SETTLE_MILLIS = 750L
     }
 }
