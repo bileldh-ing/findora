@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-23 Phase 7: Saved-search alerts, widget, owner mode and adaptive layouts
+
 ### Phase 7B: Owner mode and adaptive layouts
 - **Owner mode** (Settings › Owner): a switch that opens the **Owner dashboard** (and a shortcut row while it is on). Guests get an inline "listing needs an account" card with Create account instead; deleting the account deletes its listings, their live copies and photos and turns owner mode off. The switch is kept in DataStore (`DataStoreOwnerModeRepository`).
 - **Domain** (`core/domain/owner`, pure Kotlin): `ListingDraft`, `OwnerListing` (Draft / Published / Paused, unpublished-changes flag), `WizardStep`, `ListingValidator` (per-step rules with bounds: title 8-80 and description 30-2000 characters trimmed, region, neighbourhood and a pin inside the region's bounds, 0-20 bedrooms, 1-20 bathrooms, 8-5000 m², floor -2 to 120, 1-12 photos, rent 1-100,000,000, currency, deposit at most 12 months of rent), `ListingPublisher` (complete draft → `Property` with `ownerId`, deposit, the owner as an initials-avatar contact without phone or e-mail, local photo files with a bundled fallback image, "New" instead of a 0.0 rating) and `OwnerStatsCalculator` (views, saves and enquiries by other users only; saves and chat threads de-duplicated per user; enquiries = chat threads + viewing requests; 14 days of views in the user's zone).
