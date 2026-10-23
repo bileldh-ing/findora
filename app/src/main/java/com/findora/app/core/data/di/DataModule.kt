@@ -20,6 +20,7 @@ import com.findora.app.core.data.local.dao.ChatDao
 import com.findora.app.core.data.local.dao.FavoriteDao
 import com.findora.app.core.data.local.dao.InteractionEventDao
 import com.findora.app.core.data.local.dao.NotificationDao
+import com.findora.app.core.data.local.dao.OwnerListingDao
 import com.findora.app.core.data.local.dao.PriceWatchDao
 import com.findora.app.core.data.local.dao.PropertyDao
 import com.findora.app.core.data.local.dao.RecentSearchDao
@@ -28,6 +29,13 @@ import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
 import com.findora.app.core.data.location.LastKnownLocationSource
 import com.findora.app.core.data.match.DataStoreMatchProfileRepository
+import com.findora.app.core.data.owner.AndroidPhotoCodec
+import com.findora.app.core.data.owner.DataStoreOwnerModeRepository
+import com.findora.app.core.data.owner.FileListingPhotoStore
+import com.findora.app.core.data.owner.ListingPhotosDir
+import com.findora.app.core.data.owner.OwnerListingIds
+import com.findora.app.core.data.owner.PhotoCodec
+import com.findora.app.core.data.owner.RoomOwnerListingRepository
 import com.findora.app.core.data.reference.AssetReferenceDataRepository
 import com.findora.app.core.data.remote.FakeRemoteDataSource
 import com.findora.app.core.data.remote.RemoteDataSource
@@ -49,6 +57,9 @@ import com.findora.app.core.di.IoDispatcher
 import com.findora.app.core.domain.chat.AgentReplyFormatter
 import com.findora.app.core.domain.chat.AgentResponder
 import com.findora.app.core.domain.location.DeviceLocationSource
+import com.findora.app.core.domain.owner.ListingPhotoStore
+import com.findora.app.core.domain.owner.OwnerListingRepository
+import com.findora.app.core.domain.owner.OwnerModeRepository
 import com.findora.app.core.domain.repository.CacheCleaner
 import com.findora.app.core.domain.repository.ChatRepository
 import com.findora.app.core.domain.repository.CompareRepository
@@ -84,6 +95,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
+import java.io.File
 import java.time.ZoneId
 import javax.inject.Singleton
 import kotlin.random.Random
@@ -277,4 +289,37 @@ object DatabaseModule {
 
     @Provides
     fun provideInteractionEventDao(db: FindoraDatabase): InteractionEventDao = db.interactionEventDao()
+
+    @Provides
+    fun provideOwnerListingDao(db: FindoraDatabase): OwnerListingDao = db.ownerListingDao()
+}
+
+/** Owner mode: listings created on the device, their photos and the owner-mode switch. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class OwnerBindingsModule {
+    @Binds
+    abstract fun bindOwnerListingRepository(impl: RoomOwnerListingRepository): OwnerListingRepository
+
+    @Binds
+    abstract fun bindListingPhotoStore(impl: FileListingPhotoStore): ListingPhotoStore
+
+    @Binds
+    abstract fun bindPhotoCodec(impl: AndroidPhotoCodec): PhotoCodec
+
+    @Binds
+    abstract fun bindOwnerModeRepository(impl: DataStoreOwnerModeRepository): OwnerModeRepository
+
+    companion object {
+        private const val PHOTOS_DIR = "listing_photos"
+
+        @Provides
+        @ListingPhotosDir
+        fun provideListingPhotosDir(
+            @ApplicationContext context: Context,
+        ): File = File(context.filesDir, PHOTOS_DIR)
+
+        @Provides
+        fun provideOwnerListingIds(): OwnerListingIds = OwnerListingIds.Random
+    }
 }

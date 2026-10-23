@@ -9,6 +9,7 @@ import com.findora.app.core.data.local.dao.ChatDao
 import com.findora.app.core.data.local.dao.FavoriteDao
 import com.findora.app.core.data.local.dao.InteractionEventDao
 import com.findora.app.core.data.local.dao.NotificationDao
+import com.findora.app.core.data.local.dao.OwnerListingDao
 import com.findora.app.core.data.local.dao.PriceWatchDao
 import com.findora.app.core.data.local.dao.PropertyDao
 import com.findora.app.core.data.local.dao.PropertySearchDao
@@ -22,6 +23,7 @@ import com.findora.app.core.data.local.entity.InteractionEventEntity
 import com.findora.app.core.data.local.entity.LoginAttemptEntity
 import com.findora.app.core.data.local.entity.MessageEntity
 import com.findora.app.core.data.local.entity.NotificationEntity
+import com.findora.app.core.data.local.entity.OwnerListingEntity
 import com.findora.app.core.data.local.entity.PriceWatchEntity
 import com.findora.app.core.data.local.entity.PropertyEntity
 import com.findora.app.core.data.local.entity.RecentSearchEntity
@@ -46,17 +48,20 @@ import com.findora.app.core.data.local.entity.ViewingEntity
         NotificationEntity::class,
         SavedSearchSeenEntity::class,
         PriceWatchEntity::class,
+        OwnerListingEntity::class,
     ],
     version = FindoraDatabase.VERSION,
     exportSchema = true,
     // v2 adds login_attempts (sign-in throttling); v3 adds conversations, notifications and messages.status
     // (with a default); v4 adds saved_search_seen, price_watch, saved-search region/frequency/last check and the
-    // notification saved_search_id/item_count columns (all with defaults or nullable). Every step is a pure
+    // notification saved_search_id/item_count columns (all with defaults or nullable); v5 adds owner_listings and the
+    // nullable properties.owner_id / deposit_amount columns (listings published on the device). Every step is a pure
     // addition, so Room generates the migrations; DatabaseSchemaTest runs them.
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5),
     ],
 )
 // One DAO accessor per table group is the Room convention, so the function count grows with the schema.
@@ -87,8 +92,10 @@ abstract class FindoraDatabase : RoomDatabase() {
 
     abstract fun propertySearchDao(): PropertySearchDao
 
+    abstract fun ownerListingDao(): OwnerListingDao
+
     companion object {
-        const val VERSION = 4
+        const val VERSION = 5
         const val NAME = "findora.db"
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,9 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -60,6 +59,7 @@ import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.ReduceMotion
 import com.findora.app.core.domain.model.ThemeMode
+import com.findora.app.core.ui.adaptive.LocalAdaptiveLayout
 import com.findora.app.core.ui.currentLocale
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -84,6 +84,7 @@ fun SettingsRoute(
     onOpenAbout: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    onOpenOwnerDashboard: () -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
@@ -91,6 +92,7 @@ fun SettingsRoute(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val currentOnSignedOut by rememberUpdatedState(onSignedOut)
+    val currentOnOpenOwnerDashboard by rememberUpdatedState(onOpenOwnerDashboard)
     val exportLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(EXPORT_MIME_TYPE)) { uri ->
             viewModel.onEvent(DataEvent.ExportDestinationChosen(uri?.toString()))
@@ -111,6 +113,7 @@ fun SettingsRoute(
         viewModel.effects.collect { effect ->
             when (effect) {
                 SettingsUiEffect.SignedOut -> currentOnSignedOut()
+                SettingsUiEffect.OpenOwnerDashboard -> currentOnOpenOwnerDashboard()
                 is SettingsUiEffect.Show -> snackbarHostState.showSnackbar(currentMessages.getValue(effect.message))
                 is SettingsUiEffect.CreateExportDocument ->
                     try {
@@ -143,6 +146,7 @@ fun SettingsRoute(
                 }
             },
             onOpenDesignSystem = onOpenDesignSystem,
+            onOpenOwnerDashboard = onOpenOwnerDashboard,
             contentPadding = contentPadding,
         )
         SnackbarHost(
@@ -169,20 +173,11 @@ fun SettingsScreen(
     onOpenSystemNotificationSettings: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    onOpenOwnerDashboard: () -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     var openChoice by rememberSaveable { mutableStateOf<OpenChoice?>(null) }
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .background(FindoraTheme.colors.background)
-                .verticalScroll(rememberScrollState())
-                .padding(contentPadding)
-                .padding(horizontal = FindoraTheme.spacing.screenHorizontal)
-                .testTag("settings"),
-        verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
-    ) {
+    val primary: @Composable ColumnScope.() -> Unit = {
         Spacer(Modifier.height(FindoraTheme.spacing.md))
         Text(
             text = stringResource(R.string.settings_title),
@@ -205,7 +200,14 @@ fun SettingsScreen(
             onClick = onOpenMatchPreferences,
             modifier = Modifier.testTag("settingsMatchPreferences"),
         )
-
+        OwnerSection(
+            state = state,
+            onEvent = onEvent,
+            onOpenOwnerDashboard = onOpenOwnerDashboard,
+            onCreateAccount = onCreateAccount,
+        )
+    }
+    val preferences: @Composable ColumnScope.() -> Unit = {
         SectionTitle(stringResource(R.string.settings_appearance))
         SegmentedControl(
             options =
@@ -240,7 +242,8 @@ fun SettingsScreen(
         }
 
         PrivacySection(state, onEvent, onOpenAbout)
-
+    }
+    val account: @Composable ColumnScope.() -> Unit = {
         SectionTitle(stringResource(R.string.settings_account))
         ActionRow(
             title = stringResource(R.string.action_logout),
@@ -263,6 +266,39 @@ fun SettingsScreen(
             )
         }
         Spacer(Modifier.height(FindoraTheme.spacing.lg))
+    }
+    if (LocalAdaptiveLayout.current.useTwoPanes) {
+        // Expanded width: the account, owner and account actions on the start side, every preference beside them.
+        Row(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .background(FindoraTheme.colors.background)
+                    .padding(contentPadding)
+                    .testTag("settings"),
+            horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.lg),
+        ) {
+            SettingsColumn(Modifier.weight(PRIMARY_PANE_WEIGHT).testTag("settingsPrimaryPane")) {
+                primary()
+                account()
+            }
+            SettingsColumn(Modifier.weight(1f).testTag("settingsPreferencesPane")) {
+                Spacer(Modifier.height(FindoraTheme.spacing.md))
+                preferences()
+                Spacer(Modifier.height(FindoraTheme.spacing.lg))
+            }
+        }
+    } else {
+        SettingsColumn(
+            modifier
+                .background(FindoraTheme.colors.background)
+                .padding(contentPadding)
+                .testTag("settings"),
+        ) {
+            primary()
+            preferences()
+            account()
+        }
     }
     when (openChoice) {
         OpenChoice.Language ->
@@ -566,3 +602,5 @@ private fun AccountCard(
         }
     }
 }
+
+private const val PRIMARY_PANE_WEIGHT = 0.42f

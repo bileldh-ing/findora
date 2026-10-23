@@ -35,7 +35,7 @@ and the choices you have.
 | In-app notifications | new message, viewing booked, viewing reminder, new matches for a saved search and price drop entries | on your device | notifications center |
 | Saved searches | the name, filter and region of each search, the listings it already reported and the last rent seen for each saved home | on your device | new-match and price-drop alerts |
 | Approximate location | only if you tap "My location" and grant the permission | read once on your device from the last known position, never stored or sent anywhere | centring the map on where you are |
-| Photos | only images you pick with the system photo picker | on your device | adding photos to a listing |
+| Listings you publish (owner mode) | the listing's text, address area and map pin, rent and deposit, and the photos you pick with the system photo picker (resized copies) | on your device only, in app-private storage excluded from backups; visible to other people who use Findora on the same device once published | listing your property |
 
 [If a version adds a backend, analytics or crash reporting, add a row per data type, name each
 service provider, where the data is processed and how long it is kept.]
@@ -56,6 +56,8 @@ device, never transmitted), not shared, optional. Precise location: not accessed
   signed in on the device.
 - **Biometrics** (optional): to unlock the app with your fingerprint or face; biometric data never
   leaves the Android system and is not accessible to Findora.
+- **Photos**: none. Listing photos are chosen with the Android Photo Picker, which gives Findora access only to the
+  items you select, once; resized copies are stored in the app's private storage and never uploaded.
 - **Internet**: to load map tiles and property images.
 
 ## 4. Third parties
@@ -86,6 +88,8 @@ clear the app's storage in Android settings, or uninstall the app. In **Settings
 - **Home-screen widget**: shows homes and your next viewing only while you are signed in; remove it from your home
   screen to stop it.
 - **Clear cache**: deletes downloaded listing photos and map tiles; they are downloaded again when needed.
+- **Your listings** (owner mode): delete a listing from the Owner dashboard to remove it, its photos and its stats
+  from the device; deleting your account deletes all of them. Photos you add to a listing never leave the device.
 
 Display-currency conversions use a table of indicative exchange rates bundled with the app; no request is made to
 an exchange-rate service. [If server-side data exists,

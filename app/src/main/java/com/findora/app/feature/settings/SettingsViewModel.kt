@@ -12,6 +12,8 @@ import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.ReduceMotion
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.core.domain.model.UserAccount
+import com.findora.app.core.domain.owner.OwnerListingRepository
+import com.findora.app.core.domain.owner.OwnerModeRepository
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.CacheCleaner
 import com.findora.app.core.domain.repository.DocumentWriter
@@ -64,7 +66,14 @@ data class SettingsUiState(
     val confirmingDelete: Boolean = false,
     /** An export or cache clear is running; their buttons are disabled meanwhile. */
     val working: Boolean = false,
+    /** Owner mode is on (only effective for a signed-in account). */
+    val ownerMode: Boolean = false,
+    /** A guest tried to switch owner mode on: explain that listing needs an account. */
+    val ownerNeedsAccount: Boolean = false,
 ) {
+    /** Owner mode applies: switched on by a signed-in (non-guest) user. */
+    val ownerModeActive: Boolean get() = ownerMode && !isGuest && account != null
+
     val canToggleBiometric: Boolean get() = biometricAvailable && sessionRemembered && !isGuest
 
     fun isEnabled(toggle: NotificationToggle): Boolean =
@@ -128,6 +137,13 @@ sealed interface DataEvent : SettingsUiEvent {
 sealed interface AccountEvent : SettingsUiEvent {
     data object Logout : AccountEvent
 
+    /** The "Owner mode" switch. Guests are asked to create an account instead. */
+    data class OwnerModeToggled(
+        val enabled: Boolean,
+    ) : AccountEvent
+
+    data object OwnerPromptDismissed : AccountEvent
+
     data object DeleteAccountRequested : AccountEvent
 
     data object DeleteAccountConfirmed : AccountEvent
@@ -140,6 +156,9 @@ enum class SettingsMessage { SearchHistoryCleared, CacheCleared, ExportSaved, Ex
 
 sealed interface SettingsUiEffect {
     data object SignedOut : SettingsUiEffect
+
+    /** Owner mode was just switched on: open the dashboard. */
+    data object OpenOwnerDashboard : SettingsUiEffect
 
     data class Show(
         val message: SettingsMessage,
@@ -155,8 +174,10 @@ private data class LocalState(
     val language: AppLanguage,
     val confirmingDelete: Boolean = false,
     val working: Boolean = false,
+    val ownerNeedsAccount: Boolean = false,
 )
 
+@Suppress("TooManyFunctions") // One handler per settings section.
 @HiltViewModel
 class SettingsViewModel
     @Inject
@@ -173,24 +194,27 @@ class SettingsViewModel
         private val documents: DocumentWriter,
         private val clock: AppClock,
         private val zone: ZoneId,
+        private val ownerModes: OwnerModeRepository,
+        private val ownerListings: OwnerListingRepository,
     ) : ViewModel() {
         private val local = MutableStateFlow(LocalState(language = languages.current()))
         private val biometricAvailable = biometric.canAuthenticate()
         private val ratesAsOf: Flow<LocalDate?> = flow { emit(referenceData.exchangeRates()?.asOf) }
 
         val state: StateFlow<SettingsUiState> =
-            combine(auth.observeCurrentUser(), auth.session, settings.settings, local, ratesAsOf) {
-                account,
-                session,
-                appSettings,
-                localState,
-                asOf,
-                ->
+            combine(
+                auth.observeCurrentUser(),
+                auth.session,
+                settings.settings,
+                local,
+                combine(ratesAsOf, ownerModes.ownerMode, ::Pair),
+            ) { account, session, appSettings, localState, (asOf, ownerMode) ->
                 appSettings.toUiState(localState).copy(
                     account = account,
                     isGuest = session?.isGuest == true,
                     sessionRemembered = session?.isPersistent == true,
                     ratesAsOf = asOf,
+                    ownerMode = ownerMode,
                 )
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), SettingsUiState())
 
@@ -220,6 +244,7 @@ class SettingsViewModel
                 biometricAvailable = biometricAvailable,
                 confirmingDelete = localState.confirmingDelete,
                 working = localState.working,
+                ownerNeedsAccount = localState.ownerNeedsAccount,
             )
 
         private fun onPreference(event: PreferenceEvent) {
@@ -315,22 +340,40 @@ class SettingsViewModel
                         auth.logout()
                         effectChannel.send(SettingsUiEffect.SignedOut)
                     }
+                is AccountEvent.OwnerModeToggled -> toggleOwnerMode(event.enabled)
+                AccountEvent.OwnerPromptDismissed -> local.update { it.copy(ownerNeedsAccount = false) }
                 AccountEvent.DeleteAccountRequested -> local.update { it.copy(confirmingDelete = true) }
                 AccountEvent.DeleteAccountDismissed -> local.update { it.copy(confirmingDelete = false) }
                 AccountEvent.DeleteAccountConfirmed -> deleteAccount()
             }
         }
 
+        private fun toggleOwnerMode(enabled: Boolean) {
+            val session = auth.session.value
+            if (enabled && (session == null || session.isGuest)) {
+                local.update { it.copy(ownerNeedsAccount = true) }
+                return
+            }
+            viewModelScope.launch {
+                ownerModes.setOwnerMode(enabled)
+                if (enabled) effectChannel.send(SettingsUiEffect.OpenOwnerDashboard)
+            }
+        }
+
         private fun deleteAccount() {
             viewModelScope.launch {
                 local.update { it.copy(confirmingDelete = false) }
-                // The quiz answers belong to the account being deleted.
+                // The quiz answers and the listings (with their photos) belong to the account being deleted.
                 auth.session.value
                     ?.userId
-                    ?.let { matchProfiles.clear(it) }
+                    ?.let {
+                        matchProfiles.clear(it)
+                        ownerListings.deleteAllFor(it)
+                    }
                 auth.deleteAccount()
-                // The biometric lock belonged to the deleted account.
+                // The biometric lock and owner mode belonged to the deleted account.
                 settings.setBiometricLockEnabled(false)
+                ownerModes.setOwnerMode(false)
                 effectChannel.send(SettingsUiEffect.SignedOut)
             }
         }

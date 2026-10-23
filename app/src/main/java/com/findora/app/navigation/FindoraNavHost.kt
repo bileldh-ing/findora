@@ -29,6 +29,8 @@ import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.match.deck.DeckRoute
 import com.findora.app.feature.match.quiz.MatchQuizRoute
 import com.findora.app.feature.notifications.NotificationsRoute
+import com.findora.app.feature.owner.dashboard.OwnerDashboardRoute
+import com.findora.app.feature.owner.wizard.ListingWizardRoute
 import com.findora.app.feature.saved.MatchesRoute
 import com.findora.app.feature.savedsearch.SavedSearchLinkRoute
 import com.findora.app.feature.search.SearchRoute
@@ -64,6 +66,8 @@ private fun FindoraGraph(
     val openProperty: (String) -> Unit = { id -> navController.navigate(FindoraRoute.PropertyDetail(id)) }
     val openConversation: (String) -> Unit = { id -> navController.navigate(FindoraRoute.Chat(id)) }
     val messageAgent: (String) -> Unit = { id -> navController.navigate(FindoraRoute.ChatWithAgent(id)) }
+    val scheduleViewing: (String) -> Unit = { id -> navController.navigate(FindoraRoute.ScheduleViewing(id)) }
+    val editListing: (String) -> Unit = { id -> navController.navigate(FindoraRoute.ListingEditor(id)) }
     val toMain = { navController.navigateClearingBackStack(FindoraRoute.Main) }
     val toWelcome = { navController.navigateClearingBackStack(FindoraRoute.Welcome) }
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier) {
@@ -111,18 +115,25 @@ private fun FindoraGraph(
                 }
             CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this) {
                 MainShell(
-                    onOpenSearch = { navController.navigate(FindoraRoute.Search) },
-                    onOpenProperty = openProperty,
-                    onSignedOut = toWelcome,
-                    onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
-                    onOpenViewings = { navController.navigate(FindoraRoute.Viewings) },
-                    onOpenAbout = { navController.navigate(FindoraRoute.About) },
-                    onOpenMatchQuiz = { navController.navigate(FindoraRoute.MatchQuiz) },
-                    onOpenDreamMatch = { navController.navigate(FindoraRoute.DreamMatch) },
-                    onOpenCompare = { navController.navigate(FindoraRoute.Compare) },
-                    onOpenConversation = openConversation,
-                    onOpenNotifications = { navController.navigate(FindoraRoute.Notifications) },
-                    onOpenDesignSystem = openDesignSystem,
+                    actions =
+                        MainShellActions(
+                            onOpenSearch = { navController.navigate(FindoraRoute.Search) },
+                            onOpenProperty = openProperty,
+                            onSignedOut = toWelcome,
+                            onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
+                            onOpenViewings = { navController.navigate(FindoraRoute.Viewings) },
+                            onOpenAbout = { navController.navigate(FindoraRoute.About) },
+                            onOpenMatchQuiz = { navController.navigate(FindoraRoute.MatchQuiz) },
+                            onOpenDreamMatch = { navController.navigate(FindoraRoute.DreamMatch) },
+                            onOpenCompare = { navController.navigate(FindoraRoute.Compare) { launchSingleTop = true } },
+                            onOpenConversation = openConversation,
+                            onOpenNotifications = { navController.navigate(FindoraRoute.Notifications) },
+                            onOpenDesignSystem = openDesignSystem,
+                            onScheduleViewing = scheduleViewing,
+                            onMessageAgent = messageAgent,
+                            onOpenOwnerDashboard = { navController.navigate(FindoraRoute.OwnerDashboard) },
+                            onEditListing = editListing,
+                        ),
                 )
             }
         }
@@ -133,9 +144,10 @@ private fun FindoraGraph(
                 DetailRoute(
                     onBack = { navController.popBackStack() },
                     onOpenProperty = openProperty,
-                    onScheduleViewing = { id -> navController.navigate(FindoraRoute.ScheduleViewing(id)) },
+                    onScheduleViewing = scheduleViewing,
                     onOpenCompare = { navController.navigate(FindoraRoute.Compare) { launchSingleTop = true } },
                     onMessageAgent = messageAgent,
+                    onEditListing = editListing,
                 )
             }
         }
@@ -203,6 +215,29 @@ private fun FindoraGraph(
             MatchQuizRoute(
                 onFinish = { navController.popBackStack() },
                 onClose = { navController.popBackStack() },
+            )
+        }
+        composable<FindoraRoute.OwnerDashboard> {
+            OwnerDashboardRoute(
+                onBack = { navController.popBackStack() },
+                onCreateListing = { navController.navigate(FindoraRoute.ListingEditor()) },
+                onEditListing = editListing,
+                onOpenListing = openProperty,
+            )
+        }
+        composable<FindoraRoute.ListingEditor> {
+            ListingWizardRoute(
+                onClose = { navController.popBackStack() },
+                onOpenListing = { id ->
+                    navController.navigate(FindoraRoute.PropertyDetail(id)) {
+                        popUpTo<FindoraRoute.ListingEditor> { inclusive = true }
+                    }
+                },
+                onCreateAccount = {
+                    navController.navigate(FindoraRoute.SignUp) {
+                        popUpTo<FindoraRoute.ListingEditor> { inclusive = true }
+                    }
+                },
             )
         }
         composable<FindoraRoute.About> {

@@ -42,6 +42,7 @@ class DatabaseSchemaTest {
             "notifications",
             "saved_search_seen",
             "price_watch",
+            "owner_listings",
         ).forEach { table -> assertTrue(table, schema.readText().contains("\"tableName\": \"$table\"")) }
     }
 
@@ -132,6 +133,38 @@ class DatabaseSchemaTest {
             db.execSQL("INSERT INTO saved_search_seen (search_id, property_id) VALUES (1, 'p1')")
             db.execSQL("INSERT INTO price_watch (user_id, property_id, rent_amount) VALUES ('u1', 'p1', 10000)")
             db.query("SELECT COUNT(*) FROM saved_search_seen").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals(1, cursor.getInt(0))
+            }
+        }
+    }
+
+    @Test
+    fun version4MigratesToVersion5KeepingListingsAsMarketListings() {
+        helper.createDatabase(TEST_DB, 4).use { db ->
+            db.execSQL(
+                "INSERT INTO properties (id, title, type, rent_amount, currency, bedrooms, bathrooms, area_sqm, " +
+                    "floor, " +
+                    "furnished, pet_friendly, parking, amenities, tags, rating, reviews_count, verified, latitude, " +
+                    "longitude, locality, region_id, description, agent_id, agent_name, agent_phone, agent_initials, " +
+                    "agent_avatar_argb, agent_response_minutes, images, video_url, panorama_url, created_at, " +
+                    "price_history, sample_data, fetched_at) VALUES " +
+                    "('p1', 'Home', 'house', 1000, 'INR', 1, 1, 50, 0, " +
+                    "0, 0, 0, '[]', '[]', 4.5, 3, 1, 10.0, 76.0, 'Kochi', 'kerala', 'A home', 'a1', 'Agent', '1', " +
+                    "'AG', 0, 30, '[]', NULL, NULL, 0, '[]', 1, 0)",
+            )
+        }
+        helper.runMigrationsAndValidate(TEST_DB, 5, true).use { db ->
+            db.query("SELECT owner_id, deposit_amount FROM properties WHERE id = 'p1'").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertTrue(cursor.isNull(0))
+                assertTrue(cursor.isNull(1))
+            }
+            db.execSQL(
+                "INSERT INTO owner_listings (id, owner_id, status, draft_json, published_json, created_at, " +
+                    "updated_at, published_at) VALUES ('own-1', 'u1', 'draft', '{}', NULL, 0, 0, NULL)",
+            )
+            db.query("SELECT COUNT(*) FROM owner_listings").use { cursor ->
                 assertTrue(cursor.moveToFirst())
                 assertEquals(1, cursor.getInt(0))
             }

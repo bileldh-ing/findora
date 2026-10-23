@@ -4,20 +4,12 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -30,30 +22,25 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.ui.LocalNavAnimatedVisibilityScope
+import com.findora.app.core.ui.adaptive.ListDetailLayout
+import com.findora.app.core.ui.adaptive.LocalAdaptiveLayout
+import com.findora.app.feature.chat.ChatRoute
 import com.findora.app.feature.chat.ConversationsRoute
+import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.home.HomeRoute
 import com.findora.app.feature.locations.LocationsRoute
 import com.findora.app.feature.saved.SavedRoute
 import com.findora.app.feature.settings.SettingsRoute
 
 /**
- * The signed-in (or guest) app: the tab destinations with the floating navigation pill drawn over them.
- * Every tab gets bottom content padding for the pill so no card or button is ever hidden behind it.
+ * The signed-in (or guest) app: the tab destinations under [MainScaffold] (floating pill on phones, navigation rail on
+ * wider windows). On expanded widths Home and Chat become list-detail: a listing or a thread opens in the pane beside
+ * the list (its own small graph) instead of covering it.
  */
 @Composable
 fun MainShell(
-    onOpenSearch: () -> Unit,
-    onOpenProperty: (String) -> Unit,
-    onSignedOut: () -> Unit,
-    onCreateAccount: () -> Unit,
-    onOpenViewings: () -> Unit,
-    onOpenAbout: () -> Unit,
-    onOpenMatchQuiz: () -> Unit,
-    onOpenDreamMatch: () -> Unit,
-    onOpenCompare: () -> Unit,
-    onOpenConversation: (String) -> Unit,
-    onOpenNotifications: () -> Unit,
-    onOpenDesignSystem: (() -> Unit)?,
+    actions: MainShellActions,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     viewModel: MainShellViewModel = hiltViewModel(),
@@ -66,16 +53,17 @@ fun MainShell(
         } ?: MainTab.Home
     val reduceMotion = rememberReducedMotion()
     val fadeMillis = FindoraTheme.motion.shortMillis
-    val contentPadding =
-        PaddingValues(
-            top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-            bottom =
-                WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() +
-                    NavPillHeight + NavPillMargin * 2,
-        )
+    val layout = LocalAdaptiveLayout.current
     val selectTab: (MainTab) -> Unit = { tab -> navController.navigateToTab(tab) }
 
-    Box(modifier = modifier.fillMaxSize().testTag("mainShell")) {
+    MainScaffold(
+        useRail = layout.useNavigationRail,
+        selected = currentTab,
+        onSelect = selectTab,
+        badges = mapOf(MainTab.Chat to unreadMessages),
+        reduceMotion = reduceMotion,
+        modifier = modifier,
+    ) { contentPadding ->
         NavHost(
             navController = navController,
             startDestination = MainRoute.Home,
@@ -84,54 +72,132 @@ fun MainShell(
             modifier = Modifier.fillMaxSize(),
         ) {
             composable<MainRoute.Home> {
-                HomeRoute(
-                    onOpenSearch = onOpenSearch,
-                    onOpenProfile = { selectTab(MainTab.Settings) },
-                    onOpenProperty = onOpenProperty,
-                    onOpenMatchQuiz = onOpenMatchQuiz,
-                    onOpenDreamMatch = onOpenDreamMatch,
-                    onOpenCompare = onOpenCompare,
-                    onOpenNotifications = onOpenNotifications,
-                    contentPadding = contentPadding,
-                )
+                HomeTab(actions, contentPadding, onOpenProfile = { selectTab(MainTab.Settings) })
             }
             composable<MainRoute.Locations> {
-                LocationsRoute(onOpenProperty = onOpenProperty, contentPadding = contentPadding)
+                LocationsRoute(onOpenProperty = actions.onOpenProperty, contentPadding = contentPadding)
             }
             composable<MainRoute.Saved> {
                 SavedRoute(
-                    onOpenProperty = onOpenProperty,
-                    onOpenDreamMatch = onOpenDreamMatch,
+                    onOpenProperty = actions.onOpenProperty,
+                    onOpenDreamMatch = actions.onOpenDreamMatch,
                     onShowSearchResults = { selectTab(MainTab.Home) },
                     contentPadding = contentPadding,
                 )
             }
             composable<MainRoute.Chat> {
-                ConversationsRoute(onOpenConversation = onOpenConversation, contentPadding = contentPadding)
+                ChatTab(actions, contentPadding)
             }
             composable<MainRoute.Settings> {
                 SettingsRoute(
-                    onSignedOut = onSignedOut,
-                    onCreateAccount = onCreateAccount,
-                    onOpenViewings = onOpenViewings,
-                    onOpenMatchPreferences = onOpenMatchQuiz,
-                    onOpenAbout = onOpenAbout,
-                    onOpenDesignSystem = onOpenDesignSystem,
+                    onSignedOut = actions.onSignedOut,
+                    onCreateAccount = actions.onCreateAccount,
+                    onOpenViewings = actions.onOpenViewings,
+                    onOpenMatchPreferences = actions.onOpenMatchQuiz,
+                    onOpenAbout = actions.onOpenAbout,
+                    onOpenDesignSystem = actions.onOpenDesignSystem,
+                    onOpenOwnerDashboard = actions.onOpenOwnerDashboard,
                     contentPadding = contentPadding,
                 )
             }
         }
-        FloatingNavPill(
-            selected = currentTab,
-            onSelect = selectTab,
-            reduceMotion = reduceMotion,
-            badges = mapOf(MainTab.Chat to unreadMessages),
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .navigationBarsPadding()
-                    .padding(horizontal = FindoraTheme.spacing.screenHorizontal, vertical = NavPillMargin),
-        )
+    }
+}
+
+/** Home, with the selected listing beside the feed on expanded widths. */
+@Composable
+private fun HomeTab(
+    actions: MainShellActions,
+    contentPadding: PaddingValues,
+    onOpenProfile: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val layout = LocalAdaptiveLayout.current
+    val paneNav = rememberNavController()
+    val twoPanes = layout.useTwoPanes
+    ListDetailLayout(
+        twoPanes = twoPanes,
+        fold = layout.fold,
+        modifier = modifier,
+        list = {
+            HomeRoute(
+                onOpenSearch = actions.onOpenSearch,
+                onOpenProfile = onOpenProfile,
+                onOpenProperty = if (twoPanes) paneNav::showDetail else actions.onOpenProperty,
+                onOpenMatchQuiz = actions.onOpenMatchQuiz,
+                onOpenDreamMatch = actions.onOpenDreamMatch,
+                onOpenCompare = actions.onOpenCompare,
+                onOpenNotifications = actions.onOpenNotifications,
+                contentPadding = contentPadding,
+            )
+        },
+        detail = {
+            NavHost(navController = paneNav, startDestination = PaneRoute.Empty) {
+                composable<PaneRoute.Empty> { EmptyPane(PaneRoute.Kind.Listing, contentPadding) }
+                composable<FindoraRoute.PropertyDetail> {
+                    // The list stays on screen, so the photo is not shared between the panes.
+                    CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides null) {
+                        DetailRoute(
+                            onBack = { paneNav.popBackStack() },
+                            onOpenProperty = paneNav::showDetail,
+                            onScheduleViewing = actions.onScheduleViewing,
+                            onOpenCompare = actions.onOpenCompare,
+                            onMessageAgent = actions.onMessageAgent,
+                            onEditListing = actions.onEditListing,
+                        )
+                    }
+                }
+            }
+        },
+    )
+}
+
+/** Conversations, with the open thread beside the list on expanded widths. */
+@Composable
+private fun ChatTab(
+    actions: MainShellActions,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier,
+) {
+    val layout = LocalAdaptiveLayout.current
+    val paneNav = rememberNavController()
+    val twoPanes = layout.useTwoPanes
+    ListDetailLayout(
+        twoPanes = twoPanes,
+        fold = layout.fold,
+        modifier = modifier,
+        list = {
+            ConversationsRoute(
+                onOpenConversation =
+                    if (twoPanes) {
+                        { id -> paneNav.showOnly(FindoraRoute.Chat(id)) }
+                    } else {
+                        actions.onOpenConversation
+                    },
+                contentPadding = contentPadding,
+            )
+        },
+        detail = {
+            NavHost(navController = paneNav, startDestination = PaneRoute.Empty) {
+                composable<PaneRoute.Empty> { EmptyPane(PaneRoute.Kind.Conversation, contentPadding) }
+                composable<FindoraRoute.Chat> {
+                    ChatRoute(onBack = { paneNav.popBackStack() }, onOpenProperty = actions.onOpenProperty)
+                }
+            }
+        },
+    )
+}
+
+/** Opens a listing in the detail pane; listings opened from it (similar homes) stack, Back returns. */
+private fun NavHostController.showDetail(propertyId: String) {
+    navigate(FindoraRoute.PropertyDetail(propertyId)) { launchSingleTop = true }
+}
+
+/** Replaces whatever the pane shows with [route] (one thread at a time). */
+private fun NavHostController.showOnly(route: FindoraRoute) {
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id)
+        launchSingleTop = true
     }
 }
 

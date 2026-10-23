@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.findora.app.R
@@ -40,8 +41,10 @@ import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.Agent
+import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.PropertyCard
+import com.findora.app.core.ui.rentText
 import kotlinx.coroutines.launch
 
 private const val MINUTES_PER_HOUR = 60
@@ -109,6 +112,7 @@ fun AgentCard(
     onEmail: () -> Unit,
     modifier: Modifier = Modifier,
     onMessage: () -> Unit = {},
+    showDirectContact: Boolean = true,
 ) {
     val response =
         if (agent.responseTimeMinutes < MINUTES_PER_HOUR) {
@@ -175,20 +179,84 @@ fun AgentCard(
                 modifier =
                     Modifier.fillMaxWidth().semantics { contentDescription = messageLabel }.testTag("detailMessage"),
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
-                SecondaryPillButton(
-                    text = stringResource(R.string.detail_call),
-                    onClick = onCall,
-                    modifier = Modifier.weight(1f).semantics { contentDescription = callLabel }.testTag("detailCall"),
-                )
-                SecondaryPillButton(
-                    text = stringResource(R.string.detail_email),
-                    onClick = onEmail,
-                    modifier = Modifier.weight(1f).semantics { contentDescription = emailLabel }.testTag("detailEmail"),
-                )
+            if (showDirectContact) {
+                ContactButtons(callLabel, emailLabel, onCall, onEmail)
             }
         }
     }
+}
+
+@Composable
+private fun ContactButtons(
+    callLabel: String,
+    emailLabel: String,
+    onCall: () -> Unit,
+    onEmail: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
+        SecondaryPillButton(
+            text = stringResource(R.string.detail_call),
+            onClick = onCall,
+            modifier = Modifier.weight(1f).semantics { contentDescription = callLabel }.testTag("detailCall"),
+        )
+        SecondaryPillButton(
+            text = stringResource(R.string.detail_email),
+            onClick = onEmail,
+            modifier = Modifier.weight(1f).semantics { contentDescription = emailLabel }.testTag("detailEmail"),
+        )
+    }
+}
+
+/** Shown instead of the agent card on the viewer's own listing: "Listed by you" and a way to edit it. */
+@Composable
+fun ListedByYouCard(
+    onEdit: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier.fillMaxWidth().padding(horizontal = FindoraTheme.spacing.screenHorizontal)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.sm),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(FindoraTheme.shapes.card)
+                    .background(FindoraTheme.colors.surface)
+                    .padding(FindoraTheme.spacing.md)
+                    .testTag("detailListedByYou"),
+        ) {
+            Text(
+                text = stringResource(R.string.card_listed_by_you),
+                style = FindoraTheme.typography.section,
+                color = FindoraTheme.colors.onBackground,
+                modifier = Modifier.semantics { heading() },
+            )
+            Text(
+                text = stringResource(R.string.detail_listed_by_you_body),
+                style = FindoraTheme.typography.caption,
+                color = FindoraTheme.colors.onSurfaceMuted,
+            )
+            SecondaryPillButton(
+                text = stringResource(R.string.owner_edit_listing),
+                onClick = onEdit,
+                modifier = Modifier.fillMaxWidth().testTag("detailEditListing"),
+            )
+        }
+    }
+}
+
+/** The deposit an owner asks for, in the display currency. */
+@Composable
+fun DepositRow(
+    deposit: Money,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = stringResource(R.string.detail_deposit, rentText(deposit)),
+        style = FindoraTheme.typography.body,
+        color = FindoraTheme.colors.onBackground,
+        modifier = modifier.padding(horizontal = FindoraTheme.spacing.screenHorizontal).testTag("detailDeposit"),
+    )
 }
 
 /** Locality and coordinates with a button that hands the point to any installed maps app (no API key). */

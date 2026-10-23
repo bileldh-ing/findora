@@ -131,6 +131,69 @@ fun PropertyEntity.toDomain(): Property =
         createdAt = Instant.ofEpochMilli(createdAtMillis),
         priceHistory = priceHistory.map { PricePoint(YearMonth.parse(it.month), it.amount) },
         isSampleData = sampleData,
+        ownerId = ownerId,
+        deposit = depositAmount?.let { Money(it, Currency.fromCode(currency)) },
+    )
+
+/** The cache row of a listing published on this device (see [Property.ownerId]). */
+fun Property.toEntity(fetchedAtMillis: Long): PropertyEntity =
+    PropertyEntity(
+        id = id,
+        title = title,
+        type = type.id,
+        rentAmount = rent.amount,
+        currency = rent.currency.code,
+        bedrooms = bedrooms,
+        bathrooms = bathrooms,
+        areaSqm = areaSqm,
+        floor = floor,
+        furnished = furnished,
+        petFriendly = petFriendly,
+        parking = parking,
+        amenities = amenities.map(Amenity::id),
+        tags = tags,
+        rating = rating,
+        reviewsCount = reviewsCount,
+        verified = verified,
+        latitude = location.latitude,
+        longitude = location.longitude,
+        locality = locality,
+        regionId = regionId,
+        description = description,
+        agent =
+            AgentColumns(
+                id = agent.id,
+                name = agent.name,
+                phone = agent.phone,
+                initials = agent.avatar.initials,
+                avatarArgb = agent.avatar.backgroundArgb,
+                responseTimeMinutes = agent.responseTimeMinutes,
+            ),
+        images =
+            images.map {
+                ImageColumns(
+                    url = it.url,
+                    width = it.width,
+                    height = it.height,
+                    dominantColorArgb = it.dominantColorArgb,
+                    alt = it.altText,
+                    photographer = it.credit.photographer,
+                    photographerUrl = it.credit.photographerUrl,
+                    sourceUrl = it.credit.sourceUrl,
+                    licence = it.credit.licence,
+                    licenceUrl = it.credit.licenceUrl,
+                    offlineAsset = it.offlineAsset,
+                    fallbackAsset = it.fallbackAsset,
+                )
+            },
+        videoUrl = videoUrl,
+        panoramaUrl = panoramaUrl,
+        createdAtMillis = createdAt.toEpochMilli(),
+        priceHistory = priceHistory.map { PricePointColumns(it.month.toString(), it.amount) },
+        sampleData = isSampleData,
+        fetchedAtMillis = fetchedAtMillis,
+        ownerId = ownerId,
+        depositAmount = deposit?.amount,
     )
 
 fun InteractionEvent.toEntity(): InteractionEventEntity =

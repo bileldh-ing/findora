@@ -245,6 +245,9 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.osmdroid.android)
     implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.window)
+    implementation(libs.androidx.window.core)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

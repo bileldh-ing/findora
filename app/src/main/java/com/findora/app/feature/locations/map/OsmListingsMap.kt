@@ -310,7 +310,7 @@ private fun clusterMarker(
     }
 
 /** Configures osmdroid once (user agent = application id, app-private tile cache) and builds the view. */
-private fun createMapView(context: Context): MapView {
+internal fun createMapView(context: Context): MapView {
     val configuration = Configuration.getInstance()
     configuration.load(context, context.getSharedPreferences("osmdroid", Context.MODE_PRIVATE))
     configuration.userAgentValue = BuildConfig.APPLICATION_ID

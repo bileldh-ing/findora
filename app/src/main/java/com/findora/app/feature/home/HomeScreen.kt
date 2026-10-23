@@ -75,6 +75,7 @@ import com.findora.app.core.ui.InlineBanner
 import com.findora.app.core.ui.PropertyCard
 import com.findora.app.core.ui.PropertyCardSkeleton
 import com.findora.app.core.ui.StateMessage
+import com.findora.app.core.ui.adaptive.LocalAdaptiveLayout
 import com.findora.app.feature.compare.CompareTray
 import com.findora.app.feature.compare.CompareTrayEvent
 import com.findora.app.feature.compare.CompareTrayHeight
@@ -243,7 +244,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Fixed(LocalAdaptiveLayout.current.gridColumns),
                 state = gridState,
                 contentPadding =
                     PaddingValues(

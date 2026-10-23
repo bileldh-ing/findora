@@ -54,6 +54,7 @@ import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.ui.LocalViewerId
 import com.findora.app.core.ui.StateMessage
 import com.findora.app.core.ui.match.MatchSummaryCard
 import com.findora.app.core.ui.match.WhyThisMatchSheet
@@ -77,6 +78,7 @@ fun DetailRoute(
     onOpenCompare: () -> Unit,
     onMessageAgent: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onEditListing: (String) -> Unit = {},
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -110,6 +112,7 @@ fun DetailRoute(
         onOpenProperty = onOpenProperty,
         onScheduleViewing = { onScheduleViewing(viewModel.propertyId) },
         onMessageAgent = { onMessageAgent(viewModel.propertyId) },
+        onEditListing = { onEditListing(viewModel.propertyId) },
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -130,6 +133,7 @@ fun DetailScreen(
     onScheduleViewing: () -> Unit,
     modifier: Modifier = Modifier,
     onMessageAgent: () -> Unit = {},
+    onEditListing: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Box(
@@ -151,6 +155,7 @@ fun DetailScreen(
                     onOpenProperty = onOpenProperty,
                     onScheduleViewing = onScheduleViewing,
                     onMessageAgent = onMessageAgent,
+                    onEditListing = onEditListing,
                 )
         }
         if (state !is DetailUiState.Content) {
@@ -174,9 +179,11 @@ private fun DetailContent(
     onOpenProperty: (String) -> Unit,
     onScheduleViewing: () -> Unit,
     onMessageAgent: () -> Unit,
+    onEditListing: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val property = content.property
+    val listedByYou = property.isListedBy(LocalViewerId.current)
     val listState = rememberLazyListState()
     val pagerState = rememberPagerState { property.images.size }
     var galleryPage by rememberSaveable(property.id) { mutableStateOf<Int?>(null) }
@@ -226,13 +233,20 @@ private fun DetailContent(
                 )
             }
             if (property.amenities.isNotEmpty()) item(key = "amenities") { AmenitiesSection(property.amenities) }
+            property.deposit?.let { deposit -> item(key = "deposit") { DepositRow(deposit) } }
             item(key = "agent") {
-                AgentCard(
-                    agent = property.agent,
-                    onCall = { onEvent(DetailUiEvent.CallAgent) },
-                    onEmail = { onEvent(DetailUiEvent.EmailAgent) },
-                    onMessage = onMessageAgent,
-                )
+                if (listedByYou) {
+                    ListedByYouCard(onEdit = onEditListing)
+                } else {
+                    AgentCard(
+                        agent = property.agent,
+                        onCall = { onEvent(DetailUiEvent.CallAgent) },
+                        onEmail = { onEvent(DetailUiEvent.EmailAgent) },
+                        onMessage = onMessageAgent,
+                        // Owners on this device are reached through the in-app chat only.
+                        showDirectContact = property.ownerId == null,
+                    )
+                }
             }
             item(key = "location") {
                 LocationSection(property = property, onOpenMap = { onEvent(DetailUiEvent.OpenInMaps) })
@@ -249,7 +263,7 @@ private fun DetailContent(
                 }
             }
         }
-        ScheduleBar(onClick = onScheduleViewing, modifier = Modifier.align(Alignment.BottomCenter))
+        if (!listedByYou) ScheduleBar(onClick = onScheduleViewing, modifier = Modifier.align(Alignment.BottomCenter))
         DetailTopBar(
             isFavorite = content.isFavorite,
             isInCompare = content.isInCompare,

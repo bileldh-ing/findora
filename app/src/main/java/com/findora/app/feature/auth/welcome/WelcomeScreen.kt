@@ -15,12 +15,16 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -60,6 +64,8 @@ import com.findora.app.feature.auth.common.FormErrorText
 
 private const val HERO_FRACTION = 0.6f
 private val HeroMinHeight = 340.dp
+private val LandscapeMaxHeight = 480.dp
+private val PanelMaxWidth = 560.dp
 private val ArcDepth = 44.dp
 private const val KEN_BURNS_SCALE = 1.12f
 private const val KEN_BURNS_MILLIS = 14_000
@@ -127,26 +133,58 @@ fun WelcomeScreen(
                 .background(FindoraTheme.colors.background)
                 .testTag("welcome"),
     ) {
-        val heroHeight = (maxHeight * HERO_FRACTION).coerceAtLeast(HeroMinHeight)
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(scroll).navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            WelcomeHero(
-                badgeScale = entrance.badgeScale,
-                parallaxPx = scroll.value * PARALLAX_FACTOR,
-                reduceMotion = reduceMotion,
-                modifier = Modifier.fillMaxWidth().height(heroHeight),
-            )
-            Spacer(Modifier.height(FindoraTheme.spacing.lg))
-            WelcomePanel(
-                state = state,
-                entrance = entrance,
-                onLogin = onLogin,
-                onSignUp = onSignUp,
-                onTryDemo = onTryDemo,
-                onContinueAsGuest = onContinueAsGuest,
-            )
+        if (maxWidth > maxHeight && maxHeight < LandscapeMaxHeight) {
+            // Landscape phone (or a short window): the hero on the start side, the panel scrolling beside it.
+            Row(Modifier.fillMaxSize().testTag("welcomeLandscape")) {
+                WelcomeHero(
+                    badgeScale = entrance.badgeScale,
+                    parallaxPx = 0f,
+                    reduceMotion = reduceMotion,
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                )
+                Column(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .verticalScroll(scroll)
+                            .safeDrawingPadding(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(Modifier.height(FindoraTheme.spacing.md))
+                    WelcomePanel(
+                        state = state,
+                        entrance = entrance,
+                        onLogin = onLogin,
+                        onSignUp = onSignUp,
+                        onTryDemo = onTryDemo,
+                        onContinueAsGuest = onContinueAsGuest,
+                    )
+                }
+            }
+        } else {
+            val heroHeight = (maxHeight * HERO_FRACTION).coerceAtLeast(HeroMinHeight)
+            Column(
+                modifier = Modifier.fillMaxSize().verticalScroll(scroll).navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                WelcomeHero(
+                    badgeScale = entrance.badgeScale,
+                    parallaxPx = scroll.value * PARALLAX_FACTOR,
+                    reduceMotion = reduceMotion,
+                    modifier = Modifier.fillMaxWidth().height(heroHeight),
+                )
+                Spacer(Modifier.height(FindoraTheme.spacing.lg))
+                WelcomePanel(
+                    state = state,
+                    entrance = entrance,
+                    onLogin = onLogin,
+                    onSignUp = onSignUp,
+                    onTryDemo = onTryDemo,
+                    onContinueAsGuest = onContinueAsGuest,
+                    modifier = Modifier.widthIn(max = PanelMaxWidth),
+                )
+            }
         }
     }
 }

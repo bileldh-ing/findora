@@ -25,8 +25,27 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
-| 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A) | In progress |
+| 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A); owner mode and adaptive layouts for tablets, foldables and landscape (7B) | In progress |
 | 8 | Polish and release | Planned |
+
+## What Phase 7B ships
+
+- **Owner mode**: switch it on in Settings (signed-in accounts; guests are asked to create one) to reach the **Owner
+  dashboard**: total views, saves and enquiries, a 14-day views bar chart, My listings with Draft / Published /
+  Paused status and per-listing stats, and the enquiries other users sent. Pause, unpublish and delete ask first.
+- **List your property**: a seven-step wizard (basics, location with a map pin, details, amenities, photos, price
+  and deposit, preview) with inline validation per step (`ListingValidator`), autosaved drafts and Publish. Photos
+  come from the system Photo Picker (no storage permission) and are downscaled to 1600 px, compressed and kept in
+  app-private storage; reorder, remove and choose the cover.
+- **Listings stay on the device**: a published listing is written into the local listings cache with its owner id,
+  so every user of the device sees it in Home, search, the map and detail pages; the owner sees "Listed by you" and
+  Edit listing. Market refreshes never touch owner listings. Room schema v5 (auto-migration, tested).
+- **Adaptive layouts**: window size classes pick the floating pill (compact) or a navigation rail (medium and
+  expanded), 2 / 3 / 4 Home columns, list-detail panes for Home → listing and Chat → conversation and two-pane
+  Settings on expanded widths, hinge-aware panes on book-posture foldables, and landscape-safe Welcome and sign-in.
+- **Known limitation**: messages to an owner's listing are answered by the automated demo assistant and listed in the
+  owner's dashboard; the owner cannot reply from their account, because two-party messaging between accounts needs a
+  backend that Findora does not have yet.
 
 ## What Phase 7A ships
 
@@ -373,6 +392,8 @@ app/src/main/java/com/findora/app
 | WorkManager (work-runtime-ktx, work-testing) | Viewing reminders that survive process death and reboots; `TestListenableWorkerBuilder` and the test WorkManager in unit tests |
 | Jetpack Glance (glance-appwidget, glance-appwidget-testing) | The "Findora picks" home-screen widget written in Compose style, with JVM unit tests of its content |
 | androidx.hilt:hilt-work (+ hilt-compiler) | Constructor-injected `@HiltWorker` workers through `HiltWorkerFactory` |
+| Jetpack WindowManager (window, window-core) | `WindowSizeClass` breakpoints for adaptive layouts and the fold / hinge position on foldables |
+| androidx.exifinterface | Reads the orientation of picked photos so they are stored upright |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
 
 ## Tests
@@ -385,7 +406,10 @@ app/src/main/java/com/findora/app
 | `PriceFormatterTest` | Design style, INR lakh grouping, USD, EUR, TND, Arabic/RTL isolation |
 | `DomainModelTest` | Money arithmetic, stable ids, bounds, filters |
 | `PropertyDaoTest`, `UserDataDaoTest`, `ActivityDaoTest` | Every DAO against in-memory Room (Robolectric): filters, ordering, per-user favourites, unique e-mail, double-booking guard, recent-search de-duplication and trimming |
-| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v4, v2 to v3 and v3 to v4 migrations keep data (`MigrationTestHelper`) |
+| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v5, v2 to v3, v3 to v4 and v4 to v5 migrations keep data (`MigrationTestHelper`) |
+| `ListingValidatorTest`, `OwnerStatsCalculatorTest`, `ListingPublisherTest`, `PhotoSizingTest`, `OwnerPhotoAndDraftTest` | Per-step listing rules and bounds; owner stats from other users' activity and the 14-day chart; draft to listing; photo subsampling and sizing; the photo import pipeline with a fake decoder and the draft JSON |
+| `RoomOwnerListingRepositoryTest`, `ListingWizardViewModelTest`, `OwnerDashboardViewModelTest` | Owner-scoped listings, publish into the shared cache and survive refreshes, pause / unpublish / delete, signals and enquiries; wizard navigation, validation, autosave, photos and publish (Turbine, virtual time); dashboard stats and confirmed actions |
+| `ListingWizardScreenTest`, `OwnerDashboardScreenTest`, `AdaptiveLayoutTest`, `OwnerConfirmDialogTest` | Wizard steps and inline errors, dashboard rows and actions (Compose, Robolectric); rail vs pill, list-detail and two-pane Settings at forced sizes; confirmation dialogs on the emulator |
 | `AlertDiffTest`, `CheckSearchAlertsTest`, `FakeMarketTest`, `SavedFilterJsonTest` | New-match diff, due rules, no duplicate alerts, price drops; the deterministic moving market; saved filter JSON round trip and tolerance |
 | `RoomSavedSearchRepositoryTest`, `SearchAlertWorkerTest` | Owner-scoped saved searches, seen ids, deletion with the account, price baselines; alert worker with `TestListenableWorkerBuilder` (deep link, toggles, permission, signed out, no repeats, price drop) |
 | `SavedSearchesViewModelTest`, `SearchNameStateTest`, `SavedSearchesScreenTest`, `SaveSearchDialogTest`, `SearchDeepLinkTest` | Saved searches list, run, rename, alerts, delete, Home save, owner-only links (Turbine); name trimming, blank names and the length cap; Searches tab and name field (Compose), the name dialog on the emulator; `findora://search/{id}` parsing and routing |

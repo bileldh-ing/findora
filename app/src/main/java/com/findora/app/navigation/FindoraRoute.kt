@@ -85,6 +85,16 @@ sealed interface FindoraRoute {
     @Serializable
     data object Notifications : FindoraRoute
 
+    /** Owner mode: the signed-in user's listings with their stats (from Settings once owner mode is on). */
+    @Serializable
+    data object OwnerDashboard : FindoraRoute
+
+    /** The create / edit listing wizard; a null [listingId] starts a new draft. */
+    @Serializable
+    data class ListingEditor(
+        val listingId: String? = null,
+    ) : FindoraRoute
+
     /** Version, licences, photo credits and map attribution (from Settings). */
     @Serializable
     data object About : FindoraRoute

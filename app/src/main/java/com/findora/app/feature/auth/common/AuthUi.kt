@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -35,6 +37,8 @@ import com.findora.app.core.domain.model.PasswordRule
 import java.time.Duration
 import java.time.Instant
 
+private val AuthFormMaxWidth = 560.dp
+
 /** Scrollable, keyboard-aware column shared by the auth forms, with a back button and a heading. */
 @Composable
 fun AuthFormScaffold(
@@ -44,6 +48,7 @@ fun AuthFormScaffold(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    // Centred and capped at a readable width on tablets, foldables and in landscape.
     Column(
         modifier =
             modifier
@@ -51,6 +56,8 @@ fun AuthFormScaffold(
                 .safeDrawingPadding()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .widthIn(max = AuthFormMaxWidth)
                 .padding(horizontal = FindoraTheme.spacing.screenHorizontal, vertical = FindoraTheme.spacing.xs),
     ) {
         IconButton(onClick = onBack) {
