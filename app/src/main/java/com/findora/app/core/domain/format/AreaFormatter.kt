@@ -26,7 +26,9 @@ object AreaFormatter {
         when (unit) {
             AreaUnit.Metric -> sqm.toLong()
             AreaUnit.Imperial ->
-                BigDecimal(sqm).divide(SQM_PER_SQFT, SCALE, RoundingMode.HALF_EVEN).setScale(0, RoundingMode.HALF_UP).toLong()
+                BigDecimal(
+                    sqm,
+                ).divide(SQM_PER_SQFT, SCALE, RoundingMode.HALF_EVEN).setScale(0, RoundingMode.HALF_UP).toLong()
         }
 
     /** The number part of an area in [unit], grouped for [locale] ("1,076"); the unit label comes from resources. */

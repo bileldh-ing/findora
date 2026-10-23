@@ -1,8 +1,5 @@
 package com.findora.app.feature.detail
 
-import com.findora.app.core.ui.areaText
-import com.findora.app.core.ui.displayMoney
-import com.findora.app.core.domain.format.DisplayMoney
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -50,11 +47,14 @@ import com.findora.app.core.designsystem.component.TextLink
 import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.domain.format.DisplayMoney
 import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Amenity
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.Property
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.displayMoney
 import com.findora.app.feature.home.labelRes
 import java.util.Locale
 import kotlin.math.roundToLong
@@ -139,7 +139,10 @@ private fun CountUpPrice(
     }
     val shown = Money(animated.value.roundToLong().coerceIn(0L, money.amount), money.currency)
     val finalText =
-        stringResource(R.string.detail_price_per_month, PriceFormatter.formatDisplay(display, locale, PriceStyle.Localized))
+        stringResource(
+            R.string.detail_price_per_month,
+            PriceFormatter.formatDisplay(display, locale, PriceStyle.Localized),
+        )
     val shownText = PriceFormatter.formatDisplay(DisplayMoney(shown, display.approximate), locale, PriceStyle.Localized)
     Text(
         text = stringResource(R.string.detail_price_per_month, shownText),

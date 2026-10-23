@@ -63,14 +63,20 @@ class ResourceAgentReplyFormatter
                     is ReplyPart.ViewingTimes -> viewingTimes(part, zone)
                     is ReplyPart.Price -> price(part)
                     is ReplyPart.Pets ->
-                        context.getString(if (part.allowed) R.string.agent_reply_pets_yes else R.string.agent_reply_pets_no)
+                        context.getString(
+                            if (part.allowed) R.string.agent_reply_pets_yes else R.string.agent_reply_pets_no,
+                        )
                     is ReplyPart.Parking ->
                         context.getString(
                             if (part.available) R.string.agent_reply_parking_yes else R.string.agent_reply_parking_no,
                         )
                     is ReplyPart.Furnished ->
                         context.getString(
-                            if (part.furnished) R.string.agent_reply_furnished_yes else R.string.agent_reply_furnished_no,
+                            if (part.furnished) {
+                                R.string.agent_reply_furnished_yes
+                            } else {
+                                R.string.agent_reply_furnished_no
+                            },
                         )
                     is ReplyPart.Size -> size(part)
                     ReplyPart.Thanks -> context.getString(R.string.agent_reply_thanks)

@@ -367,7 +367,9 @@ private fun NotificationsSection(
             val (title, summary) =
                 when (toggle) {
                     NotificationToggle.Messages -> R.string.notify_messages to R.string.notify_messages_summary
-                    NotificationToggle.ViewingReminders -> R.string.notify_reminders to R.string.notify_reminders_summary
+                    NotificationToggle.ViewingReminders ->
+                        R.string.notify_reminders to
+                            R.string.notify_reminders_summary
                     NotificationToggle.InApp -> R.string.notify_in_app to R.string.notify_in_app_summary
                 }
             SwitchRow(

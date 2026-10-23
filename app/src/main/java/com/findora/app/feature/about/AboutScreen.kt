@@ -218,7 +218,12 @@ private fun Body(
     text: String,
     modifier: Modifier = Modifier,
 ) {
-    Text(text = text, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onBackground, modifier = modifier)
+    Text(
+        text = text,
+        style = FindoraTheme.typography.body,
+        color = FindoraTheme.colors.onBackground,
+        modifier = modifier,
+    )
 }
 
 /** An outbound link: opens in the browser. */
@@ -242,7 +247,11 @@ private fun LinkRow(
         Column(Modifier.weight(1f)) {
             Text(text = title, style = FindoraTheme.typography.bodyMedium, color = FindoraTheme.colors.accent)
             if (summary != null) {
-                Text(text = summary, style = FindoraTheme.typography.caption, color = FindoraTheme.colors.onSurfaceMuted)
+                Text(
+                    text = summary,
+                    style = FindoraTheme.typography.caption,
+                    color = FindoraTheme.colors.onSurfaceMuted,
+                )
             }
         }
         Icon(FindoraIcons.ExternalLink, contentDescription = null, tint = FindoraTheme.colors.onSurfaceMuted)

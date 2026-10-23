@@ -1,7 +1,5 @@
 package com.findora.app.feature.match.quiz
 
-import com.findora.app.core.domain.format.PriceStyle
-import com.findora.app.core.ui.rentText
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -21,12 +19,13 @@ import androidx.core.os.ConfigurationCompat
 import com.findora.app.R
 import com.findora.app.core.designsystem.component.CategoryChip
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.match.LifestyleTag
 import com.findora.app.core.domain.match.MustHave
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.PropertyType
 import com.findora.app.core.ui.match.labelRes
+import com.findora.app.core.ui.rentText
 import java.util.Locale
 import kotlin.math.roundToLong
 

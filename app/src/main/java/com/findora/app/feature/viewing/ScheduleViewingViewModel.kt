@@ -8,9 +8,9 @@ import com.findora.app.core.domain.model.BookingError
 import com.findora.app.core.domain.model.BookingResult
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
+import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.TimeRange
-import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.Viewing
 import com.findora.app.core.domain.notification.NewNotification
 import com.findora.app.core.domain.notification.NotificationKind
@@ -18,8 +18,8 @@ import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
-import com.findora.app.core.domain.repository.ViewingReminderScheduler
 import com.findora.app.core.domain.repository.SettingsRepository
+import com.findora.app.core.domain.repository.ViewingReminderScheduler
 import com.findora.app.core.domain.repository.ViewingRepository
 import com.findora.app.core.domain.viewing.ViewingDay
 import com.findora.app.core.domain.viewing.ViewingSlot

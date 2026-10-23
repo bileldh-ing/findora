@@ -226,7 +226,12 @@ class SettingsViewModel
                 is PreferenceEvent.CurrencySelected ->
                     viewModelScope.launch { settings.setCurrencyOverride(event.currency) }
                 is PreferenceEvent.AreaUnitSelected -> viewModelScope.launch { settings.setAreaUnit(event.unit) }
-                is PreferenceEvent.ReduceMotionSelected -> viewModelScope.launch { settings.setReduceMotion(event.mode) }
+                is PreferenceEvent.ReduceMotionSelected ->
+                    viewModelScope.launch {
+                        settings.setReduceMotion(
+                            event.mode,
+                        )
+                    }
                 is PreferenceEvent.NotificationToggled ->
                     viewModelScope.launch { settings.setNotificationEnabled(event.toggle, event.enabled) }
                 is PreferenceEvent.BiometricToggled ->

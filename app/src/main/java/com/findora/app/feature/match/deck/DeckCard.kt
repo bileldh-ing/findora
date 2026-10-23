@@ -1,8 +1,5 @@
 package com.findora.app.feature.match.deck
 
-import com.findora.app.core.ui.rentPerMonthText
-import com.findora.app.core.ui.rentText
-import com.findora.app.core.ui.areaText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -54,11 +51,13 @@ import com.findora.app.R
 import com.findora.app.core.designsystem.component.GlassChip
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.match.DeckEntry
 import com.findora.app.core.ui.ListingCoverPhoto
+import com.findora.app.core.ui.areaText
 import com.findora.app.core.ui.match.MatchBadge
+import com.findora.app.core.ui.rentPerMonthText
+import com.findora.app.core.ui.rentText
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.abs

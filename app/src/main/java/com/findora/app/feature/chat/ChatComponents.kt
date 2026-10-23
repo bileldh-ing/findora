@@ -1,6 +1,5 @@
 package com.findora.app.feature.chat
 
-import com.findora.app.core.ui.rentPerMonthText
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -50,11 +49,11 @@ import com.findora.app.core.domain.chat.ChatAgent
 import com.findora.app.core.domain.chat.ChatMessage
 import com.findora.app.core.domain.chat.DeliveryStatus
 import com.findora.app.core.domain.chat.QuickReply
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
 import com.findora.app.core.ui.TimeLabels
 import com.findora.app.core.ui.appLocale
+import com.findora.app.core.ui.rentPerMonthText
 import java.time.ZoneId
 
 private val BubbleMaxWidth = 300.dp

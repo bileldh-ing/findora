@@ -16,6 +16,7 @@ import androidx.navigation.navDeepLink
 import com.findora.app.BuildConfig
 import com.findora.app.core.ui.LocalNavAnimatedVisibilityScope
 import com.findora.app.core.ui.LocalSharedTransitionScope
+import com.findora.app.feature.about.AboutRoute
 import com.findora.app.feature.auth.forgot.ForgotPasswordRoute
 import com.findora.app.feature.auth.login.LoginRoute
 import com.findora.app.feature.auth.signup.SignUpRoute
@@ -23,7 +24,6 @@ import com.findora.app.feature.auth.unlock.UnlockRoute
 import com.findora.app.feature.auth.welcome.WelcomeRoute
 import com.findora.app.feature.chat.ChatRoute
 import com.findora.app.feature.compare.CompareRoute
-import com.findora.app.feature.about.AboutRoute
 import com.findora.app.feature.designsystem.DesignSystemScreen
 import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.match.deck.DeckRoute

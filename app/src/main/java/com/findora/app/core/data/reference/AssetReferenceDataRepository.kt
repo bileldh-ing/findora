@@ -14,8 +14,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.io.IOException
 import java.math.BigDecimal
@@ -144,7 +144,10 @@ class AssetReferenceDataRepository
             }
 
         private fun read(path: String): String =
-            context.assets.open(path).bufferedReader(Charsets.UTF_8).use { it.readText() }
+            context.assets
+                .open(path)
+                .bufferedReader(Charsets.UTF_8)
+                .use { it.readText() }
 
         internal companion object {
             const val RATES = "rates/exchange_rates.json"

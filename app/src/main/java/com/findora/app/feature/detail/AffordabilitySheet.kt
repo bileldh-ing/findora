@@ -1,8 +1,5 @@
 package com.findora.app.feature.detail
 
-import com.findora.app.core.domain.format.PriceStyle
-import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.ui.displayMoney
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -48,8 +45,11 @@ import com.findora.app.core.designsystem.component.FindoraTextField
 import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.insight.AffordabilityCalculator
 import com.findora.app.core.domain.insight.AffordabilityReport
+import com.findora.app.core.ui.displayMoney
 import kotlinx.coroutines.launch
 import java.util.Locale
 

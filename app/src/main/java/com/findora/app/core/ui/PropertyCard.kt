@@ -56,7 +56,6 @@ import com.findora.app.core.designsystem.component.GlassChip
 import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.image.offlineFallback

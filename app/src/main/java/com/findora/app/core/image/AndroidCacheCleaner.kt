@@ -36,6 +36,5 @@ class AndroidCacheCleaner
                 (before - sizeOf(tiles) - sizeOf(images)).coerceAtLeast(0L)
             }
 
-        private fun sizeOf(directory: File): Long =
-            directory.walkBottomUp().filter(File::isFile).sumOf(File::length)
+        private fun sizeOf(directory: File): Long = directory.walkBottomUp().filter(File::isFile).sumOf(File::length)
     }

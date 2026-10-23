@@ -7,13 +7,13 @@ import androidx.work.WorkerParameters
 import com.findora.app.R
 import com.findora.app.core.common.AppClock
 import com.findora.app.core.domain.model.NotificationToggle
-import com.findora.app.core.domain.repository.SettingsRepository
-import com.findora.app.core.locale.LocalizedContext
 import com.findora.app.core.domain.notification.NewNotification
 import com.findora.app.core.domain.notification.NotificationKind
 import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
+import com.findora.app.core.domain.repository.SettingsRepository
 import com.findora.app.core.domain.repository.ViewingRepository
+import com.findora.app.core.locale.LocalizedContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first

@@ -1,15 +1,5 @@
 package com.findora.app.feature.compare
 
-import kotlin.math.roundToLong
-import java.math.BigDecimal
-import java.math.RoundingMode
-import com.findora.app.core.ui.rentText
-import com.findora.app.core.ui.areaText
-import com.findora.app.core.ui.LocalDisplayPreferences
-import com.findora.app.core.domain.model.AreaUnit
-import com.findora.app.core.domain.format.DisplayMoney
-import com.findora.app.core.domain.format.CurrencyConverter
-import com.findora.app.core.domain.format.AreaFormatter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -72,15 +62,25 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.compare.CompareMetric
 import com.findora.app.core.domain.compare.CompareRow
 import com.findora.app.core.domain.compare.CompareTable
+import com.findora.app.core.domain.format.AreaFormatter
+import com.findora.app.core.domain.format.CurrencyConverter
+import com.findora.app.core.domain.format.DisplayMoney
 import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.format.PriceStyle
+import com.findora.app.core.domain.model.AreaUnit
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
+import com.findora.app.core.ui.LocalDisplayPreferences
 import com.findora.app.core.ui.StateMessage
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.rentText
 import com.findora.app.feature.home.labelRes
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.Locale
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 private val LabelColumn = 92.dp
 private val CellMinHeight = 48.dp
@@ -542,7 +542,12 @@ private fun pricePerAreaText(
             display.rates
                 ?.let(::CurrencyConverter)
                 ?.convertExact(BigDecimal.valueOf(perUnit), source, currency)
-                ?.let { DisplayMoney(Money(it.setScale(0, RoundingMode.HALF_UP).toLong(), currency), approximate = true) }
+                ?.let {
+                    DisplayMoney(
+                        Money(it.setScale(0, RoundingMode.HALF_UP).toLong(), currency),
+                        approximate = true,
+                    )
+                }
         }
     val exact = converted ?: DisplayMoney(Money(perUnit.roundToLong().coerceAtLeast(0L), source), approximate = false)
     val format =

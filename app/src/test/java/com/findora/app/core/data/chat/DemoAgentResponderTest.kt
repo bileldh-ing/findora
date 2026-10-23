@@ -180,7 +180,12 @@ class DemoAgentResponderTest {
             agent.onUserMessage(guest, thread, message, "Is it still available?")
             finishAgentWork()
             // The reply itself is still stored; only the notifications are skipped.
-            assertEquals("Greeting Availability", chats.messages.value.last().body)
+            assertEquals(
+                "Greeting Availability",
+                chats.messages.value
+                    .last()
+                    .body,
+            )
             assertTrue(notifier.posted.isEmpty())
             assertTrue(notifications.observeNotifications(guest).first().isEmpty())
         }

@@ -1,15 +1,5 @@
 package com.findora.app.core.data.di
 
-import com.findora.app.core.data.reference.AssetReferenceDataRepository
-import com.findora.app.core.domain.repository.ReferenceDataRepository
-import com.findora.app.core.locale.AppCompatLanguageController
-import com.findora.app.core.domain.repository.LanguageController
-import com.findora.app.core.image.AndroidCacheCleaner
-import com.findora.app.core.domain.repository.CacheCleaner
-import com.findora.app.core.data.export.JsonUserDataExporter
-import com.findora.app.core.domain.repository.UserDataExporter
-import com.findora.app.core.data.export.ContentResolverDocumentWriter
-import com.findora.app.core.domain.repository.DocumentWriter
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -23,6 +13,8 @@ import com.findora.app.core.common.AppClock
 import com.findora.app.core.common.SystemAppClock
 import com.findora.app.core.data.chat.DemoAgentResponder
 import com.findora.app.core.data.chat.ResourceAgentReplyFormatter
+import com.findora.app.core.data.export.ContentResolverDocumentWriter
+import com.findora.app.core.data.export.JsonUserDataExporter
 import com.findora.app.core.data.local.FindoraDatabase
 import com.findora.app.core.data.local.dao.ChatDao
 import com.findora.app.core.data.local.dao.FavoriteDao
@@ -35,6 +27,7 @@ import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
 import com.findora.app.core.data.location.LastKnownLocationSource
 import com.findora.app.core.data.match.DataStoreMatchProfileRepository
+import com.findora.app.core.data.reference.AssetReferenceDataRepository
 import com.findora.app.core.data.remote.FakeRemoteDataSource
 import com.findora.app.core.data.remote.RemoteDataSource
 import com.findora.app.core.data.repository.CachePolicy
@@ -55,19 +48,26 @@ import com.findora.app.core.di.IoDispatcher
 import com.findora.app.core.domain.chat.AgentReplyFormatter
 import com.findora.app.core.domain.chat.AgentResponder
 import com.findora.app.core.domain.location.DeviceLocationSource
+import com.findora.app.core.domain.repository.CacheCleaner
 import com.findora.app.core.domain.repository.ChatRepository
 import com.findora.app.core.domain.repository.CompareRepository
+import com.findora.app.core.domain.repository.DocumentWriter
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
 import com.findora.app.core.domain.repository.InteractionRepository
+import com.findora.app.core.domain.repository.LanguageController
 import com.findora.app.core.domain.repository.MatchProfileRepository
 import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
+import com.findora.app.core.domain.repository.ReferenceDataRepository
 import com.findora.app.core.domain.repository.RegionRepository
 import com.findora.app.core.domain.repository.SearchHistoryRepository
 import com.findora.app.core.domain.repository.SettingsRepository
+import com.findora.app.core.domain.repository.UserDataExporter
 import com.findora.app.core.domain.repository.ViewingReminderScheduler
 import com.findora.app.core.domain.repository.ViewingRepository
+import com.findora.app.core.image.AndroidCacheCleaner
+import com.findora.app.core.locale.AppCompatLanguageController
 import com.findora.app.core.notification.AndroidChatNotifier
 import com.findora.app.core.notification.ChatNotifier
 import com.findora.app.core.reminder.AndroidViewingReminderNotifier
@@ -118,7 +118,6 @@ abstract class DataBindingsModule {
     abstract fun bindHomeFilterRepository(impl: InMemoryHomeFilterRepository): HomeFilterRepository
 }
 
-/** Chat with the demo agent and the in-app notifications center. */
 /** Settings support: bundled reference data, per-app language and the privacy & data controls. */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -139,6 +138,7 @@ abstract class SettingsBindingsModule {
     abstract fun bindDocumentWriter(impl: ContentResolverDocumentWriter): DocumentWriter
 }
 
+/** Chat with the demo agent and the in-app notifications center. */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ChatBindingsModule {

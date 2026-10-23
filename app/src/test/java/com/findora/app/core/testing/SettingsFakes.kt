@@ -29,7 +29,10 @@ val testRates =
 
 val testCredits =
     AboutCredits(
-        libraries = listOf(OpenSourceLibrary("Coil", "Coil Contributors", "Apache License 2.0", "https://coil-kt.github.io/coil/")),
+        libraries =
+            listOf(
+                OpenSourceLibrary("Coil", "Coil Contributors", "Apache License 2.0", "https://coil-kt.github.io/coil/"),
+            ),
         photoSource = "Pexels",
         photoLicense = "Pexels License",
         photoLicenseUrl = "https://www.pexels.com/license/",

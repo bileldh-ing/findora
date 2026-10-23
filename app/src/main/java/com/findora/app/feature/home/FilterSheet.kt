@@ -1,8 +1,5 @@
 package com.findora.app.feature.home
 
-import com.findora.app.core.ui.rentText
-import com.findora.app.core.ui.areaText
-import com.findora.app.core.domain.format.PriceStyle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -36,13 +33,15 @@ import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.component.SwitchRow
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Amenity
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.ListingBounds
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.SortOrder
+import com.findora.app.core.ui.areaText
+import com.findora.app.core.ui.rentText
 import java.util.Locale
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
