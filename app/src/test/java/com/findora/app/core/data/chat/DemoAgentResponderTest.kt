@@ -17,7 +17,6 @@ import com.findora.app.core.testing.seedProperties
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -66,6 +65,16 @@ class DemoAgentResponderTest {
             scope = backgroundScope,
         )
 
+    /**
+     * The agent runs in [TestScope.backgroundScope] (it stands in for the application scope), and
+     * `advanceUntilIdle` does not wait for background work, so the tests move virtual time past every pause
+     * the agent can take (delivery + reading + the longest typing time) instead.
+     */
+    private fun TestScope.finishAgentWork() {
+        advanceTimeBy(AGENT_WORK_BOUND_MILLIS)
+        runCurrent()
+    }
+
     private suspend fun send(text: String): Pair<String, String> {
         val thread = chats.startConversation(guest, georgie)
         val message = requireNotNull(chats.sendMessage(guest, thread.id, text))
@@ -91,7 +100,7 @@ class DemoAgentResponderTest {
             advanceTimeBy(timing.readMillis)
             assertEquals(DeliveryStatus.Read, statusOf(message))
             assertEquals(setOf(thread), agent.typing.value)
-            advanceUntilIdle()
+            finishAgentWork()
             assertTrue(agent.typing.value.isEmpty())
             val reply = chats.messages.value.last()
             assertEquals("Greeting Availability", reply.body)
@@ -111,7 +120,7 @@ class DemoAgentResponderTest {
             val (thread, message) = send("Can I visit this week?")
             active.enter(thread)
             agent.onUserMessage(guest, thread, message, "Can I visit this week?")
-            advanceUntilIdle()
+            finishAgentWork()
             val reply = chats.messages.value.last()
             assertEquals("Greeting ViewingTimes", reply.body)
             assertEquals(DeliveryStatus.Read, reply.status)
@@ -127,7 +136,7 @@ class DemoAgentResponderTest {
             val second = requireNotNull(chats.sendMessage(guest, thread, "Do you allow pets?")).id
             agent.onUserMessage(guest, thread, first, "Is the price negotiable?")
             agent.onUserMessage(guest, thread, second, "Do you allow pets?")
-            advanceUntilIdle()
+            finishAgentWork()
             val replies =
                 chats.messages.value
                     .filter { !it.fromUser }
@@ -143,7 +152,7 @@ class DemoAgentResponderTest {
             val agent = responder(FakePropertyRepository(listings = seedProperties.filter { it.id != georgie.id }))
             val (thread, message) = send("Is it still available?")
             agent.onUserMessage(guest, thread, message, "Is it still available?")
-            advanceUntilIdle()
+            finishAgentWork()
             assertEquals(
                 "gone",
                 chats.messages.value
@@ -151,4 +160,9 @@ class DemoAgentResponderTest {
                     .body,
             )
         }
+
+    private companion object {
+        /** Far beyond two queued replies of the longest pauses (0.5 s + 1 s + 4 s each). */
+        const val AGENT_WORK_BOUND_MILLIS = 60_000L
+    }
 }
