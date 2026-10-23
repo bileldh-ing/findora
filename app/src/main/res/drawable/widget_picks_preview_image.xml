@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Static picker preview of the "Findora picks" widget for launchers below Android 12 (heading, three rows). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="250dp"
-    android:height="180dp"
+    android:width="200dp"
+    android:height="144dp"
     android:viewportWidth="250"
     android:viewportHeight="180">
     <path

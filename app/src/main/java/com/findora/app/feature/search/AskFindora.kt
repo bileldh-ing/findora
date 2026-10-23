@@ -42,6 +42,7 @@ import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.feature.home.labelRes
 import com.findora.app.feature.savedsearch.SaveSearchDialog
+import com.findora.app.feature.savedsearch.rememberSaveWithNotificationPermission
 
 private val ChipMinHeight = 40.dp
 private val SmallIcon = 16.dp
@@ -85,6 +86,7 @@ private fun SaveAskButton(
     modifier: Modifier = Modifier,
 ) {
     var naming by rememberSaveable { mutableStateOf(false) }
+    val save = rememberSaveWithNotificationPermission { name -> onEvent(SearchUiEvent.SaveAsk(name)) }
     SecondaryPillButton(
         text = stringResource(R.string.saved_search_save_this),
         onClick = { naming = true },
@@ -99,7 +101,7 @@ private fun SaveAskButton(
             initialName = query.trim(),
             onConfirm = { name ->
                 naming = false
-                onEvent(SearchUiEvent.SaveAsk(name))
+                save(name)
             },
             onDismiss = { naming = false },
         )

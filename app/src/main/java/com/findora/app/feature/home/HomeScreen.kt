@@ -84,6 +84,7 @@ import com.findora.app.feature.match.deck.DreamMatchEntry
 import com.findora.app.feature.savedsearch.SaveSearchDialog
 import com.findora.app.feature.savedsearch.SaveSearchEffect
 import com.findora.app.feature.savedsearch.SaveSearchViewModel
+import com.findora.app.feature.savedsearch.rememberSaveWithNotificationPermission
 import com.findora.app.feature.savedsearch.suggestedSearchName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -131,6 +132,7 @@ fun HomeRoute(
         }
     }
     val savedMessage = stringResource(R.string.saved_search_saved)
+    val saveSearch = rememberSaveWithNotificationPermission(saveSearchViewModel::save)
     LaunchedEffect(saveSearchViewModel) {
         saveSearchViewModel.effects.collect { effect ->
             when (effect) {
@@ -151,7 +153,7 @@ fun HomeRoute(
             onOpenDreamMatch = onOpenDreamMatch,
             onAddToCompare = { compareViewModel.onEvent(CompareTrayEvent.Add(it)) },
             onOpenNotifications = onOpenNotifications,
-            onSaveSearch = saveSearchViewModel::save,
+            onSaveSearch = saveSearch,
             contentPadding = contentPadding.plusBottom(trayPadding),
             reduceMotion = reduceMotion,
         )
