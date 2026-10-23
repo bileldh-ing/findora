@@ -229,7 +229,7 @@ private fun PickingContent(
             ViewingSectionTitle(stringResource(R.string.schedule_pick_day), Modifier.padding(horizontal = horizontal))
             DayStrip(
                 days = state.days,
-                selected = state.selectedDate,
+                selectedDate = state.selectedDate,
                 onSelect = { onEvent(ScheduleUiEvent.SelectDate(it)) },
             )
             ViewingSectionTitle(stringResource(R.string.schedule_pick_time), Modifier.padding(horizontal = horizontal))
@@ -296,7 +296,7 @@ private fun PickingContent(
 @Composable
 private fun DayStrip(
     days: List<ViewingDay>,
-    selected: LocalDate?,
+    selectedDate: LocalDate?,
     onSelect: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -307,7 +307,7 @@ private fun DayStrip(
         modifier = modifier.fillMaxWidth().testTag("dayStrip"),
     ) {
         itemsIndexed(days, key = { _, day -> day.date.toEpochDay() }) { index, day ->
-            val isSelected = day.date == selected
+            val isSelected = day.date == selectedDate
             val longDate = ViewingFormat.longDate(day.date, locale)
             val description =
                 if (day.availableCount == 0) {
