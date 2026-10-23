@@ -87,7 +87,7 @@ fun SaveSearchDialog(
         onDismissRequest = onDismiss,
         modifier = modifier.testTag("saveSearchDialog"),
         title = { Text(title, modifier = Modifier.semantics { heading() }) },
-        text = { SaveSearchNameField(state = nameState, onDone = onConfirm) },
+        text = { SaveSearchNameField(state = nameState, onSave = onConfirm) },
         confirmButton = {
             TextButton(
                 onClick = { nameState.nameToSave?.let(onConfirm) },
@@ -109,7 +109,7 @@ fun SaveSearchDialog(
 @Composable
 fun SaveSearchNameField(
     state: SearchNameState,
-    onDone: (String) -> Unit,
+    onSave: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
@@ -118,7 +118,7 @@ fun SaveSearchNameField(
             onValueChange = state::onNameChange,
             label = stringResource(R.string.saved_search_name_label),
             imeAction = ImeAction.Done,
-            onImeAction = { state.nameToSave?.let(onDone) },
+            onImeAction = { state.nameToSave?.let(onSave) },
             fieldTag = "saveSearchName",
         )
         Text(

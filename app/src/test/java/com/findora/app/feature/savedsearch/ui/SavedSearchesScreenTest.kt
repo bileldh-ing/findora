@@ -92,8 +92,12 @@ class SavedSearchesScreenTest {
     fun renamingOpensTheNameDialogWithTheCurrentName() {
         show(listOf(SavedSearchItem(search, "Tunis")))
         compose.onNode(hasContentDescription("Rename search")).performClick()
+        // The dialog window never reports idle under Robolectric, so frames are advanced by hand from here.
+        compose.mainClock.autoAdvance = false
+        compose.mainClock.advanceTimeBy(DIALOG_FRAMES_MS)
         compose.onNodeWithTag("saveSearchName").assertTextEquals("Marsa flats")
         compose.onNodeWithTag("saveSearchConfirm").assertIsEnabled().performClick()
+        compose.mainClock.advanceTimeBy(DIALOG_FRAMES_MS)
         assertEquals(listOf(SavedSearchesUiEvent.Rename(3, "Marsa flats")), events)
         compose.onNodeWithTag("saveSearchDialog").assertDoesNotExist()
     }
@@ -104,7 +108,7 @@ class SavedSearchesScreenTest {
     fun anEditedNameIsTrimmedAndSavedWithDone() {
         val state = SearchNameState("Marsa flats")
         var saved: String? = null
-        compose.setContent { FindoraTheme { SaveSearchNameField(state = state, onDone = { saved = it }) } }
+        compose.setContent { FindoraTheme { SaveSearchNameField(state = state, onSave = { saved = it }) } }
         compose.onNodeWithTag("saveSearchName").performTextReplacement("  Beach flats ")
         compose.onNodeWithTag("saveSearchName").performImeAction()
         assertEquals("Beach flats", saved)
@@ -121,7 +125,7 @@ class SavedSearchesScreenTest {
     fun aBlankNameCannotBeSaved() {
         val state = SearchNameState("")
         val saved = mutableListOf<String>()
-        compose.setContent { FindoraTheme { SaveSearchNameField(state = state, onDone = { saved += it }) } }
+        compose.setContent { FindoraTheme { SaveSearchNameField(state = state, onSave = { saved += it }) } }
         compose.onNodeWithTag("saveSearchName").performImeAction()
         compose.onNodeWithTag("saveSearchName").performTextReplacement("   ")
         compose.onNodeWithTag("saveSearchName").performImeAction()
@@ -130,5 +134,9 @@ class SavedSearchesScreenTest {
         compose.onNodeWithTag("saveSearchName").performTextReplacement("  Kochi houses ")
         compose.onNodeWithTag("saveSearchName").performImeAction()
         assertEquals(listOf("Kochi houses"), saved)
+    }
+
+    private companion object {
+        const val DIALOG_FRAMES_MS = 500L
     }
 }
