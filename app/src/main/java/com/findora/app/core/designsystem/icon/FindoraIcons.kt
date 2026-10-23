@@ -248,6 +248,33 @@ object FindoraIcons {
         )
     }
 
+    /** Rising line; mirrors in right-to-left layouts, like the charts it labels. */
+    val TrendUp: ImageVector by lazy {
+        outline("TrendUp", "M22 7 13.5 15.5 8.5 10.5 2 17", "M16 7h6v6", autoMirror = true)
+    }
+
+    val TrendDown: ImageVector by lazy {
+        outline("TrendDown", "M22 17 13.5 8.5 8.5 13.5 2 7", "M16 17h6v-6", autoMirror = true)
+    }
+
+    val TrendFlat: ImageVector by lazy { outline("TrendFlat", "M5 12h14") }
+
+    val Calculator: ImageVector by lazy {
+        outline(
+            "Calculator",
+            "M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z",
+            "M8 6h8",
+            "M16 14v4",
+            "M16 10h.01",
+            "M12 10h.01",
+            "M8 10h.01",
+            "M12 14h.01",
+            "M8 14h.01",
+            "M12 18h.01",
+            "M8 18h.01",
+        )
+    }
+
     /** Blue shield with a white check: the verified badge on cards (not tinted). */
     val VerifiedBadge: ImageVector by lazy {
         ImageVector

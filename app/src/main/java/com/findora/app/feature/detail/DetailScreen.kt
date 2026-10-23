@@ -179,6 +179,17 @@ private fun DetailContent(
             }
             item(key = "specs") { SpecsRow(property) }
             item(key = "description") { DescriptionSection(property.description) }
+            content.priceTrend?.let { trend ->
+                item(key = "priceHistory") {
+                    PriceHistorySection(trend, property.rent.currency, isSampleData = property.isSampleData)
+                }
+            }
+            item(key = "affordability") {
+                AffordabilityCard(
+                    state = content.affordability,
+                    onOpen = { onEvent(DetailUiEvent.Affordability(AffordabilityEvent.Open)) },
+                )
+            }
             if (property.amenities.isNotEmpty()) item(key = "amenities") { AmenitiesSection(property.amenities) }
             item(key = "agent") {
                 AgentCard(
@@ -190,6 +201,7 @@ private fun DetailContent(
             item(key = "location") {
                 LocationSection(property = property, onOpenMap = { onEvent(DetailUiEvent.OpenInMaps) })
             }
+            item(key = "neighbourhood") { NeighbourhoodSection(content.neighbourhood) }
             if (content.similar.isNotEmpty()) {
                 item(key = "similar") {
                     SimilarSection(
@@ -219,6 +231,12 @@ private fun DetailContent(
             )
         }
         if (showVerification) VerificationSheet(onDismiss = { showVerification = false })
+        if (content.affordability.isOpen) {
+            AffordabilitySheet(
+                state = content.affordability,
+                onEvent = { onEvent(DetailUiEvent.Affordability(it)) },
+            )
+        }
     }
 }
 

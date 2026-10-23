@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -43,7 +42,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import com.findora.app.R
 import com.findora.app.core.designsystem.component.TextLink
 import com.findora.app.core.designsystem.component.rememberReducedMotion
@@ -66,10 +64,6 @@ private val BadgeSize = 20.dp
 private val SummaryGap = 6.dp
 private val StarSize = 18.dp
 private val MinTouchTarget = 48.dp
-
-@Composable
-private fun currentLocale(): Locale =
-    ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
 
 /** Section heading, announced as a heading by TalkBack. */
 @Composable
