@@ -111,8 +111,8 @@ fun NeighbourhoodSection(
                     .clip(FindoraTheme.shapes.chip)
                     .background(FindoraTheme.colors.surface)
                     .padding(FindoraTheme.spacing.sm)
-                    .clearAndSetSemantics { contentDescription = summary }
-                    .testTag("neighbourhoodRadar"),
+                    .testTag("neighbourhoodRadar")
+                    .clearAndSetSemantics { contentDescription = summary },
         )
     }
 }

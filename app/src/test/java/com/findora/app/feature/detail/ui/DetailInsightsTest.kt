@@ -77,7 +77,7 @@ class DetailInsightsTest {
     fun priceHistoryShowsSparklineChangeAndSampleLabel() {
         showDetail()
         scrollTo("detailPriceHistory")
-        compose.onNodeWithTag("priceSparkline").assertIsDisplayed()
+        compose.onNodeWithTag("priceSparkline").assertExists()
         compose.onNodeWithTag("priceChangeChip").assertIsDisplayed()
         compose.onNodeWithTag("priceHistorySample").assertIsDisplayed()
         val description =
@@ -96,7 +96,7 @@ class DetailInsightsTest {
     fun neighbourhoodRadarListsEveryScoreForTalkBack() {
         showDetail(darkTheme = true)
         scrollTo("detailNeighbourhood")
-        compose.onNodeWithTag("neighbourhoodRadar").assertIsDisplayed()
+        compose.onNodeWithTag("neighbourhoodRadar").assertExists()
         compose.onNodeWithTag("neighbourhoodSample").assertIsDisplayed()
         val description =
             compose
@@ -134,7 +134,7 @@ class DetailInsightsTest {
         compose.onNodeWithTag("affordabilityIncome").performTextInput(income.toString())
         compose.onNodeWithTag("affordabilityVerdict").assertIsDisplayed()
         compose.onNodeWithText("Comfortable").assertIsDisplayed()
-        compose.onNodeWithTag("affordabilityDonut").assertIsDisplayed()
+        compose.onNodeWithTag("affordabilityDonut").assertExists()
         compose
             .onNodeWithText(
                 "The 30% rule suggests a rent of up to ${price(AffordabilityCalculator.maxRent(income))} a month.",

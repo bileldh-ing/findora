@@ -142,8 +142,8 @@ fun PriceHistorySection(
                     .clip(FindoraTheme.shapes.chip)
                     .background(FindoraTheme.colors.surface)
                     .padding(FindoraTheme.spacing.sm)
-                    .clearAndSetSemantics { contentDescription = summary }
-                    .testTag("priceSparkline"),
+                    .testTag("priceSparkline")
+                    .clearAndSetSemantics { contentDescription = summary },
         ) {
             Sparkline(trend)
             Spacer(Modifier.height(FindoraTheme.spacing.xs))

@@ -169,8 +169,8 @@ private fun ResultBlock(
                 contentAlignment = Alignment.Center,
                 modifier =
                     Modifier
-                        .clearAndSetSemantics { contentDescription = donutDescription }
-                        .testTag("affordabilityDonut"),
+                        .testTag("affordabilityDonut")
+                        .clearAndSetSemantics { contentDescription = donutDescription },
             ) {
                 Donut(report.rentShare.toFloat(), rentColor)
                 Text(share, style = FindoraTheme.typography.title, color = FindoraTheme.colors.onBackground)
