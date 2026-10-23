@@ -508,4 +508,37 @@
         <item quantity="many">%1$d / %2$d محددًا</item>
         <item quantity="other">%1$d / %2$d محدد</item>
     </plurals>
+
+    <!-- Ask Findora: on-device natural-language search -->
+    <string name="ask_mode_places">الأماكن</string>
+    <string name="ask_mode_ask">اسأل Findora</string>
+    <string name="ask_placeholder">صف المسكن الذي تبحث عنه…</string>
+    <string name="ask_on_device">يُفهم طلبك على جهازك بواسطة محلل Findora القائم على القواعد. لا يُرسَل ما تكتبه إلى أي مكان.</string>
+    <string name="ask_try">جرّب أن تسأل</string>
+    <string name="ask_example_1">شقة غرفتين في المرسى أقل من ٢٠٠٠ دينار</string>
+    <string name="ask_example_2">فيلا مفروشة مع مسبح في نخلة جميرا</string>
+    <string name="ask_example_3">شقة هادئة قرب المترو في دبي مارينا</string>
+    <string name="ask_example_4">منزل ٣ غرف في كوتشي أقل من ٢٠ ألف روبية</string>
+    <string name="ask_understood">ما فهمناه</string>
+    <string name="ask_not_understood">لم يُفهم: %1$s</string>
+    <string name="ask_nothing">لم يجد Findora ميزانية أو مساحة أو مكانًا أو ميزة في «%1$s».</string>
+    <string name="ask_search_words">ابحث عن هذه الكلمات بدلًا من ذلك</string>
+    <string name="ask_switches_region">سيتم تغيير منطقتك إلى %1$s.</string>
+    <string name="ask_currency_note">الإيجارات في %1$s بعملة %2$s، لذلك تُقرأ المبالغ بعملة %2$s.</string>
+    <string name="ask_order">الترتيب: %1$s</string>
+    <string name="ask_lifestyle_quiz">تؤثر هذه الكلمات في الترتيب بعد إكمال استبيان التفضيلات.</string>
+    <string name="ask_apply">اعرض المساكن</string>
+    <string name="ask_remove_chip">إزالة %1$s</string>
+    <string name="ask_voice">البحث الصوتي</string>
+    <string name="ask_voice_prompt">صف المسكن الذي تريده</string>
+    <string name="nl_chip_under">أقل من %1$s</string>
+    <string name="nl_chip_from">من %1$s</string>
+    <string name="nl_chip_bedrooms">غرف النوم: %1$d+</string>
+    <string name="nl_chip_bathrooms">الحمامات: %1$d+</string>
+    <string name="nl_chip_area_min">من %1$d م²</string>
+    <string name="nl_chip_area_max">حتى %1$d م²</string>
+    <string name="nl_chip_area_range">%1$d–%2$d م²</string>
+    <string name="nl_chip_pets">يُسمح بالحيوانات</string>
+    <string name="nl_chip_transport">قرب المواصلات</string>
+    <string name="nl_chip_hint">تلميح: %1$s</string>
 </resources>

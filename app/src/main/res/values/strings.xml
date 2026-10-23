@@ -489,4 +489,37 @@
         <item quantity="one">%1$d / %2$d selected</item>
         <item quantity="other">%1$d / %2$d selected</item>
     </plurals>
+
+    <!-- Ask Findora: on-device natural-language search -->
+    <string name="ask_mode_places">Places</string>
+    <string name="ask_mode_ask">Ask Findora</string>
+    <string name="ask_placeholder">Describe your home…</string>
+    <string name="ask_on_device">Understood on your device by Findora\'s rule-based parser. What you type is not sent anywhere.</string>
+    <string name="ask_try">Try asking</string>
+    <string name="ask_example_1">2 bedroom apartment in La Marsa under 2000 TND with parking</string>
+    <string name="ask_example_2">quiet furnished studio in Le Marais under €1500</string>
+    <string name="ask_example_3">pet friendly villa with pool in Palm Jumeirah</string>
+    <string name="ask_example_4">quiet 2 bedroom near Fort Kochi under 15k with parking</string>
+    <string name="ask_understood">Understood</string>
+    <string name="ask_not_understood">Not understood: %1$s</string>
+    <string name="ask_nothing">Findora couldn\'t find a budget, size, place or must-have in “%1$s”.</string>
+    <string name="ask_search_words">Search these words instead</string>
+    <string name="ask_switches_region">Switches your region to %1$s.</string>
+    <string name="ask_currency_note">Rents in %1$s are listed in %2$s, so the amounts are read as %2$s.</string>
+    <string name="ask_order">Order: %1$s</string>
+    <string name="ask_lifestyle_quiz">Words like these shape the order once you take the preference quiz.</string>
+    <string name="ask_apply">Show homes</string>
+    <string name="ask_remove_chip">Remove %1$s</string>
+    <string name="ask_voice">Voice search</string>
+    <string name="ask_voice_prompt">Describe the home you want</string>
+    <string name="nl_chip_under">Under %1$s</string>
+    <string name="nl_chip_from">From %1$s</string>
+    <string name="nl_chip_bedrooms">Bedrooms: %1$d+</string>
+    <string name="nl_chip_bathrooms">Bathrooms: %1$d+</string>
+    <string name="nl_chip_area_min">From %1$d m²</string>
+    <string name="nl_chip_area_max">Up to %1$d m²</string>
+    <string name="nl_chip_area_range">%1$d–%2$d m²</string>
+    <string name="nl_chip_pets">Pets OK</string>
+    <string name="nl_chip_transport">Near transport</string>
+    <string name="nl_chip_hint">Hint: %1$s</string>
 </resources>

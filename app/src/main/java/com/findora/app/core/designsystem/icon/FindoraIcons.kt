@@ -299,6 +299,16 @@ object FindoraIcons {
         )
     }
 
+    /** Microphone: voice search. */
+    val Mic: ImageVector by lazy {
+        outline(
+            "Mic",
+            "M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z",
+            "M19 10v2a7 7 0 0 1-14 0v-2",
+            "M12 19v3",
+        )
+    }
+
     /** Blue shield with a white check: the verified badge on cards (not tinted). */
     val VerifiedBadge: ImageVector by lazy {
         ImageVector
