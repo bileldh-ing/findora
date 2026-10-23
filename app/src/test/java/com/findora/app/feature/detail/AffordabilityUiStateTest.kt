@@ -46,7 +46,8 @@ class AffordabilityUiStateTest {
 
     @Test
     fun flagsZeroAndTooLargeAmounts() {
-        assertEquals(AffordabilityFieldError.IncomeZero, initial.reduce(AffordabilityEvent.IncomeChanged("0")).incomeError)
+        val zero = initial.reduce(AffordabilityEvent.IncomeChanged("0"))
+        assertEquals(AffordabilityFieldError.IncomeZero, zero.incomeError)
         val huge = initial.reduce(AffordabilityEvent.IncomeChanged("9".repeat(13)))
         assertEquals(AffordabilityFieldError.AmountTooLarge, huge.incomeError)
         assertNull(huge.report)

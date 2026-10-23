@@ -109,6 +109,7 @@ fun PriceHistorySection(
     modifier: Modifier = Modifier,
 ) {
     val locale = currentLocale()
+
     fun price(amount: Long) = PriceFormatter.format(Money(amount, currency), locale, PriceStyle.Localized)
     val change = formatSignedPercent(trend.changePercent, locale)
     val months = trend.points.size

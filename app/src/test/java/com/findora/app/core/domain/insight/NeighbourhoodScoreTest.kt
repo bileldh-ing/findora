@@ -24,7 +24,8 @@ class NeighbourhoodScoreTest {
 
     @Test
     fun everyAxisIsScoredWithinTheSampleRange() {
-        listOf("Kakkanad", "Edappally", "La Marsa", "Les Berges du Lac", "Jumeirah", "Marais", "حي النصر").forEach { name ->
+        val names = listOf("Kakkanad", "Edappally", "La Marsa", "Les Berges du Lac", "Jumeirah", "Marais", "حي النصر")
+        names.forEach { name ->
             val score = NeighbourhoodScore.sample("region", name)
             assertEquals(NeighbourhoodAxis.entries, score.scores.keys.toList())
             assertTrue(score.scores.values.all { it in NeighbourhoodScore.SAMPLE_MIN..NeighbourhoodScore.SAMPLE_MAX })
@@ -47,13 +48,14 @@ class NeighbourhoodScoreTest {
 
     @Test
     fun overallIsTheRoundedMean() {
-        val scores = mapOf(
-            NeighbourhoodAxis.Walkability to 80,
-            NeighbourhoodAxis.Transport to 70,
-            NeighbourhoodAxis.Safety to 60,
-            NeighbourhoodAxis.Noise to 50,
-            NeighbourhoodAxis.Amenities to 43,
-        )
+        val scores =
+            mapOf(
+                NeighbourhoodAxis.Walkability to 80,
+                NeighbourhoodAxis.Transport to 70,
+                NeighbourhoodAxis.Safety to 60,
+                NeighbourhoodAxis.Noise to 50,
+                NeighbourhoodAxis.Amenities to 43,
+            )
         // (80 + 70 + 60 + 50 + 43) / 5 = 60.6 -> 61.
         assertEquals(61, NeighbourhoodScore("X", scores, isSampleData = false).overall)
     }

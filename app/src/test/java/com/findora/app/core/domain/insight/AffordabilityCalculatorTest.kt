@@ -74,7 +74,10 @@ class AffordabilityCalculatorTest {
         assertEquals(0L, result.upfrontTotal)
         val maxed =
             report(
-                input(deposit = AffordabilityCalculator.MAX_DEPOSIT_MONTHS, fee = AffordabilityCalculator.MAX_AGENCY_FEE_PERCENT),
+                input(
+                    deposit = AffordabilityCalculator.MAX_DEPOSIT_MONTHS,
+                    fee = AffordabilityCalculator.MAX_AGENCY_FEE_PERCENT,
+                ),
             )
         assertEquals(18_000L, maxed.deposit)
         assertEquals(5_400L, maxed.agencyFee)

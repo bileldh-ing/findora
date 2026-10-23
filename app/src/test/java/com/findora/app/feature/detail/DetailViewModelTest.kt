@@ -215,7 +215,8 @@ class DetailViewModelTest {
                 vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.DepositMonthsChanged(3)))
                 assertEquals(georgie.rent.amount * 3, requireNotNull(affordability().report).deposit)
 
-                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.IncomeChanged(georgie.rent.amount.toString())))
+                val rentAsIncome = georgie.rent.amount.toString()
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.IncomeChanged(rentAsIncome)))
                 assertEquals(AffordabilityVerdict.Over, requireNotNull(affordability().report).verdict)
 
                 vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.Dismiss))

@@ -279,7 +279,10 @@ private fun ResultBlock(
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.clearAndSetSemantics { contentDescription = donutDescription }.testTag("affordabilityDonut"),
+                modifier =
+                    Modifier
+                        .clearAndSetSemantics { contentDescription = donutDescription }
+                        .testTag("affordabilityDonut"),
             ) {
                 Donut(report.rentShare.toFloat(), rentColor)
                 Text(share, style = FindoraTheme.typography.title, color = FindoraTheme.colors.onBackground)
@@ -361,7 +364,8 @@ private fun CostInputs(
     modifier: Modifier = Modifier,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs), modifier = modifier.fillMaxWidth()) {
-        val depositLabel = pluralStringResource(R.plurals.afford_deposit_months, state.depositMonths, state.depositMonths)
+        val months = state.depositMonths
+        val depositLabel = pluralStringResource(R.plurals.afford_deposit_months, months, months)
         LabeledSlider(
             label = depositLabel,
             value = state.depositMonths,

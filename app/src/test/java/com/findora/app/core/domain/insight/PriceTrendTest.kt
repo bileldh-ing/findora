@@ -9,11 +9,13 @@ import java.time.YearMonth
 class PriceTrendTest {
     private val start = YearMonth.of(2025, 11)
 
-    private fun history(vararg amounts: Long) = amounts.mapIndexed { i, amount -> PricePoint(start.plusMonths(i.toLong()), amount) }
+    private fun history(vararg amounts: Long) =
+        amounts.mapIndexed { i, amount -> PricePoint(start.plusMonths(i.toLong()), amount) }
 
     @Test
     fun minMaxAndChangeOverTwelveMonths() {
-        val trend = requireNotNull(PriceTrend.from(history(1000, 1000, 950, 980, 1010, 1040, 1020, 1030, 1050, 1060, 1080, 1100)))
+        val amounts = longArrayOf(1000, 1000, 950, 980, 1010, 1040, 1020, 1030, 1050, 1060, 1080, 1100)
+        val trend = requireNotNull(PriceTrend.from(history(*amounts)))
         assertEquals(12, trend.points.size)
         assertEquals(PricePoint(start.plusMonths(2), 950), trend.min)
         assertEquals(PricePoint(start.plusMonths(11), 1100), trend.max)
