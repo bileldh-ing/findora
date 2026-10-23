@@ -295,8 +295,8 @@
     <string name="detail_price_history_cd">Historique du loyer. %1$s en %2$s, %3$s en %4$s, %5$s. Minimum %6$s, maximum %7$s</string>
     <string name="detail_neighbourhood">Quartier</string>
     <string name="detail_neighbourhood_caption">Notes sur 100 pour %1$s, plus c\'est haut, mieux c\'est. Global %2$d.</string>
-    <string name="detail_neighbourhood_score_cd">%1$s %2$d sur 100</string>
-    <string name="detail_neighbourhood_cd">Notes du quartier %1$s : %2$s. Global %3$d sur 100</string>
+    <string name="detail_neighbourhood_score_cd">%1$s : %2$d</string>
+    <string name="detail_neighbourhood_cd">Notes sur 100 du quartier %1$s : %2$s. Global : %3$d</string>
     <string name="neighbourhood_walkability">À pied</string>
     <string name="neighbourhood_transport">Transports</string>
     <string name="neighbourhood_safety">Sécurité</string>

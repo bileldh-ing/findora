@@ -310,8 +310,8 @@
     <string name="detail_price_history_cd">سجل الإيجار. %1$s في %2$s، و%3$s في %4$s، %5$s. الأدنى %6$s، والأعلى %7$s</string>
     <string name="detail_neighbourhood">الحي</string>
     <string name="detail_neighbourhood_caption">درجات من 100 لحي %1$s، والأعلى أفضل. الإجمالي %2$d.</string>
-    <string name="detail_neighbourhood_score_cd">%1$s %2$d من 100</string>
-    <string name="detail_neighbourhood_cd">درجات حي %1$s: %2$s. الإجمالي %3$d من 100</string>
+    <string name="detail_neighbourhood_score_cd">%1$s: %2$d</string>
+    <string name="detail_neighbourhood_cd">درجات حي %1$s من 100: %2$s. الإجمالي: %3$d</string>
     <string name="neighbourhood_walkability">سهولة المشي</string>
     <string name="neighbourhood_transport">المواصلات</string>
     <string name="neighbourhood_safety">الأمان</string>

@@ -307,8 +307,8 @@
     <string name="detail_price_history_cd">Rent history. %1$s in %2$s, %3$s in %4$s, %5$s. Lowest %6$s, highest %7$s</string>
     <string name="detail_neighbourhood">Neighbourhood</string>
     <string name="detail_neighbourhood_caption">Scores out of 100 for %1$s, higher is better. Overall %2$d.</string>
-    <string name="detail_neighbourhood_score_cd">%1$s %2$d out of 100</string>
-    <string name="detail_neighbourhood_cd">Neighbourhood scores for %1$s: %2$s. Overall %3$d out of 100</string>
+    <string name="detail_neighbourhood_score_cd">%1$s: %2$d</string>
+    <string name="detail_neighbourhood_cd">Neighbourhood scores out of 100 for %1$s: %2$s. Overall: %3$d</string>
     <string name="neighbourhood_walkability">Walkability</string>
     <string name="neighbourhood_transport">Transport</string>
     <string name="neighbourhood_safety">Safety</string>

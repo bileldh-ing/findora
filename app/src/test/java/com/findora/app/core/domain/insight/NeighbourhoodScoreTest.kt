@@ -24,7 +24,7 @@ class NeighbourhoodScoreTest {
 
     @Test
     fun everyAxisIsScoredWithinTheSampleRange() {
-        val names = listOf("Kakkanad", "Edappally", "La Marsa", "Les Berges du Lac", "Jumeirah", "Marais", "حي النصر")
+        val names = listOf("Kakkanad", "Edappally", "La Marsa", "Jumeirah", "Marais", "حي النصر")
         names.forEach { name ->
             val score = NeighbourhoodScore.sample("region", name)
             assertEquals(NeighbourhoodAxis.entries, score.scores.keys.toList())

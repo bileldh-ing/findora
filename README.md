@@ -22,7 +22,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 1 | Data layer and property imagery | Done |
 | 2 | Welcome and authentication | Done |
 | 3 | Home screen, pixel-faithful to the reference design | Done |
-| 4 | Property detail (gallery, agent contact, share links, similar homes) and viewing bookings (slots, reminders, calendar, My viewings) | Done |
+| 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations | Planned |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
