@@ -90,7 +90,7 @@ private val EntranceRise = 24.dp
 private const val SEARCH_ITEM_INDEX = 1
 
 /** Which bottom sheet Home is showing. */
-enum class HomeSheet { None, Filters, Regions, Notifications }
+enum class HomeSheet { None, Filters, Regions }
 
 @Composable
 fun HomeRoute(
@@ -100,6 +100,7 @@ fun HomeRoute(
     onOpenMatchQuiz: () -> Unit,
     onOpenDreamMatch: () -> Unit,
     onOpenCompare: () -> Unit,
+    onOpenNotifications: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = hiltViewModel(),
@@ -132,6 +133,7 @@ fun HomeRoute(
             onOpenMatchQuiz = onOpenMatchQuiz,
             onOpenDreamMatch = onOpenDreamMatch,
             onAddToCompare = { compareViewModel.onEvent(CompareTrayEvent.Add(it)) },
+            onOpenNotifications = onOpenNotifications,
             contentPadding = contentPadding.plusBottom(trayPadding),
             reduceMotion = reduceMotion,
         )
@@ -185,6 +187,7 @@ fun HomeScreen(
     reduceMotion: Boolean = rememberReducedMotion(),
     onOpenDreamMatch: (() -> Unit)? = null,
     onAddToCompare: ((String) -> Unit)? = null,
+    onOpenNotifications: () -> Unit = {},
 ) {
     var sheet by rememberSaveable { mutableStateOf(HomeSheet.None) }
     val gridState = rememberLazyGridState()
@@ -237,10 +240,10 @@ fun HomeScreen(
                     ) {
                         HomeTopBar(
                             locationLabel = state.locationLabel,
-                            unreadCount = state.unread.size,
+                            unreadCount = state.unreadNotifications,
                             userInitials = state.userInitials,
                             onLocationClick = { sheet = HomeSheet.Regions },
-                            onBellClick = { sheet = HomeSheet.Notifications },
+                            onBellClick = onOpenNotifications,
                             onAvatarClick = onOpenProfile,
                         )
                         Spacer(Modifier.height(FindoraTheme.spacing.md))

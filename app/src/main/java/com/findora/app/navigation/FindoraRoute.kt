@@ -20,7 +20,7 @@ sealed interface FindoraRoute {
     @Serializable
     data object Unlock : FindoraRoute
 
-    /** The signed-in (or guest) app: Home, Locations, Saved and Settings tabs under the floating nav pill. */
+    /** The signed-in (or guest) app: Home, Locations, Saved, Chat and Settings tabs under the floating nav pill. */
     @Serializable
     data object Main : FindoraRoute
 
@@ -59,6 +59,22 @@ sealed interface FindoraRoute {
     /** Up to three homes side by side (from the Home compare tray and the detail page). */
     @Serializable
     data object Compare : FindoraRoute
+
+    /** A thread with a listing's demo agent, from the Chat tab, a notification or `findora://chat/{id}`. */
+    @Serializable
+    data class Chat(
+        val conversationId: String,
+    ) : FindoraRoute
+
+    /** "Message agent" on a listing: opens the user's thread about it (created by the first message). */
+    @Serializable
+    data class ChatWithAgent(
+        val propertyId: String,
+    ) : FindoraRoute
+
+    /** The in-app notifications center (from the Home bell). */
+    @Serializable
+    data object Notifications : FindoraRoute
 
     /** Debug-only catalogue of every design-system component. */
     @Serializable

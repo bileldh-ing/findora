@@ -11,8 +11,11 @@ import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.TimeRange
 import com.findora.app.core.domain.model.Viewing
+import com.findora.app.core.domain.notification.NewNotification
+import com.findora.app.core.domain.notification.NotificationKind
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.InteractionRepository
+import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.ViewingReminderScheduler
 import com.findora.app.core.domain.repository.ViewingRepository
@@ -126,6 +129,7 @@ class ScheduleViewingViewModel
         private val viewings: ViewingRepository,
         private val reminders: ViewingReminderScheduler,
         private val interactions: InteractionRepository,
+        private val notifications: NotificationRepository,
         private val auth: AuthRepository,
         private val generator: ViewingSlotGenerator,
         private val clock: AppClock,
@@ -248,6 +252,18 @@ class ScheduleViewingViewModel
             val reminder = bestEffort("schedule reminder") { reminders.schedule(viewing) } ?: false
             bestEffort("record interaction") {
                 interactions.record(InteractionEvent(user, propertyId, InteractionType.ScheduledViewing, clock.now()))
+            }
+            bestEffort("add notification") {
+                val title =
+                    properties
+                        .observeProperty(propertyId)
+                        .first()
+                        ?.title
+                        .orEmpty()
+                notifications.add(
+                    user,
+                    NewNotification(NotificationKind.ViewingBooked, title, propertyId, eventAt = viewing.startAt),
+                )
             }
             form.update { it.copy(submitting = false, booked = viewing, reminderScheduled = reminder) }
         }

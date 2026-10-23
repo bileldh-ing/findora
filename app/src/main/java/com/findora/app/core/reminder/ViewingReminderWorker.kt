@@ -6,6 +6,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.findora.app.R
 import com.findora.app.core.common.AppClock
+import com.findora.app.core.domain.notification.NewNotification
+import com.findora.app.core.domain.notification.NotificationKind
+import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.ViewingRepository
 import dagger.assisted.Assisted
@@ -28,6 +31,7 @@ class ViewingReminderWorker
         private val viewings: ViewingRepository,
         private val properties: PropertyRepository,
         private val notifier: ViewingReminderNotifier,
+        private val notifications: NotificationRepository,
         private val clock: AppClock,
         private val zone: ZoneId,
     ) : CoroutineWorker(context, params) {
@@ -42,6 +46,15 @@ class ViewingReminderWorker
                     DateTimeFormatter
                         .ofLocalizedTime(FormatStyle.SHORT)
                         .format(viewing.startAt.atZone(zone))
+                notifications.add(
+                    viewing.userId,
+                    NewNotification(
+                        NotificationKind.ViewingReminder,
+                        title,
+                        viewing.propertyId,
+                        eventAt = viewing.startAt,
+                    ),
+                )
                 notifier.post(ViewingReminder(viewing.id, viewing.propertyId, title, time))
             }
             return if (viewingId == NO_ID) Result.failure() else Result.success()

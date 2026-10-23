@@ -215,7 +215,6 @@
         <item quantity="many">Carte avec %1$d logements. Utilisez la vue liste pour les consulter un par un.</item>
         <item quantity="other">Carte avec %1$d logements. Utilisez la vue liste pour les consulter un par un.</item>
     </plurals>
-    <string name="notifications_mark_read">Marquer comme lu</string>
     <!-- Property detail -->
     <string name="action_open_listing">Ouvrir l\'annonce</string>
     <string name="action_share">Partager</string>
@@ -544,4 +543,88 @@
     <string name="nl_chip_pets">Animaux acceptés</string>
     <string name="nl_chip_transport">Près des transports</string>
     <string name="nl_chip_hint">Indice : %1$s</string>
+
+    <!-- Phase 6B: chat with agents and the notifications center -->
+    <string name="nav_chat">Messages</string>
+    <string name="chat_title">Messages</string>
+    <string name="chat_demo_label">Agent de démonstration — réponses automatiques</string>
+    <string name="chat_empty_title">Aucune conversation</string>
+    <string name="chat_empty_body">Ouvrez une annonce et touchez Contacter l’agent pour poser vos questions.</string>
+    <string name="chat_you_prefix">Vous : %1$s</string>
+    <string name="chat_typing">écrit…</string>
+    <string name="chat_input_hint">Écrire un message</string>
+    <string name="chat_send">Envoyer</string>
+    <string name="chat_quick_still_available">Est-il toujours disponible ?</string>
+    <string name="chat_quick_visit_week">Puis-je visiter cette semaine ?</string>
+    <string name="chat_quick_negotiable">Le prix est-il négociable ?</string>
+    <string name="chat_quick_replies_cd">Réponses rapides</string>
+    <string name="chat_today">Aujourd’hui</string>
+    <string name="chat_yesterday">Hier</string>
+    <string name="chat_status_sending">Envoi en cours</string>
+    <string name="chat_status_sent">Envoyé</string>
+    <string name="chat_status_read">Lu</string>
+    <string name="chat_bubble_you_cd">Vous, %1$s : %2$s. %3$s</string>
+    <string name="chat_bubble_agent_cd">%1$s, %2$s : %3$s</string>
+    <string name="chat_typing_cd">%1$s est en train d’écrire</string>
+    <string name="chat_open_listing">Ouvrir l’annonce</string>
+    <string name="chat_open_conversation">Ouvrir la conversation</string>
+    <string name="chat_not_found_title">Conversation indisponible</string>
+    <string name="chat_not_found_body">Elle a peut-être été supprimée ou appartient à un autre compte.</string>
+    <string name="chat_start_hint">Posez vos questions à %1$s sur ce logement, ou choisissez une réponse rapide ci-dessous.</string>
+    <string name="detail_message_agent">Contacter l’agent</string>
+    <string name="detail_message_cd">Écrire à %1$s</string>
+    <string name="messages_channel_name">Messages</string>
+    <string name="messages_channel_description">Les réponses des agents à vos questions.</string>
+    <string name="agent_reply_greeting">Bonjour, je suis %1$s, l’agent de %2$s.</string>
+    <string name="agent_reply_available">Oui, %1$s est toujours disponible.</string>
+    <string name="agent_reply_listed_today">L’annonce a été publiée aujourd’hui.</string>
+    <string name="agent_reply_slots">Je peux vous le faire visiter le %1$s.</string>
+    <string name="agent_reply_slots_tomorrow">Demain, je peux vous le faire visiter à %1$s.</string>
+    <string name="agent_reply_slot">%1$s à %2$s</string>
+    <string name="agent_reply_list_separator"> ; </string>
+    <string name="agent_reply_book_hint">Vous pouvez réserver avec le bouton Planifier une visite de l’annonce.</string>
+    <string name="agent_reply_no_slots">Je n’ai pas de créneau libre à ce moment-là. Choisissez un autre jour dans Planifier une visite.</string>
+    <string name="agent_reply_price_firm">Le loyer est de %1$s par mois, et le propriétaire le maintient à ce prix pour l’instant.</string>
+    <string name="agent_reply_price_reduced">Le loyer vient d’être baissé à %1$s par mois, la marge de négociation est donc faible.</string>
+    <string name="agent_reply_price_offers">Le loyer est de %1$s par mois. Le bien est sur le marché depuis un moment, le propriétaire pourrait étudier une offre pour un bail plus long.</string>
+    <string name="agent_reply_pets_yes">Les animaux sont les bienvenus.</string>
+    <string name="agent_reply_pets_no">Désolé, le propriétaire n’accepte pas les animaux.</string>
+    <string name="agent_reply_parking_yes">Une place de stationnement est disponible pour votre voiture.</string>
+    <string name="agent_reply_parking_no">Ce logement n’a pas de place de stationnement.</string>
+    <string name="agent_reply_furnished_yes">Il est loué meublé.</string>
+    <string name="agent_reply_furnished_no">Il est loué non meublé.</string>
+    <string name="agent_reply_size">Il compte %1$s, %2$s et %3$d m² habitables.</string>
+    <string name="agent_reply_thanks">Avec plaisir ! N’hésitez pas si vous avez d’autres questions.</string>
+    <string name="agent_reply_help">Je peux vous renseigner sur la disponibilité, le loyer, les créneaux de visite, les animaux, le stationnement, l’ameublement et la surface. Que souhaitez-vous savoir ?</string>
+    <string name="agent_reply_listing_gone">Cette annonce n’est plus sur Findora, je ne peux donc pas donner de détails ici.</string>
+    <string name="notifications_empty_body">Les messages des agents et le suivi de vos visites apparaîtront ici.</string>
+    <string name="notifications_mark_all_read">Tout marquer comme lu</string>
+    <string name="notifications_delete">Supprimer</string>
+    <string name="notifications_deleted">Notification supprimée</string>
+    <string name="notification_message_title">Nouveau message de %1$s</string>
+    <string name="notification_reminder_title">Visite dans une heure</string>
+    <string name="notification_booked_title">Visite réservée</string>
+    <string name="notification_viewing_body">%1$s · %2$s</string>
+    <string name="notification_unread">Non lu</string>
+    <string name="notification_cd">%1$s. %2$s. %3$s</string>
+    <plurals name="agent_reply_listed_days">
+        <item quantity="one">L’annonce est en ligne depuis %1$d jour.</item>
+        <item quantity="many">L’annonce est en ligne depuis %1$d jours.</item>
+        <item quantity="other">L’annonce est en ligne depuis %1$d jours.</item>
+    </plurals>
+    <plurals name="agent_reply_bedrooms">
+        <item quantity="one">%1$d chambre</item>
+        <item quantity="many">%1$d chambres</item>
+        <item quantity="other">%1$d chambres</item>
+    </plurals>
+    <plurals name="agent_reply_bathrooms">
+        <item quantity="one">%1$d salle de bain</item>
+        <item quantity="many">%1$d salles de bain</item>
+        <item quantity="other">%1$d salles de bain</item>
+    </plurals>
+    <plurals name="chat_unread_cd">
+        <item quantity="one">%1$d message non lu</item>
+        <item quantity="many">%1$d messages non lus</item>
+        <item quantity="other">%1$d messages non lus</item>
+    </plurals>
 </resources>

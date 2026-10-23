@@ -28,21 +28,6 @@ data class FavoriteEntity(
     @ColumnInfo(name = "created_at") val createdAtMillis: Long,
 )
 
-@Entity(
-    tableName = "messages",
-    indices = [Index(value = ["conversation_id", "sent_at"]), Index(value = ["recipient_id", "read_at"])],
-)
-data class MessageEntity(
-    @PrimaryKey val id: String,
-    @ColumnInfo(name = "conversation_id") val conversationId: String,
-    @ColumnInfo(name = "property_id") val propertyId: String,
-    @ColumnInfo(name = "sender_id") val senderId: String,
-    @ColumnInfo(name = "recipient_id") val recipientId: String,
-    val body: String,
-    @ColumnInfo(name = "sent_at") val sentAtMillis: Long,
-    @ColumnInfo(name = "read_at") val readAtMillis: Long?,
-)
-
 @Entity(tableName = "saved_searches", indices = [Index(value = ["user_id", "created_at"])])
 data class SavedSearchEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

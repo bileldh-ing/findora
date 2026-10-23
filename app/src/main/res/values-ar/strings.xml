@@ -230,7 +230,6 @@
         <item quantity="many">خريطة بها %1$d منزلًا. استخدم عرض القائمة لتصفحها واحدًا تلو الآخر.</item>
         <item quantity="other">خريطة بها %1$d منزل. استخدم عرض القائمة لتصفحها واحدًا تلو الآخر.</item>
     </plurals>
-    <string name="notifications_mark_read">تحديد كمقروء</string>
     <!-- Property detail -->
     <string name="action_open_listing">فتح الإعلان</string>
     <string name="action_share">مشاركة</string>
@@ -580,4 +579,100 @@
     <string name="nl_chip_pets">يُسمح بالحيوانات</string>
     <string name="nl_chip_transport">قرب المواصلات</string>
     <string name="nl_chip_hint">تلميح: %1$s</string>
+
+    <!-- Phase 6B: chat with agents and the notifications center -->
+    <string name="nav_chat">الرسائل</string>
+    <string name="chat_title">الرسائل</string>
+    <string name="chat_demo_label">وكيل تجريبي — ردود آلية</string>
+    <string name="chat_empty_title">لا توجد محادثات بعد</string>
+    <string name="chat_empty_body">افتح إعلاناً واضغط على مراسلة الوكيل لتسأل عنه.</string>
+    <string name="chat_you_prefix">أنت: %1$s</string>
+    <string name="chat_typing">يكتب…</string>
+    <string name="chat_input_hint">اكتب رسالة</string>
+    <string name="chat_send">إرسال</string>
+    <string name="chat_quick_still_available">هل ما زال متاحاً؟</string>
+    <string name="chat_quick_visit_week">هل يمكنني الزيارة هذا الأسبوع؟</string>
+    <string name="chat_quick_negotiable">هل السعر قابل للتفاوض؟</string>
+    <string name="chat_quick_replies_cd">ردود سريعة</string>
+    <string name="chat_today">اليوم</string>
+    <string name="chat_yesterday">أمس</string>
+    <string name="chat_status_sending">جارٍ الإرسال</string>
+    <string name="chat_status_sent">تم الإرسال</string>
+    <string name="chat_status_read">تمت القراءة</string>
+    <string name="chat_bubble_you_cd">أنت، %1$s: %2$s. %3$s</string>
+    <string name="chat_bubble_agent_cd">%1$s، %2$s: %3$s</string>
+    <string name="chat_typing_cd">%1$s يكتب الآن</string>
+    <string name="chat_open_listing">فتح الإعلان</string>
+    <string name="chat_open_conversation">فتح المحادثة</string>
+    <string name="chat_not_found_title">المحادثة غير متاحة</string>
+    <string name="chat_not_found_body">ربما حُذفت أو تخص حساباً آخر.</string>
+    <string name="chat_start_hint">اسأل %1$s عن هذا المنزل، أو اختر رداً سريعاً بالأسفل.</string>
+    <string name="detail_message_agent">مراسلة الوكيل</string>
+    <string name="detail_message_cd">مراسلة %1$s</string>
+    <string name="messages_channel_name">الرسائل</string>
+    <string name="messages_channel_description">ردود وكلاء الإعلانات على أسئلتك.</string>
+    <string name="agent_reply_greeting">مرحباً، أنا %1$s، وكيل %2$s.</string>
+    <string name="agent_reply_available">نعم، %1$s ما زال متاحاً.</string>
+    <string name="agent_reply_listed_today">نُشر الإعلان اليوم.</string>
+    <string name="agent_reply_slots">يمكنني أن أريك إياه يوم %1$s.</string>
+    <string name="agent_reply_slots_tomorrow">غداً يمكنني أن أريك إياه الساعة %1$s.</string>
+    <string name="agent_reply_slot">%1$s الساعة %2$s</string>
+    <string name="agent_reply_list_separator">؛ </string>
+    <string name="agent_reply_book_hint">يمكنك الحجز من زر جدولة معاينة في الإعلان.</string>
+    <string name="agent_reply_no_slots">ليست لدي مواعيد معاينة متاحة حينها. اختر يوماً آخر من جدولة معاينة.</string>
+    <string name="agent_reply_price_firm">الإيجار %1$s شهرياً، والمالك متمسك بهذا السعر حالياً.</string>
+    <string name="agent_reply_price_reduced">خُفّض الإيجار مؤخراً إلى %1$s شهرياً، لذا فهامش التفاوض محدود.</string>
+    <string name="agent_reply_price_offers">الإيجار %1$s شهرياً. العقار معروض منذ مدة، لذا قد يدرس المالك عرضاً مقابل عقد أطول.</string>
+    <string name="agent_reply_pets_yes">الحيوانات الأليفة مرحب بها.</string>
+    <string name="agent_reply_pets_no">عذراً، المالك لا يقبل الحيوانات الأليفة.</string>
+    <string name="agent_reply_parking_yes">يوجد موقف لسيارتك.</string>
+    <string name="agent_reply_parking_no">لا يوجد موقف سيارات مخصص لهذا المنزل.</string>
+    <string name="agent_reply_furnished_yes">المنزل مفروش.</string>
+    <string name="agent_reply_furnished_no">المنزل غير مفروش.</string>
+    <string name="agent_reply_size">يضم %1$s و%2$s ومساحة سكنية قدرها %3$d م².</string>
+    <string name="agent_reply_thanks">على الرحب والسعة! أخبرني إن كان لديك أي سؤال آخر.</string>
+    <string name="agent_reply_help">يمكنني إفادتك بشأن التوفر والإيجار ومواعيد المعاينة والحيوانات الأليفة وموقف السيارات والأثاث ومساحة المنزل. ماذا تود أن تعرف؟</string>
+    <string name="agent_reply_listing_gone">لم يعد هذا الإعلان على Findora، لذا لا يمكنني مشاركة تفاصيله هنا.</string>
+    <string name="notifications_empty_body">ستظهر هنا رسائل الوكلاء وتحديثات المعاينات.</string>
+    <string name="notifications_mark_all_read">تعليم الكل كمقروء</string>
+    <string name="notifications_delete">حذف</string>
+    <string name="notifications_deleted">تم حذف الإشعار</string>
+    <string name="notification_message_title">رسالة جديدة من %1$s</string>
+    <string name="notification_reminder_title">معاينة بعد ساعة</string>
+    <string name="notification_booked_title">تم حجز المعاينة</string>
+    <string name="notification_viewing_body">%1$s · %2$s</string>
+    <string name="notification_unread">غير مقروء</string>
+    <string name="notification_cd">%1$s. %2$s. %3$s</string>
+    <plurals name="agent_reply_listed_days">
+        <item quantity="zero">الإعلان منشور منذ %1$d يوم.</item>
+        <item quantity="one">الإعلان منشور منذ يوم واحد.</item>
+        <item quantity="two">الإعلان منشور منذ يومين.</item>
+        <item quantity="few">الإعلان منشور منذ %1$d أيام.</item>
+        <item quantity="many">الإعلان منشور منذ %1$d يوماً.</item>
+        <item quantity="other">الإعلان منشور منذ %1$d يوم.</item>
+    </plurals>
+    <plurals name="agent_reply_bedrooms">
+        <item quantity="zero">%1$d غرفة نوم</item>
+        <item quantity="one">غرفة نوم واحدة</item>
+        <item quantity="two">غرفتي نوم</item>
+        <item quantity="few">%1$d غرف نوم</item>
+        <item quantity="many">%1$d غرفة نوم</item>
+        <item quantity="other">%1$d غرفة نوم</item>
+    </plurals>
+    <plurals name="agent_reply_bathrooms">
+        <item quantity="zero">%1$d حمام</item>
+        <item quantity="one">حمام واحد</item>
+        <item quantity="two">حمامين</item>
+        <item quantity="few">%1$d حمامات</item>
+        <item quantity="many">%1$d حماماً</item>
+        <item quantity="other">%1$d حمام</item>
+    </plurals>
+    <plurals name="chat_unread_cd">
+        <item quantity="zero">لا رسائل غير مقروءة</item>
+        <item quantity="one">رسالة واحدة غير مقروءة</item>
+        <item quantity="two">رسالتان غير مقروءتين</item>
+        <item quantity="few">%1$d رسائل غير مقروءة</item>
+        <item quantity="many">%1$d رسالة غير مقروءة</item>
+        <item quantity="other">%1$d رسالة غير مقروءة</item>
+    </plurals>
 </resources>
