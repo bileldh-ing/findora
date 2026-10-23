@@ -181,7 +181,8 @@ class MapViewModelTest {
                 // A programmatic move (a carousel pan) never offers the button.
                 val shifted = GeoBounds(start.south + 0.05, start.west, start.north + 0.05, start.east)
                 vm.onEvent(MapUiEvent.CameraMoved(viewport(shifted, 12.0), byUser = false))
-                assertFalse(awaitUntil { it.clusters.isNotEmpty() }.showSearchThisArea)
+                // Nothing visible changes (same zoom), so the state is not re-emitted: read it directly.
+                assertFalse(vm.state.value.showSearchThisArea)
 
                 // The user drags the map north: the button appears.
                 vm.onEvent(MapUiEvent.CameraMoved(viewport(shifted, 12.0), byUser = true))

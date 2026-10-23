@@ -110,11 +110,13 @@ fun LocationsScreen(
     map: @Composable (Modifier) -> Unit = { mapModifier -> OsmListingsMap(state, onEvent, mapModifier) },
 ) {
     val spacing = FindoraTheme.spacing
+    val title = stringResource(R.string.locations_title)
     Box(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(FindoraTheme.colors.background)
+                .semantics { paneTitle = title }
                 .testTag("locations"),
     ) {
         if (state.mode == MapMode.Map) {
