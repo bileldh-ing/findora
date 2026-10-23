@@ -533,8 +533,8 @@
     <string name="ask_voice_prompt">صف المسكن الذي تريده</string>
     <string name="nl_chip_under">أقل من %1$s</string>
     <string name="nl_chip_from">من %1$s</string>
-    <string name="nl_chip_bedrooms">%1$d+ غرف نوم</string>
-    <string name="nl_chip_bathrooms">%1$d+ حمامات</string>
+    <string name="nl_chip_bedrooms">غرف النوم: %1$d+</string>
+    <string name="nl_chip_bathrooms">الحمامات: %1$d+</string>
     <string name="nl_chip_area_min">من %1$d م²</string>
     <string name="nl_chip_area_max">حتى %1$d م²</string>
     <string name="nl_chip_area_range">%1$d–%2$d م²</string>

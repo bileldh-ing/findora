@@ -95,7 +95,7 @@ class AskFindoraScreenTest {
     @Test
     fun understoodPartsAppearAsChipsWithNotesAndApply() {
         show(askState("2 bedroom in La Marsa under 2000 TND, pets ok, spacious"))
-        listOf("2+ bedrooms", "La Marsa", "Under 2,000 TND", "Pets OK").forEach {
+        listOf("Bedrooms: 2+", "La Marsa", "Under 2,000 TND", "Pets OK").forEach {
             compose.onNodeWithContentDescription("Remove $it").assertIsDisplayed()
         }
         compose.onNodeWithText("Not understood: spacious").assertIsDisplayed()

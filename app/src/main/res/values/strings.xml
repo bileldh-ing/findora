@@ -514,8 +514,8 @@
     <string name="ask_voice_prompt">Describe the home you want</string>
     <string name="nl_chip_under">Under %1$s</string>
     <string name="nl_chip_from">From %1$s</string>
-    <string name="nl_chip_bedrooms">%1$d+ bedrooms</string>
-    <string name="nl_chip_bathrooms">%1$d+ bathrooms</string>
+    <string name="nl_chip_bedrooms">Bedrooms: %1$d+</string>
+    <string name="nl_chip_bathrooms">Bathrooms: %1$d+</string>
     <string name="nl_chip_area_min">From %1$d m²</string>
     <string name="nl_chip_area_max">Up to %1$d m²</string>
     <string name="nl_chip_area_range">%1$d–%2$d m²</string>

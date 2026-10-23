@@ -506,8 +506,8 @@
     <string name="ask_voice_prompt">Décrivez le logement souhaité</string>
     <string name="nl_chip_under">Moins de %1$s</string>
     <string name="nl_chip_from">À partir de %1$s</string>
-    <string name="nl_chip_bedrooms">%1$d+ chambres</string>
-    <string name="nl_chip_bathrooms">%1$d+ salles de bain</string>
+    <string name="nl_chip_bedrooms">Chambres : %1$d+</string>
+    <string name="nl_chip_bathrooms">Salles de bain : %1$d+</string>
     <string name="nl_chip_area_min">À partir de %1$d m²</string>
     <string name="nl_chip_area_max">Jusqu\'à %1$d m²</string>
     <string name="nl_chip_area_range">%1$d–%2$d m²</string>
