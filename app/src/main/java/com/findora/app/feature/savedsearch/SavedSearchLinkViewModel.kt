@@ -3,12 +3,10 @@ package com.findora.app.feature.savedsearch
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
 import com.findora.app.core.domain.repository.SavedSearchRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
-import com.findora.app.navigation.FindoraRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +37,8 @@ class SavedSearchLinkViewModel
         private val currentRegion: CurrentRegion,
         private val auth: AuthRepository,
     ) : ViewModel() {
-        private val searchId: Long = savedStateHandle.toRoute<FindoraRoute.SavedSearchResults>().searchId
+        /** [FindoraRoute.SavedSearchResults.searchId], put in the handle by the navigation graph. */
+        private val searchId: Long = savedStateHandle.get<Long>(SEARCH_ID_KEY) ?: NO_ID
 
         private val mutableState = MutableStateFlow<SavedSearchLinkState>(SavedSearchLinkState.Resolving)
         val state: StateFlow<SavedSearchLinkState> = mutableState.asStateFlow()
@@ -53,5 +52,10 @@ class SavedSearchLinkViewModel
                 if (search != null) applySavedSearch(search, filters, currentRegion)
                 mutableState.value = SavedSearchLinkState.Done(applied = search != null)
             }
+        }
+
+        companion object {
+            const val SEARCH_ID_KEY = "searchId"
+            private const val NO_ID = -1L
         }
     }

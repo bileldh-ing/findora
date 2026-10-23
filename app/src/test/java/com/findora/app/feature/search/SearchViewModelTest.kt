@@ -18,10 +18,10 @@ import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeMatchProfileRepository
 import com.findora.app.core.testing.FakePropertyRepository
 import com.findora.app.core.testing.FakeSavedSearchRepository
-import com.findora.app.core.testing.RecordingAlertScheduler
 import com.findora.app.core.testing.FakeSearchHistoryRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
+import com.findora.app.core.testing.RecordingAlertScheduler
 import com.findora.app.core.testing.fileSeedReader
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -272,7 +272,11 @@ class SearchViewModelTest {
             assertTrue(saved.filter.parkingOnly)
             // Homes that already match are remembered, so only later ones alert.
             val matching =
-                FakePropertyRepository().observeProperties("kerala").first().filter(saved.filter::accepts).map { it.id }
+                FakePropertyRepository()
+                    .observeProperties("kerala")
+                    .first()
+                    .filter(saved.filter::accepts)
+                    .map { it.id }
             assertEquals(matching.toSet(), savedSearches.seenIds(saved.id))
             assertEquals(1, alertScheduler.scheduled)
         }

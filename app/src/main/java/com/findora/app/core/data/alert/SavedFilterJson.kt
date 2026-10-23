@@ -59,17 +59,15 @@ object SavedFilterJson {
         )
 
     /** The filter in [text]; a malformed or inconsistent value decodes to the default (unfiltered) search. */
-    fun decode(text: String): PropertyFilter {
-        val dto =
-            try {
-                json.decodeFromString(SavedFilterDto.serializer(), text)
-            } catch (_: SerializationException) {
-                return PropertyFilter()
-            } catch (_: IllegalArgumentException) {
-                return PropertyFilter()
-            }
-        return runCatching { dto.toFilter() }.getOrDefault(PropertyFilter())
-    }
+    fun decode(text: String): PropertyFilter =
+        try {
+            json.decodeFromString(SavedFilterDto.serializer(), text).toFilter()
+        } catch (ignored: SerializationException) {
+            PropertyFilter()
+        } catch (ignored: IllegalArgumentException) {
+            // Also covers a stored range PropertyFilter rejects (min above max).
+            PropertyFilter()
+        }
 
     private fun SavedFilterDto.toFilter(): PropertyFilter =
         PropertyFilter(

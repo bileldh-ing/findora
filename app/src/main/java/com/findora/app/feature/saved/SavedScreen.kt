@@ -21,8 +21,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,8 +53,6 @@ import com.findora.app.feature.savedsearch.SavedSearchesUiEffect
 import com.findora.app.feature.savedsearch.SavedSearchesUiEvent
 import com.findora.app.feature.savedsearch.SavedSearchesUiState
 import com.findora.app.feature.savedsearch.SavedSearchesViewModel
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberUpdatedState
 
 private const val SKELETON_COUNT = 4
 private val BackButton = 48.dp

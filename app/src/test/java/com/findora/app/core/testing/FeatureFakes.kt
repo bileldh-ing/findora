@@ -108,13 +108,15 @@ class FakePropertyRepository(
     }
 }
 
-class FakeFavoritesRepository : FavoritesRepository {
+class FakeFavoritesRepository(
+    private val catalogue: List<Property> = seedProperties,
+) : FavoritesRepository {
     private val byUser = MutableStateFlow<Map<String, Set<String>>>(emptyMap())
 
     override fun observeFavoriteIds(userId: String): Flow<Set<String>> = byUser.map { it[userId].orEmpty() }
 
     override fun observeFavorites(userId: String): Flow<List<Property>> =
-        byUser.map { map -> map[userId].orEmpty().mapNotNull { id -> seedProperties.firstOrNull { it.id == id } } }
+        byUser.map { map -> map[userId].orEmpty().mapNotNull { id -> catalogue.firstOrNull { it.id == id } } }
 
     override suspend fun toggle(
         userId: String,

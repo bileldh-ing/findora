@@ -18,6 +18,10 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,17 +35,13 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.findora.app.R
-import com.findora.app.core.designsystem.component.SecondaryPillButton
-import com.findora.app.feature.savedsearch.SaveSearchDialog
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import com.findora.app.core.designsystem.component.PrimaryPillButton
+import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.component.TextLink
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.feature.home.labelRes
+import com.findora.app.feature.savedsearch.SaveSearchDialog
 
 private val ChipMinHeight = 40.dp
 private val SmallIcon = 16.dp

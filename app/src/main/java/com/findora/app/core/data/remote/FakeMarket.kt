@@ -42,10 +42,8 @@ class FakeMarket
             seed: List<ListingDto>,
             now: Instant,
         ): List<ListingDto> {
-            if (seed.isEmpty()) return emptyList()
             val today = now.atZone(ZoneOffset.UTC).toLocalDate()
             val firstDay = maxOf(EPOCH, today.minusDays(LISTING_DAYS - 1))
-            if (today.isBefore(EPOCH)) return emptyList()
             return seed
                 .groupBy(ListingDto::region)
                 .flatMap { (_, regional) ->
@@ -84,8 +82,10 @@ class FakeMarket
             listing: ListingDto,
             now: Instant,
         ): ListingDto {
-            val week = ChronoUnit.WEEKS.between(EPOCH.atStartOfDay(ZoneOffset.UTC).toInstant(), now)
-            if (week < 0 || stableHash("${listing.id}:w$week") % OFFER_ODDS != 0L) return listing
+            // Instants have no week unit: count whole UTC days since the epoch date instead.
+            val days = ChronoUnit.DAYS.between(EPOCH, now.atZone(ZoneOffset.UTC).toLocalDate())
+            val week = days / DAYS_PER_WEEK
+            if (days < 0 || stableHash("${listing.id}:w$week") % OFFER_ODDS != 0L) return listing
             val reduced = roundRent(listing.rentPerMonth * (PERCENT - OFFER_PERCENT) / PERCENT)
             return listing.copy(rentPerMonth = minOf(reduced, listing.rentPerMonth - 1).coerceAtLeast(1))
         }
@@ -108,6 +108,7 @@ class FakeMarket
             private const val SPREAD_STEPS = 21L
             private const val PERCENT = 100.0
             private const val UNIT_FLOORS = 7
+            private const val DAYS_PER_WEEK = 7L
             private const val ROUND_SMALL = 10L
             private const val ROUND_LARGE = 100L
             private const val LARGE_RENT = 5_000L

@@ -218,6 +218,8 @@ class FakeNotificationRepository(
                 eventAt = notification.eventAt,
                 createdAt = now(),
                 readAt = null,
+                savedSearchId = notification.savedSearchId,
+                count = notification.count,
             )
         edit(userId) { list ->
             val kept =

@@ -61,6 +61,7 @@ import com.findora.app.core.ui.TimeLabels
 import com.findora.app.core.ui.appLocale
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.Locale
 
 private val KindIconBox = 44.dp
 private val UnreadDot = 9.dp
@@ -227,35 +228,8 @@ private fun NotificationRow(
     modifier: Modifier = Modifier,
 ) {
     val locale = appLocale()
-    val title =
-        when (notification.kind) {
-            NotificationKind.NewMessage -> stringResource(R.string.notification_message_title, notification.subject)
-            NotificationKind.ViewingReminder -> stringResource(R.string.notification_reminder_title)
-            NotificationKind.ViewingBooked -> stringResource(R.string.notification_booked_title)
-            NotificationKind.NewMatches ->
-                pluralStringResource(
-                    R.plurals.search_alert_title,
-                    notification.count.coerceAtLeast(1),
-                    notification.count.coerceAtLeast(1),
-                    notification.subject,
-                )
-            NotificationKind.PriceDrop -> stringResource(R.string.price_drop_title, notification.subject)
-        }
-    val body =
-        when (notification.kind) {
-            NotificationKind.NewMessage, NotificationKind.PriceDrop -> notification.preview
-            NotificationKind.NewMatches -> stringResource(R.string.search_alert_body, notification.preview)
-            NotificationKind.ViewingReminder, NotificationKind.ViewingBooked ->
-                notification.eventAt
-                    ?.let {
-                        stringResource(
-                            R.string.notification_viewing_body,
-                            notification.subject,
-                            TimeLabels.dateTime(it, zone, locale),
-                        )
-                    }
-                    ?: notification.subject
-        }
+    val title = notificationTitle(notification)
+    val body = notificationBody(notification, zone, locale)
     val time = TimeLabels.listLabel(notification.createdAt, zone, today, locale)
     val unreadLabel = stringResource(R.string.notification_unread)
     val description =
@@ -270,6 +244,58 @@ private fun NotificationRow(
                 is NotificationTarget.Property -> R.string.chat_open_listing
             },
         )
+    NotificationRowContent(notification, title, body, time, description, openLabel, onClick, modifier)
+}
+
+@Composable
+private fun notificationTitle(notification: AppNotification): String =
+    when (notification.kind) {
+        NotificationKind.NewMessage -> stringResource(R.string.notification_message_title, notification.subject)
+        NotificationKind.ViewingReminder -> stringResource(R.string.notification_reminder_title)
+        NotificationKind.ViewingBooked -> stringResource(R.string.notification_booked_title)
+        NotificationKind.NewMatches ->
+            pluralStringResource(
+                R.plurals.search_alert_title,
+                notification.count.coerceAtLeast(1),
+                notification.count.coerceAtLeast(1),
+                notification.subject,
+            )
+        NotificationKind.PriceDrop -> stringResource(R.string.price_drop_title, notification.subject)
+    }
+
+@Composable
+private fun notificationBody(
+    notification: AppNotification,
+    zone: ZoneId,
+    locale: Locale,
+): String =
+    when (notification.kind) {
+        NotificationKind.NewMessage, NotificationKind.PriceDrop -> notification.preview
+        NotificationKind.NewMatches -> stringResource(R.string.search_alert_body, notification.preview)
+        NotificationKind.ViewingReminder, NotificationKind.ViewingBooked ->
+            notification.eventAt
+                ?.let {
+                    stringResource(
+                        R.string.notification_viewing_body,
+                        notification.subject,
+                        TimeLabels.dateTime(it, zone, locale),
+                    )
+                }
+                ?: notification.subject
+    }
+
+@Suppress("LongParameterList")
+@Composable
+private fun NotificationRowContent(
+    notification: AppNotification,
+    title: String,
+    body: String,
+    time: String,
+    description: String,
+    openLabel: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =

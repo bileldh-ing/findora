@@ -51,7 +51,7 @@ class SearchAlertWorker
         private val localized: LocalizedContext,
     ) : CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
-            val session = auth.restoreSession() ?: auth.session.value ?: return Result.success()
+            val session = auth.restoreSession() ?: return Result.success()
             val onRefresh = inputData.getBoolean(KEY_ON_REFRESH, false)
             val fallbackRegion = currentRegion.region.first().id
             if (!onRefresh) {

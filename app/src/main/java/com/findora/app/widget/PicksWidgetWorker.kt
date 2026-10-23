@@ -11,13 +11,13 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.findora.app.core.di.ApplicationScope
 import com.findora.app.core.domain.repository.HomeWidgetRefresher
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import com.findora.app.core.di.ApplicationScope
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Provider

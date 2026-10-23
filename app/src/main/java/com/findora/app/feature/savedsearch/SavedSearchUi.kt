@@ -37,10 +37,10 @@ import com.findora.app.core.designsystem.component.SwitchRow
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.AlertFrequency
+import com.findora.app.core.domain.model.HomeCategory
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.SavedSearch
 import com.findora.app.feature.home.labelRes
-import com.findora.app.core.domain.model.HomeCategory
 
 private val IconSize = 20.dp
 

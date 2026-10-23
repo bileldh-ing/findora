@@ -40,6 +40,8 @@ class DatabaseSchemaTest {
             "login_attempts",
             "conversations",
             "notifications",
+            "saved_search_seen",
+            "price_watch",
         ).forEach { table -> assertTrue(table, schema.readText().contains("\"tableName\": \"$table\"")) }
     }
 
@@ -94,6 +96,42 @@ class DatabaseSchemaTest {
                     "VALUES ('u1', 'new_message', 'Anu', 'Hi', 'p1', 'c1', NULL, 0, NULL)",
             )
             db.query("SELECT COUNT(*) FROM notifications WHERE user_id = 'u1'").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals(1, cursor.getInt(0))
+            }
+        }
+    }
+
+    @Test
+    fun version3MigratesToVersion4KeepingSavedSearchesAndNotifications() {
+        helper.createDatabase(TEST_DB, 3).use { db ->
+            db.execSQL(
+                "INSERT INTO saved_searches (user_id, name, query, filter_json, alerts_enabled, created_at, " +
+                    "last_notified_at) VALUES ('u1', 'Houses', 'houses', '{\"type\":\"house\"}', 1, 5, NULL)",
+            )
+            db.execSQL(
+                "INSERT INTO notifications (user_id, kind, subject, preview, property_id, conversation_id, " +
+                    "event_at, created_at, read_at) " +
+                    "VALUES ('u1', 'viewing_booked', 'Home', '', 'p1', NULL, 0, 0, NULL)",
+            )
+        }
+        helper.runMigrationsAndValidate(TEST_DB, 4, true).use { db ->
+            db.query("SELECT name, region_id, alert_frequency, last_checked_at FROM saved_searches").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals("Houses", cursor.getString(0))
+                // Older searches run in the current region with daily alerts.
+                assertEquals("", cursor.getString(1))
+                assertEquals("daily", cursor.getString(2))
+                assertTrue(cursor.isNull(3))
+            }
+            db.query("SELECT saved_search_id, item_count FROM notifications").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertTrue(cursor.isNull(0))
+                assertEquals(0, cursor.getInt(1))
+            }
+            db.execSQL("INSERT INTO saved_search_seen (search_id, property_id) VALUES (1, 'p1')")
+            db.execSQL("INSERT INTO price_watch (user_id, property_id, rent_amount) VALUES ('u1', 'p1', 10000)")
+            db.query("SELECT COUNT(*) FROM saved_search_seen").use { cursor ->
                 assertTrue(cursor.moveToFirst())
                 assertEquals(1, cursor.getInt(0))
             }

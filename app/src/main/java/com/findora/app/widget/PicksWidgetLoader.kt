@@ -104,8 +104,10 @@ class PicksWidgetLoader
                 }
             val thumbnails =
                 model.picks
-                    .mapNotNull { pick -> pick.thumbnailUrl?.let { url -> thumbnail(context, url)?.let { pick.propertyId to it } } }
-                    .toMap()
+                    .mapNotNull { pick ->
+                        val url = pick.thumbnailUrl ?: return@mapNotNull null
+                        thumbnail(context, url)?.let { pick.propertyId to it }
+                    }.toMap()
             return PicksWidgetUi(
                 model = model,
                 thumbnails = thumbnails,
@@ -132,7 +134,7 @@ class PicksWidgetLoader
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (
-                @Suppress("TooGenericExceptionCaught") error: Exception,
+                @Suppress("TooGenericExceptionCaught") ignored: Exception,
             ) {
                 // A broken photo must never break the widget: the icon is shown instead.
                 null
@@ -183,6 +185,5 @@ class AndroidPicksWidgetTexts(
         locality: String,
         price: String,
         match: String?,
-    ): String =
-        listOfNotNull(title, locality, price, match).joinToString(", ")
+    ): String = listOfNotNull(title, locality, price, match).joinToString(", ")
 }

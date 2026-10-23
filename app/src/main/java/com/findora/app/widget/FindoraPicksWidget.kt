@@ -41,6 +41,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.findora.app.MainActivity
 import com.findora.app.R
+import com.findora.app.core.domain.repository.HomeWidgetRefresher
 import com.findora.app.navigation.PropertyDeepLink
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -53,7 +54,7 @@ import dagger.hilt.components.SingletonComponent
 interface PicksWidgetEntryPoint {
     fun picksWidgetLoader(): PicksWidgetLoader
 
-    fun homeWidgetRefresher(): com.findora.app.core.domain.repository.HomeWidgetRefresher
+    fun homeWidgetRefresher(): HomeWidgetRefresher
 }
 
 /**
@@ -68,7 +69,11 @@ class FindoraPicksWidget : GlanceAppWidget() {
         context: Context,
         id: GlanceId,
     ) {
-        val ui = EntryPointAccessors.fromApplication(context, PicksWidgetEntryPoint::class.java).picksWidgetLoader().load()
+        val ui =
+            EntryPointAccessors
+                .fromApplication(context, PicksWidgetEntryPoint::class.java)
+                .picksWidgetLoader()
+                .load()
         provideContent { PicksWidgetContent(ui) }
     }
 }
@@ -78,7 +83,10 @@ class FindoraPicksWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        EntryPointAccessors.fromApplication(context, PicksWidgetEntryPoint::class.java).homeWidgetRefresher().ensureScheduled()
+        EntryPointAccessors
+            .fromApplication(context, PicksWidgetEntryPoint::class.java)
+            .homeWidgetRefresher()
+            .ensureScheduled()
     }
 
     override fun onDisabled(context: Context) {
@@ -99,12 +107,15 @@ internal object WidgetColors {
 private val Thumb = 56.dp
 
 @Composable
-fun PicksWidgetContent(ui: PicksWidgetUi) {
+fun PicksWidgetContent(
+    ui: PicksWidgetUi,
+    modifier: GlanceModifier = GlanceModifier,
+) {
     val context = LocalContext.current
     val model = ui.model
     Column(
         modifier =
-            GlanceModifier
+            modifier
                 .fillMaxSize()
                 .background(WidgetColors.background)
                 .cornerRadius(24.dp)
@@ -190,7 +201,8 @@ private fun PickRow(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = pick.priceText,
-                    style = TextStyle(color = WidgetColors.onBackground, fontSize = 13.sp, fontWeight = FontWeight.Bold),
+                    style =
+                        TextStyle(color = WidgetColors.onBackground, fontSize = 13.sp, fontWeight = FontWeight.Bold),
                     maxLines = 1,
                 )
                 pick.matchText?.let { match ->

@@ -36,5 +36,4 @@ class SaveSearch
             scheduler.ensureScheduled()
             return id
         }
-
     }

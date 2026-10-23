@@ -22,14 +22,14 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 /** Applies a linked saved search (a brief spinner while it loads), then continues to the app with Home showing it. */
 @Composable
 fun SavedSearchLinkRoute(
-    onDone: () -> Unit,
+    onFinish: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SavedSearchLinkViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val currentOnDone by rememberUpdatedState(onDone)
+    val currentOnFinish by rememberUpdatedState(onFinish)
     LaunchedEffect(state) {
-        if (state is SavedSearchLinkState.Done) currentOnDone()
+        if (state is SavedSearchLinkState.Done) currentOnFinish()
     }
     val loading = stringResource(R.string.saved_search_opening)
     Box(

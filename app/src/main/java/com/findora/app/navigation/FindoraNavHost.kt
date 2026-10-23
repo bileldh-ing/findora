@@ -197,7 +197,7 @@ private fun FindoraGraph(
             )
         }
         composable<FindoraRoute.SavedSearchResults>(deepLinks = savedSearchDeepLinks) {
-            SavedSearchLinkRoute(onDone = toMain)
+            SavedSearchLinkRoute(onFinish = toMain)
         }
         composable<FindoraRoute.MatchQuiz> {
             MatchQuizRoute(
