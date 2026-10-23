@@ -47,6 +47,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -322,10 +325,18 @@ private fun DayStrip(
                         .height(DayChipHeight)
                         .clip(FindoraTheme.shapes.chip)
                         .background(if (isSelected) colors.primaryAction else colors.surface)
+                        .testTag("day_$index")
                         .selectable(selected = isSelected, role = Role.Tab, onClick = { onSelect(day.date) })
+                        // One announcement per day ("Tuesday 27 October, 17 free times") instead of three fragments.
                         .clearAndSetSemantics {
                             contentDescription = description
-                        }.testTag("day_$index"),
+                            selected = isSelected
+                            role = Role.Tab
+                            onClick {
+                                onSelect(day.date)
+                                true
+                            }
+                        },
             ) {
                 val content = if (isSelected) colors.onPrimaryAction else colors.onBackground
                 Text(
