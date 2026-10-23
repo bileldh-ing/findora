@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.glance.appwidget.testing.unit.hasStartActivityClickAction
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.hasContentDescription
-import androidx.glance.testing.unit.hasText
+import androidx.glance.testing.unit.hasTextEqualTo
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,12 +72,12 @@ class PicksWidgetContentTest {
                     ),
                 )
             }
-            onNode(hasText("Top matches for you")).assertExists()
-            onNode(hasText("Georgie House")).assertExists()
-            onNode(hasText("92% match")).assertExists()
-            onNode(hasText("Palm Court")).assertExists()
-            onAllNodes(hasText("₹10,000/ Month")).assertCountEquals(3)
-            onNode(hasText("Next viewing: Georgie House · Oct 26, 14:00")).assertExists()
+            onNode(hasTextEqualTo("Top matches for you")).assertExists()
+            onNode(hasTextEqualTo("Georgie House")).assertExists()
+            onNode(hasTextEqualTo("92% match")).assertExists()
+            onNode(hasTextEqualTo("Palm Court")).assertExists()
+            onAllNodes(hasTextEqualTo("₹10,000/ Month")).assertCountEquals(3)
+            onNode(hasTextEqualTo("Next viewing: Georgie House · Oct 26, 14:00")).assertExists()
             // TalkBack reads each home as one item.
             onNode(hasContentDescription("Luna Haven, Kochi, ₹10,000/ Month")).assertExists()
         }
@@ -96,7 +96,7 @@ class PicksWidgetContentTest {
         runGlanceAppWidgetUnitTest {
             setContext(context)
             provideComposable { PicksWidgetContent(ui(emptyList(), signedIn = false)) }
-            onNode(hasText("Sign in to Findora to see your picks.")).assertExists()
-            onNode(hasText("Georgie House")).assertDoesNotExist()
+            onNode(hasTextEqualTo("Sign in to Findora to see your picks.")).assertExists()
+            onNode(hasTextEqualTo("Georgie House")).assertDoesNotExist()
         }
 }

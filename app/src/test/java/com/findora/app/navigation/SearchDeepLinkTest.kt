@@ -5,6 +5,9 @@ import android.net.Uri
 import androidx.compose.material3.Text
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,7 +52,8 @@ class SearchDeepLinkTest {
                 composable<FindoraRoute.Main> { Text("main") }
                 composable<FindoraRoute.PropertyDetail>(deepLinks = propertyDetailDeepLinks) { Text("detail") }
                 composable<FindoraRoute.SavedSearchResults>(deepLinks = savedSearchDeepLinks) { entry ->
-                    val handleId = entry.savedStateHandle.get<Long>(SavedSearchLinkViewModel.SEARCH_ID_KEY)
+                    // A view model's handle is seeded from the entry's arguments, exactly as for hiltViewModel().
+                    val handleId = viewModel<HandleProbe>().handle.get<Long>(SavedSearchLinkViewModel.SEARCH_ID_KEY)
                     Text("search ${entry.toRoute<FindoraRoute.SavedSearchResults>().searchId} $handleId")
                 }
             }
@@ -64,4 +68,9 @@ class SearchDeepLinkTest {
         // The view model reads the id under the same key the graph stores it.
         compose.onNodeWithText("search 7 7").assertExists()
     }
+
+    /** Stands in for [SavedSearchLinkViewModel]: receives the destination's [SavedStateHandle] the same way. */
+    class HandleProbe(
+        val handle: SavedStateHandle,
+    ) : ViewModel()
 }

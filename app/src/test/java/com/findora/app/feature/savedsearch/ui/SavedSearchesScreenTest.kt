@@ -64,6 +64,16 @@ class SavedSearchesScreenTest {
         compose.onNodeWithText("Searches").performClick()
     }
 
+    /**
+     * The focused field's blinking cursor keeps the dialog window from ever going idle under Robolectric, so the
+     * clock is driven by hand while typing: frames advance a fixed amount instead of "until idle".
+     */
+    private fun typeInDialog(text: String) {
+        compose.mainClock.autoAdvance = false
+        compose.onNodeWithTag("saveSearchName").performTextReplacement(text)
+        compose.mainClock.advanceTimeBy(FRAME_STEP_MS)
+    }
+
     @Test
     fun theSearchesTabListsSearchesWithTheirActions() {
         show(listOf(SavedSearchItem(search, "Tunis")))
@@ -88,7 +98,7 @@ class SavedSearchesScreenTest {
     fun renamingUsesTheNameDialog() {
         show(listOf(SavedSearchItem(search, "Tunis")))
         compose.onNode(hasContentDescription("Rename search")).performClick()
-        compose.onNodeWithTag("saveSearchName").performTextReplacement("Beach flats")
+        typeInDialog("Beach flats")
         compose.onNodeWithTag("saveSearchConfirm").performClick()
         assertEquals(listOf(SavedSearchesUiEvent.Rename(3, "Beach flats")), events)
     }
@@ -106,8 +116,12 @@ class SavedSearchesScreenTest {
             FindoraTheme { SaveSearchDialog(initialName = "", onConfirm = { saved = it }, onDismiss = {}) }
         }
         compose.onNodeWithTag("saveSearchConfirm").assertIsNotEnabled()
-        compose.onNodeWithTag("saveSearchName").performTextReplacement("  Kochi houses ")
+        typeInDialog("  Kochi houses ")
         compose.onNodeWithTag("saveSearchConfirm").performClick()
         assertEquals("Kochi houses", saved)
+    }
+
+    private companion object {
+        const val FRAME_STEP_MS = 100L
     }
 }
