@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Static picker preview of the "Findora picks" widget for launchers below Android 12 (heading, three rows). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="250dp"
+    android:height="180dp"
+    android:viewportWidth="250"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M24,0h202a24,24 0,0 1,24 24v132a24,24 0,0 1,-24 24H24A24,24 0,0 1,0 156V24A24,24 0,0 1,24 0z" />
+    <path
+        android:fillColor="#FF161616"
+        android:pathData="M14,14h110v10H14z" />
+    <path
+        android:fillColor="#FFF2F2F2"
+        android:pathData="M14,34h222v38H14zM14,78h222v38H14zM14,122h222v38H14z" />
+    <path
+        android:fillColor="#FFD9D9D9"
+        android:pathData="M20,39h28v28H20zM20,83h28v28H20zM20,127h28v28H20z" />
+    <path
+        android:fillColor="#FF161616"
+        android:pathData="M56,42h90v7H56zM56,86h80v7H56zM56,130h96v7H56z" />
+    <path
+        android:fillColor="#FF1E5EFF"
+        android:pathData="M56,56h50v6H56zM56,100h44v6H56zM56,144h56v6H56z" />
+</vector>

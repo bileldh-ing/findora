@@ -157,6 +157,19 @@ object FindoraIcons {
         )
     }
 
+    val Pencil: ImageVector by lazy {
+        outline("Pencil", "M12 20h9", "M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z")
+    }
+
+    /** Saved searches. */
+    val Bookmark: ImageVector by lazy {
+        outline("Bookmark", "m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z")
+    }
+
+    val TrendingDown: ImageVector by lazy {
+        outline("TrendingDown", "m22 17-8.5-8.5-5 5L2 7", "M16 17h6v-6", autoMirror = true)
+    }
+
     val History: ImageVector by lazy {
         outline("History", "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", "M3 3v5h5", "M12 7v5l4 2")
     }

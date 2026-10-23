@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -70,6 +71,7 @@ fun NotificationsRoute(
     onOpenConversation: (String) -> Unit,
     onOpenProperty: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onOpenSavedSearch: (Long) -> Unit = {},
     viewModel: NotificationsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -77,6 +79,7 @@ fun NotificationsRoute(
     val deleted = stringResource(R.string.notifications_deleted)
     val openConversation by rememberUpdatedState(onOpenConversation)
     val openProperty by rememberUpdatedState(onOpenProperty)
+    val openSavedSearch by rememberUpdatedState(onOpenSavedSearch)
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
@@ -84,6 +87,7 @@ fun NotificationsRoute(
                     when (val target = effect.target) {
                         is NotificationTarget.Chat -> openConversation(target.conversationId)
                         is NotificationTarget.Property -> openProperty(target.propertyId)
+                        is NotificationTarget.SavedSearch -> openSavedSearch(target.searchId)
                     }
                 NotificationsUiEffect.Deleted -> snackbarHostState.showSnackbar(deleted)
             }
@@ -228,10 +232,19 @@ private fun NotificationRow(
             NotificationKind.NewMessage -> stringResource(R.string.notification_message_title, notification.subject)
             NotificationKind.ViewingReminder -> stringResource(R.string.notification_reminder_title)
             NotificationKind.ViewingBooked -> stringResource(R.string.notification_booked_title)
+            NotificationKind.NewMatches ->
+                pluralStringResource(
+                    R.plurals.search_alert_title,
+                    notification.count.coerceAtLeast(1),
+                    notification.count.coerceAtLeast(1),
+                    notification.subject,
+                )
+            NotificationKind.PriceDrop -> stringResource(R.string.price_drop_title, notification.subject)
         }
     val body =
         when (notification.kind) {
-            NotificationKind.NewMessage -> notification.preview
+            NotificationKind.NewMessage, NotificationKind.PriceDrop -> notification.preview
+            NotificationKind.NewMatches -> stringResource(R.string.search_alert_body, notification.preview)
             NotificationKind.ViewingReminder, NotificationKind.ViewingBooked ->
                 notification.eventAt
                     ?.let {
@@ -251,10 +264,10 @@ private fun NotificationRow(
         }
     val openLabel =
         stringResource(
-            if (notification.target is NotificationTarget.Chat) {
-                R.string.chat_open_conversation
-            } else {
-                R.string.chat_open_listing
+            when (notification.target) {
+                is NotificationTarget.Chat -> R.string.chat_open_conversation
+                is NotificationTarget.SavedSearch -> R.string.saved_search_run
+                is NotificationTarget.Property -> R.string.chat_open_listing
             },
         )
     Row(
@@ -316,4 +329,6 @@ private fun kindIcon(kind: NotificationKind): ImageVector =
         NotificationKind.NewMessage -> FindoraIcons.Chat
         NotificationKind.ViewingReminder -> FindoraIcons.Clock
         NotificationKind.ViewingBooked -> FindoraIcons.Calendar
+        NotificationKind.NewMatches -> FindoraIcons.Bookmark
+        NotificationKind.PriceDrop -> FindoraIcons.TrendingDown
     }

@@ -8,6 +8,10 @@ import com.findora.app.core.testing.MainDispatcherRule
 import com.findora.app.core.testing.RecordingAgentResponder
 import com.findora.app.core.testing.seedProperties
 import com.findora.app.feature.viewing.awaitUntil
+import com.findora.app.core.testing.FakeFavoritesRepository
+import com.findora.app.core.testing.FakeViewingRepository
+import com.findora.app.core.testing.RecordingAlertScheduler
+import com.findora.app.core.testing.RecordingWidgetRefresher
 import com.findora.app.navigation.MainShellViewModel
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -77,7 +81,15 @@ class ConversationsViewModelTest {
             val thread = chats.startConversation(auth.account.id, seedProperties.first())
             chats.receiveAgentMessage(thread.id, "Hello")
             chats.receiveAgentMessage(thread.id, "Viewing slots")
-            val vm = MainShellViewModel(chats, auth)
+            val vm =
+                MainShellViewModel(
+                    chats,
+                    auth,
+                    FakeFavoritesRepository(),
+                    FakeViewingRepository { Instant.EPOCH },
+                    RecordingAlertScheduler(),
+                    RecordingWidgetRefresher(),
+                )
             vm.unreadMessages.test {
                 assertEquals(0, awaitItem())
                 auth.signIn()

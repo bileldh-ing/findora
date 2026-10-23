@@ -28,6 +28,10 @@ data class FavoriteEntity(
     @ColumnInfo(name = "created_at") val createdAtMillis: Long,
 )
 
+/**
+ * A named search. v4 added [regionId], [alertFrequency] and [lastCheckedAtMillis] (with defaults, so older rows
+ * migrate as daily alerts in the current region); [lastNotifiedAtMillis] is the last time it actually alerted.
+ */
 @Entity(tableName = "saved_searches", indices = [Index(value = ["user_id", "created_at"])])
 data class SavedSearchEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -38,6 +42,27 @@ data class SavedSearchEntity(
     @ColumnInfo(name = "alerts_enabled") val alertsEnabled: Boolean,
     @ColumnInfo(name = "created_at") val createdAtMillis: Long,
     @ColumnInfo(name = "last_notified_at") val lastNotifiedAtMillis: Long?,
+    @ColumnInfo(name = "region_id", defaultValue = "") val regionId: String = "",
+    @ColumnInfo(name = "alert_frequency", defaultValue = "daily") val alertFrequency: String = "daily",
+    @ColumnInfo(name = "last_checked_at") val lastCheckedAtMillis: Long? = null,
+)
+
+/** A listing a saved search already reported (or that matched when it was saved): it never alerts again. */
+@Entity(
+    tableName = "saved_search_seen",
+    primaryKeys = ["search_id", "property_id"],
+)
+data class SavedSearchSeenEntity(
+    @ColumnInfo(name = "search_id") val searchId: Long,
+    @ColumnInfo(name = "property_id") val propertyId: String,
+)
+
+/** The rent a user's favourite had at the last price check, so each drop is reported once. */
+@Entity(tableName = "price_watch", primaryKeys = ["user_id", "property_id"])
+data class PriceWatchEntity(
+    @ColumnInfo(name = "user_id") val userId: String,
+    @ColumnInfo(name = "property_id") val propertyId: String,
+    @ColumnInfo(name = "rent_amount") val rentAmount: Long,
 )
 
 /** A booked viewing. The unique (property, start) index makes double booking impossible. */

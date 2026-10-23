@@ -391,18 +391,24 @@ fun CompactSearchBar(
     }
 }
 
-/** Section heading row ("Nearby Rental Houses"). */
+/** Section heading row ("Nearby Rental Houses"), with an optional trailing action ("Save search"). */
 @Composable
 fun SectionHeading(
     text: String,
     modifier: Modifier = Modifier,
+    action: (@Composable () -> Unit)? = null,
 ) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
             text = text,
             style = FindoraTheme.typography.section,
             color = FindoraTheme.colors.onBackground,
-            modifier = Modifier.semantics { heading() },
+            modifier = Modifier.weight(1f).semantics { heading() },
         )
+        action?.invoke()
     }
 }

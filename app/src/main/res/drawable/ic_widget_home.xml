@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- House outline shown on the widget when a listing photo cannot be loaded. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M3,10l9,-7 9,7v10a2,2 0,0 1,-2 2H5a2,2 0,0 1,-2 -2zM9,22V12h6v10"
+        android:strokeWidth="2"
+        android:strokeColor="#FF6B6B6B"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

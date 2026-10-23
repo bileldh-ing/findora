@@ -2,6 +2,7 @@ package com.findora.app.feature.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.findora.app.core.domain.alert.SaveSearch
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.RecentSearch
 import com.findora.app.core.domain.model.RegionPack
@@ -109,6 +110,11 @@ sealed interface SearchUiEvent {
 
     /** Apply what Ask Findora understood to the Home feed (or search the words when nothing was understood). */
     data object ApplyAsk : SearchUiEvent
+
+    /** Save what Ask Findora understood under [name] (with new-match alerts), then apply it like [ApplyAsk]. */
+    data class SaveAsk(
+        val name: String,
+    ) : SearchUiEvent
 }
 
 sealed interface SearchUiEffect {
@@ -127,6 +133,7 @@ class SearchViewModel
         private val auth: AuthRepository,
         private val currentRegion: CurrentRegion,
         private val profiles: MatchProfileRepository,
+        private val saveSearch: SaveSearch,
     ) : ViewModel() {
         private val query = MutableStateFlow(filters.filter.value.query)
         private val mode = MutableStateFlow(SearchMode.Places)
@@ -192,6 +199,7 @@ class SearchViewModel
                 }
                 is SearchUiEvent.RemoveMeaning -> removed.value += event.meaning
                 SearchUiEvent.ApplyAsk -> applyAsk()
+                is SearchUiEvent.SaveAsk -> applyAsk(saveAs = event.name.trim().takeIf { it.isNotEmpty() })
             }
         }
 
@@ -203,9 +211,10 @@ class SearchViewModel
         /**
          * Replaces the Home filter with what the sentence describes, switching region when it names a place (or a
          * currency) of another one. Without a sort word the feed is ordered by Best match once the user has a
-         * preference profile. When nothing was understood the words are searched as plain text instead.
+         * preference profile. When nothing was understood the words are searched as plain text instead. With
+         * [saveAs] the understood search is also saved under that name (in the region it applies to).
          */
-        private fun applyAsk() {
+        private fun applyAsk(saveAs: String? = null) {
             viewModelScope.launch {
                 val text = query.value.trim()
                 val user = userId.first()
@@ -222,8 +231,10 @@ class SearchViewModel
                     submit(text)
                 } else {
                     history.record(user, text)
+                    val filter = intent.filter.copy(sort = ask.appliedSort)
+                    if (saveAs != null) saveSearch(user, saveAs, text, ask.regionId, filter)
                     if (ask.switchesRegion) currentRegion.select(ask.regionId)
-                    filters.update { intent.filter.copy(sort = ask.appliedSort) }
+                    filters.update { filter }
                     effectChannel.send(SearchUiEffect.Applied)
                 }
             }

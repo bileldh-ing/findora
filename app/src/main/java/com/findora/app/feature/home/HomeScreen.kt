@@ -77,6 +77,14 @@ import com.findora.app.feature.compare.CompareTrayHeight
 import com.findora.app.feature.compare.CompareTrayViewModel
 import com.findora.app.feature.compare.compareMessages
 import com.findora.app.feature.match.deck.DreamMatchEntry
+import com.findora.app.feature.savedsearch.SaveSearchDialog
+import com.findora.app.feature.savedsearch.SaveSearchEffect
+import com.findora.app.feature.savedsearch.SaveSearchViewModel
+import com.findora.app.feature.savedsearch.suggestedSearchName
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -105,6 +113,7 @@ fun HomeRoute(
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = hiltViewModel(),
     compareViewModel: CompareTrayViewModel = hiltViewModel(),
+    saveSearchViewModel: SaveSearchViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listings = viewModel.listings.collectAsLazyPagingItems()
@@ -121,6 +130,14 @@ fun HomeRoute(
             }
         }
     }
+    val savedMessage = stringResource(R.string.saved_search_saved)
+    LaunchedEffect(saveSearchViewModel) {
+        saveSearchViewModel.effects.collect { effect ->
+            when (effect) {
+                is SaveSearchEffect.Saved -> launch { snackbarHostState.showSnackbar(savedMessage) }
+            }
+        }
+    }
     val trayPadding = if (tray.isVisible) CompareTrayHeight else 0.dp
     Box(modifier.fillMaxSize()) {
         HomeScreen(
@@ -134,6 +151,7 @@ fun HomeRoute(
             onOpenDreamMatch = onOpenDreamMatch,
             onAddToCompare = { compareViewModel.onEvent(CompareTrayEvent.Add(it)) },
             onOpenNotifications = onOpenNotifications,
+            onSaveSearch = saveSearchViewModel::save,
             contentPadding = contentPadding.plusBottom(trayPadding),
             reduceMotion = reduceMotion,
         )
@@ -188,8 +206,10 @@ fun HomeScreen(
     onOpenDreamMatch: (() -> Unit)? = null,
     onAddToCompare: ((String) -> Unit)? = null,
     onOpenNotifications: () -> Unit = {},
+    onSaveSearch: ((String) -> Unit)? = null,
 ) {
     var sheet by rememberSaveable { mutableStateOf(HomeSheet.None) }
+    var namingSearch by rememberSaveable { mutableStateOf(false) }
     val gridState = rememberLazyGridState()
     var headerHeight by remember { mutableIntStateOf(1) }
     val collapse by remember {
@@ -299,6 +319,12 @@ fun HomeScreen(
                     SectionHeading(
                         text = stringResource(R.string.home_nearby),
                         modifier = Modifier.padding(top = FindoraTheme.spacing.xs),
+                        action =
+                            if (onSaveSearch != null && state.isFiltered) {
+                                { SaveSearchButton(onClick = { namingSearch = true }) }
+                            } else {
+                                null
+                            },
                     )
                 }
                 feedItems(
@@ -341,6 +367,33 @@ fun HomeScreen(
         onEvent = onEvent,
         onDismiss = { sheet = HomeSheet.None },
     )
+    if (namingSearch && onSaveSearch != null) {
+        SaveSearchDialog(
+            initialName = suggestedSearchName(state.filter),
+            onConfirm = { name ->
+                onSaveSearch(name)
+                namingSearch = false
+            },
+            onDismiss = { namingSearch = false },
+        )
+    }
+}
+
+/** "Save search": keeps the current filter under a name, with new-match alerts. */
+@Composable
+private fun SaveSearchButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TextButton(onClick = onClick, modifier = modifier.testTag("saveSearch")) {
+        Icon(FindoraIcons.Bookmark, contentDescription = null, tint = FindoraTheme.colors.accent)
+        Spacer(Modifier.width(FindoraTheme.spacing.xxs))
+        Text(
+            text = stringResource(R.string.saved_search_save_action),
+            style = FindoraTheme.typography.bodyMedium,
+            color = FindoraTheme.colors.accent,
+        )
+    }
 }
 
 /** What a feed card does when tapped and long-pressed (Add to compare), by listing id. */

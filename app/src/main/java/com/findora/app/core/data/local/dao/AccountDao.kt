@@ -25,6 +25,12 @@ abstract class AccountDao {
     @Query("DELETE FROM recent_searches WHERE user_id = :userId")
     protected abstract suspend fun deleteRecentSearches(userId: String)
 
+    @Query("DELETE FROM saved_search_seen WHERE search_id IN (SELECT id FROM saved_searches WHERE user_id = :userId)")
+    protected abstract suspend fun deleteSavedSearchSeen(userId: String)
+
+    @Query("DELETE FROM price_watch WHERE user_id = :userId")
+    protected abstract suspend fun deletePriceWatch(userId: String)
+
     @Query("DELETE FROM saved_searches WHERE user_id = :userId")
     protected abstract suspend fun deleteSavedSearches(userId: String)
 
@@ -66,7 +72,9 @@ abstract class AccountDao {
     private suspend fun deleteOwnedRows(userId: String) {
         deleteFavorites(userId)
         deleteRecentSearches(userId)
+        deleteSavedSearchSeen(userId)
         deleteSavedSearches(userId)
+        deletePriceWatch(userId)
         deleteViewings(userId)
         deleteInteractions(userId)
         deleteMessages(userId)

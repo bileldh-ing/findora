@@ -21,6 +21,7 @@ import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.RefreshResult
 import com.findora.app.core.domain.model.SearchSuggestion
+import com.findora.app.core.domain.repository.ListingsRefreshListener
 import com.findora.app.core.domain.repository.PropertyRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +46,8 @@ data class CachePolicy(
 
 /**
  * Room is the single source of truth: readers observe the database, [refresh] writes into it.
- * A failed refresh never clears the cache, so the app keeps working offline.
+ * A failed refresh never clears the cache, so the app keeps working offline. A successful fetch is reported to
+ * [refreshListener] (instant saved-search alerts).
  */
 @Singleton
 class OfflineFirstPropertyRepository
@@ -57,6 +59,7 @@ class OfflineFirstPropertyRepository
         private val clock: AppClock,
         private val policy: CachePolicy,
         @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+        private val refreshListener: ListingsRefreshListener = ListingsRefreshListener.None,
     ) : PropertyRepository {
         override fun observeProperties(
             regionId: String,
@@ -137,6 +140,7 @@ class OfflineFirstPropertyRepository
                     val listings = fetchAllPages(regionId)
                     val fetchedAt = now.toEpochMilli()
                     dao.replaceRegion(regionId, listings.map { it.toEntity(fetchedAt) })
+                    refreshListener.onRegionRefreshed(regionId)
                     RefreshResult.Fetched(listings.size)
                 } catch (error: RemoteException) {
                     RefreshResult.Failed(error.error, dao.countInRegion(regionId))

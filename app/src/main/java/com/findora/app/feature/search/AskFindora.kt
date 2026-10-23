@@ -31,6 +31,12 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.findora.app.R
+import com.findora.app.core.designsystem.component.SecondaryPillButton
+import com.findora.app.feature.savedsearch.SaveSearchDialog
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.TextLink
 import com.findora.app.core.designsystem.icon.FindoraIcons
@@ -66,7 +72,37 @@ internal fun LazyListScope.askItems(
                             ).testTag("askApply"),
                 )
             }
+            item(key = "askSave") { SaveAskButton(query, onEvent) }
         }
+    }
+}
+
+/** "Save this search": names the understood search, saves it with alerts and applies it. */
+@Composable
+private fun SaveAskButton(
+    query: String,
+    onEvent: (SearchUiEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var naming by rememberSaveable { mutableStateOf(false) }
+    SecondaryPillButton(
+        text = stringResource(R.string.saved_search_save_this),
+        onClick = { naming = true },
+        modifier =
+            modifier
+                .padding(horizontal = FindoraTheme.spacing.screenHorizontal)
+                .padding(bottom = FindoraTheme.spacing.md)
+                .testTag("askSave"),
+    )
+    if (naming) {
+        SaveSearchDialog(
+            initialName = query.trim(),
+            onConfirm = { name ->
+                naming = false
+                onEvent(SearchUiEvent.SaveAsk(name))
+            },
+            onDismiss = { naming = false },
+        )
     }
 }
 

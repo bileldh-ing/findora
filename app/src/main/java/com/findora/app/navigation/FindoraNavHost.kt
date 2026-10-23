@@ -30,6 +30,7 @@ import com.findora.app.feature.match.deck.DeckRoute
 import com.findora.app.feature.match.quiz.MatchQuizRoute
 import com.findora.app.feature.notifications.NotificationsRoute
 import com.findora.app.feature.saved.MatchesRoute
+import com.findora.app.feature.savedsearch.SavedSearchLinkRoute
 import com.findora.app.feature.search.SearchRoute
 import com.findora.app.feature.viewing.ScheduleViewingRoute
 import com.findora.app.feature.viewing.ViewingsRoute
@@ -192,7 +193,11 @@ private fun FindoraGraph(
                 onBack = { navController.popBackStack() },
                 onOpenConversation = openConversation,
                 onOpenProperty = openProperty,
+                onOpenSavedSearch = { id -> navController.navigate(FindoraRoute.SavedSearchResults(id)) },
             )
+        }
+        composable<FindoraRoute.SavedSearchResults>(deepLinks = savedSearchDeepLinks) {
+            SavedSearchLinkRoute(onDone = toMain)
         }
         composable<FindoraRoute.MatchQuiz> {
             MatchQuizRoute(
@@ -228,6 +233,10 @@ internal val propertyDetailDeepLinks =
 
 /** `findora://chat/{conversationId}` mapped onto [FindoraRoute.Chat]; shared with the routing test. */
 internal val chatDeepLinks = listOf(navDeepLink<FindoraRoute.Chat>(basePath = ChatDeepLink.BASE_PATH))
+
+/** `findora://search/{searchId}` mapped onto [FindoraRoute.SavedSearchResults]; shared with the routing test. */
+internal val savedSearchDeepLinks =
+    listOf(navDeepLink<FindoraRoute.SavedSearchResults>(basePath = SearchDeepLink.BASE_PATH))
 
 /** Navigates to [route] and removes everything behind it (sign-in, sign-out). */
 private fun NavHostController.navigateClearingBackStack(route: FindoraRoute) {

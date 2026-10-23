@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="findora_background">#FF0E0E10</color>
+    <!-- "Findora picks" widget preview (the live widget sets the same colours in code). -->
+    <color name="widget_background">#FF161616</color>
+    <color name="widget_surface">#FF262626</color>
+    <color name="widget_on_background">#FFF5F5F5</color>
 </resources>

@@ -46,23 +46,41 @@ import com.findora.app.core.ui.PropertyCard
 import com.findora.app.core.ui.PropertyCardSkeleton
 import com.findora.app.core.ui.StateMessage
 import com.findora.app.feature.match.deck.DreamMatchEntry
+import com.findora.app.feature.savedsearch.SavedSearchRow
+import com.findora.app.feature.savedsearch.SavedSearchesUiEffect
+import com.findora.app.feature.savedsearch.SavedSearchesUiEvent
+import com.findora.app.feature.savedsearch.SavedSearchesUiState
+import com.findora.app.feature.savedsearch.SavedSearchesViewModel
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberUpdatedState
 
 private const val SKELETON_COUNT = 4
 private val BackButton = 48.dp
 private val BackIcon = 22.dp
 
-/** The two lists of the Saved tab. */
-enum class SavedTab { Saved, Matches }
+/** The lists of the Saved tab: saved homes, Dream Match matches and saved searches. */
+enum class SavedTab { Saved, Matches, Searches }
 
 @Composable
 fun SavedRoute(
     onOpenProperty: (String) -> Unit,
     onOpenDreamMatch: () -> Unit,
+    onShowSearchResults: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: SavedViewModel = hiltViewModel(),
+    searchesViewModel: SavedSearchesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val searches by searchesViewModel.state.collectAsStateWithLifecycle()
+    val currentOnShowResults by rememberUpdatedState(onShowSearchResults)
+    LaunchedEffect(searchesViewModel) {
+        searchesViewModel.effects.collect { effect ->
+            when (effect) {
+                SavedSearchesUiEffect.ShowResults -> currentOnShowResults()
+            }
+        }
+    }
     SavedScreen(
         state = state,
         onToggleFavorite = viewModel::toggleFavorite,
@@ -70,6 +88,8 @@ fun SavedRoute(
         onOpenDreamMatch = onOpenDreamMatch,
         modifier = modifier,
         contentPadding = contentPadding,
+        searches = searches,
+        onSearchEvent = searchesViewModel::onEvent,
     )
 }
 
@@ -105,6 +125,8 @@ fun SavedScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     onOpenDreamMatch: (() -> Unit)? = null,
+    searches: SavedSearchesUiState = SavedSearchesUiState(isLoading = false),
+    onSearchEvent: (SavedSearchesUiEvent) -> Unit = {},
 ) {
     var tab by rememberSaveable { mutableIntStateOf(SavedTab.Saved.ordinal) }
     val selected = SavedTab.entries[tab]
@@ -119,13 +141,20 @@ fun SavedScreen(
         }
         fullWidth("tabs") {
             SlidingChipRow(
-                labels = listOf(stringResource(R.string.saved_tab_saved), stringResource(R.string.saved_tab_matches)),
+                labels =
+                    listOf(
+                        stringResource(R.string.saved_tab_saved),
+                        stringResource(R.string.saved_tab_matches),
+                        stringResource(R.string.saved_tab_searches),
+                    ),
                 selectedIndex = tab,
                 onSelect = { tab = it },
                 modifier = Modifier.testTag("savedTabs"),
             )
         }
-        if (onOpenDreamMatch != null) fullWidth("dreamMatch") { DreamMatchEntry(onClick = onOpenDreamMatch) }
+        if (onOpenDreamMatch != null && selected != SavedTab.Searches) {
+            fullWidth("dreamMatch") { DreamMatchEntry(onClick = onOpenDreamMatch) }
+        }
         when (selected) {
             SavedTab.Saved ->
                 homes(
@@ -143,7 +172,32 @@ fun SavedScreen(
                     onToggleFavorite = onToggleFavorite,
                     onOpenProperty = onOpenProperty,
                 )
+            SavedTab.Searches -> savedSearches(searches, onSearchEvent)
         }
+    }
+}
+
+private fun LazyGridScope.savedSearches(
+    state: SavedSearchesUiState,
+    onEvent: (SavedSearchesUiEvent) -> Unit,
+) {
+    when {
+        state.isLoading -> Unit
+        state.items.isEmpty() ->
+            fullWidth("empty_searches") {
+                StateMessage(
+                    icon = FindoraIcons.Bookmark,
+                    title = stringResource(R.string.saved_searches_empty_title),
+                    body = stringResource(R.string.saved_searches_empty_body),
+                    modifier = Modifier.testTag("savedSearchesEmpty"),
+                )
+            }
+        else ->
+            state.items.forEach { item ->
+                fullWidth("search_${item.search.id}") {
+                    SavedSearchRow(item = item, onEvent = onEvent)
+                }
+            }
     }
 }
 

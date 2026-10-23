@@ -76,6 +76,7 @@ class DataStoreSettingsRepository
                     NotificationToggle.Messages -> Keys.notifyMessages
                     NotificationToggle.ViewingReminders -> Keys.notifyReminders
                     NotificationToggle.InApp -> Keys.notifyInApp
+                    NotificationToggle.SearchAlerts -> Keys.notifySearchAlerts
                 }
             dataStore.edit { it[key] = enabled }
         }
@@ -104,6 +105,7 @@ class DataStoreSettingsRepository
                 messageNotifications = prefs[Keys.notifyMessages] ?: true,
                 viewingReminderNotifications = prefs[Keys.notifyReminders] ?: true,
                 inAppNotifications = prefs[Keys.notifyInApp] ?: true,
+                searchAlertNotifications = prefs[Keys.notifySearchAlerts] ?: true,
             )
 
         private object Keys {
@@ -118,5 +120,6 @@ class DataStoreSettingsRepository
             val notifyMessages = booleanPreferencesKey("notify_messages")
             val notifyReminders = booleanPreferencesKey("notify_viewing_reminders")
             val notifyInApp = booleanPreferencesKey("notify_in_app")
+            val notifySearchAlerts = booleanPreferencesKey("notify_search_alerts")
         }
     }

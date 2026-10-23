@@ -755,4 +755,60 @@
         <item quantity="many">%1$d صورة</item>
         <item quantity="other">%1$d صورة</item>
     </plurals>
+    <!-- المرحلة 7أ: عمليات البحث المحفوظة والتنبيهات والأداة -->
+    <string name="saved_tab_searches">عمليات البحث</string>
+    <string name="saved_search_save_action">حفظ البحث</string>
+    <string name="saved_search_save_this">حفظ هذا البحث</string>
+    <string name="saved_search_save_title">حفظ هذا البحث</string>
+    <string name="saved_search_save">حفظ</string>
+    <string name="saved_search_name_label">الاسم</string>
+    <string name="saved_search_save_hint">سنخبرك عندما تظهر منازل جديدة تطابقه. يمكنك تغيير التنبيهات في المحفوظات › عمليات البحث.</string>
+    <string name="saved_search_default_name">بحثي</string>
+    <string name="saved_search_saved">تم حفظ البحث. التنبيهات مفعّلة.</string>
+    <string name="saved_search_run">عرض النتائج</string>
+    <string name="saved_search_rename">إعادة تسمية البحث</string>
+    <string name="saved_search_rename_confirm">إعادة التسمية</string>
+    <string name="saved_search_delete">حذف البحث</string>
+    <string name="saved_search_alerts">تنبيهات المطابقات الجديدة</string>
+    <string name="saved_search_alerts_summary">أخبرني عندما تظهر منازل جديدة تطابق هذا البحث</string>
+    <string name="saved_search_frequency_daily">يوميًا</string>
+    <string name="saved_search_frequency_instant">عند كل تحديث</string>
+    <string name="saved_search_opening">جارٍ فتح البحث المحفوظ</string>
+    <string name="saved_searches_empty_title">لا توجد عمليات بحث محفوظة بعد</string>
+    <string name="saved_searches_empty_body">صفِّ قائمة الرئيسية أو اسأل Findora، ثم اضغط «حفظ البحث» لتصلك تنبيهات المنازل الجديدة.</string>
+    <plurals name="saved_search_bedrooms">
+        <item quantity="zero">%1$d+ غرف نوم</item>
+        <item quantity="one">غرفة نوم واحدة أو أكثر</item>
+        <item quantity="two">غرفتا نوم أو أكثر</item>
+        <item quantity="few">%1$d+ غرف نوم</item>
+        <item quantity="many">%1$d+ غرفة نوم</item>
+        <item quantity="other">%1$d+ غرفة نوم</item>
+    </plurals>
+    <string name="search_alerts_channel_name">تنبيهات البحث</string>
+    <string name="search_alerts_channel_description">منازل جديدة لعمليات البحث المحفوظة وانخفاض أسعار المنازل المحفوظة</string>
+    <plurals name="search_alert_title">
+        <item quantity="zero">لا منازل جديدة لـ «%2$s»</item>
+        <item quantity="one">منزل جديد واحد لـ «%2$s»</item>
+        <item quantity="two">منزلان جديدان لـ «%2$s»</item>
+        <item quantity="few">%1$d منازل جديدة لـ «%2$s»</item>
+        <item quantity="many">%1$d منزلًا جديدًا لـ «%2$s»</item>
+        <item quantity="other">%1$d منزل جديد لـ «%2$s»</item>
+    </plurals>
+    <string name="search_alert_body">الأحدث: %1$s</string>
+    <string name="price_drop_title">انخفاض السعر: %1$s</string>
+    <string name="price_drop_body">الآن %1$s شهريًا (كان %2$s)</string>
+    <string name="notify_search_alerts">تنبيهات البحث</string>
+    <string name="notify_search_alerts_summary">مطابقات جديدة لعمليات البحث المحفوظة وانخفاض أسعار المنازل المحفوظة</string>
+    <string name="widget_picks_name">اختيارات Findora</string>
+    <string name="widget_picks_description">أفضل المنازل لك مع أسعارها وموعد معاينتك التالي</string>
+    <string name="widget_heading_matches">أفضل المطابقات لك</string>
+    <string name="widget_heading_saved">منازلك المحفوظة</string>
+    <string name="widget_heading_recommended">منازل مقترحة</string>
+    <string name="widget_match">تطابق %1$d٪</string>
+    <string name="widget_next_viewing">المعاينة التالية: %1$s · %2$s</string>
+    <string name="widget_empty">لا توجد منازل لعرضها بعد. افتح Findora لتحميل الإعلانات.</string>
+    <string name="widget_signed_out">سجّل الدخول إلى Findora لرؤية اختياراتك.</string>
+    <string name="widget_open_app">فتح Findora</string>
+    <string name="widget_preview_row">Georgie House · ‏10,000 ₹</string>
+    <string name="widget_preview_viewing">المعاينة التالية: الثلاثاء 14:00</string>
 </resources>

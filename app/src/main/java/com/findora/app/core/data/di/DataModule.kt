@@ -22,6 +22,7 @@ import com.findora.app.core.data.local.dao.InteractionEventDao
 import com.findora.app.core.data.local.dao.NotificationDao
 import com.findora.app.core.data.local.dao.PropertyDao
 import com.findora.app.core.data.local.dao.RecentSearchDao
+import com.findora.app.core.data.local.dao.PriceWatchDao
 import com.findora.app.core.data.local.dao.SavedSearchDao
 import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
@@ -263,6 +264,9 @@ object DatabaseModule {
 
     @Provides
     fun provideSavedSearchDao(db: FindoraDatabase): SavedSearchDao = db.savedSearchDao()
+
+    @Provides
+    fun providePriceWatchDao(db: FindoraDatabase): PriceWatchDao = db.priceWatchDao()
 
     @Provides
     fun provideViewingDao(db: FindoraDatabase): ViewingDao = db.viewingDao()

@@ -4,6 +4,7 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.findora.app.core.data.repository.InMemoryHomeFilterRepository
 import com.findora.app.core.data.repository.SeedRegionRepository
+import com.findora.app.core.domain.alert.SaveSearch
 import com.findora.app.core.domain.match.PreferenceProfile
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.PropertyFilter
@@ -16,6 +17,8 @@ import com.findora.app.core.domain.usecase.CurrentRegion
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeMatchProfileRepository
 import com.findora.app.core.testing.FakePropertyRepository
+import com.findora.app.core.testing.FakeSavedSearchRepository
+import com.findora.app.core.testing.RecordingAlertScheduler
 import com.findora.app.core.testing.FakeSearchHistoryRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
@@ -38,15 +41,21 @@ class SearchViewModelTest {
     private val settings = FakeSettingsRepository()
     private val profiles = FakeMatchProfileRepository()
 
-    private fun viewModel() =
-        SearchViewModel(
-            properties = FakePropertyRepository(),
+    private val savedSearches = FakeSavedSearchRepository()
+    private val alertScheduler = RecordingAlertScheduler()
+
+    private fun viewModel(): SearchViewModel {
+        val properties = FakePropertyRepository()
+        return SearchViewModel(
+            properties = properties,
             history = history,
             filters = filters,
             auth = auth,
             currentRegion = CurrentRegion(settings, SeedRegionRepository(fileSeedReader(), main.dispatcher)),
             profiles = profiles,
+            saveSearch = SaveSearch(savedSearches, properties, alertScheduler),
         )
+    }
 
     private suspend fun ReceiveTurbine<SearchUiState>.awaitUntil(predicate: (SearchUiState) -> Boolean): SearchUiState {
         while (true) {
@@ -243,6 +252,29 @@ class SearchViewModelTest {
             assertEquals(SortOrder.PriceLowToHigh, filters.filter.value.sort)
             assertTrue(filters.filter.value.parkingOnly)
             assertEquals("kerala", settings.settings.value.regionId)
+        }
+
+    @Test
+    fun savingAnAskSearchKeepsItForTheUserWithAlertsAndAppliesIt() =
+        runTest(main.dispatcher) {
+            val vm = viewModel()
+            vm.onEvent(SearchUiEvent.QueryChanged("house with parking"))
+            vm.effects.test {
+                vm.onEvent(SearchUiEvent.SaveAsk("  Parking houses "))
+                assertEquals(SearchUiEffect.Applied, awaitItem())
+            }
+            val saved = savedSearches.observeSavedSearches(AuthRepository.GUEST_USER_ID).first().single()
+            assertEquals("Parking houses", saved.name)
+            assertEquals("house with parking", saved.query)
+            assertEquals("kerala", saved.regionId)
+            assertTrue(saved.alertsEnabled)
+            assertEquals(filters.filter.value, saved.filter)
+            assertTrue(saved.filter.parkingOnly)
+            // Homes that already match are remembered, so only later ones alert.
+            val matching =
+                FakePropertyRepository().observeProperties("kerala").first().filter(saved.filter::accepts).map { it.id }
+            assertEquals(matching.toSet(), savedSearches.seenIds(saved.id))
+            assertEquals(1, alertScheduler.scheduled)
         }
 
     @Test

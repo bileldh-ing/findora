@@ -371,6 +371,8 @@ private fun NotificationsSection(
                         R.string.notify_reminders to
                             R.string.notify_reminders_summary
                     NotificationToggle.InApp -> R.string.notify_in_app to R.string.notify_in_app_summary
+                    NotificationToggle.SearchAlerts ->
+                        R.string.notify_search_alerts to R.string.notify_search_alerts_summary
                 }
             SwitchRow(
                 title = stringResource(title),

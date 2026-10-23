@@ -56,6 +56,7 @@ data class SettingsUiState(
     val messageNotifications: Boolean = true,
     val viewingReminderNotifications: Boolean = true,
     val inAppNotifications: Boolean = true,
+    val searchAlertNotifications: Boolean = true,
     val biometricEnabled: Boolean = false,
     val biometricAvailable: Boolean = false,
     /** Biometric lock only makes sense for a remembered session (one that survives an app restart). */
@@ -71,6 +72,7 @@ data class SettingsUiState(
             NotificationToggle.Messages -> messageNotifications
             NotificationToggle.ViewingReminders -> viewingReminderNotifications
             NotificationToggle.InApp -> inAppNotifications
+            NotificationToggle.SearchAlerts -> searchAlertNotifications
         }
 }
 
@@ -213,6 +215,7 @@ class SettingsViewModel
                 messageNotifications = messageNotifications,
                 viewingReminderNotifications = viewingReminderNotifications,
                 inAppNotifications = inAppNotifications,
+                searchAlertNotifications = searchAlertNotifications,
                 biometricEnabled = biometricLockEnabled,
                 biometricAvailable = biometricAvailable,
                 confirmingDelete = localState.confirmingDelete,

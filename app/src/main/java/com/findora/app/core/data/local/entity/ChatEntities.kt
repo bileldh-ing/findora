@@ -87,4 +87,8 @@ data class NotificationEntity(
     @ColumnInfo(name = "event_at") val eventAtMillis: Long?,
     @ColumnInfo(name = "created_at") val createdAtMillis: Long,
     @ColumnInfo(name = "read_at") val readAtMillis: Long?,
+    /** v4: the saved search a new-matches notification opens. */
+    @ColumnInfo(name = "saved_search_id") val savedSearchId: Long? = null,
+    /** v4: how many new listings a new-matches notification reports. */
+    @ColumnInfo(name = "item_count", defaultValue = "0") val itemCount: Int = 0,
 )
