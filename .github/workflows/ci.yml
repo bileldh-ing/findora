@@ -249,7 +249,7 @@ jobs:
       - name: Build release-like app and benchmark APKs (R8)
         run: |
           set -o pipefail
-          ./gradlew :app:assembleNonMinifiedRelease :app:assembleBenchmarkRelease :baselineprofile:assemble --stacktrace 2>&1 | tee build-perf.log
+          ./gradlew :app:assembleNonMinifiedRelease :app:assembleBenchmarkRelease --stacktrace 2>&1 | tee build-perf.log
 
       # The Google APIs image (userdebug) supports profile generation without root on API 33+; aosp_atd does not.
       - name: Generate Baseline Profile, then run the startup benchmark

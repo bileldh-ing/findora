@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,7 +90,9 @@ fun SlidingChipRow(
         if (target != null) {
             Box(
                 Modifier
-                    // positionInParent is measured from the left edge in every layout direction, hence absolute.
+                    // positionInParent is measured from the left edge in every layout direction, so the pill is
+                    // anchored to the left edge and offset absolutely (start-aligned it sat off-screen in RTL).
+                    .align(AbsoluteAlignment.TopLeft)
                     .absoluteOffset { IntOffset(pillOffset.roundToPx(), 0) }
                     .width(pillWidth)
                     .height(ChipHeight)

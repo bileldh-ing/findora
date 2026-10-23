@@ -46,6 +46,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -79,6 +81,9 @@ private val TaglineSize = 18.sp
 private val SubtitleSize = 16.sp
 private val SubtitleLineHeight = 24.sp
 private const val TITLE_ALPHA = 0.86f
+
+/** Shrunk titles keep 2% of the width free so rounding never pushes the last letter off. */
+private const val FIT_MARGIN = 0.98f
 private val ScrimColor = Color(0x73000000)
 
 @Composable
@@ -272,12 +277,10 @@ private fun WelcomePanel(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.staggered(entrance.title, rise),
         ) {
-            Text(
+            SingleLineTitle(
                 text = stringResource(R.string.welcome_title),
                 style = FindoraTheme.typography.display.copy(fontSize = WelcomeTitleSize, letterSpacing = 0.02.em),
                 color = FindoraTheme.colors.onBackground.copy(alpha = TITLE_ALPHA),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.semantics { heading() },
             )
             Spacer(Modifier.height(FindoraTheme.spacing.sm))
             Text(
@@ -318,6 +321,43 @@ private fun WelcomePanel(
             }
         }
         Spacer(Modifier.height(FindoraTheme.spacing.lg))
+    }
+}
+
+/**
+ * The WELCOME / BIENVENUE heading on one line: the type shrinks just enough to fit narrow phones and large font
+ * scales instead of breaking the word in two (caught by the screenshot tests on a 411 dp wide screen).
+ */
+@Composable
+private fun SingleLineTitle(
+    text: String,
+    style: TextStyle,
+    color: Color,
+    modifier: Modifier = Modifier,
+) {
+    BoxWithConstraints(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        val measurer = rememberTextMeasurer()
+        val maxWidth = constraints.maxWidth
+        val fitted =
+            remember(text, style, maxWidth) {
+                val width = measurer.measure(text, style, softWrap = false, maxLines = 1).size.width
+                if (width <=
+                    maxWidth
+                ) {
+                    style
+                } else {
+                    style.copy(fontSize = style.fontSize * (maxWidth * FIT_MARGIN / width))
+                }
+            }
+        Text(
+            text = text,
+            style = fitted,
+            color = color,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            softWrap = false,
+            modifier = Modifier.semantics { heading() },
+        )
     }
 }
 

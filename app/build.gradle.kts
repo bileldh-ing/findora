@@ -295,4 +295,6 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.accessibility.test.framework)
+    // ATF exposes Guava types (ImmutableSet) in its API but declares Guava as a runtime-only dependency.
+    androidTestImplementation(libs.guava)
 }
