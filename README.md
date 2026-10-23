@@ -23,10 +23,54 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 2 | Welcome and authentication | Done |
 | 3 | Home screen, pixel-faithful to the reference design | Done |
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
-| 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B) | Done (unreleased) |
+| 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 5C ships
+
+- **Ask Findora** (a second mode of the Search screen, next to Places): type or dictate a sentence such as
+  "quiet 2 bedroom near Fort Kochi under 15k with parking", "T3 meublé à La Marsa moins de 2 000 DT" or
+  "شقة غرفتين في المرسى أقل من ٢٠٠٠ دينار" and Findora shows what it understood as removable chips
+  ("Under 2,000 TND", "2+ bedrooms", "La Marsa", "Pets OK"), the words it did not understand, and notes when the
+  sentence switches region or names a currency the region does not use. **Show homes** replaces the Home filter
+  with the result (switching region when a neighbourhood, region or currency points elsewhere) and orders it by
+  Best match when the user has a preference profile, unless the sentence asked for an order ("cheapest",
+  "newest", "top rated"). When nothing is understood it says so and offers to search the words as plain text.
+  Example prompts are shown in the current language.
+- **On-device and rule-based, not generative AI** (see [ADR 0004](docs/adr/0004-match-engine-and-natural-language-search.md)). `NaturalLanguageQueryParser` (`core/domain/search`, pure
+  Kotlin) is a deterministic tokenizer plus grammar rules over an English, French and Arabic lexicon. No text
+  leaves the phone, there is no model and no API key, and the same sentence always gives the same filter. The
+  screen says so. It understands:
+  - numbers in ASCII, Arabic-Indic (٠-٩) and Persian (۰-۹) digits, with thousands groups ("2 000", "2,000",
+    "2.000"), decimals ("1,5k"), multipliers ("2k", "2 lakh", "deux mille", "٢ ألف", "ألفين") and spelled-out
+    counts ("two", "trois", "ثلاث");
+  - budgets: under / below / max / up to / around, moins de / sous / jusqu'à, أقل من / تحت / حوالي, at least /
+    au moins / على الأقل, ranges ("between 1 500 and 2 000", "de 800 à 1200", "بين ١٠٠٠ و ٢٠٠٠", "1.5-2k"),
+    bare amounts with a currency or multiplier, and currency symbols, codes and names (₹ Rs, €, $, DT/TND/دينار,
+    AED/درهم);
+  - bedrooms and bathrooms ("2 bedrooms", "3BHK", "3+ beds", "2-bedroom", "chambres", "غرفتين", "٣ غرف نوم",
+    "حمامين"), French T/F notation and "pièces" (T3 = 3 rooms including the living room = 2 bedrooms), areas
+    (m², sqm, sq ft converted);
+  - types (apartment / flat / studio / appartement / شقة, house / villa / maison / فيلا / منزل, room /
+    colocation / غرفة), must-haves (furnished / meublé / مفروش, pets / animaux / حيوانات أليفة, parking /
+    موقف, verified) and amenities (balcony, pool, gym, Wi-Fi, air conditioning, garden, sea view, lift,
+    security, home office, washing machine);
+  - neighbourhoods and regions of the region packs, accent- and case-insensitive, with Arabic and common
+    aliases (المرسى, قرطاج, نخلة جميرا, Cochin, JVC) and a small typo allowance on canonical names (one edit, two
+    for names of nine letters or more, first letter must agree, never on short aliases);
+  - lifestyle words (quiet, family, near metro / transport, student, nightlife, nature, remote work), which the
+    listings cannot filter on: they are shown as "Hint" chips and ask for Best match, which weighs the user's own
+    lifestyle answers (without a profile the screen suggests the quiz).
+  Negated phrases ("no pets", "sans parking", "غير مفروش"), an upper bound on rooms ("max 2 bedrooms", which the
+  filter cannot express) and contradictions ("under 2000 under 1500") are reported as not understood instead of
+  being applied the wrong way round.
+- **Voice input**: a microphone button hands off to the system speech recognizer (`RecognizerIntent`) in the
+  app language. Findora requests no microphone permission; the button only appears when a recognizer is
+  installed (`<queries>` declaration). The recognizer belongs to the device and may process audio according to
+  its provider's own policy; only the recognized text reaches Findora, where it is parsed on the device.
+- English, French and Arabic strings and examples, RTL, light and dark, TalkBack labels ("Remove Pets OK").
 
 ## What Phase 5B ships
 
@@ -281,6 +325,8 @@ app/src/main/java/com/findora/app
 | `DeckScreenTest` | Swipe right, left and up with `performTouchInput`, short drag springs back, buttons, Undo, TalkBack custom actions, end of deck, restart, dark RTL (Compose, Robolectric) |
 | `CompareTableTest`, `CompareViewModelTest` | Best value per row and direction, ties, single column, unknown values, mixed currencies, selection cap and reorder, per-user repository; table following the selection, match row with a profile, tray add / full / duplicate (Turbine) |
 | `CompareScreenTest` | Rows and highlighted best cells, amenity checklist, remove / reorder / TalkBack actions, long-press drag in RTL, empty and single states (Compose, Robolectric) |
+| `NaturalLanguageQueryParserTest` | Table-driven EN/FR/AR cases: budgets, ranges, multipliers, Arabic-Indic digits, rooms, T/F notation, areas, types, must-haves, amenities, sorts, places with aliases and typos; no false positives (negations, small numbers, common words); spans, chip removal, determinism, the in-app example prompts |
+| `SearchViewModelTest` (Ask Findora), `AskFindoraScreenTest` | Interpretation and region, chip removal reset by new text, Apply replacing the Home filter with region switch and Best match, explicit sort kept, plain-text fallback, quiz hint, currency mismatch (Turbine); examples, chips appear / remove / apply, notes, nothing-understood state, mode switch, voice button only when available (Compose, Robolectric) |
 | `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, open a listing and book a viewing, My viewings, tabs, Settings and back |
 
 ## Credits

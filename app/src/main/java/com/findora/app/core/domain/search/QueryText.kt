@@ -62,7 +62,10 @@ internal object QueryText {
                     val end = match.range.last + 1
                     when {
                         text.first().isDigit() -> QueryToken(TokenKind.Number, start, end, text, value = number(text))
-                        text.first().isLetter() || Character.getType(text.first()) == Character.NON_SPACING_MARK.toInt() ->
+                        text.first().isLetter() ||
+                            Character.getType(
+                                text.first(),
+                            ) == Character.NON_SPACING_MARK.toInt() ->
                             QueryToken(TokenKind.Word, start, end, fold(text))
                         else -> QueryToken(TokenKind.Symbol, start, end, text)
                     }
@@ -101,7 +104,13 @@ internal object QueryText {
         forms.toList().forEach { form ->
             if (form.startsWith(ARABIC_ARTICLE) && form.length >= MIN_PREFIXED_LENGTH) forms += form.substring(2)
         }
-        forms.toList().forEach { form -> if (form.endsWith('ه') && form.length >= MIN_PREFIXED_LENGTH) forms += form.dropLast(1) }
+        forms.toList().forEach { form ->
+            if (form.endsWith('ه') &&
+                form.length >= MIN_PREFIXED_LENGTH
+            ) {
+                forms += form.dropLast(1)
+            }
+        }
         return forms
     }
 
@@ -113,7 +122,9 @@ internal object QueryText {
     private fun asciiDigit(char: Char): Char =
         when (char) {
             in ARABIC_INDIC_ZERO until ARABIC_INDIC_ZERO + DIGITS -> '0' + (char - ARABIC_INDIC_ZERO)
-            in EXTENDED_ARABIC_INDIC_ZERO until EXTENDED_ARABIC_INDIC_ZERO + DIGITS -> '0' + (char - EXTENDED_ARABIC_INDIC_ZERO)
+            in EXTENDED_ARABIC_INDIC_ZERO until EXTENDED_ARABIC_INDIC_ZERO + DIGITS ->
+                '0' +
+                    (char - EXTENDED_ARABIC_INDIC_ZERO)
             ARABIC_DECIMAL_SEPARATOR -> '.'
             ARABIC_THOUSANDS_SEPARATOR -> ','
             else -> char
@@ -151,7 +162,10 @@ internal object QueryText {
             token.isNumber -> token
             !token.isWord -> null
             else ->
-                QueryLexicon.countWord(token.norm)?.let { token.copy(kind = TokenKind.Number, value = it.toDouble(), countWord = true) }
+                QueryLexicon
+                    .countWord(
+                        token.norm,
+                    )?.let { token.copy(kind = TokenKind.Number, value = it.toDouble(), countWord = true) }
                     ?: QueryLexicon.spelledAmount(token.norm)?.let { (value, scale) ->
                         token.copy(kind = TokenKind.Number, value = value.toDouble(), scale = scale)
                     }

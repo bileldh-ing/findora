@@ -481,4 +481,37 @@
         <item quantity="many">%1$d / %2$d sélectionnés</item>
         <item quantity="other">%1$d / %2$d sélectionnés</item>
     </plurals>
+
+    <!-- Ask Findora: on-device natural-language search -->
+    <string name="ask_mode_places">Lieux</string>
+    <string name="ask_mode_ask">Demander à Findora</string>
+    <string name="ask_placeholder">Décrivez votre logement…</string>
+    <string name="ask_on_device">Compris sur votre appareil par l\'analyseur à règles de Findora. Rien de ce que vous tapez n\'est envoyé.</string>
+    <string name="ask_try">Essayez par exemple</string>
+    <string name="ask_example_1">T3 meublé à La Marsa moins de 2 000 DT</string>
+    <string name="ask_example_2">studio calme au Marais sous 1500 €</string>
+    <string name="ask_example_3">villa avec piscine à Palm Jumeirah, animaux acceptés</string>
+    <string name="ask_example_4">maison 3 chambres à Fort Kochi moins de 20k ₹</string>
+    <string name="ask_understood">Compris</string>
+    <string name="ask_not_understood">Non compris : %1$s</string>
+    <string name="ask_nothing">Findora n\'a trouvé ni budget, ni surface, ni lieu, ni critère dans « %1$s ».</string>
+    <string name="ask_search_words">Rechercher ces mots</string>
+    <string name="ask_switches_region">Votre région passera à %1$s.</string>
+    <string name="ask_currency_note">Les loyers à %1$s sont en %2$s : les montants sont lus en %2$s.</string>
+    <string name="ask_order">Tri : %1$s</string>
+    <string name="ask_lifestyle_quiz">Ces mots influencent le tri une fois le questionnaire de préférences rempli.</string>
+    <string name="ask_apply">Voir les logements</string>
+    <string name="ask_remove_chip">Retirer %1$s</string>
+    <string name="ask_voice">Recherche vocale</string>
+    <string name="ask_voice_prompt">Décrivez le logement souhaité</string>
+    <string name="nl_chip_under">Moins de %1$s</string>
+    <string name="nl_chip_from">À partir de %1$s</string>
+    <string name="nl_chip_bedrooms">%1$d+ chambres</string>
+    <string name="nl_chip_bathrooms">%1$d+ salles de bain</string>
+    <string name="nl_chip_area_min">À partir de %1$d m²</string>
+    <string name="nl_chip_area_max">Jusqu\'à %1$d m²</string>
+    <string name="nl_chip_area_range">%1$d–%2$d m²</string>
+    <string name="nl_chip_pets">Animaux acceptés</string>
+    <string name="nl_chip_transport">Près des transports</string>
+    <string name="nl_chip_hint">Indice : %1$s</string>
 </resources>

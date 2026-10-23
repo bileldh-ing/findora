@@ -138,7 +138,13 @@ private class ParseSession(
         if (symbolIs(index, "+")) index++
         val after = if (before == null) phraseAt(index, QueryLexicon.currencies) else null
         if (after != null) index = after.end
-        return Quantity(number.value ?: return null, number.scale, before?.value ?: after?.value, number.countWord, index)
+        return Quantity(
+            number.value ?: return null,
+            number.scale,
+            before?.value ?: after?.value,
+            number.countWord,
+            index,
+        )
     }
 
     private fun roomUnitAt(start: Int): Hit<RoomUnit>? {
@@ -231,7 +237,14 @@ private class ParseSession(
         val high = second.value
         roomUnitAt(second.end)?.let { unit ->
             val min = low.toInt().takeIf { low % 1.0 == 0.0 && it in 1..MAX_ROOMS } ?: return null
-            val meaning = if (unit.value == RoomUnit.Bathroom) QueryMeaning.Bathrooms(min) else QueryMeaning.Bedrooms(min)
+            val meaning =
+                if (unit.value ==
+                    RoomUnit.Bathroom
+                ) {
+                    QueryMeaning.Bathrooms(min)
+                } else {
+                    QueryMeaning.Bedrooms(min)
+                }
             record(meaning, index, unit.end)
             return unit.end
         }
@@ -495,7 +508,11 @@ private class ParseSession(
                 continue
             }
             val start = index
-            while (index + 1 < tokens.size && (flagged[index + 1] || isGlue(index + 1) && flagged.getOrElse(index + 2) { false })) index++
+            while (index + 1 < tokens.size &&
+                (flagged[index + 1] || isGlue(index + 1) && flagged.getOrElse(index + 2) { false })
+            ) {
+                index++
+            }
             runs += text(start, index + 1)
             index++
         }

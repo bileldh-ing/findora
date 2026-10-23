@@ -7,6 +7,14 @@
     <!-- Viewing reminders (asked at booking time on Android 13+; booking works without it). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Voice search hands off to the system speech recognizer (no microphone permission); declared so the
+         Search screen can tell whether one is installed (package visibility, Android 11+). -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
+    </queries>
+
     <application
         android:name=".FindoraApplication"
         android:allowBackup="false"

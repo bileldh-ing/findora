@@ -39,7 +39,10 @@ class NaturalLanguageQueryParserTest {
                             add("currency ${intent.budget?.currency}")
                         }
                     }
-                problems.takeIf { it.isNotEmpty() }?.let { "\"${case.query}\" -> ${it.joinToString()} (unrecognized ${intent.unrecognized})" }
+                problems
+                    .takeIf {
+                        it.isNotEmpty()
+                    }?.let { "\"${case.query}\" -> ${it.joinToString()} (unrecognized ${intent.unrecognized})" }
             }
         assertTrue(failures.joinToString("\n"), failures.isEmpty())
     }
@@ -56,7 +59,11 @@ class NaturalLanguageQueryParserTest {
                 Case("budget of $1200", PropertyFilter(maxRent = 1_200), currency = Currency.USD),
                 Case("at least 900", PropertyFilter(minRent = 900)),
                 Case("over 5000 aed", PropertyFilter(minRent = 5_000), regionId = "dubai"),
-                Case("between 1 500 and 2 000 TND", PropertyFilter(minRent = 1_500, maxRent = 2_000), regionId = "tunis"),
+                Case(
+                    "between 1 500 and 2 000 TND",
+                    PropertyFilter(minRent = 1_500, maxRent = 2_000),
+                    regionId = "tunis",
+                ),
                 Case("between 2000 and 1500", PropertyFilter(minRent = 1_500, maxRent = 2_000)),
                 Case("1.5-2k", PropertyFilter(minRent = 1_500, maxRent = 2_000)),
                 Case("15k to 25k", PropertyFilter(minRent = 15_000, maxRent = 25_000)),
@@ -161,12 +168,25 @@ class NaturalLanguageQueryParserTest {
                 Case("F4", PropertyFilter(type = PropertyType.Apartment, minBedrooms = 3)),
                 Case("appartement 2 chambres", PropertyFilter(type = PropertyType.Apartment, minBedrooms = 2)),
                 Case("maison 3 pièces", PropertyFilter(type = PropertyType.House, minBedrooms = 2)),
-                Case("studio calme au Marais sous 1500 €", PropertyFilter(type = PropertyType.Apartment, query = "Le Marais", maxRent = 1_500)),
+                Case(
+                    "studio calme au Marais sous 1500 €",
+                    PropertyFilter(type = PropertyType.Apartment, query = "Le Marais", maxRent = 1_500),
+                ),
                 Case("de 800 à 1200 euros", PropertyFilter(minRent = 800, maxRent = 1_200), currency = Currency.EUR),
                 Case("au moins 2 salles de bain", PropertyFilter(minBathrooms = 2)),
-                Case("villa avec piscine, animaux acceptés", PropertyFilter(type = PropertyType.House, petFriendlyOnly = true, amenities = setOf(Amenity.SwimmingPool))),
+                Case(
+                    "villa avec piscine, animaux acceptés",
+                    PropertyFilter(
+                        type = PropertyType.House,
+                        petFriendlyOnly = true,
+                        amenities = setOf(Amenity.SwimmingPool),
+                    ),
+                ),
                 Case("pas cher avec parking", PropertyFilter(parkingOnly = true, sort = SortOrder.PriceLowToHigh)),
-                Case("climatisation et ascenseur", PropertyFilter(amenities = setOf(Amenity.AirConditioning, Amenity.Lift))),
+                Case(
+                    "climatisation et ascenseur",
+                    PropertyFilter(amenities = setOf(Amenity.AirConditioning, Amenity.Lift)),
+                ),
                 Case("budget max 1,5k", PropertyFilter(maxRent = 1_500)),
                 Case("deux mille euros", PropertyFilter(maxRent = 2_000), currency = Currency.EUR),
             ),
@@ -182,7 +202,14 @@ class NaturalLanguageQueryParserTest {
                     regionId = "tunis",
                     currency = Currency.TND,
                 ),
-                Case("فيلا مفروشة مع مسبح", PropertyFilter(type = PropertyType.House, furnishedOnly = true, amenities = setOf(Amenity.SwimmingPool))),
+                Case(
+                    "فيلا مفروشة مع مسبح",
+                    PropertyFilter(
+                        type = PropertyType.House,
+                        furnishedOnly = true,
+                        amenities = setOf(Amenity.SwimmingPool),
+                    ),
+                ),
                 Case("ثلاث غرف وحمامين", PropertyFilter(minBedrooms = 3, minBathrooms = 2)),
                 Case("٣ غرف نوم", PropertyFilter(minBedrooms = 3)),
                 Case("أقل من ١٥٠٠", PropertyFilter(maxRent = 1_500)),
@@ -190,9 +217,20 @@ class NaturalLanguageQueryParserTest {
                 Case("ألفين دينار", PropertyFilter(maxRent = 2_000), currency = Currency.TND),
                 Case("٢ ألف", PropertyFilter(maxRent = 2_000)),
                 Case("مع موقف سيارات وحيوانات أليفة", PropertyFilter(parkingOnly = true, petFriendlyOnly = true)),
-                Case("شقة بالمرسى", PropertyFilter(type = PropertyType.Apartment, query = "La Marsa"), regionId = "tunis"),
-                Case("فيلا في نخلة جميرا", PropertyFilter(type = PropertyType.House, query = "Palm Jumeirah"), regionId = "dubai"),
-                Case("شقة هادئة قرب المترو في دبي مارينا", PropertyFilter(type = PropertyType.Apartment, query = "Dubai Marina")),
+                Case(
+                    "شقة بالمرسى",
+                    PropertyFilter(type = PropertyType.Apartment, query = "La Marsa"),
+                    regionId = "tunis",
+                ),
+                Case(
+                    "فيلا في نخلة جميرا",
+                    PropertyFilter(type = PropertyType.House, query = "Palm Jumeirah"),
+                    regionId = "dubai",
+                ),
+                Case(
+                    "شقة هادئة قرب المترو في دبي مارينا",
+                    PropertyFilter(type = PropertyType.Apartment, query = "Dubai Marina"),
+                ),
                 Case("۱۲۰۰ يورو", PropertyFilter(maxRent = 1_200), regionId = "paris"),
             ),
         )

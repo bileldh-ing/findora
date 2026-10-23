@@ -101,7 +101,11 @@ data class ParsedIntent(
 
     val region: QueryMeaning.Region? get() = first()
 
-    val lifestyle: Set<LifestyleHint> get() = meanings.filterIsInstance<QueryMeaning.Lifestyle>().map { it.hint }.toSet()
+    val lifestyle: Set<LifestyleHint> get() =
+        meanings
+            .filterIsInstance<QueryMeaning.Lifestyle>()
+            .map { it.hint }
+            .toSet()
 
     /** The order the sentence asked for ("cheapest", "newest"), if any. */
     val sort: SortOrder? get() = first<QueryMeaning.Sort>()?.order

@@ -36,8 +36,12 @@ internal class PlaceIndex private constructor(
         val allowed = if (text.length >= LONG_NAME_LENGTH) 2 else 1
         return names
             .asSequence()
-            .filter { it.allowsTypos && it.words.size == words.size && it.joined.length >= MIN_FUZZY_LENGTH && it.joined[0] == text[0] }
-            .map { it to editDistance(text, it.joined, allowed) }
+            .filter {
+                it.allowsTypos &&
+                    it.words.size == words.size &&
+                    it.joined.length >= MIN_FUZZY_LENGTH &&
+                    it.joined[0] == text[0]
+            }.map { it to editDistance(text, it.joined, allowed) }
             .filter { (_, distance) -> distance in 1..allowed }
             .minByOrNull { (_, distance) -> distance }
             ?.first
@@ -91,7 +95,11 @@ internal class PlaceIndex private constructor(
             if (name.contains(',')) forms += words(name.substringBefore(','))
             forms.toList().forEach { form ->
                 val rest = form.drop(1)
-                if (form.first() in articles && rest.joinToString(" ").length >= MIN_ARTICLE_STRIPPED_LENGTH) forms += rest
+                if (form.first() in articles &&
+                    rest.joinToString(" ").length >= MIN_ARTICLE_STRIPPED_LENGTH
+                ) {
+                    forms += rest
+                }
             }
             return forms
         }
@@ -110,7 +118,12 @@ internal class PlaceIndex private constructor(
                 val regionMeaning = QueryMeaning.Region(region.id, region.name)
                 names += named(forms(region.name), aliases[region.id], regionMeaning)
                 region.localities.forEach { locality ->
-                    names += named(forms(locality.name), aliases[locality.name], QueryMeaning.Place(locality.name, region.id))
+                    names +=
+                        named(
+                            forms(locality.name),
+                            aliases[locality.name],
+                            QueryMeaning.Place(locality.name, region.id),
+                        )
                 }
             }
             // A neighbourhood named like its region ("Kochi") stays a neighbourhood; region names never shadow it.
