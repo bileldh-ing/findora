@@ -18,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -28,6 +30,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.feature.chat.ConversationsRoute
 import com.findora.app.feature.home.HomeRoute
 import com.findora.app.feature.locations.LocationsRoute
 import com.findora.app.feature.saved.SavedRoute
@@ -47,10 +50,14 @@ fun MainShell(
     onOpenMatchQuiz: () -> Unit,
     onOpenDreamMatch: () -> Unit,
     onOpenCompare: () -> Unit,
+    onOpenConversation: (String) -> Unit,
+    onOpenNotifications: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    viewModel: MainShellViewModel = hiltViewModel(),
 ) {
+    val unreadMessages by viewModel.unreadMessages.collectAsStateWithLifecycle()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentTab =
         MainTab.entries.firstOrNull { tab ->
@@ -83,6 +90,7 @@ fun MainShell(
                     onOpenMatchQuiz = onOpenMatchQuiz,
                     onOpenDreamMatch = onOpenDreamMatch,
                     onOpenCompare = onOpenCompare,
+                    onOpenNotifications = onOpenNotifications,
                     contentPadding = contentPadding,
                 )
             }
@@ -95,6 +103,9 @@ fun MainShell(
                     onOpenDreamMatch = onOpenDreamMatch,
                     contentPadding = contentPadding,
                 )
+            }
+            composable<MainRoute.Chat> {
+                ConversationsRoute(onOpenConversation = onOpenConversation, contentPadding = contentPadding)
             }
             composable<MainRoute.Settings> {
                 SettingsRoute(
@@ -111,6 +122,7 @@ fun MainShell(
             selected = currentTab,
             onSelect = selectTab,
             reduceMotion = reduceMotion,
+            badges = mapOf(MainTab.Chat to unreadMessages),
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)

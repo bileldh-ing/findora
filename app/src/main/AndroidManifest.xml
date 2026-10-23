@@ -4,7 +4,8 @@
 
     <!-- Listing photos are loaded over HTTPS (Coil + OkHttp); the bundled WebP pack covers offline use. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Viewing reminders (asked at booking time on Android 13+; booking works without it). -->
+    <!-- Viewing reminders and agent messages (asked at booking time and on the first chat message on
+         Android 13+; both features work without it). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Map "My location" only: approximate position from the last known fix, asked when the button is tapped.
          Never fine location, never in the background. -->
@@ -53,6 +54,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="property"
+                    android:scheme="findora" />
+            </intent-filter>
+            <!-- Message notifications: findora://chat/{conversationId} opens the thread (owner only). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="chat"
                     android:scheme="findora" />
             </intent-filter>
         </activity>

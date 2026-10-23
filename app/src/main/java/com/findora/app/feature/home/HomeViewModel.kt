@@ -8,7 +8,6 @@ import com.findora.app.core.domain.match.BestMatchRanking
 import com.findora.app.core.domain.match.MatchContext
 import com.findora.app.core.domain.match.ObserveMatchContext
 import com.findora.app.core.domain.model.HomeCategory
-import com.findora.app.core.domain.model.InboxMessage
 import com.findora.app.core.domain.model.ListingBounds
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.PropertyFilter
@@ -18,7 +17,7 @@ import com.findora.app.core.domain.model.SortOrder
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
-import com.findora.app.core.domain.repository.MessageRepository
+import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -58,7 +57,8 @@ data class HomeUiState(
     val filter: PropertyFilter = PropertyFilter(),
     val favoriteIds: Set<String> = emptySet(),
     val bounds: ListingBounds? = null,
-    val unread: List<InboxMessage> = emptyList(),
+    /** Unread entries of the notifications center: the blue dot on the bell. */
+    val unreadNotifications: Int = 0,
     val refresh: RefreshStatus = RefreshStatus.Idle,
     /** Null until known; false shows the "Find my best match" banner, true offers the Best match sort. */
     val hasMatchProfile: Boolean? = null,
@@ -103,11 +103,6 @@ sealed interface HomeUiEvent {
     /** Back to the default feed: every category, refinement and search text cleared. */
     data object ResetFilter : HomeUiEvent
 
-    /** A notification swiped away in the sheet is marked read. */
-    data class DismissNotification(
-        val messageId: String,
-    ) : HomeUiEvent
-
     data object Refresh : HomeUiEvent
 }
 
@@ -121,7 +116,7 @@ class HomeViewModel
         private val filters: HomeFilterRepository,
         private val auth: AuthRepository,
         private val currentRegion: CurrentRegion,
-        private val messages: MessageRepository,
+        private val notifications: NotificationRepository,
         observeMatchContext: ObserveMatchContext,
     ) : ViewModel() {
         private val userId: Flow<String> =
@@ -178,7 +173,7 @@ class HomeViewModel
                 currentRegion.region,
                 auth.observeCurrentUser(),
                 userId.flatMapLatest { favorites.observeFavoriteIds(it) },
-                userId.flatMapLatest { messages.observeUnread(it) },
+                userId.flatMapLatest { notifications.observeUnreadCount(it) },
             ) { region, account, favoriteIds, unread -> HeaderParts(region, account?.initials, favoriteIds, unread) }
 
         private val feed =
@@ -198,7 +193,7 @@ class HomeViewModel
                     filter = feedParts.filter,
                     favoriteIds = parts.favoriteIds,
                     bounds = feedParts.bounds,
-                    unread = parts.unread,
+                    unreadNotifications = parts.unread,
                     refresh = feedParts.refresh,
                     hasMatchProfile = match.hasProfile,
                     matchScores = match.scores,
@@ -226,8 +221,6 @@ class HomeViewModel
                 HomeUiEvent.ClearRefinements -> filters.update { it.withoutRefinements() }
                 HomeUiEvent.ClearQuery -> filters.update { it.copy(query = "") }
                 HomeUiEvent.ResetFilter -> filters.reset()
-                is HomeUiEvent.DismissNotification ->
-                    viewModelScope.launch { messages.markRead(userId.first(), event.messageId) }
                 HomeUiEvent.Refresh ->
                     viewModelScope.launch { refresh(currentRegion.region.first().id, force = true) }
             }
@@ -270,7 +263,7 @@ class HomeViewModel
             val region: RegionPack,
             val initials: String?,
             val favoriteIds: Set<String>,
-            val unread: List<InboxMessage>,
+            val unread: Int,
         )
 
         private companion object {

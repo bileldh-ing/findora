@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
@@ -148,7 +151,13 @@ class SearchAndTabsScreenTest {
                 )
             }
         }
-        listOf("Home", "Locations", "Saved", "Settings").forEach { compose.onNodeWithText(it).assertIsDisplayed() }
+        listOf(
+            "Home",
+            "Locations",
+            "Saved",
+            "Chat",
+            "Settings",
+        ).forEach { compose.onNodeWithText(it).assertIsDisplayed() }
         compose.onNodeWithTag("nav_home").assertIsSelected()
         compose.onNodeWithTag("nav_saved").performClick()
         compose.onNodeWithTag("nav_saved").assertIsSelected()
@@ -156,6 +165,20 @@ class SearchAndTabsScreenTest {
         compose.onNodeWithTag("nav_settings").performClick()
         compose.onNodeWithTag("nav_locations").performClick()
         assertEquals(listOf(MainTab.Saved, MainTab.Settings, MainTab.Locations), selected)
+    }
+
+    @Test
+    fun theChatTabShowsItsUnreadBadge() {
+        compose.setContent {
+            FindoraTheme {
+                FloatingNavPill(selected = MainTab.Home, onSelect = {}, badges = mapOf(MainTab.Chat to 3))
+            }
+        }
+        compose.onNodeWithTag("nav_chat_badge", useUnmergedTree = true).assertExists()
+        compose.onNodeWithText("3", useUnmergedTree = true).assertExists()
+        compose
+            .onNodeWithTag("nav_chat")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "3 unread messages"))
     }
 
     @Test

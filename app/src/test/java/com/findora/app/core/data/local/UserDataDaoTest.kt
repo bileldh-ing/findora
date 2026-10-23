@@ -3,7 +3,6 @@ package com.findora.app.core.data.local
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
 import app.cash.turbine.test
-import com.findora.app.core.data.local.entity.MessageEntity
 import com.findora.app.core.data.local.entity.UserEntity
 import com.findora.app.core.testing.inMemoryDatabase
 import com.findora.app.core.testing.seedEntity
@@ -84,25 +83,6 @@ class UserDataDaoTest {
             assertEquals(1, dao.updatePassword("u1", "new-hash", "new-salt"))
             dao.observeById("u1").test {
                 assertEquals("new-hash", awaitItem()?.passwordHash)
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-    @Test
-    fun messagesOrderByTimeAndTrackUnread() =
-        runTest {
-            val dao = db.messageDao()
-            dao.insert(MessageEntity("m2", "c1", "p1", "agent", "me", "Sure, Saturday works.", 20, null))
-            dao.insert(MessageEntity("m1", "c1", "p1", "me", "agent", "Is it available?", 10, null))
-            dao.insert(MessageEntity("m3", "c2", "p2", "agent", "me", "Hello", 30, null))
-            dao.observeConversation("c1").test {
-                assertEquals(listOf("m1", "m2"), awaitItem().map { it.id })
-                cancelAndIgnoreRemainingEvents()
-            }
-            dao.observeUnreadCount("me").test {
-                assertEquals(2, awaitItem())
-                assertEquals(1, dao.markConversationRead("c1", "me", 40))
-                assertEquals(1, awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
         }

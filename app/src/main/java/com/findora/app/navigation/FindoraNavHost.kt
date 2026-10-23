@@ -21,11 +21,13 @@ import com.findora.app.feature.auth.login.LoginRoute
 import com.findora.app.feature.auth.signup.SignUpRoute
 import com.findora.app.feature.auth.unlock.UnlockRoute
 import com.findora.app.feature.auth.welcome.WelcomeRoute
+import com.findora.app.feature.chat.ChatRoute
 import com.findora.app.feature.compare.CompareRoute
 import com.findora.app.feature.designsystem.DesignSystemScreen
 import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.match.deck.DeckRoute
 import com.findora.app.feature.match.quiz.MatchQuizRoute
+import com.findora.app.feature.notifications.NotificationsRoute
 import com.findora.app.feature.saved.MatchesRoute
 import com.findora.app.feature.search.SearchRoute
 import com.findora.app.feature.viewing.ScheduleViewingRoute
@@ -58,6 +60,8 @@ private fun FindoraGraph(
     modifier: Modifier = Modifier,
 ) {
     val openProperty: (String) -> Unit = { id -> navController.navigate(FindoraRoute.PropertyDetail(id)) }
+    val openConversation: (String) -> Unit = { id -> navController.navigate(FindoraRoute.Chat(id)) }
+    val messageAgent: (String) -> Unit = { id -> navController.navigate(FindoraRoute.ChatWithAgent(id)) }
     val toMain = { navController.navigateClearingBackStack(FindoraRoute.Main) }
     val toWelcome = { navController.navigateClearingBackStack(FindoraRoute.Welcome) }
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier) {
@@ -113,6 +117,8 @@ private fun FindoraGraph(
                     onOpenMatchQuiz = { navController.navigate(FindoraRoute.MatchQuiz) },
                     onOpenDreamMatch = { navController.navigate(FindoraRoute.DreamMatch) },
                     onOpenCompare = { navController.navigate(FindoraRoute.Compare) },
+                    onOpenConversation = openConversation,
+                    onOpenNotifications = { navController.navigate(FindoraRoute.Notifications) },
                     onOpenDesignSystem = openDesignSystem,
                 )
             }
@@ -126,6 +132,7 @@ private fun FindoraGraph(
                     onOpenProperty = openProperty,
                     onScheduleViewing = { id -> navController.navigate(FindoraRoute.ScheduleViewing(id)) },
                     onOpenCompare = { navController.navigate(FindoraRoute.Compare) { launchSingleTop = true } },
+                    onMessageAgent = messageAgent,
                 )
             }
         }
@@ -165,6 +172,24 @@ private fun FindoraGraph(
                     }
                 },
                 onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
+                onMessageAgent = { id ->
+                    navController.navigate(FindoraRoute.ChatWithAgent(id)) {
+                        popUpTo<FindoraRoute.ScheduleViewing> { inclusive = true }
+                    }
+                },
+            )
+        }
+        composable<FindoraRoute.Chat>(deepLinks = chatDeepLinks) {
+            ChatRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
+        }
+        composable<FindoraRoute.ChatWithAgent> {
+            ChatRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
+        }
+        composable<FindoraRoute.Notifications> {
+            NotificationsRoute(
+                onBack = { navController.popBackStack() },
+                onOpenConversation = openConversation,
+                onOpenProperty = openProperty,
             )
         }
         composable<FindoraRoute.MatchQuiz> {
@@ -195,6 +220,9 @@ private const val SEARCH_FADE_MILLIS = 200
 /** `findora://property/{propertyId}` mapped onto [FindoraRoute.PropertyDetail]; shared with the routing test. */
 internal val propertyDetailDeepLinks =
     listOf(navDeepLink<FindoraRoute.PropertyDetail>(basePath = PropertyDeepLink.BASE_PATH))
+
+/** `findora://chat/{conversationId}` mapped onto [FindoraRoute.Chat]; shared with the routing test. */
+internal val chatDeepLinks = listOf(navDeepLink<FindoraRoute.Chat>(basePath = ChatDeepLink.BASE_PATH))
 
 /** Navigates to [route] and removes everything behind it (sign-in, sign-out). */
 private fun NavHostController.navigateClearingBackStack(route: FindoraRoute) {

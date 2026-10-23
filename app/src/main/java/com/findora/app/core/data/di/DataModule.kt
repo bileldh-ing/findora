@@ -11,10 +11,13 @@ import androidx.room.Room
 import androidx.work.WorkManager
 import com.findora.app.core.common.AppClock
 import com.findora.app.core.common.SystemAppClock
+import com.findora.app.core.data.chat.DemoAgentResponder
+import com.findora.app.core.data.chat.ResourceAgentReplyFormatter
 import com.findora.app.core.data.local.FindoraDatabase
+import com.findora.app.core.data.local.dao.ChatDao
 import com.findora.app.core.data.local.dao.FavoriteDao
 import com.findora.app.core.data.local.dao.InteractionEventDao
-import com.findora.app.core.data.local.dao.MessageDao
+import com.findora.app.core.data.local.dao.NotificationDao
 import com.findora.app.core.data.local.dao.PropertyDao
 import com.findora.app.core.data.local.dao.RecentSearchDao
 import com.findora.app.core.data.local.dao.SavedSearchDao
@@ -28,9 +31,10 @@ import com.findora.app.core.data.repository.CachePolicy
 import com.findora.app.core.data.repository.InMemoryCompareRepository
 import com.findora.app.core.data.repository.InMemoryHomeFilterRepository
 import com.findora.app.core.data.repository.OfflineFirstPropertyRepository
+import com.findora.app.core.data.repository.RoomChatRepository
 import com.findora.app.core.data.repository.RoomFavoritesRepository
 import com.findora.app.core.data.repository.RoomInteractionRepository
-import com.findora.app.core.data.repository.RoomMessageRepository
+import com.findora.app.core.data.repository.RoomNotificationRepository
 import com.findora.app.core.data.repository.RoomSearchHistoryRepository
 import com.findora.app.core.data.repository.RoomViewingRepository
 import com.findora.app.core.data.repository.SeedRegionRepository
@@ -38,19 +42,24 @@ import com.findora.app.core.data.seed.AssetSeedReader
 import com.findora.app.core.data.seed.SeedReader
 import com.findora.app.core.data.settings.DataStoreSettingsRepository
 import com.findora.app.core.di.IoDispatcher
+import com.findora.app.core.domain.chat.AgentReplyFormatter
+import com.findora.app.core.domain.chat.AgentResponder
 import com.findora.app.core.domain.location.DeviceLocationSource
+import com.findora.app.core.domain.repository.ChatRepository
 import com.findora.app.core.domain.repository.CompareRepository
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.HomeFilterRepository
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.MatchProfileRepository
-import com.findora.app.core.domain.repository.MessageRepository
+import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.RegionRepository
 import com.findora.app.core.domain.repository.SearchHistoryRepository
 import com.findora.app.core.domain.repository.SettingsRepository
 import com.findora.app.core.domain.repository.ViewingReminderScheduler
 import com.findora.app.core.domain.repository.ViewingRepository
+import com.findora.app.core.notification.AndroidChatNotifier
+import com.findora.app.core.notification.ChatNotifier
 import com.findora.app.core.reminder.AndroidViewingReminderNotifier
 import com.findora.app.core.reminder.ViewingReminderNotifier
 import com.findora.app.core.reminder.WorkManagerViewingReminderScheduler
@@ -97,9 +106,26 @@ abstract class DataBindingsModule {
 
     @Binds
     abstract fun bindHomeFilterRepository(impl: InMemoryHomeFilterRepository): HomeFilterRepository
+}
+
+/** Chat with the demo agent and the in-app notifications center. */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class ChatBindingsModule {
+    @Binds
+    abstract fun bindChatRepository(impl: RoomChatRepository): ChatRepository
 
     @Binds
-    abstract fun bindMessageRepository(impl: RoomMessageRepository): MessageRepository
+    abstract fun bindNotificationRepository(impl: RoomNotificationRepository): NotificationRepository
+
+    @Binds
+    abstract fun bindAgentResponder(impl: DemoAgentResponder): AgentResponder
+
+    @Binds
+    abstract fun bindAgentReplyFormatter(impl: ResourceAgentReplyFormatter): AgentReplyFormatter
+
+    @Binds
+    abstract fun bindChatNotifier(impl: AndroidChatNotifier): ChatNotifier
 }
 
 /** The Best Match engine's preference profiles. */
@@ -200,7 +226,10 @@ object DatabaseModule {
     fun provideUserDao(db: FindoraDatabase): UserDao = db.userDao()
 
     @Provides
-    fun provideMessageDao(db: FindoraDatabase): MessageDao = db.messageDao()
+    fun provideChatDao(db: FindoraDatabase): ChatDao = db.chatDao()
+
+    @Provides
+    fun provideNotificationDao(db: FindoraDatabase): NotificationDao = db.notificationDao()
 
     @Provides
     fun provideSavedSearchDao(db: FindoraDatabase): SavedSearchDao = db.savedSearchDao()

@@ -75,6 +75,7 @@ fun DetailRoute(
     onOpenProperty: (String) -> Unit,
     onScheduleViewing: (String) -> Unit,
     onOpenCompare: () -> Unit,
+    onMessageAgent: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
@@ -108,6 +109,7 @@ fun DetailRoute(
         onBack = onBack,
         onOpenProperty = onOpenProperty,
         onScheduleViewing = { onScheduleViewing(viewModel.propertyId) },
+        onMessageAgent = { onMessageAgent(viewModel.propertyId) },
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -127,6 +129,7 @@ fun DetailScreen(
     onOpenProperty: (String) -> Unit,
     onScheduleViewing: () -> Unit,
     modifier: Modifier = Modifier,
+    onMessageAgent: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Box(
@@ -147,6 +150,7 @@ fun DetailScreen(
                     onBack = onBack,
                     onOpenProperty = onOpenProperty,
                     onScheduleViewing = onScheduleViewing,
+                    onMessageAgent = onMessageAgent,
                 )
         }
         if (state !is DetailUiState.Content) {
@@ -169,6 +173,7 @@ private fun DetailContent(
     onBack: () -> Unit,
     onOpenProperty: (String) -> Unit,
     onScheduleViewing: () -> Unit,
+    onMessageAgent: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val property = content.property
@@ -226,6 +231,7 @@ private fun DetailContent(
                     agent = property.agent,
                     onCall = { onEvent(DetailUiEvent.CallAgent) },
                     onEmail = { onEvent(DetailUiEvent.EmailAgent) },
+                    onMessage = onMessageAgent,
                 )
             }
             item(key = "location") {

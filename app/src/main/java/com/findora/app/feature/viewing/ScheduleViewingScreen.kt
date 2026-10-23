@@ -87,6 +87,7 @@ fun ScheduleViewingRoute(
     onFinish: () -> Unit,
     onOpenViewings: () -> Unit,
     onCreateAccount: () -> Unit,
+    onMessageAgent: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ScheduleViewingViewModel = hiltViewModel(),
 ) {
@@ -124,6 +125,7 @@ fun ScheduleViewingRoute(
         onFinish = onFinish,
         onOpenViewings = onOpenViewings,
         onCreateAccount = onCreateAccount,
+        onMessageAgent = { onMessageAgent(viewModel.propertyId) },
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -142,6 +144,7 @@ fun ScheduleViewingScreen(
     onOpenViewings: () -> Unit,
     onCreateAccount: () -> Unit,
     modifier: Modifier = Modifier,
+    onMessageAgent: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Box(modifier.fillMaxSize().background(FindoraTheme.colors.background).testTag("scheduleViewing")) {
@@ -179,6 +182,7 @@ fun ScheduleViewingScreen(
                     onAddToCalendar = { onEvent(ScheduleUiEvent.AddToCalendar) },
                     onOpenViewings = onOpenViewings,
                     onFinish = onFinish,
+                    onMessageAgent = onMessageAgent,
                 )
         }
         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter).navigationBarsPadding())
@@ -461,6 +465,7 @@ private fun BookedContent(
     onAddToCalendar: () -> Unit,
     onOpenViewings: () -> Unit,
     onFinish: () -> Unit,
+    onMessageAgent: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val locale = currentLocale()
@@ -511,6 +516,11 @@ private fun BookedContent(
             text = stringResource(R.string.booked_add_calendar),
             onClick = onAddToCalendar,
             modifier = Modifier.testTag("bookedAddToCalendar"),
+        )
+        SecondaryPillButton(
+            text = stringResource(R.string.detail_message_agent),
+            onClick = onMessageAgent,
+            modifier = Modifier.testTag("bookedMessageAgent"),
         )
         PrimaryPillButton(
             text = stringResource(R.string.action_done),

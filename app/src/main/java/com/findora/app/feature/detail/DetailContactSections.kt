@@ -98,13 +98,17 @@ fun VerificationSheet(
     }
 }
 
-/** Initials avatar, name, typical response time, and Call (dialer) / Email (mail app) actions. */
+/**
+ * Initials avatar, name, typical response time, "Message agent" (in-app chat with the demo agent) and Call
+ * (dialer) / Email (mail app) actions.
+ */
 @Composable
 fun AgentCard(
     agent: Agent,
     onCall: () -> Unit,
     onEmail: () -> Unit,
     modifier: Modifier = Modifier,
+    onMessage: () -> Unit = {},
 ) {
     val response =
         if (agent.responseTimeMinutes < MINUTES_PER_HOUR) {
@@ -114,6 +118,7 @@ fun AgentCard(
         }
     val callLabel = stringResource(R.string.detail_call_cd, agent.name)
     val emailLabel = stringResource(R.string.detail_email_cd, agent.name)
+    val messageLabel = stringResource(R.string.detail_message_cd, agent.name)
     Column(modifier.fillMaxWidth().padding(horizontal = FindoraTheme.spacing.screenHorizontal)) {
         SectionTitle(stringResource(R.string.detail_agent))
         Spacer(Modifier.size(FindoraTheme.spacing.sm))
@@ -164,8 +169,14 @@ fun AgentCard(
                     }
                 }
             }
+            PrimaryPillButton(
+                text = stringResource(R.string.detail_message_agent),
+                onClick = onMessage,
+                modifier =
+                    Modifier.fillMaxWidth().semantics { contentDescription = messageLabel }.testTag("detailMessage"),
+            )
             Row(horizontalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs)) {
-                PrimaryPillButton(
+                SecondaryPillButton(
                     text = stringResource(R.string.detail_call),
                     onClick = onCall,
                     modifier = Modifier.weight(1f).semantics { contentDescription = callLabel }.testTag("detailCall"),

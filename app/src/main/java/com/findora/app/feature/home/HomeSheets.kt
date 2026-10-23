@@ -1,8 +1,5 @@
 package com.findora.app.feature.home
 
-import android.text.format.DateUtils
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,14 +32,12 @@ import com.findora.app.R
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.model.Currency
-import com.findora.app.core.domain.model.InboxMessage
 import com.findora.app.core.domain.model.RegionPack
-import com.findora.app.core.ui.SwipeToDeleteRow
 
 private val RowMinHeight = 56.dp
 private val RowIconSize = 22.dp
 
-/** Hosts the filter, region and notification sheets; [sheet] says which one is open. */
+/** Hosts the filter and region sheets; [sheet] says which one is open. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeSheets(
@@ -79,11 +74,6 @@ fun HomeSheets(
                         onEvent(HomeUiEvent.SelectRegion(id))
                         onDismiss()
                     },
-                )
-            HomeSheet.Notifications ->
-                NotificationsSheetContent(
-                    messages = state.unread,
-                    onDismissMessage = { onEvent(HomeUiEvent.DismissNotification(it)) },
                 )
             HomeSheet.None -> Unit
         }
@@ -155,67 +145,6 @@ fun RegionSheetContent(
 }
 
 private const val PREVIEW_LOCALITIES = 3
-
-@Composable
-fun NotificationsSheetContent(
-    messages: List<InboxMessage>,
-    onDismissMessage: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = FindoraTheme.spacing.screenHorizontal)
-                .navigationBarsPadding()
-                .testTag("notificationsSheet"),
-        verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xs),
-    ) {
-        SheetTitle(stringResource(R.string.notifications_title))
-        if (messages.isEmpty()) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.heightIn(min = RowMinHeight)) {
-                Icon(
-                    FindoraIcons.Check,
-                    null,
-                    tint = FindoraTheme.colors.success,
-                    modifier = Modifier.size(RowIconSize),
-                )
-                Spacer(Modifier.width(FindoraTheme.spacing.sm))
-                Text(
-                    text = stringResource(R.string.notifications_empty),
-                    style = FindoraTheme.typography.body,
-                    color = FindoraTheme.colors.onSurfaceMuted,
-                )
-            }
-        }
-        val deleteLabel = stringResource(R.string.notifications_mark_read)
-        messages.forEach { message ->
-            SwipeToDeleteRow(
-                deleteLabel = deleteLabel,
-                onDelete = { onDismissMessage(message.id) },
-                modifier = Modifier.testTag("notification_${message.id}"),
-            ) {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = RowMinHeight)
-                        .clip(FindoraTheme.shapes.chip)
-                        .background(FindoraTheme.colors.surface)
-                        .padding(FindoraTheme.spacing.sm),
-                ) {
-                    Text(message.body, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onBackground)
-                    Text(
-                        text = DateUtils.getRelativeTimeSpanString(message.sentAt.toEpochMilli()).toString(),
-                        style = FindoraTheme.typography.caption,
-                        color = FindoraTheme.colors.onSurfaceMuted,
-                    )
-                }
-            }
-        }
-        Spacer(Modifier.height(FindoraTheme.spacing.md))
-    }
-}
 
 @Composable
 private fun SheetTitle(

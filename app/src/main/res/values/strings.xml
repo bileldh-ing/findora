@@ -227,7 +227,6 @@
         <item quantity="one">Map with %1$d home. Use the list view to browse it.</item>
         <item quantity="other">Map with %1$d homes. Use the list view to browse them one by one.</item>
     </plurals>
-    <string name="notifications_mark_read">Mark as read</string>
     <!-- Property detail -->
     <string name="action_open_listing">Open listing</string>
     <string name="action_share">Share</string>
@@ -549,4 +548,84 @@
     <string name="nl_chip_pets">Pets OK</string>
     <string name="nl_chip_transport">Near transport</string>
     <string name="nl_chip_hint">Hint: %1$s</string>
+
+    <!-- Phase 6B: chat with agents and the notifications center -->
+    <string name="nav_chat">Chat</string>
+    <string name="chat_title">Messages</string>
+    <string name="chat_demo_label">Demo agent — automated replies</string>
+    <string name="chat_empty_title">No conversations yet</string>
+    <string name="chat_empty_body">Open a listing and tap Message agent to ask about it.</string>
+    <string name="chat_you_prefix">You: %1$s</string>
+    <string name="chat_typing">typing…</string>
+    <string name="chat_input_hint">Write a message</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_quick_still_available">Is it still available?</string>
+    <string name="chat_quick_visit_week">Can I visit this week?</string>
+    <string name="chat_quick_negotiable">Is the price negotiable?</string>
+    <string name="chat_quick_replies_cd">Quick replies</string>
+    <string name="chat_today">Today</string>
+    <string name="chat_yesterday">Yesterday</string>
+    <string name="chat_status_sending">Sending</string>
+    <string name="chat_status_sent">Sent</string>
+    <string name="chat_status_read">Read</string>
+    <string name="chat_bubble_you_cd">You, %1$s: %2$s. %3$s</string>
+    <string name="chat_bubble_agent_cd">%1$s, %2$s: %3$s</string>
+    <string name="chat_typing_cd">%1$s is typing</string>
+    <string name="chat_open_listing">Open listing</string>
+    <string name="chat_open_conversation">Open conversation</string>
+    <string name="chat_not_found_title">Conversation not available</string>
+    <string name="chat_not_found_body">It may have been removed, or it belongs to another account.</string>
+    <string name="chat_start_hint">Ask %1$s anything about this home, or pick a quick reply below.</string>
+    <string name="detail_message_agent">Message agent</string>
+    <string name="detail_message_cd">Message %1$s</string>
+    <string name="messages_channel_name">Messages</string>
+    <string name="messages_channel_description">Replies from listing agents to your questions.</string>
+    <string name="agent_reply_greeting">Hi, I’m %1$s, the agent for %2$s.</string>
+    <string name="agent_reply_available">Yes, %1$s is still available.</string>
+    <string name="agent_reply_listed_today">It was listed today.</string>
+    <string name="agent_reply_slots">I can show it on %1$s.</string>
+    <string name="agent_reply_slots_tomorrow">Tomorrow I can show it at %1$s.</string>
+    <string name="agent_reply_slot">%1$s at %2$s</string>
+    <string name="agent_reply_list_separator">; </string>
+    <string name="agent_reply_book_hint">You can book one with the Schedule a viewing button on the listing.</string>
+    <string name="agent_reply_no_slots">I have no free viewing slots then. Please pick another day in Schedule a viewing.</string>
+    <string name="agent_reply_price_firm">The rent is %1$s per month, and the owner is keeping it at that price for now.</string>
+    <string name="agent_reply_price_reduced">The rent was recently reduced to %1$s per month, so there is little room to negotiate further.</string>
+    <string name="agent_reply_price_offers">The rent is %1$s per month. It has been on the market for a while, so the owner may consider an offer for a longer lease.</string>
+    <string name="agent_reply_pets_yes">Pets are welcome here.</string>
+    <string name="agent_reply_pets_no">Sorry, the owner does not accept pets.</string>
+    <string name="agent_reply_parking_yes">There is parking for your car.</string>
+    <string name="agent_reply_parking_no">There is no dedicated parking with this home.</string>
+    <string name="agent_reply_furnished_yes">It comes furnished.</string>
+    <string name="agent_reply_furnished_no">It is rented unfurnished.</string>
+    <string name="agent_reply_size">It has %1$s, %2$s and %3$d m² of living space.</string>
+    <string name="agent_reply_thanks">You’re welcome! Let me know if anything else comes up.</string>
+    <string name="agent_reply_help">I can tell you about availability, the rent, viewing times, pets, parking, furnishing and the size of the home. What would you like to know?</string>
+    <string name="agent_reply_listing_gone">This listing is no longer on Findora, so I can’t share details about it here.</string>
+    <string name="notifications_empty_body">Messages from agents and viewing updates will show up here.</string>
+    <string name="notifications_mark_all_read">Mark all read</string>
+    <string name="notifications_delete">Delete</string>
+    <string name="notifications_deleted">Notification deleted</string>
+    <string name="notification_message_title">New message from %1$s</string>
+    <string name="notification_reminder_title">Viewing in one hour</string>
+    <string name="notification_booked_title">Viewing booked</string>
+    <string name="notification_viewing_body">%1$s · %2$s</string>
+    <string name="notification_unread">Unread</string>
+    <string name="notification_cd">%1$s. %2$s. %3$s</string>
+    <plurals name="agent_reply_listed_days">
+        <item quantity="one">It has been listed for %1$d day.</item>
+        <item quantity="other">It has been listed for %1$d days.</item>
+    </plurals>
+    <plurals name="agent_reply_bedrooms">
+        <item quantity="one">%1$d bedroom</item>
+        <item quantity="other">%1$d bedrooms</item>
+    </plurals>
+    <plurals name="agent_reply_bathrooms">
+        <item quantity="one">%1$d bathroom</item>
+        <item quantity="other">%1$d bathrooms</item>
+    </plurals>
+    <plurals name="chat_unread_cd">
+        <item quantity="one">%1$d unread message</item>
+        <item quantity="other">%1$d unread messages</item>
+    </plurals>
 </resources>

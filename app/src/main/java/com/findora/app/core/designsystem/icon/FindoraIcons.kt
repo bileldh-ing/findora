@@ -53,6 +53,18 @@ object FindoraIcons {
         outline("Chat", "M7.9 20A9 9 0 1 0 4 16.1L2 22Z", "M8 12h.01", "M12 12h.01", "M16 12h.01")
     }
 
+    val Send: ImageVector by lazy {
+        outline(
+            "Send",
+            "M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 " +
+                ".682.627l18-8.5a.5.5 0 0 0 0-.904z",
+            "M6 12h16",
+            autoMirror = true,
+        )
+    }
+
+    val CheckDouble: ImageVector by lazy { outline("CheckDouble", "M18 6 7 17l-5-5", "m22 10-7.5 7.5L13 16") }
+
     val Settings: ImageVector by lazy {
         outline(
             "Settings",

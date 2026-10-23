@@ -13,10 +13,13 @@ import androidx.work.WorkerParameters
 import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.workDataOf
 import com.findora.app.core.domain.model.Viewing
+import com.findora.app.core.domain.notification.NotificationKind
+import com.findora.app.core.testing.FakeNotificationRepository
 import com.findora.app.core.testing.FakePropertyRepository
 import com.findora.app.core.testing.FakeViewingRepository
 import com.findora.app.core.testing.seedProperties
 import com.findora.app.navigation.PropertyDeepLink
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -41,6 +44,7 @@ class ViewingReminderWorkerTest {
     private val viewings = FakeViewingRepository { now }
     private val georgie = seedProperties.first { it.title == "Georgie House" }
     private val notifier = AndroidViewingReminderNotifier(context)
+    private val inApp = FakeNotificationRepository { now }
     private val notifications get() = shadowOf(context.getSystemService(NotificationManager::class.java))
 
     @Before
@@ -62,6 +66,7 @@ class ViewingReminderWorkerTest {
                         viewings,
                         FakePropertyRepository(),
                         notifier,
+                        inApp,
                         { now },
                         ZoneId.of("Africa/Tunis"),
                     )
@@ -99,6 +104,11 @@ class ViewingReminderWorkerTest {
             val tap = shadowOf(posted.contentIntent).savedIntent
             assertEquals(Intent.ACTION_VIEW, tap.action)
             assertEquals(PropertyDeepLink.uriFor(georgie.id), tap.dataString)
+            // The notifications center gets the same reminder, owned by the viewing's user.
+            val entry = inApp.observeNotifications("ada").first().single()
+            assertEquals(NotificationKind.ViewingReminder, entry.kind)
+            assertEquals(georgie.title, entry.subject)
+            assertEquals(viewing.startAt, entry.eventAt)
         }
 
     @Test
@@ -108,6 +118,7 @@ class ViewingReminderWorkerTest {
             viewings.cancel("ada", viewing.id)
             assertEquals(ListenableWorker.Result.success(), worker(viewing.id).doWork())
             assertTrue(notifications.allNotifications.isEmpty())
+            assertTrue(inApp.observeNotifications("ada").first().isEmpty())
         }
 
     @Test

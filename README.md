@@ -24,9 +24,36 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 3 | Home screen, pixel-faithful to the reference design | Done |
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
-| 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A) | In progress |
+| 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B) | In progress |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 6B ships
+
+- **Chat tab** (fifth item of the floating nav pill, with an unread badge): one thread per listing with its
+  agent, last message preview, time and unread count. **Message agent** on the listing's agent card and on the
+  "Viewing booked" screen (where a Dream Match super like lands) opens the thread; it is created by the first
+  message, so the list never holds empty threads.
+- **Conversation screen**: the listing card pinned at the top, bubbles grouped by day, delivery ticks
+  (sending, sent, read), a typing indicator, quick replies ("Is it still available?", "Can I visit this week?",
+  "Is the price negotiable?") and a composer. Mirrored for Arabic, light and dark, every bubble read by
+  TalkBack as one sentence with sender, time and delivery state; the typing dots stay still with animations off.
+- **Demo agent, clearly labelled "Demo agent — automated replies"**: `AgentReplyEngine` (pure Kotlin,
+  deterministic) answers from the listing's own data only: availability and days on the market, open viewing
+  times from `ViewingSlotGenerator` (taken and busy slots are never offered; "tomorrow" and "this week" are
+  understood), the rent and how negotiable it is (from its price history and age), pets, parking, furnishing and
+  size, in English, French or Arabic. Replies arrive after a human-looking delay through an app-scoped
+  coroutine; nothing leaves the device.
+- **Notifications center** (Home bell, whose blue dot now counts real unread entries): new agent messages,
+  viewing booked and viewing reminders, stored per user in Room. Tap opens the thread or listing and marks it read;
+  "Mark all read"; swipe (or the TalkBack "Delete" action) removes one. A reply to a thread that is not on screen
+  also posts a system notification on a new **Messages** channel (only with `POST_NOTIFICATIONS`, asked with the
+  first message of a thread on Android 13+); its `findora://chat/{id}` link goes through the same route guard as
+  listing links and opens only for the thread's owner.
+- **Room schema v3** (auto-migration from v2, tested with `MigrationTestHelper`): `conversations`, `notifications`
+  and a `status` column on `messages` (existing rows default to "sent").
+- Price-drop notifications are not included: listing prices only change between seed versions, so there is no
+  real event to notify about yet.
 
 ## What Phase 6A ships
 
@@ -152,7 +179,7 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 - **Search** with 300 ms debounced suggestions and per-user recent searches (swipe to delete, clear all).
 - **Favourites** per user: heart toggle, double-tap with a heart burst, and a Saved tab.
 - **Floating navigation pill** (Home, Locations, Saved, Settings) with a sliding spring indicator.
-  Locations became a map in Phase 6A; Chat joins with Phase 6.
+  Locations became a map in Phase 6A; the Chat tab joined in Phase 6B.
 - Staggered card entrance and `animateItem`, all skipped when system animations are off; TalkBack reads one
   summary per card with Save as a custom action.
 
@@ -256,8 +283,9 @@ app/src/main/java/com/findora/app
 │   ├── designsystem/component  pill buttons, chips, logo, text fields, arc shape, controls
 │   ├── designsystem/icon       thin-stroke icon set (ImageVector)
 │   ├── common                  injectable clock
-│   ├── domain                  models, repository interfaces, PriceFormatter, map clustering and areas (pure Kotlin)
-│   ├── data                    Room, DataStore, seed DTOs, fake remote, repositories, Hilt modules
+│   ├── domain                  models, repository interfaces, PriceFormatter, map clustering, demo agent rules (pure Kotlin)
+│   ├── data                    Room, DataStore, seed DTOs, fake remote, repositories, demo agent responder, Hilt modules
+│   ├── notification            Messages channel notifier
 │   ├── data/auth               password hashing, Keystore session cipher, local AuthRepository
 │   ├── security                biometric availability
 │   ├── image                   Coil ImageLoader and offline fallback
@@ -265,7 +293,9 @@ app/src/main/java/com/findora/app
 │   └── di                      coroutine dispatchers module
 ├── feature
 │   ├── auth                    welcome, login, sign up, forgot password, biometric unlock
-│   ├── home                    header, paged grid, filter, region and notification sheets
+│   ├── home                    header, paged grid, filter and region sheets
+│   ├── chat                    conversation list (Chat tab) and conversation screen
+│   ├── notifications           in-app notifications center
 │   ├── search                  debounced suggestions and recent searches
 │   ├── saved                   saved homes and Dream Match matches
 │   ├── compare                 compare tray and side-by-side compare table
@@ -308,7 +338,11 @@ app/src/main/java/com/findora/app
 | `PriceFormatterTest` | Design style, INR lakh grouping, USD, EUR, TND, Arabic/RTL isolation |
 | `DomainModelTest` | Money arithmetic, stable ids, bounds, filters |
 | `PropertyDaoTest`, `UserDataDaoTest`, `ActivityDaoTest` | Every DAO against in-memory Room (Robolectric): filters, ordering, per-user favourites, unique e-mail, double-booking guard, recent-search de-duplication and trimming |
-| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v2 migration keeps data (`MigrationTestHelper`) |
+| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v3 and v2 to v3 migrations keep data (`MigrationTestHelper`) |
+| `AgentReplyEngineTest` | Demo agent rules: greeting once, availability, one open slot per day, taken slots never offered, "tomorrow" spacing, price flexibility from history and age, pets / parking / furnishing / size, French and Arabic, no false keyword matches, determinism, bounded typing time |
+| `RoomChatRepositoryTest`, `DemoAgentResponderTest`, `AndroidChatNotifierTest` | Threads and notifications per user (isolation, unread counts, newest first, one unread notification per thread, account deletion); sending, sent, read, typing, reply and notification in virtual time, no notification for the open thread; Messages channel and chat link |
+| `ChatViewModelTest`, `ConversationsViewModelTest`, `NotificationsViewModelTest` | Start from a listing, first message creates the thread, quick replies, failed send, foreign thread not found, read on screen, typing and day separators; list order, unread and typing, Chat tab badge; open, mark read, mark all, delete (Turbine) |
+| `ChatScreenTest`, `NotificationsScreenTest`, `ChatDeepLinkTest` | Send flow, quick replies, bubble TalkBack sentences, RTL bubbles, not found; notifications list, unread state, mark all, delete action, Chat tab rows; `findora://chat/{id}` parsing and routing (Compose, Robolectric) |
 | `FakeRemoteDataSourceTest` | Latency window, paging, not found, fail-next / always / random error injection |
 | `OfflineFirstPropertyRepositoryTest` | First load, TTL, forced refresh, failures keep the cache, filters |
 | `RoomRepositoriesTest` | Favourites, search history, interactions, region packs |
