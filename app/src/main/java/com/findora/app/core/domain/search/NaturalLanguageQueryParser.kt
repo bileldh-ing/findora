@@ -383,12 +383,13 @@ private class ParseSession(
     private fun wordWindow(start: Int): List<Int> {
         val indices = mutableListOf<Int>()
         var index = start
-        while (indices.size < MAX_PLACE_WORDS) {
+        var open = true
+        while (open && indices.size < MAX_PLACE_WORDS) {
             val token = free(index)
+            val joiner = token != null && indices.isNotEmpty() && token.isSymbol && token.norm in JOINERS
             when {
-                token == null -> break
-                token.isWord -> indices += index
-                !(indices.isNotEmpty() && token.isSymbol && token.norm in JOINERS) -> break
+                token?.isWord == true -> indices += index
+                !joiner -> open = false
             }
             index++
         }
@@ -515,26 +516,23 @@ private class ParseSession(
 
     /** Runs of words nobody claimed (filler words aside) plus ignored spans, as they were typed. */
     private fun unrecognized(): List<String> {
-        val flagged =
-            BooleanArray(tokens.size) { index ->
-                val token = tokens[index]
-                !consumed[index] &&
-                    when {
-                        token.isWord -> QueryText.variants(token.norm).none(QueryLexicon.stopwords::contains)
-                        token.isNumber -> !token.countWord
-                        else -> false
-                    }
-            }
+        val flagged = BooleanArray(tokens.size) { index -> !consumed[index] && isMeaningful(tokens[index]) }
         ignored.forEach { range -> range.forEach { flagged[it] = true } }
         // A hyphen between two flagged words ("non-meublé") stays inside the run.
         tokens.indices
-            .filter {
-                isGlue(
-                    it,
-                ) &&
-                    flagged.getOrElse(it - 1) { false } &&
-                    flagged.getOrElse(it + 1) { false }
-            }.forEach { flagged[it] = true }
+            .filter { isGlue(it) && flagged.getOrElse(it - 1) { false } && flagged.getOrElse(it + 1) { false } }
+            .forEach { flagged[it] = true }
+        return runsOf(flagged).distinct()
+    }
+
+    private fun isMeaningful(token: QueryToken): Boolean =
+        when {
+            token.isWord -> QueryText.variants(token.norm).none(QueryLexicon.stopwords::contains)
+            token.isNumber -> !token.countWord
+            else -> false
+        }
+
+    private fun runsOf(flagged: BooleanArray): List<String> {
         val runs = mutableListOf<String>()
         var start = -1
         for (index in 0..tokens.size) {
@@ -545,7 +543,7 @@ private class ParseSession(
                 start = -1
             }
         }
-        return runs.distinct()
+        return runs
     }
 
     private fun isGlue(index: Int): Boolean = tokens[index].isSymbol && tokens[index].norm in JOINERS
