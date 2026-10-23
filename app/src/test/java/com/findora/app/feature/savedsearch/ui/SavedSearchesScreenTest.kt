@@ -1,7 +1,5 @@
 package com.findora.app.feature.savedsearch.ui
 
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -88,22 +86,8 @@ class SavedSearchesScreenTest {
         )
     }
 
-    @Test
-    fun renamingOpensTheNameDialogWithTheCurrentName() {
-        show(listOf(SavedSearchItem(search, "Tunis")))
-        compose.onNode(hasContentDescription("Rename search")).performClick()
-        // The dialog window never reports idle under Robolectric, so frames are advanced by hand from here.
-        compose.mainClock.autoAdvance = false
-        compose.mainClock.advanceTimeBy(DIALOG_FRAMES_MS)
-        compose.onNodeWithTag("saveSearchName").assertTextEquals("Marsa flats")
-        compose.onNodeWithTag("saveSearchConfirm").assertIsEnabled().performClick()
-        compose.mainClock.advanceTimeBy(DIALOG_FRAMES_MS)
-        assertEquals(listOf(SavedSearchesUiEvent.Rename(3, "Marsa flats")), events)
-        compose.onNodeWithTag("saveSearchDialog").assertDoesNotExist()
-    }
-
-    // The name field is tested outside the AlertDialog: a focused field's blinking cursor keeps a Robolectric
-    // dialog window from ever going idle, so typing is exercised on the field itself.
+    // An AlertDialog's window never reports idle under Robolectric, so the name field and its state are tested
+    // here on their own and the dialog itself (rename and blank names) in SaveSearchDialogTest on the emulator.
     @Test
     fun anEditedNameIsTrimmedAndSavedWithDone() {
         val state = SearchNameState("Marsa flats")
@@ -134,9 +118,5 @@ class SavedSearchesScreenTest {
         compose.onNodeWithTag("saveSearchName").performTextReplacement("  Kochi houses ")
         compose.onNodeWithTag("saveSearchName").performImeAction()
         assertEquals(listOf("Kochi houses"), saved)
-    }
-
-    private companion object {
-        const val DIALOG_FRAMES_MS = 500L
     }
 }
