@@ -45,6 +45,8 @@ fun MainShell(
     onCreateAccount: () -> Unit,
     onOpenViewings: () -> Unit,
     onOpenMatchQuiz: () -> Unit,
+    onOpenDreamMatch: () -> Unit,
+    onOpenCompare: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
@@ -79,6 +81,8 @@ fun MainShell(
                     onOpenProfile = { selectTab(MainTab.Settings) },
                     onOpenProperty = onOpenProperty,
                     onOpenMatchQuiz = onOpenMatchQuiz,
+                    onOpenDreamMatch = onOpenDreamMatch,
+                    onOpenCompare = onOpenCompare,
                     contentPadding = contentPadding,
                 )
             }
@@ -86,7 +90,11 @@ fun MainShell(
                 LocationsRoute(onShowHome = { selectTab(MainTab.Home) }, contentPadding = contentPadding)
             }
             composable<MainRoute.Saved> {
-                SavedRoute(onOpenProperty = onOpenProperty, contentPadding = contentPadding)
+                SavedRoute(
+                    onOpenProperty = onOpenProperty,
+                    onOpenDreamMatch = onOpenDreamMatch,
+                    contentPadding = contentPadding,
+                )
             }
             composable<MainRoute.Settings> {
                 SettingsRoute(

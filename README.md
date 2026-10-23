@@ -23,10 +23,46 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 2 | Welcome and authentication | Done |
 | 3 | Home screen, pixel-faithful to the reference design | Done |
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
-| 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match deck and more (5B) | 5A done, 5B planned |
+| 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B) | Done (unreleased) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL) | Planned |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 5B ships
+
+- **Dream Match** (`feature/match/deck`, `DreamMatch` route, from a card on Home and on the Saved tab): the
+  current region's homes as a stack of cards, Best match order with a profile (must-have failures left out) and
+  Home's Recommended order without one. Homes already saved, or skipped in an earlier session, are left out.
+  Drag the top card (it tilts with the drag and SAVE / SKIP / SUPER LIKE stamps fade in); it commits past 30% of
+  the width (20% of the height upwards) or above a 1000 dp/s fling, otherwise it springs back.
+  - Right / Save: added to favourites and to the **Matches** collection, recorded as `save_deck`.
+  - Left / Skip: recorded as `skip_deck`, which `BehaviorAffinity` weighs at -1.5 (a dismissal is -2), so similar
+    homes score a little lower in learned behaviour.
+  - Up / Super like: saved like Save (`super_like_deck`, weighted like contacting an agent), then the Schedule a
+    viewing screen opens for that home (Findora has no chat yet).
+  - Undo reverts the last action, repeatedly: the event is deleted and a favourite the deck added is removed
+    (one the user already had is kept). "n / total" progress with an animated bar, haptics on commit
+    (`LongPress`) and when a drag crosses the threshold (`TextHandleMove`). End of deck: "See my matches" and
+    "Start again" (which deals the skipped homes again).
+  - Accessibility: every gesture has a button (Undo, Skip, Super like, Save, 48 to 64 dp) and the card offers
+    Save, Skip and Super like as TalkBack custom actions; the progress is announced politely. With animations
+    off, cards move instantly and do not tilt.
+  - **RTL decision**: swipe directions are physical. Right always saves and left always skips, in Arabic too,
+    and the action buttons keep the left-to-right order (Skip on the left, Save on the right) so each button
+    sits on the side its swipe goes. Labels and the rest of the screen mirror normally.
+- **Matches**: a Saved / Matches switch on the Saved tab and a standalone Matches page ("See my matches").
+  Matches are derived from the deck events (`save_deck`, `super_like_deck`) intersected with the current
+  favourites, newest first, so un-saving a home also removes it from Matches. No new table: Room stays at
+  schema v2 (only two new DAO queries over `interaction_events`).
+- **Compare** (`feature/compare`, `Compare` route): "Add to compare" in the detail page's top bar (it toggles)
+  and as a long press (and TalkBack action) on Home cards; at most 3 homes, with a snackbar when full and a
+  "View" action. A floating tray above the navigation pill shows the picked homes, "n / 3 selected", Clear and
+  Compare. The Compare screen is a side-by-side table: photo, price, area, price per m², bedrooms, bathrooms,
+  amenity count, rating and match score (with a profile), the best value per row highlighted (ties share it,
+  nothing is highlighted when all are equal, prices in different currencies are never ranked), then an amenity
+  checklist. Columns are removed with their close button and reordered by long-press dragging a header
+  (mirrored in RTL), by arrow buttons or by TalkBack actions. The selection is per user and kept in memory for
+  the session (`InMemoryCompareRepository`): it is a short-lived working set, so it is not persisted.
 
 ## What Phase 5A ships
 
@@ -174,9 +210,10 @@ app/src/main/java/com/findora/app
 │   ├── auth                    welcome, login, sign up, forgot password, biometric unlock
 │   ├── home                    header, paged grid, filter, region and notification sheets
 │   ├── search                  debounced suggestions and recent searches
-│   ├── saved                   saved homes
+│   ├── saved                   saved homes and Dream Match matches
+│   ├── compare                 compare tray and side-by-side compare table
 │   ├── locations               region and neighbourhood picker
-│   ├── match                   preference quiz (Best Match engine lives in core/domain/match)
+│   ├── match                   preference quiz and Dream Match deck (engine lives in core/domain/match)
 │   ├── settings                account, match preferences, theme, biometric lock, logout, delete account
 │   └── designsystem            debug-only component showcase
 └── navigation                  type-safe routes, NavHost, route guard, main shell and floating nav pill
@@ -239,6 +276,11 @@ app/src/main/java/com/findora/app
 | `MatchScoreCalculatorTest`, `BestMatchRankingTest` | Property-based style checks over thousands of generated listings: score in 0..100, cheaper within budget never lowers budget fit, missing must-have always excluded, decay reduces old signals, determinism; Best match ordering, filters and badge scores |
 | `DataStoreMatchProfileRepositoryTest`, `MatchQuizViewModelTest` | Profile round trip, per user, restart, corrupt and future documents; quiz steps, skip, back, close, editing, saving (Turbine) |
 | `MatchQuizScreenTest`, `WhyThisMatchTest` | Quiz flow end to end with the real ViewModel, dark RTL; factor bars and points, top reasons, missing must-have, detail ring and sheet (Compose, Robolectric) |
+| `DreamMatchDeckTest`, `DeckViewModelTest` | Deck order with and without a profile, exclusions, a skip lowering the learned-behaviour score; save, skip, super like (effect), multi-step undo, keeping a prior favourite, end of deck, restart, load failure (Turbine) |
+| `DeckInteractionQueriesTest` | Matches query (distinct, newest first, per user) and Undo's delete-newest-match over Room |
+| `DeckScreenTest` | Swipe right, left and up with `performTouchInput`, short drag springs back, buttons, Undo, TalkBack custom actions, end of deck, restart, dark RTL (Compose, Robolectric) |
+| `CompareTableTest`, `CompareViewModelTest` | Best value per row and direction, ties, single column, unknown values, mixed currencies, selection cap and reorder, per-user repository; table following the selection, match row with a profile, tray add / full / duplicate (Turbine) |
+| `CompareScreenTest` | Rows and highlighted best cells, amenity checklist, remove / reorder / TalkBack actions, long-press drag in RTL, empty and single states (Compose, Robolectric) |
 | `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, open a listing and book a viewing, My viewings, tabs, Settings and back |
 
 ## Credits

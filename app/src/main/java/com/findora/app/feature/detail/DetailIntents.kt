@@ -9,11 +9,11 @@ import com.findora.app.core.domain.model.GeoPoint
 import java.util.Locale
 
 /**
- * Hands a [DetailUiEffect] to another app: the share sheet, the dialer (ACTION_DIAL, no call permission),
+ * Hands a [DetailUiEffect.External] to another app: the share sheet, the dialer (ACTION_DIAL, no call permission),
  * an e-mail app (ACTION_SENDTO mailto:) or a maps app (geo: URI, no API key). Returns false when no
  * installed app can handle it, so the screen can say so instead of failing silently.
  */
-internal fun Context.launchDetailEffect(effect: DetailUiEffect): Boolean {
+internal fun Context.launchDetailEffect(effect: DetailUiEffect.External): Boolean {
     val intent =
         when (effect) {
             is DetailUiEffect.Share -> shareIntent(effect)

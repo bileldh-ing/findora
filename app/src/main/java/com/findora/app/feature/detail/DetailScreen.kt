@@ -25,12 +25,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +57,7 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.ui.StateMessage
 import com.findora.app.core.ui.match.MatchSummaryCard
 import com.findora.app.core.ui.match.WhyThisMatchSheet
+import com.findora.app.feature.compare.compareMessages
 import kotlinx.coroutines.launch
 
 private val TopButtonSize = 48.dp
@@ -71,6 +74,7 @@ fun DetailRoute(
     onBack: () -> Unit,
     onOpenProperty: (String) -> Unit,
     onScheduleViewing: (String) -> Unit,
+    onOpenCompare: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
@@ -78,10 +82,23 @@ fun DetailRoute(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val noApp = stringResource(R.string.detail_no_app)
+    val removed = stringResource(R.string.compare_removed)
+    val compareMessages = compareMessages()
+    val currentOnOpenCompare by rememberUpdatedState(onOpenCompare)
     LaunchedEffect(viewModel, context) {
         viewModel.effects.collect { effect ->
-            if (!context.launchDetailEffect(effect)) {
-                launch { snackbarHostState.showSnackbar(noApp) }
+            when (effect) {
+                is DetailUiEffect.External ->
+                    if (!context.launchDetailEffect(effect)) {
+                        launch { snackbarHostState.showSnackbar(noApp) }
+                    }
+                is DetailUiEffect.CompareAdded ->
+                    launch {
+                        val result =
+                            snackbarHostState.showSnackbar(compareMessages.text(effect.result), compareMessages.view)
+                        if (result == SnackbarResult.ActionPerformed) currentOnOpenCompare()
+                    }
+                DetailUiEffect.CompareRemoved -> launch { snackbarHostState.showSnackbar(removed) }
             }
         }
     }
@@ -229,9 +246,11 @@ private fun DetailContent(
         ScheduleBar(onClick = onScheduleViewing, modifier = Modifier.align(Alignment.BottomCenter))
         DetailTopBar(
             isFavorite = content.isFavorite,
+            isInCompare = content.isInCompare,
             onBack = onBack,
             onShare = { onEvent(DetailUiEvent.Share) },
             onToggleFavorite = { onEvent(DetailUiEvent.ToggleFavorite) },
+            onToggleCompare = { onEvent(DetailUiEvent.ToggleCompare) },
         )
         galleryPage?.let { start ->
             FullscreenGallery(
@@ -280,9 +299,11 @@ private fun ScheduleBar(
 @Composable
 private fun DetailTopBar(
     isFavorite: Boolean,
+    isInCompare: Boolean,
     onBack: () -> Unit,
     onShare: () -> Unit,
     onToggleFavorite: () -> Unit,
+    onToggleCompare: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -296,6 +317,13 @@ private fun DetailTopBar(
     ) {
         TopIconButton(FindoraIcons.ArrowBack, stringResource(R.string.back), onBack, tag = "detailBack")
         Spacer(Modifier.weight(1f))
+        TopIconButton(
+            icon = FindoraIcons.Compare,
+            label = stringResource(if (isInCompare) R.string.compare_remove_from else R.string.compare_add),
+            onClick = onToggleCompare,
+            tag = "detailCompare",
+            tint = if (isInCompare) FindoraTheme.colors.accent else Color.White,
+        )
         TopIconButton(FindoraIcons.Share, stringResource(R.string.action_share), onShare, tag = "detailShare")
         TopIconButton(
             icon = if (isFavorite) FindoraIcons.HeartFilled else FindoraIcons.Heart,

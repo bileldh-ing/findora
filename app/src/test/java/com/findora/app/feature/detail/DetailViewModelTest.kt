@@ -3,6 +3,8 @@ package com.findora.app.feature.detail
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import com.findora.app.core.data.repository.InMemoryCompareRepository
+import com.findora.app.core.domain.compare.CompareAddResult
 import com.findora.app.core.domain.insight.AffordabilityVerdict
 import com.findora.app.core.domain.insight.NeighbourhoodScore
 import com.findora.app.core.domain.insight.PriceTrend
@@ -50,6 +52,7 @@ class DetailViewModelTest {
     private val favorites = FakeFavoritesRepository()
     private val auth = FakeAuthRepository()
     private val profiles = FakeMatchProfileRepository()
+    private val compare = InMemoryCompareRepository()
 
     private fun viewModel(
         id: String = georgie.id,
@@ -62,6 +65,7 @@ class DetailViewModelTest {
         auth = auth,
         clock = { Instant.EPOCH },
         observeMatchContext = observeMatchContext(auth = auth, profiles = profiles, properties = properties),
+        compare = compare,
     )
 
     @Test
@@ -84,6 +88,27 @@ class DetailViewModelTest {
                 ),
                 interactions.events.value,
             )
+        }
+
+    @Test
+    fun toggleCompareAddsRemovesAndReportsAFullSelection() =
+        runTest(main.dispatcher) {
+            val others = seedProperties.filter { it.id != georgie.id }.take(3)
+            val vm = viewModel()
+            vm.state.test {
+                assertFalse((awaitSettled() as DetailUiState.Content).isInCompare)
+                vm.effects.test {
+                    vm.onEvent(DetailUiEvent.ToggleCompare)
+                    assertEquals(DetailUiEffect.CompareAdded(CompareAddResult.Added), awaitItem())
+                    vm.onEvent(DetailUiEvent.ToggleCompare)
+                    assertEquals(DetailUiEffect.CompareRemoved, awaitItem())
+                    others.forEach { compare.add(AuthRepository.GUEST_USER_ID, it.id) }
+                    vm.onEvent(DetailUiEvent.ToggleCompare)
+                    assertEquals(DetailUiEffect.CompareAdded(CompareAddResult.Full), awaitItem())
+                }
+                assertEquals(others.map { it.id }, compare.observe(AuthRepository.GUEST_USER_ID).first())
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -182,6 +207,7 @@ class DetailViewModelTest {
                     auth = auth,
                     clock = { Instant.EPOCH },
                     observeMatchContext = observeMatchContext(auth = auth),
+                    compare = InMemoryCompareRepository(),
                 )
             vm.state.test {
                 assertTrue(awaitSettled() is DetailUiState.Content)
@@ -290,6 +316,24 @@ private class RecordingInteractionRepository(
         if (fail) throw IOException("disk full")
         events.update { it + event }
     }
+
+    override suspend fun remove(event: InteractionEvent) =
+        events.update { list ->
+            val index = list.indexOfLast { it == event }
+            if (index < 0) list else list.toMutableList().apply { removeAt(index) }
+        }
+
+    override fun observePropertyIds(
+        userId: String,
+        types: Set<InteractionType>,
+    ): Flow<List<String>> =
+        events.map { list ->
+            list
+                .filter { it.userId == userId && it.type in types }
+                .asReversed()
+                .map { it.propertyId }
+                .distinct()
+        }
 
     override fun observeRecent(
         userId: String,

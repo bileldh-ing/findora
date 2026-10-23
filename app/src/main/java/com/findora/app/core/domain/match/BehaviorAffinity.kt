@@ -35,6 +35,9 @@ class BehaviorAffinity private constructor(
         private const val SCHEDULE = 5.0
         private const val DISMISS = -2.0
 
+        /** A quick left swipe says less than an explicit dismissal, so it weighs a little less. */
+        private const val DECK_SKIP = -1.5
+
         val None = BehaviorAffinity(emptyMap())
 
         /** Builds the affinity from [events]; events about listings [propertyById] cannot resolve are ignored. */
@@ -73,6 +76,9 @@ class BehaviorAffinity private constructor(
                 InteractionType.ContactedAgent -> CONTACT
                 InteractionType.ScheduledViewing -> SCHEDULE
                 InteractionType.Dismissed -> DISMISS
+                InteractionType.DeckSaved -> FAVORITE
+                InteractionType.DeckSuperLiked -> CONTACT
+                InteractionType.DeckSkipped -> DECK_SKIP
             }
 
         private fun features(property: Property): List<String> =

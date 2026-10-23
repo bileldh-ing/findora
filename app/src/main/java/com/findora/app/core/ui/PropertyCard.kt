@@ -83,7 +83,8 @@ private const val BURST_MILLIS = 450
  * a double-tap on the photo save the home (double-tap only adds, with a heart burst); a single tap opens the
  * listing ([onClick]). [matchPercent] adds the "92% match" badge (only when the user has a preference profile).
  * TalkBack reads one summary (including the match), activates [onClick] and offers Save / Remove as a custom
- * action. The photo is the shared element that grows into the detail page.
+ * action; a long press ([onLongPress], e.g. Add to compare) is offered the same way. The photo is the shared
+ * element that grows into the detail page.
  */
 @Composable
 fun PropertyCard(
@@ -93,6 +94,8 @@ fun PropertyCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     matchPercent: Int? = null,
+    onLongPress: (() -> Unit)? = null,
+    longPressLabel: String? = null,
 ) {
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     val price = PriceFormatter.formatPerMonth(property.rent, locale, stringResource(R.string.per_month))
@@ -126,15 +129,26 @@ fun PropertyCard(
                         true
                     }
                     customActions =
-                        listOf(
-                            CustomAccessibilityAction(actionLabel) {
-                                onToggleFavorite()
-                                true
-                            },
-                        )
-                }.pointerInput(isFavorite) {
+                        buildList {
+                            add(
+                                CustomAccessibilityAction(actionLabel) {
+                                    onToggleFavorite()
+                                    true
+                                },
+                            )
+                            if (onLongPress != null && longPressLabel != null) {
+                                add(
+                                    CustomAccessibilityAction(longPressLabel) {
+                                        onLongPress()
+                                        true
+                                    },
+                                )
+                            }
+                        }
+                }.pointerInput(isFavorite, onLongPress != null) {
                     detectTapGestures(
                         onTap = { currentOnClick() },
+                        onLongPress = onLongPress?.let { action -> { action() } },
                         onDoubleTap = {
                             if (!isFavorite) onToggleFavorite()
                             scope.launch {
@@ -146,7 +160,7 @@ fun PropertyCard(
                     )
                 }.testTag("card_${property.id}"),
     ) {
-        SharedPropertyPhoto(propertyId = property.id) { photoModifier -> CardPhoto(property, photoModifier) }
+        SharedPropertyPhoto(propertyId = property.id) { photoModifier -> ListingCoverPhoto(property, photoModifier) }
         Box(
             Modifier
                 .fillMaxSize()
@@ -185,8 +199,9 @@ fun PropertyCard(
     }
 }
 
+/** A listing's cover photo, cropped to fill, with its dominant colour as placeholder and the offline fallback. */
 @Composable
-private fun CardPhoto(
+fun ListingCoverPhoto(
     property: Property,
     modifier: Modifier = Modifier,
 ) {

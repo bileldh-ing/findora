@@ -3,6 +3,7 @@ package com.findora.app.feature.viewing
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.ReceiveTurbine
 import com.findora.app.core.domain.model.InteractionEvent
+import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.PropertyRepository
@@ -64,6 +65,24 @@ class RecordingInteractions : InteractionRepository {
     val events = MutableStateFlow<List<InteractionEvent>>(emptyList())
 
     override suspend fun record(event: InteractionEvent) = events.update { it + event }
+
+    override suspend fun remove(event: InteractionEvent) =
+        events.update { list ->
+            val index = list.indexOfLast { it == event }
+            if (index < 0) list else list.toMutableList().apply { removeAt(index) }
+        }
+
+    override fun observePropertyIds(
+        userId: String,
+        types: Set<InteractionType>,
+    ): Flow<List<String>> =
+        events.map { list ->
+            list
+                .filter { it.userId == userId && it.type in types }
+                .asReversed()
+                .map { it.propertyId }
+                .distinct()
+        }
 
     override fun observeRecent(
         userId: String,
