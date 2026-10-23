@@ -92,74 +92,68 @@ class DeckViewModelTest {
             assertEquals(scores.sortedDescending(), scores)
         }
 
+    private fun DeckViewModel.currentId(): String = requireNotNull(state.value.current).property.id
+
+    private fun lastType(): InteractionType = interactions.events.value.last().type
+
+    private suspend fun saved(): Set<String> = favorites.observeFavoriteIds(guest).first()
+
     @Test
-    fun saveSkipSuperLikeAndUndoArePersistedAndReverted() =
+    fun saveSkipAndSuperLikeArePersisted() =
         runTest(main.dispatcher) {
             val vm = viewModel()
             vm.effects.test {
-                val first =
-                    vm.state.value.current!!
-                        .property.id
+                val first = vm.currentId()
                 vm.onEvent(DeckUiEvent.Act(DeckAction.Save))
-                assertTrue(first in favorites.observeFavoriteIds(guest).first())
-                assertEquals(
-                    InteractionType.DeckSaved,
-                    interactions.events.value
-                        .last()
-                        .type,
-                )
+                assertTrue(first in saved())
+                assertEquals(InteractionType.DeckSaved, lastType())
                 assertEquals(2, vm.state.value.position)
                 assertEquals(DeckAction.Save, vm.state.value.lastAction)
 
-                val second =
-                    vm.state.value.current!!
-                        .property.id
+                val second = vm.currentId()
                 vm.onEvent(DeckUiEvent.Act(DeckAction.Skip))
-                assertFalse(second in favorites.observeFavoriteIds(guest).first())
-                assertEquals(
-                    InteractionType.DeckSkipped,
-                    interactions.events.value
-                        .last()
-                        .type,
-                )
+                assertFalse(second in saved())
+                assertEquals(InteractionType.DeckSkipped, lastType())
 
-                val third =
-                    vm.state.value.current!!
-                        .property.id
+                val third = vm.currentId()
                 vm.onEvent(DeckUiEvent.Act(DeckAction.SuperLike))
                 assertEquals(DeckUiEffect.OpenScheduleViewing(third), awaitItem())
-                assertTrue(third in favorites.observeFavoriteIds(guest).first())
+                assertTrue(third in saved())
+                assertEquals(InteractionType.DeckSuperLiked, lastType())
                 assertEquals(2, vm.state.value.savedCount)
-
-                vm.onEvent(DeckUiEvent.Undo)
-                assertFalse(third in favorites.observeFavoriteIds(guest).first())
-                assertEquals(
-                    third,
-                    vm.state.value.current!!
-                        .property.id,
-                )
-                assertEquals(DeckAction.Skip, vm.state.value.lastAction)
-
-                vm.onEvent(DeckUiEvent.Undo)
-                assertEquals(
-                    second,
-                    vm.state.value.current!!
-                        .property.id,
-                )
-                assertTrue(interactions.events.value.none { it.type == InteractionType.DeckSkipped })
-
-                vm.onEvent(DeckUiEvent.Undo)
-                assertEquals(
-                    first,
-                    vm.state.value.current!!
-                        .property.id,
-                )
-                assertTrue(favorites.observeFavoriteIds(guest).first().isEmpty())
-                assertTrue(interactions.events.value.isEmpty())
-                assertFalse(vm.state.value.canUndo)
-                assertEquals(0, vm.state.value.savedCount)
                 expectNoEvents()
             }
+        }
+
+    @Test
+    fun undoRevertsTheActionsOneByOneNewestFirst() =
+        runTest(main.dispatcher) {
+            val vm = viewModel()
+            val first = vm.currentId()
+            vm.onEvent(DeckUiEvent.Act(DeckAction.Save))
+            val second = vm.currentId()
+            vm.onEvent(DeckUiEvent.Act(DeckAction.Skip))
+            val third = vm.currentId()
+            vm.onEvent(DeckUiEvent.Act(DeckAction.SuperLike))
+
+            vm.onEvent(DeckUiEvent.Undo)
+            assertFalse(third in saved())
+            assertEquals(third, vm.currentId())
+            assertEquals(DeckAction.Skip, vm.state.value.lastAction)
+
+            vm.onEvent(DeckUiEvent.Undo)
+            assertEquals(second, vm.currentId())
+            assertTrue(interactions.events.value.none { it.type == InteractionType.DeckSkipped })
+
+            vm.onEvent(DeckUiEvent.Undo)
+            assertEquals(first, vm.currentId())
+            assertTrue(saved().isEmpty())
+            assertTrue(interactions.events.value.isEmpty())
+            assertFalse(vm.state.value.canUndo)
+            assertEquals(0, vm.state.value.savedCount)
+            // Nothing left to undo: a further Undo changes nothing.
+            vm.onEvent(DeckUiEvent.Undo)
+            assertEquals(first, vm.currentId())
         }
 
     @Test
