@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Conversations with listing agents, owned by one user id (a signed-in account or the guest id). Every read and
  * write takes the user id, so one user can never see or change another user's threads.
+ *
+ * Each step of a message's life (sent, delivered, read by the agent, answered, read by the user) is one call,
+ * which is why the interface is wider than the detekt default.
  */
+@Suppress("TooManyFunctions")
 interface ChatRepository {
     /** The user's threads that have at least one message, newest activity first. */
     fun observeConversations(userId: String): Flow<List<ConversationSummary>>

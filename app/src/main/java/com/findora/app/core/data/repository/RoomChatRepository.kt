@@ -26,6 +26,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /** Room-backed threads. Agent messages are sent by `agent:<agentId>` and addressed to the thread's user. */
+@Suppress("TooManyFunctions") // Implements ChatRepository one-to-one.
 @Singleton
 class RoomChatRepository
     @Inject

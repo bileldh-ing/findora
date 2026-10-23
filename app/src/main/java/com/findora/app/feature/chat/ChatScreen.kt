@@ -82,7 +82,8 @@ fun ChatRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    LifecycleResumeEffect(viewModel) {
+    // Keyed on Unit: the ViewModel lives as long as this destination, so the effect never needs a restart.
+    LifecycleResumeEffect(Unit) {
         viewModel.onEvent(ChatUiEvent.VisibilityChanged(true))
         onPauseOrDispose { viewModel.onEvent(ChatUiEvent.VisibilityChanged(false)) }
     }

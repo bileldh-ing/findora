@@ -85,11 +85,13 @@ class DatabaseSchemaTest {
             }
             db.execSQL(
                 "INSERT INTO conversations (id, user_id, property_id, property_title, agent_id, agent_name, " +
-                    "agent_initials, agent_color, created_at) VALUES ('c1', 'u1', 'p1', 'Home', 'a1', 'Anu', 'AT', 0, 0)",
+                    "agent_initials, agent_color, created_at) " +
+                    "VALUES ('c1', 'u1', 'p1', 'Home', 'a1', 'Anu', 'AT', 0, 0)",
             )
             db.execSQL(
                 "INSERT INTO notifications (user_id, kind, subject, preview, property_id, conversation_id, " +
-                    "event_at, created_at, read_at) VALUES ('u1', 'new_message', 'Anu', 'Hi', 'p1', 'c1', NULL, 0, NULL)",
+                    "event_at, created_at, read_at) " +
+                    "VALUES ('u1', 'new_message', 'Anu', 'Hi', 'p1', 'c1', NULL, 0, NULL)",
             )
             db.query("SELECT COUNT(*) FROM notifications WHERE user_id = 'u1'").use { cursor ->
                 assertTrue(cursor.moveToFirst())

@@ -48,6 +48,8 @@ import com.findora.app.core.data.local.entity.ViewingEntity
     // (with a default). Both are pure additions, so Room generates the migrations; DatabaseSchemaTest runs them.
     autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
 )
+// One DAO accessor per table group is the Room convention, so the function count grows with the schema.
+@Suppress("TooManyFunctions")
 @TypeConverters(Converters::class)
 abstract class FindoraDatabase : RoomDatabase() {
     abstract fun propertyDao(): PropertyDao
