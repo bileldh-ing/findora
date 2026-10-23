@@ -69,6 +69,16 @@ import com.findora.app.core.ui.PropertyCard
 import com.findora.app.core.ui.PropertyCardSkeleton
 import com.findora.app.core.ui.StateMessage
 import kotlinx.coroutines.delay
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import com.findora.app.feature.compare.CompareTray
+import com.findora.app.feature.compare.CompareTrayEvent
+import com.findora.app.feature.compare.CompareTrayHeight
+import com.findora.app.feature.compare.CompareTrayViewModel
+import com.findora.app.feature.compare.compareMessages
+import com.findora.app.feature.match.deck.DreamMatchEntry
+import kotlinx.coroutines.launch
 
 private const val SKELETON_COUNT = 6
 private const val STAGGER_MILLIS = 60L
@@ -88,24 +98,68 @@ fun HomeRoute(
     onOpenProfile: () -> Unit,
     onOpenProperty: (String) -> Unit,
     onOpenMatchQuiz: () -> Unit,
+    onOpenDreamMatch: () -> Unit,
+    onOpenCompare: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = hiltViewModel(),
+    compareViewModel: CompareTrayViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listings = viewModel.listings.collectAsLazyPagingItems()
-    HomeScreen(
-        state = state,
-        listings = listings,
-        onEvent = viewModel::onEvent,
-        onOpenSearch = onOpenSearch,
-        onOpenProfile = onOpenProfile,
-        onOpenProperty = onOpenProperty,
-        onOpenMatchQuiz = onOpenMatchQuiz,
-        modifier = modifier,
-        contentPadding = contentPadding,
-    )
+    val tray by compareViewModel.state.collectAsStateWithLifecycle()
+    val reduceMotion = rememberReducedMotion()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val messages = compareMessages()
+    val currentOnOpenCompare by rememberUpdatedState(onOpenCompare)
+    LaunchedEffect(compareViewModel) {
+        compareViewModel.effects.collect { effect ->
+            launch {
+                val result = snackbarHostState.showSnackbar(messages.text(effect.result), messages.view)
+                if (result == SnackbarResult.ActionPerformed) currentOnOpenCompare()
+            }
+        }
+    }
+    val trayPadding = if (tray.isVisible) CompareTrayHeight else 0.dp
+    Box(modifier.fillMaxSize()) {
+        HomeScreen(
+            state = state,
+            listings = listings,
+            onEvent = viewModel::onEvent,
+            onOpenSearch = onOpenSearch,
+            onOpenProfile = onOpenProfile,
+            onOpenProperty = onOpenProperty,
+            onOpenMatchQuiz = onOpenMatchQuiz,
+            onOpenDreamMatch = onOpenDreamMatch,
+            onAddToCompare = { compareViewModel.onEvent(CompareTrayEvent.Add(it)) },
+            contentPadding = contentPadding.plusBottom(trayPadding),
+            reduceMotion = reduceMotion,
+        )
+        CompareTray(
+            state = tray,
+            onCompare = onOpenCompare,
+            onClear = { compareViewModel.onEvent(CompareTrayEvent.Clear) },
+            reduceMotion = reduceMotion,
+            modifier =
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        start = FindoraTheme.spacing.screenHorizontal,
+                        end = FindoraTheme.spacing.screenHorizontal,
+                        bottom = contentPadding.calculateBottomPadding(),
+                    ),
+        )
+        SnackbarHost(
+            snackbarHostState,
+            Modifier.align(Alignment.BottomCenter).padding(bottom = contentPadding.calculateBottomPadding() + trayPadding),
+        )
+    }
 }
+
+private fun PaddingValues.plusBottom(extra: Dp): PaddingValues =
+    object : PaddingValues by this {
+        override fun calculateBottomPadding(): Dp = this@plusBottom.calculateBottomPadding() + extra
+    }
 
 /**
  * The reference Home: location chip, bell and avatar, the "Discover / Your New House" title, search pill
@@ -126,6 +180,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     reduceMotion: Boolean = rememberReducedMotion(),
+    onOpenDreamMatch: (() -> Unit)? = null,
+    onAddToCompare: ((String) -> Unit)? = null,
 ) {
     var sheet by rememberSaveable { mutableStateOf(HomeSheet.None) }
     val gridState = rememberLazyGridState()
@@ -215,6 +271,14 @@ fun HomeScreen(
                         )
                     }
                 }
+                if (onOpenDreamMatch != null) {
+                    fullWidth("dreamMatch") {
+                        DreamMatchEntry(
+                            onClick = onOpenDreamMatch,
+                            modifier = Modifier.padding(top = FindoraTheme.spacing.xs),
+                        )
+                    }
+                }
                 if (feed == FeedContent.Offline) {
                     fullWidth("offline") {
                         InlineBanner(
@@ -237,6 +301,7 @@ fun HomeScreen(
                     state = state,
                     onEvent = onEvent,
                     onOpenProperty = onOpenProperty,
+                    onAddToCompare = onAddToCompare,
                     animateEntrance = { id -> !reduceMotion && id !in revealed },
                     onRevealed = { id -> revealed += id },
                 )
@@ -296,6 +361,7 @@ private fun LazyGridScope.feedItems(
     state: HomeUiState,
     onEvent: (HomeUiEvent) -> Unit,
     onOpenProperty: (String) -> Unit,
+    onAddToCompare: ((String) -> Unit)?,
     animateEntrance: (String) -> Boolean,
     onRevealed: (String) -> Unit,
 ) {
@@ -345,6 +411,7 @@ private fun LazyGridScope.feedItems(
                         onReveal = { onRevealed(property.id) },
                         onToggleFavorite = { onEvent(HomeUiEvent.ToggleFavorite(property.id)) },
                         onClick = { onOpenProperty(property.id) },
+                        onLongPress = onAddToCompare?.let { add -> { add(property.id) } },
                         modifier = Modifier.animateItem(),
                     )
                 }
@@ -370,6 +437,7 @@ private fun FeedCard(
     onReveal: () -> Unit,
     onToggleFavorite: () -> Unit,
     onClick: () -> Unit,
+    onLongPress: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val animate = animateEntrance && index < STAGGERED_ITEMS
@@ -389,6 +457,8 @@ private fun FeedCard(
         onToggleFavorite = onToggleFavorite,
         onClick = onClick,
         matchPercent = matchPercent,
+        onLongPress = onLongPress,
+        longPressLabel = if (onLongPress != null) stringResource(R.string.compare_add) else null,
         modifier =
             modifier.graphicsLayer {
                 alpha = progress.value

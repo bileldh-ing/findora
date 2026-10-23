@@ -275,6 +275,30 @@ object FindoraIcons {
         )
     }
 
+    /** Curved arrow back: Undo in the Dream Match deck (mirrors in right-to-left layouts). */
+    val Undo: ImageVector by lazy {
+        outline("Undo", "M9 14 4 9l5-5", "M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11", autoMirror = true)
+    }
+
+    /** Three columns: Compare. */
+    val Compare: ImageVector by lazy {
+        outline(
+            "Compare",
+            "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+            "M9 3v18",
+            "M15 3v18",
+        )
+    }
+
+    /** Four-point sparkle: Dream Match and the super like. */
+    val Sparkles: ImageVector by lazy {
+        outline(
+            "Sparkles",
+            "M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z",
+            "M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z",
+        )
+    }
+
     /** Blue shield with a white check: the verified badge on cards (not tinted). */
     val VerifiedBadge: ImageVector by lazy {
         ImageVector

@@ -7,6 +7,7 @@ import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeFavoritesRepository
+import com.findora.app.core.testing.FakeInteractionRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
 import com.findora.app.core.testing.fileSeedReader
@@ -33,7 +34,7 @@ class SavedAndLocationsViewModelTest {
             val second = seedProperties[1].id
             favorites.toggle(AuthRepository.GUEST_USER_ID, first)
             favorites.toggle(auth.account.id, second)
-            val vm = SavedViewModel(favorites, auth)
+            val vm = SavedViewModel(favorites, auth, FakeInteractionRepository())
             assertTrue(SavedUiState().isLoading)
             vm.state.test {
                 var state = awaitItem()

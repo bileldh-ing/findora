@@ -5,6 +5,7 @@ import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.domain.match.ObserveMatchContext
 import com.findora.app.core.domain.match.PreferenceProfile
 import com.findora.app.core.domain.model.InteractionEvent
+import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.MatchProfileRepository
@@ -44,6 +45,24 @@ class FakeInteractionRepository : InteractionRepository {
     val events = MutableStateFlow<List<InteractionEvent>>(emptyList())
 
     override suspend fun record(event: InteractionEvent) = events.update { it + event }
+
+    override suspend fun remove(event: InteractionEvent) =
+        events.update { list ->
+            val index = list.indexOfLast { it == event }
+            if (index < 0) list else list.toMutableList().apply { removeAt(index) }
+        }
+
+    override fun observePropertyIds(
+        userId: String,
+        types: Set<InteractionType>,
+    ): Flow<List<String>> =
+        events.map { list ->
+            list
+                .filter { it.userId == userId && it.type in types }
+                .asReversed()
+                .map { it.propertyId }
+                .distinct()
+        }
 
     override fun observeRecent(
         userId: String,

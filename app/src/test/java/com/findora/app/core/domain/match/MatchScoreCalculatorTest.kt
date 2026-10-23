@@ -204,7 +204,7 @@ class MatchScoreCalculatorTest {
 
     private fun weightSign(event: InteractionEvent): Int =
         when (event.type) {
-            InteractionType.Unfavorited, InteractionType.Dismissed -> -1
+            InteractionType.Unfavorited, InteractionType.Dismissed, InteractionType.DeckSkipped -> -1
             else -> 1
         }
 

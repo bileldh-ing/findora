@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.findora.app.core.common.AppClock
+import com.findora.app.core.domain.compare.CompareAddResult
 import com.findora.app.core.domain.insight.NeighbourhoodScore
 import com.findora.app.core.domain.insight.PriceTrend
 import com.findora.app.core.domain.match.MatchContext
@@ -15,6 +16,7 @@ import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.repository.AuthRepository
+import com.findora.app.core.domain.repository.CompareRepository
 import com.findora.app.core.domain.repository.FavoritesRepository
 import com.findora.app.core.domain.repository.InteractionRepository
 import com.findora.app.core.domain.repository.PropertyRepository
@@ -66,6 +68,8 @@ sealed interface DetailUiState {
         val affordability: AffordabilityUiState = AffordabilityUiState(property.rent),
         /** The listing scored against the user's preference profile; null when they have none. */
         val match: MatchResult? = null,
+        /** True while the listing is in the user's compare selection. */
+        val isInCompare: Boolean = false,
     ) : DetailUiState
 
     data class Error(
@@ -90,33 +94,47 @@ sealed interface DetailUiEvent {
 
     data object OpenInMaps : DetailUiEvent
 
+    /** Adds the listing to the compare selection, or removes it when it is already there. */
+    data object ToggleCompare : DetailUiEvent
+
     /** Anything in the "Can I afford it?" calculator. */
     data class Affordability(
         val event: AffordabilityEvent,
     ) : DetailUiEvent
 }
 
-/** One-shot actions the screen performs with an Android intent. */
+/** One-shot actions: [External] ones are handed to another app with an Android intent. */
 sealed interface DetailUiEffect {
+    /** Performed by another app (share sheet, dialer, e-mail, maps). */
+    sealed interface External : DetailUiEffect
+
     data class Share(
         val title: String,
         val link: String,
-    ) : DetailUiEffect
+    ) : External
 
     data class Dial(
         val phone: String,
-    ) : DetailUiEffect
+    ) : External
 
     data class Email(
         val address: String,
         val listingTitle: String,
         val link: String,
-    ) : DetailUiEffect
+    ) : External
 
     data class OpenMap(
         val point: GeoPoint,
         val label: String,
+    ) : External
+
+    /** The listing was offered to the compare selection; the snackbar says what happened. */
+    data class CompareAdded(
+        val result: CompareAddResult,
     ) : DetailUiEffect
+
+    /** The listing was taken out of the compare selection. */
+    data object CompareRemoved : DetailUiEffect
 }
 
 /**
@@ -136,6 +154,7 @@ class DetailViewModel
         private val auth: AuthRepository,
         private val clock: AppClock,
         observeMatchContext: ObserveMatchContext,
+        private val compare: CompareRepository,
     ) : ViewModel() {
         /** Read by name (type-safe routes store each field under its own key), so this stays JVM-testable. */
         val propertyId: String = requireNotNull(savedStateHandle.get<String>(PROPERTY_ID_KEY)) { "propertyId missing" }
@@ -195,6 +214,7 @@ class DetailViewModel
                 DetailUiEvent.OpenInMaps ->
                     withProperty { property -> DetailUiEffect.OpenMap(property.location, property.title) }
                 is DetailUiEvent.Affordability -> onAffordability(event.event)
+                DetailUiEvent.ToggleCompare -> toggleCompare()
             }
         }
 
@@ -208,7 +228,8 @@ class DetailViewModel
                         similarTo(property),
                         affordability,
                         matchContext,
-                    ) { favoriteIds, similar, form, context ->
+                        userId.flatMapLatest { compare.observe(it) },
+                    ) { favoriteIds, similar, form, context, compared ->
                         DetailUiState.Content(
                             property = property,
                             isFavorite = property.id in favoriteIds,
@@ -216,6 +237,7 @@ class DetailViewModel
                             similarFavoriteIds = similar.mapTo(HashSet()) { it.id }.intersect(favoriteIds),
                             affordability = form?.copy(rent = property.rent) ?: AffordabilityUiState(property.rent),
                             match = context?.score(property),
+                            isInCompare = property.id in compared,
                         )
                     }
                 }
@@ -235,6 +257,21 @@ class DetailViewModel
             viewModelScope.launch {
                 val nowFavorite = favorites.toggle(userId.first(), id)
                 record(id, if (nowFavorite) InteractionType.Favorited else InteractionType.Unfavorited)
+            }
+        }
+
+        private fun toggleCompare() {
+            val content = state.value as? DetailUiState.Content ?: return
+            viewModelScope.launch {
+                val user = userId.first()
+                val effect =
+                    if (content.isInCompare) {
+                        compare.remove(user, propertyId)
+                        DetailUiEffect.CompareRemoved
+                    } else {
+                        DetailUiEffect.CompareAdded(compare.add(user, propertyId))
+                    }
+                effectChannel.send(effect)
             }
         }
 

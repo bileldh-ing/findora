@@ -21,6 +21,8 @@ import com.findora.app.core.data.local.dao.SavedSearchDao
 import com.findora.app.core.data.local.dao.UserDao
 import com.findora.app.core.data.local.dao.ViewingDao
 import com.findora.app.core.data.match.DataStoreMatchProfileRepository
+import com.findora.app.core.data.repository.InMemoryCompareRepository
+import com.findora.app.core.domain.repository.CompareRepository
 import com.findora.app.core.data.remote.FakeRemoteDataSource
 import com.findora.app.core.data.remote.RemoteDataSource
 import com.findora.app.core.data.repository.CachePolicy
@@ -104,6 +106,9 @@ abstract class DataBindingsModule {
 abstract class MatchBindingsModule {
     @Binds
     abstract fun bindMatchProfileRepository(impl: DataStoreMatchProfileRepository): MatchProfileRepository
+
+    @Binds
+    abstract fun bindCompareRepository(impl: InMemoryCompareRepository): CompareRepository
 }
 
 /** Viewing bookings and their WorkManager reminders. */

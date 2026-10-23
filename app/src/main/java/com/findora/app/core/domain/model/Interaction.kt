@@ -13,9 +13,21 @@ enum class InteractionType(
     ContactedAgent("contacted_agent"),
     Dismissed("dismissed"),
     ScheduledViewing("schedule_viewing"),
+
+    /** Swiped right (or "Save") in the Dream Match deck: saved and added to the Matches collection. */
+    DeckSaved("save_deck"),
+
+    /** Swiped up (or "Super like") in the Dream Match deck: saved, then the viewing booking opens. */
+    DeckSuperLiked("super_like_deck"),
+
+    /** Swiped left (or "Skip") in the Dream Match deck: a mild negative signal. */
+    DeckSkipped("skip_deck"),
     ;
 
     companion object {
+        /** The deck actions that put a home in the user's Matches collection. */
+        val DeckMatches: Set<InteractionType> = setOf(DeckSaved, DeckSuperLiked)
+
         fun fromId(id: String): InteractionType =
             entries.firstOrNull { it.id == id } ?: throw IllegalArgumentException("Unknown interaction: $id")
     }

@@ -22,8 +22,11 @@ import com.findora.app.feature.auth.signup.SignUpRoute
 import com.findora.app.feature.auth.unlock.UnlockRoute
 import com.findora.app.feature.auth.welcome.WelcomeRoute
 import com.findora.app.feature.designsystem.DesignSystemScreen
+import com.findora.app.feature.compare.CompareRoute
 import com.findora.app.feature.detail.DetailRoute
+import com.findora.app.feature.match.deck.DeckRoute
 import com.findora.app.feature.match.quiz.MatchQuizRoute
+import com.findora.app.feature.saved.MatchesRoute
 import com.findora.app.feature.search.SearchRoute
 import com.findora.app.feature.viewing.ScheduleViewingRoute
 import com.findora.app.feature.viewing.ViewingsRoute
@@ -108,6 +111,8 @@ private fun FindoraGraph(
                     onCreateAccount = { navController.navigate(FindoraRoute.SignUp) },
                     onOpenViewings = { navController.navigate(FindoraRoute.Viewings) },
                     onOpenMatchQuiz = { navController.navigate(FindoraRoute.MatchQuiz) },
+                    onOpenDreamMatch = { navController.navigate(FindoraRoute.DreamMatch) },
+                    onOpenCompare = { navController.navigate(FindoraRoute.Compare) },
                     onOpenDesignSystem = openDesignSystem,
                 )
             }
@@ -120,8 +125,35 @@ private fun FindoraGraph(
                     onBack = { navController.popBackStack() },
                     onOpenProperty = openProperty,
                     onScheduleViewing = { id -> navController.navigate(FindoraRoute.ScheduleViewing(id)) },
+                    onOpenCompare = { navController.navigate(FindoraRoute.Compare) { launchSingleTop = true } },
                 )
             }
+        }
+        composable<FindoraRoute.DreamMatch> {
+            DeckRoute(
+                onBack = { navController.popBackStack() },
+                onOpenMatches = {
+                    navController.navigate(FindoraRoute.Matches) {
+                        popUpTo<FindoraRoute.DreamMatch> { inclusive = true }
+                    }
+                },
+                onOpenProperty = openProperty,
+                onScheduleViewing = { id -> navController.navigate(FindoraRoute.ScheduleViewing(id)) },
+            )
+        }
+        composable<FindoraRoute.Matches> {
+            MatchesRoute(
+                onBack = { navController.popBackStack() },
+                onOpenProperty = openProperty,
+                onOpenDreamMatch = {
+                    navController.navigate(FindoraRoute.DreamMatch) {
+                        popUpTo<FindoraRoute.Matches> { inclusive = true }
+                    }
+                },
+            )
+        }
+        composable<FindoraRoute.Compare> {
+            CompareRoute(onBack = { navController.popBackStack() }, onOpenProperty = openProperty)
         }
         composable<FindoraRoute.ScheduleViewing> {
             ScheduleViewingRoute(

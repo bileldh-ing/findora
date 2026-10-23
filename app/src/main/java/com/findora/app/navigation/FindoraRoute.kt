@@ -48,6 +48,18 @@ sealed interface FindoraRoute {
     @Serializable
     data object MatchQuiz : FindoraRoute
 
+    /** Dream Match: swipe through the region's homes, best match first (from Home and Saved). */
+    @Serializable
+    data object DreamMatch : FindoraRoute
+
+    /** The homes kept in Dream Match ("See my matches" at the end of the deck). */
+    @Serializable
+    data object Matches : FindoraRoute
+
+    /** Up to three homes side by side (from the Home compare tray and the detail page). */
+    @Serializable
+    data object Compare : FindoraRoute
+
     /** Debug-only catalogue of every design-system component. */
     @Serializable
     data object DesignSystem : FindoraRoute
