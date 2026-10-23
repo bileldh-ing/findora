@@ -10,6 +10,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
@@ -69,6 +70,7 @@ class HomeScreenTest {
     }
     private val events = mutableListOf<HomeUiEvent>()
     private val opened = mutableListOf<String>()
+    private var quizOpens = 0
 
     /** Home wired to an in-memory feed: chips, favourites and filters really change what the grid shows. */
     @Composable
@@ -122,6 +124,7 @@ class HomeScreenTest {
                 onOpenSearch = { events += HomeUiEvent.Refresh },
                 onOpenProfile = {},
                 onOpenProperty = { opened += it },
+                onOpenMatchQuiz = { quizOpens += 1 },
                 reduceMotion = true,
             )
         }
@@ -316,5 +319,57 @@ class HomeScreenTest {
     fun emptyNotificationsSayAllCaughtUp() {
         compose.setContent { FindoraTheme { NotificationsSheetContent(messages = emptyList(), onDismissMessage = {}) } }
         compose.onNodeWithText("You're all caught up").assertIsDisplayed()
+    }
+
+    @Test
+    fun withoutAProfileTheBestMatchBannerOpensTheQuizAndCardsHaveNoBadge() {
+        compose.setContent { InteractiveHome(homeState().copy(hasMatchProfile = false)) }
+        showInGrid(hasTestTag("matchBanner"))
+        compose.onNodeWithText("Find your best match").assertIsDisplayed()
+        compose.onNodeWithTag("matchBannerAction").performClick()
+        assertEquals(1, quizOpens)
+        compose.onAllNodes(hasTestTag("matchBadge"), useUnmergedTree = true).assertCountEquals(0)
+    }
+
+    @Test
+    fun withAProfileCardsShowAndAnnounceTheirMatch() {
+        val georgie = repository.matching("kerala", PropertyFilter()).first { it.title == "Georgie House" }
+        compose.setContent {
+            InteractiveHome(homeState().copy(hasMatchProfile = true, matchScores = mapOf(georgie.id to 92)))
+        }
+        compose.onAllNodes(hasTestTag("matchBanner")).assertCountEquals(0)
+        showInGrid(hasTestTag("card_${georgie.id}"))
+        val description =
+            compose
+                .onNodeWithTag("card_${georgie.id}")
+                .fetchSemanticsNode()
+                .config[SemanticsProperties.ContentDescription]
+                .joinToString()
+        assertTrue(description, description.contains("92% match."))
+        compose.onNodeWithText("92% match", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun bestMatchSortIsOfferedOnlyWithAProfile() {
+        var applied: PropertyFilter? = null
+        var showBestMatch by mutableStateOf(false)
+        compose.setContent {
+            FindoraTheme {
+                FilterSheetContent(
+                    initial = PropertyFilter(),
+                    bounds = null,
+                    currency = Currency.INR,
+                    showBestMatch = showBestMatch,
+                    onApply = { applied = it },
+                )
+            }
+        }
+        compose.onAllNodes(hasTestTag("sort_BestMatch")).assertCountEquals(0)
+        compose.onNodeWithTag("sort_Recommended").performScrollTo().assertIsSelected()
+        showBestMatch = true
+        compose.onNodeWithTag("sort_BestMatch").performScrollTo().performClick()
+        compose.onNodeWithTag("applyFilters").performScrollTo().performClick()
+        assertEquals(SortOrder.BestMatch, applied?.sort)
+        assertEquals(1, applied?.activeCount)
     }
 }

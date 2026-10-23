@@ -65,6 +65,7 @@ fun HomeSheets(
                     initial = state.filter,
                     bounds = state.bounds,
                     currency = state.region?.currency ?: Currency.INR,
+                    showBestMatch = state.hasMatchProfile == true,
                     onApply = { filter ->
                         onEvent(HomeUiEvent.ApplyFilter(filter))
                         onDismiss()

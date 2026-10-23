@@ -49,6 +49,7 @@ fun SettingsRoute(
     onSignedOut: () -> Unit,
     onCreateAccount: () -> Unit,
     onOpenViewings: () -> Unit,
+    onOpenMatchPreferences: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -68,6 +69,7 @@ fun SettingsRoute(
         onEvent = viewModel::onEvent,
         onCreateAccount = onCreateAccount,
         onOpenViewings = onOpenViewings,
+        onOpenMatchPreferences = onOpenMatchPreferences,
         onOpenDesignSystem = onOpenDesignSystem,
         modifier = modifier,
         contentPadding = contentPadding,
@@ -75,8 +77,8 @@ fun SettingsRoute(
 }
 
 /**
- * Account and app settings. Only working controls are shown: theme, biometric lock (when the device supports
- * it), log out and delete account. [onOpenDesignSystem] is null in release builds, so that row disappears.
+ * Account and app settings. Only working controls are shown: viewings, match preferences (the quiz), theme,
+ * biometric lock (when the device supports it), log out and delete account. [onOpenDesignSystem] is null in release builds, so that row disappears.
  */
 @Composable
 fun SettingsScreen(
@@ -84,6 +86,7 @@ fun SettingsScreen(
     onEvent: (SettingsUiEvent) -> Unit,
     onCreateAccount: () -> Unit,
     onOpenViewings: () -> Unit,
+    onOpenMatchPreferences: () -> Unit,
     onOpenDesignSystem: (() -> Unit)?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -114,6 +117,12 @@ fun SettingsScreen(
             icon = FindoraIcons.Calendar,
             onClick = onOpenViewings,
             modifier = Modifier.testTag("settingsViewings"),
+        )
+        ActionRow(
+            title = stringResource(R.string.settings_match_preferences),
+            icon = FindoraIcons.Sliders,
+            onClick = onOpenMatchPreferences,
+            modifier = Modifier.testTag("settingsMatchPreferences"),
         )
 
         SectionTitle(stringResource(R.string.settings_appearance))

@@ -87,6 +87,7 @@ fun HomeRoute(
     onOpenSearch: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenProperty: (String) -> Unit,
+    onOpenMatchQuiz: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = hiltViewModel(),
@@ -100,6 +101,7 @@ fun HomeRoute(
         onOpenSearch = onOpenSearch,
         onOpenProfile = onOpenProfile,
         onOpenProperty = onOpenProperty,
+        onOpenMatchQuiz = onOpenMatchQuiz,
         modifier = modifier,
         contentPadding = contentPadding,
     )
@@ -120,6 +122,7 @@ fun HomeScreen(
     onOpenSearch: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenProperty: (String) -> Unit,
+    onOpenMatchQuiz: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     reduceMotion: Boolean = rememberReducedMotion(),
@@ -203,6 +206,14 @@ fun HomeScreen(
                         contentPadding = PaddingValues(horizontal = horizontal),
                         modifier = Modifier.bleed(horizontal),
                     )
+                }
+                if (state.hasMatchProfile == false) {
+                    fullWidth("matchBanner") {
+                        MatchQuizBanner(
+                            onClick = onOpenMatchQuiz,
+                            modifier = Modifier.padding(top = FindoraTheme.spacing.xs),
+                        )
+                    }
                 }
                 if (feed == FeedContent.Offline) {
                     fullWidth("offline") {
@@ -329,6 +340,7 @@ private fun LazyGridScope.feedItems(
                         property = property,
                         index = index,
                         isFavorite = property.id in state.favoriteIds,
+                        matchPercent = state.matchScores[property.id],
                         animateEntrance = animateEntrance(property.id),
                         onReveal = { onRevealed(property.id) },
                         onToggleFavorite = { onEvent(HomeUiEvent.ToggleFavorite(property.id)) },
@@ -353,6 +365,7 @@ private fun FeedCard(
     property: Property,
     index: Int,
     isFavorite: Boolean,
+    matchPercent: Int?,
     animateEntrance: Boolean,
     onReveal: () -> Unit,
     onToggleFavorite: () -> Unit,
@@ -375,6 +388,7 @@ private fun FeedCard(
         isFavorite = isFavorite,
         onToggleFavorite = onToggleFavorite,
         onClick = onClick,
+        matchPercent = matchPercent,
         modifier =
             modifier.graphicsLayer {
                 alpha = progress.value

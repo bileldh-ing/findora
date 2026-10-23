@@ -1,7 +1,11 @@
 package com.findora.app.core.domain.model
 
-/** How listings are ordered. "Best match" ranks verified, well-rated, well-reviewed homes first until Phase 5. */
-enum class SortOrder { BestMatch, PriceLowToHigh, PriceHighToLow, Newest, Rating }
+/**
+ * How listings are ordered. "Recommended" (the default) ranks verified, well-rated, well-reviewed homes first.
+ * "Best match" orders by the user's match score and leaves out homes missing a must-have; it is offered once a
+ * preference profile exists (without one it falls back to the Recommended order).
+ */
+enum class SortOrder { Recommended, BestMatch, PriceLowToHigh, PriceHighToLow, Newest, Rating }
 
 /** The Home category chips. "Rental House" shows every rental; the others narrow to one [PropertyType]. */
 enum class HomeCategory(
@@ -34,7 +38,7 @@ data class PropertyFilter(
     val petFriendlyOnly: Boolean = false,
     val parkingOnly: Boolean = false,
     val amenities: Set<Amenity> = emptySet(),
-    val sort: SortOrder = SortOrder.BestMatch,
+    val sort: SortOrder = SortOrder.Recommended,
 ) {
     init {
         if (minRent != null && maxRent != null) require(minRent <= maxRent) { "minRent must not exceed maxRent" }
@@ -57,11 +61,38 @@ data class PropertyFilter(
                 petFriendlyOnly,
                 parkingOnly,
                 verifiedOnly,
-                sort != SortOrder.BestMatch,
+                sort != SortOrder.Recommended,
             ).count { it } + amenities.size
 
     /** Drops every sheet refinement but keeps the category and the search text. */
     fun withoutRefinements(): PropertyFilter = PropertyFilter(type = type, query = query)
+
+    /**
+     * The same rules as the SQL feed (`PropertyQueryBuilder`), applied in memory: used where listings are ranked
+     * in Kotlin (Best match) rather than by the database. Sort is not a filter and is ignored here.
+     */
+    fun accepts(property: Property): Boolean {
+        val text = query.trim()
+        return (type == null || property.type == type) &&
+            (text.isEmpty() || property.title.contains(text, true) || property.locality.contains(text, true)) &&
+            acceptsRanges(property) &&
+            (!furnishedOnly || property.furnished) &&
+            (!petFriendlyOnly || property.petFriendly) &&
+            (!parkingOnly || property.parking) &&
+            (!verifiedOnly || property.verified) &&
+            property.amenities.containsAll(amenities)
+    }
+
+    private fun acceptsRanges(property: Property): Boolean {
+        val rent = property.rent.amount
+        val area = property.areaSqm
+        return (minRent == null || rent >= minRent) &&
+            (maxRent == null || rent <= maxRent) &&
+            (minBedrooms == null || property.bedrooms >= minBedrooms) &&
+            (minBathrooms == null || property.bathrooms >= minBathrooms) &&
+            (minAreaSqm == null || area >= minAreaSqm) &&
+            (maxAreaSqm == null || area <= maxAreaSqm)
+    }
 }
 
 /** Ranges of the cached listings in a region, used to bound the filter sliders. */

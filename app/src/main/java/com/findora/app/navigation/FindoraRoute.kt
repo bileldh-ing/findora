@@ -44,6 +44,10 @@ sealed interface FindoraRoute {
     @Serializable
     data object Viewings : FindoraRoute
 
+    /** The six-step preference quiz behind the match score (from the Home banner and Settings). */
+    @Serializable
+    data object MatchQuiz : FindoraRoute
+
     /** Debug-only catalogue of every design-system component. */
     @Serializable
     data object DesignSystem : FindoraRoute

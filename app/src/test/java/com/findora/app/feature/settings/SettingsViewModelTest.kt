@@ -1,9 +1,11 @@
 package com.findora.app.feature.settings
 
 import app.cash.turbine.test
+import com.findora.app.core.domain.match.PreferenceProfile
 import com.findora.app.core.domain.model.ThemeMode
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeBiometricAvailability
+import com.findora.app.core.testing.FakeMatchProfileRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
@@ -19,12 +21,13 @@ class SettingsViewModelTest {
 
     private val auth = FakeAuthRepository()
     private val settings = FakeSettingsRepository()
+    private val matchProfiles = FakeMatchProfileRepository()
 
     @Test
     fun showsTheAccountAndChangesTheTheme() =
         runTest(main.dispatcher) {
             auth.signIn(remembered = true)
-            val vm = SettingsViewModel(auth, settings, FakeBiometricAvailability(true))
+            val vm = SettingsViewModel(auth, settings, FakeBiometricAvailability(true), matchProfiles)
             vm.state.test {
                 var state = awaitItem()
                 while (state.account == null) state = awaitItem()
@@ -42,7 +45,7 @@ class SettingsViewModelTest {
     fun biometricLockNeedsARememberedSessionAndCapableDevice() =
         runTest(main.dispatcher) {
             auth.signIn(remembered = false)
-            val vm = SettingsViewModel(auth, settings, FakeBiometricAvailability(true))
+            val vm = SettingsViewModel(auth, settings, FakeBiometricAvailability(true), matchProfiles)
             vm.state.test {
                 var state = awaitItem()
                 while (state.account == null) state = awaitItem()
@@ -58,7 +61,8 @@ class SettingsViewModelTest {
         runTest(main.dispatcher) {
             auth.signIn()
             settings.setBiometricLockEnabled(true)
-            val vm = SettingsViewModel(auth, settings, FakeBiometricAvailability(true))
+            matchProfiles.save(auth.account.id, PreferenceProfile(minBedrooms = 2))
+            val vm = SettingsViewModel(auth, settings, FakeBiometricAvailability(true), matchProfiles)
             vm.effects.test {
                 vm.onEvent(SettingsUiEvent.DeleteAccountRequested)
                 vm.onEvent(SettingsUiEvent.DeleteAccountConfirmed)
@@ -67,6 +71,9 @@ class SettingsViewModelTest {
                 assertEquals(SettingsUiEffect.SignedOut, awaitItem())
             }
             assertEquals(1, auth.deletions)
+            // The deleted account's quiz answers go with it.
+            assertEquals(listOf(auth.account.id), matchProfiles.cleared)
+            assertTrue(matchProfiles.profiles.value.isEmpty())
             assertEquals(1, auth.logouts)
             assertFalse(settings.settings.value.biometricLockEnabled)
         }

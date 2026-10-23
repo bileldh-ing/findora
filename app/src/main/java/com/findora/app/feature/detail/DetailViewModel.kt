@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.findora.app.core.common.AppClock
 import com.findora.app.core.domain.insight.NeighbourhoodScore
 import com.findora.app.core.domain.insight.PriceTrend
+import com.findora.app.core.domain.match.MatchContext
+import com.findora.app.core.domain.match.MatchResult
+import com.findora.app.core.domain.match.ObserveMatchContext
 import com.findora.app.core.domain.model.GeoPoint
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
@@ -61,6 +64,8 @@ sealed interface DetailUiState {
         /** Always sample data until a neighbourhood source exists (see [NeighbourhoodScore.isSampleData]). */
         val neighbourhood: NeighbourhoodScore = NeighbourhoodScore.sample(property.regionId, property.locality),
         val affordability: AffordabilityUiState = AffordabilityUiState(property.rent),
+        /** The listing scored against the user's preference profile; null when they have none. */
+        val match: MatchResult? = null,
     ) : DetailUiState
 
     data class Error(
@@ -117,7 +122,7 @@ sealed interface DetailUiEffect {
 /**
  * A listing's detail page. Streams the listing, its favourite state and similar homes from the local
  * cache; records a "viewed" interaction when opened, and "shared" / "contacted agent" / favourite signals
- * as the user acts, for the best-match engine.
+ * as the user acts, for the best-match engine, and scores the listing against the user's profile.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
@@ -130,6 +135,7 @@ class DetailViewModel
         private val interactions: InteractionRepository,
         private val auth: AuthRepository,
         private val clock: AppClock,
+        observeMatchContext: ObserveMatchContext,
     ) : ViewModel() {
         /** Read by name (type-safe routes store each field under its own key), so this stays JVM-testable. */
         val propertyId: String = requireNotNull(savedStateHandle.get<String>(PROPERTY_ID_KEY)) { "propertyId missing" }
@@ -141,6 +147,13 @@ class DetailViewModel
 
         /** The calculator form; null until first used, then kept while the listing's rent updates. */
         private val affordability = MutableStateFlow<AffordabilityUiState?>(null)
+
+        /** A broken profile store hides the match card instead of breaking the page. */
+        private val matchContext: Flow<MatchContext?> =
+            observeMatchContext().catch { error ->
+                if (error is CancellationException) throw error
+                emit(null)
+            }
 
         val effects: Flow<DetailUiEffect> = effectChannel.receiveAsFlow()
 
@@ -194,13 +207,15 @@ class DetailViewModel
                         userId.flatMapLatest { favorites.observeFavoriteIds(it) },
                         similarTo(property),
                         affordability,
-                    ) { favoriteIds, similar, form ->
+                        matchContext,
+                    ) { favoriteIds, similar, form, context ->
                         DetailUiState.Content(
                             property = property,
                             isFavorite = property.id in favoriteIds,
                             similar = similar,
                             similarFavoriteIds = similar.mapTo(HashSet()) { it.id }.intersect(favoriteIds),
                             affordability = form?.copy(rent = property.rent) ?: AffordabilityUiState(property.rent),
+                            match = context?.score(property),
                         )
                     }
                 }

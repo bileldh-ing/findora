@@ -1,9 +1,14 @@
 package com.findora.app.feature.home
 
+import androidx.paging.testing.asSnapshot
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.findora.app.core.data.repository.InMemoryHomeFilterRepository
 import com.findora.app.core.data.repository.SeedRegionRepository
+import com.findora.app.core.domain.match.BudgetRange
+import com.findora.app.core.domain.match.MustHave
+import com.findora.app.core.domain.match.PreferenceProfile
+import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.HomeCategory
 import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.PropertyType
@@ -13,16 +18,20 @@ import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeFavoritesRepository
+import com.findora.app.core.testing.FakeMatchProfileRepository
 import com.findora.app.core.testing.FakeMessageRepository
 import com.findora.app.core.testing.FakePropertyRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
 import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.inboxMessage
+import com.findora.app.core.testing.observeMatchContext
+import com.findora.app.core.testing.seedProperties
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -36,6 +45,7 @@ class HomeViewModelTest {
     private val auth = FakeAuthRepository()
     private val settings = FakeSettingsRepository()
     private val messages = FakeMessageRepository()
+    private val profiles = FakeMatchProfileRepository()
 
     private fun viewModel() =
         HomeViewModel(
@@ -45,6 +55,14 @@ class HomeViewModelTest {
             auth = auth,
             currentRegion = CurrentRegion(settings, SeedRegionRepository(fileSeedReader(), main.dispatcher)),
             messages = messages,
+            observeMatchContext =
+                observeMatchContext(
+                    auth = auth,
+                    profiles = profiles,
+                    properties = properties,
+                    settings = settings,
+                    dispatcher = main.dispatcher,
+                ),
         )
 
     private suspend fun ReceiveTurbine<HomeUiState>.awaitUntil(predicate: (HomeUiState) -> Boolean): HomeUiState {
@@ -179,5 +197,55 @@ class HomeViewModelTest {
                 assertEquals(listOf("m2"), awaitUntil { it.unread.size == 1 }.unread.map { it.id })
                 cancelAndIgnoreRemainingEvents()
             }
+        }
+
+    @Test
+    fun withoutAProfileHomeOffersTheQuizAndBestMatchPagesFromTheDatabase() =
+        runTest(main.dispatcher) {
+            val vm = viewModel()
+            vm.state.test {
+                val state = awaitUntil { it.hasMatchProfile != null }
+                assertEquals(false, state.hasMatchProfile)
+                assertTrue(state.matchScores.isEmpty())
+                cancelAndIgnoreRemainingEvents()
+            }
+            vm.onEvent(HomeUiEvent.ApplyFilter(PropertyFilter(sort = SortOrder.BestMatch)))
+            vm.listings.first()
+            assertEquals(
+                SortOrder.BestMatch,
+                properties.requestedFilters
+                    .last()
+                    .second.sort,
+            )
+        }
+
+    @Test
+    fun withAProfileCardsGetScoresAndBestMatchRanksByScoreWithoutMustHaveFailures() =
+        runTest(main.dispatcher) {
+            profiles.save(
+                AuthRepository.GUEST_USER_ID,
+                PreferenceProfile(
+                    budget = BudgetRange(null, 30_000, Currency.INR),
+                    mustHaves = setOf(MustHave.Parking),
+                ),
+            )
+            val kerala = seedProperties.filter { it.regionId == "kerala" }
+            val vm = viewModel()
+            vm.state.test {
+                val state = awaitUntil { it.hasMatchProfile == true && it.matchScores.isNotEmpty() }
+                assertEquals(kerala.filter { it.parking }.map { it.id }.toSet(), state.matchScores.keys)
+                assertTrue(state.matchScores.values.all { it in 0..100 })
+                cancelAndIgnoreRemainingEvents()
+            }
+            vm.listings.first()
+            val pagedRequests = properties.requestedFilters.size
+            vm.onEvent(HomeUiEvent.ApplyFilter(PropertyFilter(sort = SortOrder.BestMatch)))
+            val ranked = vm.listings.asSnapshot()
+            assertEquals(pagedRequests, properties.requestedFilters.size)
+            assertEquals(kerala.count { it.parking }, ranked.size)
+            assertTrue(ranked.all { it.parking })
+            val state = vm.state.value
+            val scores = ranked.map { state.matchScores.getValue(it.id) }
+            assertEquals(scores.sortedDescending(), scores)
         }
 }
