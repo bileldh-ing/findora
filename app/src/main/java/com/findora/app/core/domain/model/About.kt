@@ -13,7 +13,7 @@ data class OpenSourceLibrary(
 
 /** A photographer whose photos illustrate the sample listings, and how many of them are used. */
 @Immutable
-data class PhotoCredit(
+data class Photographer(
     val name: String,
     val url: String,
     val photos: Int,
@@ -26,7 +26,7 @@ data class AboutCredits(
     val photoSource: String,
     val photoLicense: String,
     val photoLicenseUrl: String,
-    val photographers: List<PhotoCredit>,
+    val photographers: List<Photographer>,
     val mapAttribution: String,
     val mapLicense: String,
     val mapUrl: String,

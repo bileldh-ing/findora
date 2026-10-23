@@ -24,9 +24,35 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 3 | Home screen, pixel-faithful to the reference design | Done |
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
-| 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B) | In progress |
+| 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
 | 7 | Pro extras | Planned |
 | 8 | Polish and release | Planned |
+
+## What Phase 6C ships
+
+- **Language**: a per-app picker (System, English, Français, العربية) built on `AppCompatDelegate.setApplicationLocales`.
+  On Android 13+ the choice also appears in the system's per-app language settings (`locales_config.xml`,
+  `android:localeConfig`); below 13 AppCompat stores it (`autoStoreLocales`). The activity is recreated at once, so
+  text and RTL mirroring flip immediately. Notifications, the reminder worker and the demo agent's replies resolve
+  their strings through the same language.
+- **Display currency**: Listing currency (default) or INR, USD, EUR, TND. Conversions use a bundled, dated table of
+  indicative rates (`assets/rates/exchange_rates.json`, labelled "Indicative rates as of …" in Settings and About)
+  and a pure-Kotlin `CurrencyConverter` (BigDecimal, cross rate at 10 decimals HALF_EVEN, results HALF_UP to whole
+  units). Converted amounts carry a "≈" prefix on cards, the detail price, compare (including price per area), map
+  pills, the chat card and agent replies. **Affordability stays in the listing currency** (income, rent and
+  results are compared like for like); when a display currency is set the sheet says so and shows the "≈"
+  equivalent of the rent. The filter and quiz sliders still move in listing currency, with converted labels; the
+  price-history chart stays in the listing currency.
+- **Units**: square metres or square feet everywhere an area appears (cards, map cards, detail, Dream Match, compare,
+  filter sheet, agent replies, TalkBack). Ask Findora keeps parsing both "80 m²" and "900 sq ft".
+- **Notifications**: separate toggles for message notifications, viewing reminders and in-app notifications, honoured
+  by the demo agent, the reminder worker and booking confirmations, plus a shortcut to the system settings.
+- **Accessibility**: a reduce-motion override (System / On / Off) feeding the shared reduced-motion helper, and a
+  text-size preview that shows the current system font scale.
+- **Privacy and data**: clear search history, clear cache (Coil memory and disk caches and the map tile cache),
+  export my data (profile, preferences, favourites, viewings, chats and recent searches as JSON through the system
+  "Save as" picker), the privacy policy and an **About** screen (version, exchange-rate source, OpenStreetMap
+  attribution, Pexels photo credits generated from `CREDITS.md` by `scripts/build_licenses`, open-source licences).
 
 ## What Phase 6B ships
 
@@ -314,6 +340,7 @@ app/src/main/java/com/findora/app
 | Navigation Compose 2.8 | Type-safe routes via kotlinx.serialization |
 | Hilt + KSP | Dependency injection without kapt |
 | core-splashscreen | Android 12 splash API on API 26+ |
+| AppCompat 1.7 | Per-app language (`setApplicationLocales`, stored by AppCompat below Android 13) |
 | Room 2.6 (+ KSP, room-testing) | Local single source of truth with exported, migration-tested schemas |
 | DataStore Preferences | Async, transactional settings storage that replaces SharedPreferences |
 | kotlinx.serialization JSON | Seed and DTO parsing, JSON columns, type-safe routes |

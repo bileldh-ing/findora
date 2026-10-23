@@ -7,7 +7,7 @@ import com.findora.app.core.domain.format.ExchangeRates
 import com.findora.app.core.domain.model.AboutCredits
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.OpenSourceLibrary
-import com.findora.app.core.domain.model.PhotoCredit
+import com.findora.app.core.domain.model.Photographer
 import com.findora.app.core.domain.repository.ReferenceDataRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -96,7 +96,7 @@ internal object ReferenceDataParser {
             photoSource = dto.photos.source,
             photoLicense = dto.photos.license,
             photoLicenseUrl = dto.photos.licenseUrl,
-            photographers = dto.photos.photographers.map { PhotoCredit(it.name, it.url, it.photos) },
+            photographers = dto.photos.photographers.map { Photographer(it.name, it.url, it.photos) },
             mapAttribution = dto.map.attribution,
             mapLicense = dto.map.license,
             mapUrl = dto.map.url,

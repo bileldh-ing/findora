@@ -21,14 +21,15 @@ and the choices you have.
 - Conversations with listing agents are a demo: replies are written on your device by a rule-based
   "demo agent" from the listing's own details, are labelled as automated in the app, and your messages
   are never sent to an agent or a server.
-- You can delete everything the app stores by clearing its storage or uninstalling it.
+- You can export a copy of your data (Settings > Privacy and data > Export my data) and delete it: clear your
+  search history or the cache from the same screen, delete your account, clear the app's storage or uninstall it.
 
 ## 2. Information the app handles
 
 | Category | Examples | Where it is kept | Purpose |
 |---|---|---|---|
 | Account details you enter | name, e-mail address | on your device | sign-in and personalising the app |
-| Preferences | language, theme, currency, best-match answers (budget, bedrooms, lifestyle tags) | on your device | showing results that fit you |
+| Preferences | language, theme, display currency, area unit, notification and reduce-motion choices, best-match answers (budget, bedrooms, lifestyle tags) | on your device | showing results that fit you |
 | Activity in the app | favourites, recent and saved searches, properties viewed | on your device | favourites, recommendations, alerts |
 | Messages and viewing requests | text you send, chosen dates and times | on your device | chat and viewing bookings |
 | In-app notifications | new message, viewing booked and viewing reminder entries | on your device | notifications center |
@@ -67,10 +68,20 @@ Findora does not share your personal data with anyone else, except where require
 Session tokens are encrypted with keys held in the Android Keystore. Data stored on the device is
 protected by Android's app sandbox. [Confirm backup behaviour against `data_extraction_rules.xml`.]
 
-## 6. Retention and deletion
+## 6. Retention, export and deletion
 
 Data stays on your device until you delete it in the app (sign out or delete account in Settings),
-clear the app's storage in Android settings, or uninstall the app. [If server-side data exists,
+clear the app's storage in Android settings, or uninstall the app. In **Settings > Privacy and data** you can:
+
+- **Export my data**: writes a JSON file with your profile (name and e-mail for an account), preferences,
+  favourites, viewings, conversations and recent searches to a location you choose with the system file
+  picker. The file is created only where you save it; Findora does not send it anywhere. Passwords and session
+  tokens are never included.
+- **Clear search history**: deletes the recent searches of the current account (or guest session).
+- **Clear cache**: deletes downloaded listing photos and map tiles; they are downloaded again when needed.
+
+Display-currency conversions use a table of indicative exchange rates bundled with the app; no request is made to
+an exchange-rate service. [If server-side data exists,
 describe the in-app and web account deletion flow Google Play requires, and the retention period.]
 
 ## 7. Your rights

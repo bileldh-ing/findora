@@ -5,7 +5,7 @@ import com.findora.app.core.domain.model.AboutCredits
 import com.findora.app.core.domain.model.AppLanguage
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.OpenSourceLibrary
-import com.findora.app.core.domain.model.PhotoCredit
+import com.findora.app.core.domain.model.Photographer
 import com.findora.app.core.domain.repository.LanguageController
 import com.findora.app.core.domain.repository.ReferenceDataRepository
 import java.math.BigDecimal
@@ -36,7 +36,7 @@ val testCredits =
         photoSource = "Pexels",
         photoLicense = "Pexels License",
         photoLicenseUrl = "https://www.pexels.com/license/",
-        photographers = listOf(PhotoCredit("Max Vakhtbovych", "https://www.pexels.com/@artbovich/", 12)),
+        photographers = listOf(Photographer("Max Vakhtbovych", "https://www.pexels.com/@artbovich/", 12)),
         mapAttribution = "© OpenStreetMap contributors",
         mapLicense = "Open Database License (ODbL)",
         mapUrl = "https://www.openstreetmap.org/copyright",
