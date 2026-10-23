@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.findora.app.core.common.AppClock
+import com.findora.app.core.domain.insight.NeighbourhoodScore
+import com.findora.app.core.domain.insight.PriceTrend
 import com.findora.app.core.domain.model.GeoPoint
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
@@ -31,6 +33,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -53,6 +56,11 @@ sealed interface DetailUiState {
         /** Same type in the same region, the current listing excluded. */
         val similar: List<Property>,
         val similarFavoriteIds: Set<String>,
+        /** Last 12 months of rent; null when the listing has fewer than two months of history. */
+        val priceTrend: PriceTrend? = PriceTrend.from(property.priceHistory),
+        /** Always sample data until a neighbourhood source exists (see [NeighbourhoodScore.isSampleData]). */
+        val neighbourhood: NeighbourhoodScore = NeighbourhoodScore.sample(property.regionId, property.locality),
+        val affordability: AffordabilityUiState = AffordabilityUiState(property.rent),
     ) : DetailUiState
 
     data class Error(
@@ -76,6 +84,11 @@ sealed interface DetailUiEvent {
     data object EmailAgent : DetailUiEvent
 
     data object OpenInMaps : DetailUiEvent
+
+    /** Anything in the "Can I afford it?" calculator. */
+    data class Affordability(
+        val event: AffordabilityEvent,
+    ) : DetailUiEvent
 }
 
 /** One-shot actions the screen performs with an Android intent. */
@@ -126,6 +139,9 @@ class DetailViewModel
         private val attempt = MutableStateFlow(0)
         private val effectChannel = Channel<DetailUiEffect>(Channel.BUFFERED)
 
+        /** The calculator form; null until first used, then kept while the listing's rent updates. */
+        private val affordability = MutableStateFlow<AffordabilityUiState?>(null)
+
         val effects: Flow<DetailUiEffect> = effectChannel.receiveAsFlow()
 
         val state: StateFlow<DetailUiState> =
@@ -165,6 +181,7 @@ class DetailViewModel
                     }
                 DetailUiEvent.OpenInMaps ->
                     withProperty { property -> DetailUiEffect.OpenMap(property.location, property.title) }
+                is DetailUiEvent.Affordability -> onAffordability(event.event)
             }
         }
 
@@ -176,12 +193,14 @@ class DetailViewModel
                     combine(
                         userId.flatMapLatest { favorites.observeFavoriteIds(it) },
                         similarTo(property),
-                    ) { favoriteIds, similar ->
+                        affordability,
+                    ) { favoriteIds, similar, form ->
                         DetailUiState.Content(
                             property = property,
                             isFavorite = property.id in favoriteIds,
                             similar = similar,
                             similarFavoriteIds = similar.mapTo(HashSet()) { it.id }.intersect(favoriteIds),
+                            affordability = form?.copy(rent = property.rent) ?: AffordabilityUiState(property.rent),
                         )
                     }
                 }
@@ -202,6 +221,11 @@ class DetailViewModel
                 val nowFavorite = favorites.toggle(userId.first(), id)
                 record(id, if (nowFavorite) InteractionType.Favorited else InteractionType.Unfavorited)
             }
+        }
+
+        private fun onAffordability(event: AffordabilityEvent) {
+            val content = state.value as? DetailUiState.Content ?: return
+            affordability.update { form -> (form ?: content.affordability).reduce(event) }
         }
 
         private fun withProperty(action: suspend (Property) -> DetailUiEffect) {

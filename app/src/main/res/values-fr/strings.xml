@@ -282,4 +282,52 @@
     <string name="reminder_title">Visite dans une heure</string>
     <string name="reminder_body">%1$s à %2$s. Touchez pour voir l\'annonce.</string>
     <string name="reminder_fallback_title">Votre visite</string>
+    <!-- Phase 4C : historique des prix, quartier et budget -->
+    <string name="detail_sample_data">Données d\'exemple</string>
+    <string name="detail_price_history">Historique des prix</string>
+    <plurals name="detail_price_change">
+        <item quantity="one">%1$s sur %2$d mois</item>
+        <item quantity="many">%1$s sur %2$d mois</item>
+        <item quantity="other">%1$s sur %2$d mois</item>
+    </plurals>
+    <string name="detail_price_low">Min. %1$s</string>
+    <string name="detail_price_high">Max. %1$s</string>
+    <string name="detail_price_history_cd">Historique du loyer. %1$s en %2$s, %3$s en %4$s, %5$s. Minimum %6$s, maximum %7$s</string>
+    <string name="detail_neighbourhood">Quartier</string>
+    <string name="detail_neighbourhood_caption">Notes sur 100 pour %1$s, plus c\'est haut, mieux c\'est. Global %2$d.</string>
+    <string name="detail_neighbourhood_score_cd">%1$s : %2$d</string>
+    <string name="detail_neighbourhood_cd">Notes sur 100 du quartier %1$s : %2$s. Global : %3$d</string>
+    <string name="neighbourhood_walkability">À pied</string>
+    <string name="neighbourhood_transport">Transports</string>
+    <string name="neighbourhood_safety">Sécurité</string>
+    <string name="neighbourhood_noise">Calme</string>
+    <string name="neighbourhood_amenities">Commerces</string>
+    <string name="afford_title">Est-ce dans mon budget ?</string>
+    <string name="afford_card_body">Voyez si ce loyer convient à vos revenus et ce que vous paierez avant d\'emménager.</string>
+    <string name="afford_open">Ouvrir le calculateur</string>
+    <string name="afford_rent_line">Loyer de ce logement : %1$s par mois</string>
+    <string name="afford_income">Revenu mensuel brut</string>
+    <string name="afford_income_zero">Saisissez un revenu supérieur à zéro</string>
+    <string name="afford_amount_too_large">Ce montant est trop élevé</string>
+    <string name="afford_empty">Saisissez votre revenu mensuel pour voir si ce loyer convient.</string>
+    <string name="afford_donut_cd">Le loyer représente %1$s de vos revenus, il vous reste %2$s par mois</string>
+    <string name="afford_rent">Loyer</string>
+    <string name="afford_remaining">Reste après loyer</string>
+    <string name="afford_verdict_comfortable">Confortable</string>
+    <string name="afford_verdict_stretch">Juste</string>
+    <string name="afford_verdict_over">Hors budget</string>
+    <string name="afford_max_rent">La règle des %1$d %% conseille un loyer maximal de %2$s par mois.</string>
+    <plurals name="afford_deposit_months">
+        <item quantity="one">Dépôt de garantie : %1$d mois de loyer</item>
+        <item quantity="many">Dépôt de garantie : %1$d mois de loyer</item>
+        <item quantity="other">Dépôt de garantie : %1$d mois de loyer</item>
+    </plurals>
+    <string name="afford_fee_percent">Frais d\'agence : %1$d %% d\'un an de loyer</string>
+    <string name="afford_moving">Estimation du déménagement</string>
+    <string name="afford_upfront">Avant d\'emménager</string>
+    <string name="afford_deposit">Dépôt de garantie</string>
+    <string name="afford_fee">Frais d\'agence</string>
+    <string name="afford_upfront_total">Total à prévoir</string>
+    <string name="afford_disclaimer">Une estimation pour vous aider à prévoir, pas un conseil financier.</string>
+    <string name="afford_done">Terminé</string>
 </resources>

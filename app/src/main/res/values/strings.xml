@@ -295,4 +295,50 @@
     <string name="reminder_title">Viewing in one hour</string>
     <string name="reminder_body">%1$s at %2$s. Tap to see the listing.</string>
     <string name="reminder_fallback_title">Your viewing</string>
+    <!-- Phase 4C: price history, neighbourhood and affordability -->
+    <string name="detail_sample_data">Sample data</string>
+    <string name="detail_price_history">Price history</string>
+    <plurals name="detail_price_change">
+        <item quantity="one">%1$s over %2$d month</item>
+        <item quantity="other">%1$s over %2$d months</item>
+    </plurals>
+    <string name="detail_price_low">Low %1$s</string>
+    <string name="detail_price_high">High %1$s</string>
+    <string name="detail_price_history_cd">Rent history. %1$s in %2$s, %3$s in %4$s, %5$s. Lowest %6$s, highest %7$s</string>
+    <string name="detail_neighbourhood">Neighbourhood</string>
+    <string name="detail_neighbourhood_caption">Scores out of 100 for %1$s, higher is better. Overall %2$d.</string>
+    <string name="detail_neighbourhood_score_cd">%1$s: %2$d</string>
+    <string name="detail_neighbourhood_cd">Neighbourhood scores out of 100 for %1$s: %2$s. Overall: %3$d</string>
+    <string name="neighbourhood_walkability">Walkability</string>
+    <string name="neighbourhood_transport">Transport</string>
+    <string name="neighbourhood_safety">Safety</string>
+    <string name="neighbourhood_noise">Low noise</string>
+    <string name="neighbourhood_amenities">Amenities</string>
+    <string name="afford_title">Can I afford it?</string>
+    <string name="afford_card_body">See how this rent fits your income and what you would pay before moving in.</string>
+    <string name="afford_open">Open the calculator</string>
+    <string name="afford_rent_line">Rent for this home: %1$s a month</string>
+    <string name="afford_income">Monthly income before tax</string>
+    <string name="afford_income_zero">Enter an income above zero</string>
+    <string name="afford_amount_too_large">That amount is too large</string>
+    <string name="afford_empty">Enter your monthly income to see how this rent fits.</string>
+    <string name="afford_donut_cd">Rent takes %1$s of your income, leaving %2$s a month</string>
+    <string name="afford_rent">Rent</string>
+    <string name="afford_remaining">Left after rent</string>
+    <string name="afford_verdict_comfortable">Comfortable</string>
+    <string name="afford_verdict_stretch">A stretch</string>
+    <string name="afford_verdict_over">Over budget</string>
+    <string name="afford_max_rent">The %1$d%% rule suggests a rent of up to %2$s a month.</string>
+    <plurals name="afford_deposit_months">
+        <item quantity="one">Deposit: %1$d month of rent</item>
+        <item quantity="other">Deposit: %1$d months of rent</item>
+    </plurals>
+    <string name="afford_fee_percent">Agency fee: %1$d%% of a year\'s rent</string>
+    <string name="afford_moving">Moving estimate</string>
+    <string name="afford_upfront">Before you move in</string>
+    <string name="afford_deposit">Deposit</string>
+    <string name="afford_fee">Agency fee</string>
+    <string name="afford_upfront_total">Total up front</string>
+    <string name="afford_disclaimer">An estimate to help you plan, not financial advice.</string>
+    <string name="afford_done">Done</string>
 </resources>
