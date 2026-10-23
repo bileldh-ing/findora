@@ -39,6 +39,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -149,7 +150,9 @@ fun MessageBubble(
         ) {
             Text(
                 text = message.body,
-                style = FindoraTheme.typography.body,
+                // Direction follows the message's own script, so an English message keeps its punctuation in an
+                // Arabic UI (and vice versa) instead of inheriting the layout direction.
+                style = FindoraTheme.typography.body.copy(textDirection = TextDirection.Content),
                 color = content,
                 modifier = Modifier.align(Alignment.Start),
             )

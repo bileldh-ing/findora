@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -64,7 +65,9 @@ class AccessibilityChecksTest {
         waitFor("detailList")
         check("Detail")
 
-        composeRule.onNodeWithTag("detailMessage").performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
+        // The contact card is a lazy item below the fold: scroll the list until it is composed, then open chat.
+        composeRule.onNodeWithTag("detailList").performScrollToNode(hasTestTag("detailMessage"))
+        composeRule.onNodeWithTag("detailMessage").performSemanticsAction(SemanticsActions.OnClick)
         waitFor("chat")
         check("Chat")
         composeRule.onNodeWithTag("chatBack").performClick()

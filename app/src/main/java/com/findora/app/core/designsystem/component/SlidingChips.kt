@@ -137,9 +137,13 @@ fun SlidingChipRow(
                             .defaultMinSize(minHeight = ChipHeight)
                             .clip(FindoraTheme.shapes.chip)
                             .onPlaced { coordinates ->
+                                // Measured in the Box's space, where the pill is drawn: in RTL a row narrower than
+                                // the screen sits at the right edge, so its own offset has to be added.
+                                val rowX = coordinates.parentLayoutCoordinates?.positionInParent()?.x ?: 0f
                                 with(density) {
                                     bounds[index] =
-                                        coordinates.positionInParent().x.toDp() to coordinates.size.width.toDp()
+                                        (rowX + coordinates.positionInParent().x).toDp() to
+                                        coordinates.size.width.toDp()
                                 }
                             }.selectable(selected = selected, role = Role.Tab, onClick = { onSelect(index) })
                             .testTag("chip_$index"),
