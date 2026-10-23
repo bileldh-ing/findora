@@ -52,6 +52,7 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.TilesOverlay
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import java.io.File
 import java.util.Locale
 import org.osmdroid.util.GeoPoint as OsmGeoPoint
@@ -121,40 +122,8 @@ fun OsmListingsMap(
     }
 
     DisposableEffect(mapView) {
-        mapView.overlays.add(GestureOverlay { tracker.userGesture = true })
-        val report = { currentOnEvent(MapUiEvent.CameraMoved(mapView.viewport(), tracker.userGesture)) }
-        mapView.addMapListener(
-            DelayedMapListener(
-                object : MapListener {
-                    override fun onScroll(event: ScrollEvent?): Boolean = true.also { report() }
-
-                    override fun onZoom(event: ZoomEvent?): Boolean = true.also { report() }
-                },
-                CAMERA_SETTLE_MILLIS,
-            ),
-        )
-        mapView.addOnFirstLayoutListener { _, _, _, _, _ -> report() }
-        val offline = Runnable { tracker.reportTiles(available = false, currentOnEvent) }
-        val tileStates = mapView.overlayManager.tilesOverlay.tileStates
-        tileStates.runAfters.add(
-            Runnable {
-                if (tileStates.total == 0) return@Runnable
-                if (tileStates.notFound < tileStates.total) {
-                    mapView.removeCallbacks(offline)
-                    tracker.reportTiles(available = true, currentOnEvent)
-                } else if (!tracker.offlinePending) {
-                    tracker.offlinePending = true
-                    mapView.postDelayed(
-                        {
-                            tracker.offlinePending = false
-                            offline.run()
-                        },
-                        OFFLINE_GRACE_MILLIS,
-                    )
-                }
-            },
-        )
-        onDispose { mapView.removeCallbacks(offline) }
+        val dispose = mapView.installCallbacks(tracker) { currentOnEvent(it) }
+        onDispose(dispose)
     }
 
     LaunchedEffect(mapView, state.camera?.id) {
@@ -165,47 +134,14 @@ fun OsmListingsMap(
 
     LaunchedEffect(mapView, colors.isDark) {
         val tiles = mapView.overlayManager.tilesOverlay
-        tiles.setColorFilter(if (colors.isDark) TilesOverlay.INVERTED_COLORS else null)
+        tiles.setColorFilter(if (colors.isDark) TilesOverlay.INVERT_COLORS else null)
         tiles.loadingBackgroundColor = colors.background.toArgb()
         tiles.loadingLineColor = colors.outline.toArgb()
         mapView.invalidate()
     }
 
     LaunchedEffect(mapView, bitmaps, state.clusters, state.selectedId, state.myLocation, locale) {
-        markerLayer.items.clear()
-        state.myLocation?.let { point ->
-            markerLayer.add(
-                Marker(mapView).apply {
-                    position = point.toOsm()
-                    icon = BitmapDrawable(context.resources, bitmaps.locationDot())
-                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-                    infoWindow = null
-                    setOnMarkerClickListener { _, _ -> true }
-                },
-            )
-        }
-        // The selected pill is added last so it is drawn above its neighbours.
-        state.clusters
-            .sortedBy { cluster -> cluster.isSingle && cluster.key == state.selectedId }
-            .forEach { cluster ->
-                markerLayer.add(
-                    clusterMarker(
-                        mapView,
-                        cluster,
-                        cluster.isSingle && cluster.key == state.selectedId,
-                        bitmaps,
-                        locale,
-                    ) {
-                        currentOnEvent(
-                            if (cluster.isSingle) {
-                                MapUiEvent.SelectMarker(cluster.key)
-                            } else {
-                                MapUiEvent.SelectCluster(cluster.key)
-                            },
-                        )
-                    },
-                )
-            }
+        markerLayer.render(mapView, state, bitmaps, locale) { currentOnEvent(it) }
         mapView.invalidate()
     }
 
@@ -250,6 +186,94 @@ private fun markerActions(
     }
 }
 
+/**
+ * Wires the map callbacks: touch tracking, settled-viewport reports and the offline detector. Returns the
+ * cleanup to run when the map leaves composition.
+ */
+private fun MapView.installCallbacks(
+    tracker: MapTracker,
+    onEvent: (MapUiEvent) -> Unit,
+): () -> Unit {
+    val mapView = this
+    overlays.add(GestureOverlay { tracker.userGesture = true })
+    val report = { onEvent(MapUiEvent.CameraMoved(mapView.viewport(), tracker.userGesture)) }
+    addMapListener(
+        DelayedMapListener(
+            object : MapListener {
+                override fun onScroll(event: ScrollEvent?): Boolean = true.also { report() }
+
+                override fun onZoom(event: ZoomEvent?): Boolean = true.also { report() }
+            },
+            CAMERA_SETTLE_MILLIS,
+        ),
+    )
+    addOnFirstLayoutListener { _, _, _, _, _ -> report() }
+    val offline =
+        Runnable {
+            tracker.offlinePending = false
+            tracker.reportTiles(available = false, onEvent)
+        }
+    val tileStates = overlayManager.tilesOverlay.tileStates
+    tileStates.runAfters.add(
+        Runnable {
+            when {
+                tileStates.total == 0 -> Unit
+                tileStates.notFound < tileStates.total -> {
+                    removeCallbacks(offline)
+                    tracker.offlinePending = false
+                    tracker.reportTiles(available = true, onEvent)
+                }
+                // Tiles still missing after a grace period (not just downloading): the map is offline.
+                !tracker.offlinePending -> {
+                    tracker.offlinePending = true
+                    postDelayed(offline, OFFLINE_GRACE_MILLIS)
+                }
+            }
+        },
+    )
+    return { removeCallbacks(offline) }
+}
+
+/** Redraws the markers: the location dot, then clusters and pills, the selected pill last (on top). */
+private fun FolderOverlay.render(
+    mapView: MapView,
+    state: MapUiState,
+    bitmaps: MarkerBitmaps,
+    locale: Locale,
+    onEvent: (MapUiEvent) -> Unit,
+) {
+    items.clear()
+    state.myLocation?.let { point ->
+        add(
+            Marker(mapView).apply {
+                position = point.toOsm()
+                icon = BitmapDrawable(mapView.resources, bitmaps.locationDot())
+                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                setInfoWindow(null as MarkerInfoWindow?)
+                setOnMarkerClickListener { _, _ -> true }
+            },
+        )
+    }
+    state.clusters
+        .sortedBy { cluster -> cluster.isSingle && cluster.key == state.selectedId }
+        .forEach { cluster ->
+            val selected = cluster.isSingle && cluster.key == state.selectedId
+            add(
+                clusterMarker(mapView, cluster, selected, bitmaps, locale) {
+                    onEvent(
+                        if (cluster.isSingle) {
+                            MapUiEvent.SelectMarker(
+                                cluster.key,
+                            )
+                        } else {
+                            MapUiEvent.SelectCluster(cluster.key)
+                        },
+                    )
+                },
+            )
+        }
+}
+
 private fun clusterMarker(
     mapView: MapView,
     cluster: MapCluster<Property>,
@@ -270,7 +294,7 @@ private fun clusterMarker(
             icon = BitmapDrawable(mapView.resources, bitmaps.clusterBubble(cluster.size))
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
         }
-        infoWindow = null
+        setInfoWindow(null as MarkerInfoWindow?)
         setOnMarkerClickListener { _, _ ->
             onClick()
             true
@@ -291,8 +315,8 @@ private fun createMapView(context: Context): MapView {
         setTileSource(TileSourceFactory.MAPNIK)
         setMultiTouchControls(true)
         zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-        minZoomLevel = MIN_ZOOM
-        maxZoomLevel = MAX_ZOOM
+        setMinZoomLevel(MIN_ZOOM)
+        setMaxZoomLevel(MAX_ZOOM)
         isTilesScaledToDpi = true
         isHorizontalMapRepetitionEnabled = false
         isVerticalMapRepetitionEnabled = false

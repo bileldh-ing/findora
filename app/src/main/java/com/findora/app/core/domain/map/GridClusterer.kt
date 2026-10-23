@@ -42,8 +42,20 @@ object GridClusterer {
         maxClusterZoom: Double = DEFAULT_MAX_CLUSTER_ZOOM,
     ): List<MapCluster<T>> {
         require(cellSizePx > 0) { "cellSizePx must be positive" }
-        if (items.isEmpty()) return emptyList()
-        if (zoom >= maxClusterZoom) return items.map { single(it, id, position) }.sortedBy { it.key }
+        return when {
+            items.isEmpty() -> emptyList()
+            zoom >= maxClusterZoom -> items.map { single(it, id, position) }.sortedBy { it.key }
+            else -> merged(items, zoom, id, position, cellSizePx)
+        }
+    }
+
+    private fun <T> merged(
+        items: List<T>,
+        zoom: Double,
+        id: (T) -> String,
+        position: (T) -> GeoPoint,
+        cellSizePx: Int,
+    ): List<MapCluster<T>> {
         val worldPx = TILE_SIZE * 2.0.pow(zoom)
         return items
             .groupBy { item ->
