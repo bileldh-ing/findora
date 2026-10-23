@@ -30,7 +30,10 @@ the `screenshots` artifact and fails, so they get reviewed and committed.
 guest and runs Google's Accessibility Test Framework (the engine behind Accessibility Scanner and Espresso's
 `AccessibilityChecks`) on each screen's real accessibility tree, read through `UiAutomation` the way TalkBack sees
 it, with a screenshot so the text and image contrast checks run too. Every ERROR (missing label, touch target under
-48 dp, low contrast, duplicate clickable bounds, ...) fails the test with the screen, element and message. It logs
+48 dp, low contrast, duplicate clickable bounds, ...) fails the test with the screen, element and message. Issues it
+found and that were fixed: the chat composer and the search field exposed their placeholder as a
+`contentDescription` on an editable field (`EditableContentDescCheck`: TalkBack would read the hint instead of what
+was typed); the placeholder is now drawn inside the field's decoration box. It logs
 out at the end so the other instrumented tests start from a fresh install state.
 
 ## Instrumented tests

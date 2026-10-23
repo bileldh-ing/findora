@@ -40,6 +40,10 @@ Performance and quality gates (details in [docs/PERFORMANCE.md](docs/PERFORMANCE
 - **Accessibility checks**: Google's Accessibility Test Framework on Welcome, Home, detail, chat and Settings in an instrumented test.
 - **Screenshot tests**: Roborazzi goldens of the five key screens in light/dark and LTR/RTL, verified on CI.
 
+Measured on the CI emulator (API 34, software rendering, so relative numbers only): cold start time to initial
+display about 1.8 s, warm start about 0.6 s, before the app's own profile was committed. The spec's 800 ms cold-start
+target still has to be checked on a physical mid-range device; see [docs/PERFORMANCE.md](docs/PERFORMANCE.md).
+
 ## What Phase 7B ships
 
 - **Owner mode**: switch it on in Settings (signed-in accounts; guests are asked to create one) to reach the **Owner

@@ -347,14 +347,6 @@ private fun SearchField(
             )
             Spacer(Modifier.width(FindoraTheme.spacing.sm))
             Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
-                if (query.isEmpty()) {
-                    Text(
-                        placeholder,
-                        style = FindoraTheme.typography.body,
-                        color = FindoraTheme.colors.onSurfaceMuted,
-                        maxLines = 1,
-                    )
-                }
                 BasicTextField(
                     value = query,
                     onValueChange = onQueryChange,
@@ -363,12 +355,21 @@ private fun SearchField(
                     cursorBrush = SolidColor(FindoraTheme.colors.accent),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { onSubmit() }),
-                    modifier =
-                        Modifier
-                            .focusRequester(focusRequester)
-                            .fillMaxWidth()
-                            .semantics { contentDescription = placeholder }
-                            .testTag("searchField"),
+                    // The placeholder is part of the field (a contentDescription would be read instead of the query).
+                    decorationBox = { innerTextField ->
+                        Box(contentAlignment = Alignment.CenterStart) {
+                            if (query.isEmpty()) {
+                                Text(
+                                    placeholder,
+                                    style = FindoraTheme.typography.body,
+                                    color = FindoraTheme.colors.onSurfaceMuted,
+                                    maxLines = 1,
+                                )
+                            }
+                            innerTextField()
+                        }
+                    },
+                    modifier = Modifier.focusRequester(focusRequester).fillMaxWidth().testTag("searchField"),
                 )
             }
             if (query.isNotEmpty()) {

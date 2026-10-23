@@ -324,9 +324,6 @@ private fun Composer(
                     .background(FindoraTheme.colors.surface)
                     .padding(horizontal = FindoraTheme.spacing.md, vertical = FindoraTheme.spacing.sm),
         ) {
-            if (draft.isEmpty()) {
-                Text(hint, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onSurfaceMuted)
-            }
             BasicTextField(
                 value = draft,
                 onValueChange = onDraftChange,
@@ -335,11 +332,17 @@ private fun Composer(
                 keyboardOptions =
                     KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { if (canSend) onSend() }),
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .semantics { contentDescription = hint }
-                        .testTag("chatInput"),
+                // The hint is drawn inside the field (not set as a contentDescription, which a screen reader would
+                // announce instead of what was typed), so TalkBack reads it as the empty field's text.
+                decorationBox = { innerTextField ->
+                    Box(contentAlignment = Alignment.CenterStart) {
+                        if (draft.isEmpty()) {
+                            Text(hint, style = FindoraTheme.typography.body, color = FindoraTheme.colors.onSurfaceMuted)
+                        }
+                        innerTextField()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().testTag("chatInput"),
             )
         }
         Spacer(Modifier.width(FindoraTheme.spacing.xs))

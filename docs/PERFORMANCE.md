@@ -55,6 +55,26 @@ the relative None vs Partial difference is meaningful there. The spec's target (
 mid-range device) must be checked on a physical device with the command above. The benchmark also doubles as an
 R8 smoke test: the minified build has to start, render Home and scroll.
 
+### Results on the CI emulator (first run, 2026-10-23)
+
+First successful run: CI run 39955791287 (API 34 `google_apis` x86_64, `pixel_6` profile, software rendering on a
+shared runner). The generator produced `baseline-prof.txt` (31,659 rules, 4,567 of them for `com.findora` code),
+now committed. `startup-prof.txt` currently holds the same rules because the whole journey is recorded with
+`includeInStartupProfile = true`.
+
+| Benchmark | Metric | `None` | `Partial(Require)` |
+|---|---|---|---|
+| Cold start | `timeToInitialDisplayMs` median (min) | 1783 (1669) | 1878 (1731) |
+| Warm start | `timeToInitialDisplayMs` median (min) | 611 (556) | 588 (388) |
+| Home scroll | `frameDurationCpuMs` P50 / P90 | 100 / 142 | 105 / 153 |
+
+Read these honestly: that run built the benchmark APK **before** the app's own profile existed, so `Partial` only
+had the profiles shipped by AndroidX libraries (Compose, etc.), and the emulator renders on the CPU
+(swiftshader), which dominates frame and startup times. The numbers are a smoke test (R8 build starts, renders
+Home, scrolls) and a trend line, not a measure of the profile's benefit. Later runs build with the committed
+profile; the job summary of each run shows its table. The spec's cold-start target (under 800 ms) is for a
+physical mid-range device and has not been measured yet.
+
 ## Compose stability
 
 - Strong skipping is on (default with the Kotlin 2.x Compose compiler; `featureFlags.StrongSkipping = true` in the
