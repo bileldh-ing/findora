@@ -3,7 +3,6 @@ package com.findora.app.core.testing
 import androidx.paging.PagingData
 import com.findora.app.core.data.local.toDomain
 import com.findora.app.core.domain.model.DataError
-import com.findora.app.core.domain.model.InboxMessage
 import com.findora.app.core.domain.model.ListingBounds
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.domain.model.PropertyFilter
@@ -11,7 +10,6 @@ import com.findora.app.core.domain.model.RecentSearch
 import com.findora.app.core.domain.model.RefreshResult
 import com.findora.app.core.domain.model.SearchSuggestion
 import com.findora.app.core.domain.repository.FavoritesRepository
-import com.findora.app.core.domain.repository.MessageRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.SearchHistoryRepository
 import kotlinx.coroutines.flow.Flow
@@ -132,19 +130,6 @@ class FakeFavoritesRepository : FavoritesRepository {
     }
 }
 
-class FakeMessageRepository(
-    initial: Map<String, List<InboxMessage>> = emptyMap(),
-) : MessageRepository {
-    val unread = MutableStateFlow(initial)
-
-    override fun observeUnread(userId: String): Flow<List<InboxMessage>> = unread.map { it[userId].orEmpty() }
-
-    override suspend fun markRead(
-        userId: String,
-        messageId: String,
-    ) = unread.update { map -> map + (userId to map[userId].orEmpty().filterNot { it.id == messageId }) }
-}
-
 class FakeSearchHistoryRepository : SearchHistoryRepository {
     private val byUser = MutableStateFlow<Map<String, List<RecentSearch>>>(emptyMap())
     private var tick = 0L
@@ -175,8 +160,3 @@ class FakeSearchHistoryRepository : SearchHistoryRepository {
 
     override suspend fun clear(userId: String) = byUser.update { it - userId }
 }
-
-fun inboxMessage(
-    id: String,
-    body: String = "Viewing confirmed for Saturday",
-): InboxMessage = InboxMessage(id = id, propertyId = seedProperties.first().id, body = body, sentAt = Instant.EPOCH)

@@ -144,8 +144,8 @@ fun MessageBubble(
                     .clip(shape)
                     .background(background)
                     .padding(horizontal = FindoraTheme.spacing.sm, vertical = FindoraTheme.spacing.xs)
-                    .clearAndSetSemantics { contentDescription = description }
-                    .testTag("bubble_${message.id}"),
+                    .testTag("bubble_${message.id}")
+                    .clearAndSetSemantics { contentDescription = description },
         ) {
             Text(
                 text = message.body,
@@ -182,7 +182,7 @@ private fun DeliveryIcon(
         imageVector = icon,
         contentDescription = null,
         tint = color,
-        modifier = modifier.size(StatusIconSize).testTag("status_${status.name}"),
+        modifier = modifier.size(StatusIconSize),
     )
 }
 
@@ -231,10 +231,11 @@ fun TypingIndicator(
                     .clip(RoundedCornerShape(BubbleRadius, BubbleRadius, BubbleRadius, BubbleTail))
                     .background(FindoraTheme.colors.surface)
                     .padding(horizontal = FindoraTheme.spacing.md, vertical = FindoraTheme.spacing.sm)
+                    .testTag("typingIndicator")
                     .clearAndSetSemantics {
                         contentDescription = description
                         liveRegion = LiveRegionMode.Polite
-                    }.testTag("typingIndicator"),
+                    },
         ) {
             repeat(DOT_COUNT) { index ->
                 val lit = reduceMotion || phase.toInt() == index

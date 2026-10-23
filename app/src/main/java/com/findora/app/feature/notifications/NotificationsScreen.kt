@@ -264,10 +264,10 @@ private fun NotificationRow(
                 .fillMaxWidth()
                 .clip(FindoraTheme.shapes.chip)
                 .background(if (notification.isRead) FindoraTheme.colors.background else FindoraTheme.colors.surface)
+                .testTag("notification_${notification.id}")
                 .clickable(role = Role.Button, onClickLabel = openLabel, onClick = onClick)
                 .clearAndSetSemantics { contentDescription = description }
-                .padding(FindoraTheme.spacing.sm)
-                .testTag("notification_${notification.id}"),
+                .padding(FindoraTheme.spacing.sm),
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -305,8 +305,7 @@ private fun NotificationRow(
                 Modifier
                     .size(UnreadDot)
                     .clip(CircleShape)
-                    .background(FindoraTheme.colors.accent)
-                    .testTag("unreadDot_${notification.id}"),
+                    .background(FindoraTheme.colors.accent),
             )
         }
     }

@@ -18,6 +18,9 @@ and the choices you have.
 - Data you enter in the app (such as your profile, favourites, saved searches, messages and viewing
   requests) is stored **on your device**. Property listings are sample data bundled with the app;
   [no account data is sent to a Findora server].
+- Conversations with listing agents are a demo: replies are written on your device by a rule-based
+  "demo agent" from the listing's own details, are labelled as automated in the app, and your messages
+  are never sent to an agent or a server.
 - You can delete everything the app stores by clearing its storage or uninstalling it.
 
 ## 2. Information the app handles
@@ -28,6 +31,7 @@ and the choices you have.
 | Preferences | language, theme, currency, best-match answers (budget, bedrooms, lifestyle tags) | on your device | showing results that fit you |
 | Activity in the app | favourites, recent and saved searches, properties viewed | on your device | favourites, recommendations, alerts |
 | Messages and viewing requests | text you send, chosen dates and times | on your device | chat and viewing bookings |
+| In-app notifications | new message, viewing booked and viewing reminder entries | on your device | notifications center |
 | Approximate location | only if you tap "My location" and grant the permission | read once on your device from the last known position, never stored or sent anywhere | centring the map on where you are |
 | Photos | only images you pick with the system photo picker | on your device | adding photos to a listing |
 
@@ -43,7 +47,9 @@ device, never transmitted), not shared, optional. Precise location: not accessed
   on the map. Findora reads the last position Android already knows (no GPS request, no Google Play
   services, never in the background), centres the map on it and keeps it only in memory while the map
   is open. Precise location is never requested. If you decline, the map keeps working by region.
-- **Notifications** (optional): for viewing reminders and saved-search alerts.
+- **Notifications** (optional): for viewing reminders, replies in your conversations with listing agents
+  and saved-search alerts. Asked when you book a viewing or send the first message of a conversation;
+  both work without it, and the in-app notifications center keeps the same entries on your device.
 - **Biometrics** (optional): to unlock the app with your fingerprint or face; biometric data never
   leaves the Android system and is not accessible to Findora.
 - **Internet**: to load map tiles and property images.

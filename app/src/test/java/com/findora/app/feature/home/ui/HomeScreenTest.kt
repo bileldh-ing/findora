@@ -38,12 +38,10 @@ import com.findora.app.core.domain.model.RegionPack
 import com.findora.app.core.domain.model.SortOrder
 import com.findora.app.core.testing.FakePropertyRepository
 import com.findora.app.core.testing.fileSeedReader
-import com.findora.app.core.testing.inboxMessage
 import com.findora.app.feature.home.FilterSheetContent
 import com.findora.app.feature.home.HomeScreen
 import com.findora.app.feature.home.HomeUiEvent
 import com.findora.app.feature.home.HomeUiState
-import com.findora.app.feature.home.NotificationsSheetContent
 import com.findora.app.feature.home.RefreshStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
@@ -71,6 +69,7 @@ class HomeScreenTest {
     private val events = mutableListOf<HomeUiEvent>()
     private val opened = mutableListOf<String>()
     private var quizOpens = 0
+    private var notificationOpens = 0
 
     /** Home wired to an in-memory feed: chips, favourites and filters really change what the grid shows. */
     @Composable
@@ -126,6 +125,7 @@ class HomeScreenTest {
                 onOpenProperty = { opened += it },
                 onOpenMatchQuiz = { quizOpens += 1 },
                 reduceMotion = true,
+                onOpenNotifications = { notificationOpens += 1 },
             )
         }
     }
@@ -287,38 +287,18 @@ class HomeScreenTest {
     }
 
     @Test
-    fun bellShowsTheUnreadDotAndNotificationsCanBeMarkedRead() {
-        val unread = listOf(inboxMessage("m1", "Your viewing is confirmed"))
-        compose.setContent { InteractiveHome(homeState().copy(unread = unread)) }
-        compose.onNodeWithContentDescription("Notifications, 1 unread").assertIsDisplayed()
+    fun bellShowsTheUnreadDotAndOpensTheNotificationsCenter() {
+        compose.setContent { InteractiveHome(homeState().copy(unreadNotifications = 2)) }
+        compose.onNodeWithTag("unreadDot", useUnmergedTree = true).assertExists()
+        compose.onNodeWithContentDescription("Notifications, 2 unread").assertIsDisplayed().performClick()
+        assertEquals(1, notificationOpens)
     }
 
     @Test
-    fun notificationsSheetListsMessagesAndOffersMarkAsRead() {
-        val dismissed = mutableListOf<String>()
-        compose.setContent {
-            FindoraTheme {
-                NotificationsSheetContent(
-                    messages = listOf(inboxMessage("m1", "Your viewing is confirmed")),
-                    onDismissMessage = { dismissed += it },
-                )
-            }
-        }
-        compose.onNodeWithText("Your viewing is confirmed").assertIsDisplayed()
-        val action =
-            compose
-                .onNodeWithTag("notification_m1")
-                .fetchSemanticsNode()
-                .config[SemanticsActions.CustomActions]
-                .single { it.label == "Mark as read" }
-        action.action()
-        assertEquals(listOf("m1"), dismissed)
-    }
-
-    @Test
-    fun emptyNotificationsSayAllCaughtUp() {
-        compose.setContent { FindoraTheme { NotificationsSheetContent(messages = emptyList(), onDismissMessage = {}) } }
-        compose.onNodeWithText("You're all caught up").assertIsDisplayed()
+    fun withNothingUnreadTheBellHasNoDot() {
+        compose.setContent { InteractiveHome(homeState()) }
+        compose.onNodeWithContentDescription("Notifications").assertIsDisplayed()
+        assertTrue(compose.onAllNodes(hasTestTag("unreadDot"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
     }
 
     @Test

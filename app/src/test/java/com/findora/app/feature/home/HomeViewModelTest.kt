@@ -13,17 +13,18 @@ import com.findora.app.core.domain.model.PropertyFilter
 import com.findora.app.core.domain.model.PropertyType
 import com.findora.app.core.domain.model.RefreshResult
 import com.findora.app.core.domain.model.SortOrder
+import com.findora.app.core.domain.notification.NewNotification
+import com.findora.app.core.domain.notification.NotificationKind
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeFavoritesRepository
 import com.findora.app.core.testing.FakeMatchProfileRepository
-import com.findora.app.core.testing.FakeMessageRepository
+import com.findora.app.core.testing.FakeNotificationRepository
 import com.findora.app.core.testing.FakePropertyRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MainDispatcherRule
 import com.findora.app.core.testing.fileSeedReader
-import com.findora.app.core.testing.inboxMessage
 import com.findora.app.core.testing.observeMatchContext
 import com.findora.app.core.testing.seedProperties
 import kotlinx.coroutines.flow.first
@@ -43,7 +44,7 @@ class HomeViewModelTest {
     private val filters = InMemoryHomeFilterRepository()
     private val auth = FakeAuthRepository()
     private val settings = FakeSettingsRepository()
-    private val messages = FakeMessageRepository()
+    private val notifications = FakeNotificationRepository()
     private val profiles = FakeMatchProfileRepository()
 
     private fun viewModel() =
@@ -53,7 +54,7 @@ class HomeViewModelTest {
             filters = filters,
             auth = auth,
             currentRegion = CurrentRegion(settings, SeedRegionRepository(fileSeedReader(), main.dispatcher)),
-            messages = messages,
+            notifications = notifications,
             observeMatchContext =
                 observeMatchContext(
                     auth = auth,
@@ -185,15 +186,17 @@ class HomeViewModelTest {
         }
 
     @Test
-    fun swipingANotificationMarksItRead() =
+    fun theBellCountsTheUnreadNotificationsOfTheCurrentUserOnly() =
         runTest(main.dispatcher) {
             val guest = AuthRepository.GUEST_USER_ID
-            messages.unread.value = mapOf(guest to listOf(inboxMessage("m1"), inboxMessage("m2")))
+            notifications.add(guest, NewNotification(NotificationKind.ViewingBooked, "Georgie House", "p1"))
+            notifications.add(guest, NewNotification(NotificationKind.NewMessage, "Anu", "p1", conversationId = "c1"))
+            notifications.add("someone-else", NewNotification(NotificationKind.ViewingBooked, "Other", "p2"))
             val vm = viewModel()
             vm.state.test {
-                assertEquals(2, awaitUntil { it.unread.size == 2 }.unread.size)
-                vm.onEvent(HomeUiEvent.DismissNotification("m1"))
-                assertEquals(listOf("m2"), awaitUntil { it.unread.size == 1 }.unread.map { it.id })
+                assertEquals(2, awaitUntil { it.unreadNotifications == 2 }.unreadNotifications)
+                notifications.markAllRead(guest)
+                assertEquals(0, awaitUntil { it.unreadNotifications == 0 }.unreadNotifications)
                 cancelAndIgnoreRemainingEvents()
             }
         }

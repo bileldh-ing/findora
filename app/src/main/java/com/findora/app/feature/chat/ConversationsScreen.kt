@@ -162,10 +162,10 @@ private fun ConversationRow(
             modifier
                 .fillMaxWidth()
                 .clip(FindoraTheme.shapes.chip)
+                .testTag("conversation_${conversation.id}")
                 .clickable(role = Role.Button, onClickLabel = openLabel, onClick = onClick)
                 .clearAndSetSemantics { contentDescription = description }
-                .padding(vertical = FindoraTheme.spacing.sm, horizontal = FindoraTheme.spacing.xxs)
-                .testTag("conversation_${conversation.id}"),
+                .padding(vertical = FindoraTheme.spacing.sm, horizontal = FindoraTheme.spacing.xxs),
     ) {
         AgentAvatar(conversation.agent, RowAvatarSize)
         Spacer(Modifier.width(FindoraTheme.spacing.sm))
@@ -208,7 +208,7 @@ private fun ConversationRow(
                 )
                 if (unread > 0) {
                     Spacer(Modifier.width(FindoraTheme.spacing.xs))
-                    UnreadBadge(unread, Modifier.testTag("unread_${conversation.id}"))
+                    UnreadBadge(unread)
                 }
             }
         }
