@@ -102,6 +102,7 @@ fun MainShell(
                 SavedRoute(
                     onOpenProperty = onOpenProperty,
                     onOpenDreamMatch = onOpenDreamMatch,
+                    onShowSearchResults = { selectTab(MainTab.Home) },
                     contentPadding = contentPadding,
                 )
             }

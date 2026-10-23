@@ -32,7 +32,8 @@ and the choices you have.
 | Preferences | language, theme, display currency, area unit, notification and reduce-motion choices, best-match answers (budget, bedrooms, lifestyle tags) | on your device | showing results that fit you |
 | Activity in the app | favourites, recent and saved searches, properties viewed | on your device | favourites, recommendations, alerts |
 | Messages and viewing requests | text you send, chosen dates and times | on your device | chat and viewing bookings |
-| In-app notifications | new message, viewing booked and viewing reminder entries | on your device | notifications center |
+| In-app notifications | new message, viewing booked, viewing reminder, new matches for a saved search and price drop entries | on your device | notifications center |
+| Saved searches | the name, filter and region of each search, the listings it already reported and the last rent seen for each saved home | on your device | new-match and price-drop alerts |
 | Approximate location | only if you tap "My location" and grant the permission | read once on your device from the last known position, never stored or sent anywhere | centring the map on where you are |
 | Photos | only images you pick with the system photo picker | on your device | adding photos to a listing |
 
@@ -49,8 +50,10 @@ device, never transmitted), not shared, optional. Precise location: not accessed
   services, never in the background), centres the map on it and keeps it only in memory while the map
   is open. Precise location is never requested. If you decline, the map keeps working by region.
 - **Notifications** (optional): for viewing reminders, replies in your conversations with listing agents
-  and saved-search alerts. Asked when you book a viewing or send the first message of a conversation;
-  both work without it, and the in-app notifications center keeps the same entries on your device.
+  and saved-search alerts (new matches and price drops on saved homes). Asked when you book a viewing,
+  send the first message of a conversation or save a search; all work without it, and the in-app
+  notifications center keeps the same entries on your device. Alerts are only checked for the account
+  signed in on the device.
 - **Biometrics** (optional): to unlock the app with your fingerprint or face; biometric data never
   leaves the Android system and is not accessible to Findora.
 - **Internet**: to load map tiles and property images.
@@ -78,6 +81,10 @@ clear the app's storage in Android settings, or uninstall the app. In **Settings
   picker. The file is created only where you save it; Findora does not send it anywhere. Passwords and session
   tokens are never included.
 - **Clear search history**: deletes the recent searches of the current account (or guest session).
+- **Saved searches**: delete any of them in **Saved > Searches**; they are also deleted with your account or the
+  guest session, together with the listings they already reported and the price baselines of your saved homes.
+- **Home-screen widget**: shows homes and your next viewing only while you are signed in; remove it from your home
+  screen to stop it.
 - **Clear cache**: deletes downloaded listing photos and map tiles; they are downloaded again when needed.
 
 Display-currency conversions use a table of indicative exchange rates bundled with the app; no request is made to

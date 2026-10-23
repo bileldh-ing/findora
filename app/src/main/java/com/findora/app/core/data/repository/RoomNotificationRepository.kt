@@ -53,6 +53,8 @@ class RoomNotificationRepository
                         eventAtMillis = notification.eventAt?.toEpochMilli(),
                         createdAtMillis = clock.now().toEpochMilli(),
                         readAtMillis = null,
+                        savedSearchId = notification.savedSearchId,
+                        itemCount = notification.count,
                     ),
                 )
             }
@@ -98,5 +100,7 @@ private fun NotificationEntity.toDomain(): AppNotification? {
         eventAt = eventAtMillis?.let(Instant::ofEpochMilli),
         createdAt = Instant.ofEpochMilli(createdAtMillis),
         readAt = readAtMillis?.let(Instant::ofEpochMilli),
+        savedSearchId = savedSearchId,
+        count = itemCount,
     )
 }

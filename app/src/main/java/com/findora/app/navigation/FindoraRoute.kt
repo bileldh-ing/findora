@@ -72,6 +72,15 @@ sealed interface FindoraRoute {
         val propertyId: String,
     ) : FindoraRoute
 
+    /**
+     * A saved search's results, opened from a new-match notification or `findora://search/{id}`: applies the search
+     * to Home (owner only) and continues to [Main].
+     */
+    @Serializable
+    data class SavedSearchResults(
+        val searchId: Long,
+    ) : FindoraRoute
+
     /** The in-app notifications center (from the Home bell). */
     @Serializable
     data object Notifications : FindoraRoute

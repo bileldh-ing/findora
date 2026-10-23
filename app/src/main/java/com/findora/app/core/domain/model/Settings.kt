@@ -33,6 +33,9 @@ enum class NotificationToggle {
 
     /** New entries in the in-app notifications center. */
     InApp,
+
+    /** System notifications for saved-search matches and price drops on favourites. */
+    SearchAlerts,
 }
 
 /**
@@ -51,11 +54,13 @@ data class AppSettings(
     val messageNotifications: Boolean = true,
     val viewingReminderNotifications: Boolean = true,
     val inAppNotifications: Boolean = true,
+    val searchAlertNotifications: Boolean = true,
 ) {
     fun isEnabled(toggle: NotificationToggle): Boolean =
         when (toggle) {
             NotificationToggle.Messages -> messageNotifications
             NotificationToggle.ViewingReminders -> viewingReminderNotifications
             NotificationToggle.InApp -> inAppNotifications
+            NotificationToggle.SearchAlerts -> searchAlertNotifications
         }
 }

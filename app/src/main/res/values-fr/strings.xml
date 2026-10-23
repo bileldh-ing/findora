@@ -698,4 +698,54 @@
         <item quantity="many">%1$d photos</item>
         <item quantity="other">%1$d photos</item>
     </plurals>
+    <!-- Phase 7A : recherches enregistrées, alertes et widget -->
+    <string name="saved_tab_searches">Recherches</string>
+    <string name="saved_search_save_action">Enregistrer</string>
+    <string name="saved_search_save_this">Enregistrer cette recherche</string>
+    <string name="saved_search_save_title">Enregistrer cette recherche</string>
+    <string name="saved_search_save">Enregistrer</string>
+    <string name="saved_search_name_label">Nom</string>
+    <string name="saved_search_save_hint">Nous vous préviendrons quand de nouveaux logements correspondent. Modifiez les alertes dans Favoris › Recherches.</string>
+    <string name="saved_search_default_name">Ma recherche</string>
+    <string name="saved_search_saved">Recherche enregistrée. Alertes activées.</string>
+    <string name="saved_search_run">Voir les résultats</string>
+    <string name="saved_search_rename">Renommer la recherche</string>
+    <string name="saved_search_rename_confirm">Renommer</string>
+    <string name="saved_search_delete">Supprimer la recherche</string>
+    <string name="saved_search_alerts">Alertes nouveautés</string>
+    <string name="saved_search_alerts_summary">Me prévenir quand de nouveaux logements correspondent</string>
+    <string name="saved_search_frequency_daily">Quotidienne</string>
+    <string name="saved_search_frequency_instant">À chaque actualisation</string>
+    <string name="saved_search_opening">Ouverture de votre recherche</string>
+    <string name="saved_searches_empty_title">Aucune recherche enregistrée</string>
+    <string name="saved_searches_empty_body">Filtrez l’accueil ou demandez à Findora, puis touchez « Enregistrer » pour être alerté des nouveaux logements.</string>
+    <plurals name="saved_search_bedrooms">
+        <item quantity="one">%1$d+ chambre</item>
+        <item quantity="many">%1$d+ chambres</item>
+        <item quantity="other">%1$d+ chambres</item>
+    </plurals>
+    <string name="search_alerts_channel_name">Alertes de recherche</string>
+    <string name="search_alerts_channel_description">Nouveaux logements pour vos recherches et baisses de prix sur vos favoris</string>
+    <plurals name="search_alert_title">
+        <item quantity="one">%1$d nouveau logement pour « %2$s »</item>
+        <item quantity="many">%1$d nouveaux logements pour « %2$s »</item>
+        <item quantity="other">%1$d nouveaux logements pour « %2$s »</item>
+    </plurals>
+    <string name="search_alert_body">Le plus récent : %1$s</string>
+    <string name="price_drop_title">Baisse de prix : %1$s</string>
+    <string name="price_drop_body">Désormais %1$s par mois (avant %2$s)</string>
+    <string name="notify_search_alerts">Alertes de recherche</string>
+    <string name="notify_search_alerts_summary">Nouveautés pour vos recherches et baisses de prix sur vos favoris</string>
+    <string name="widget_picks_name">Sélection Findora</string>
+    <string name="widget_picks_description">Vos meilleurs logements avec leur prix et votre prochaine visite</string>
+    <string name="widget_heading_matches">Vos meilleurs matchs</string>
+    <string name="widget_heading_saved">Vos logements favoris</string>
+    <string name="widget_heading_recommended">Logements recommandés</string>
+    <string name="widget_match">Match %1$d %%</string>
+    <string name="widget_next_viewing">Prochaine visite : %1$s · %2$s</string>
+    <string name="widget_empty">Aucun logement pour l’instant. Ouvrez Findora pour charger les annonces.</string>
+    <string name="widget_signed_out">Connectez-vous à Findora pour voir votre sélection.</string>
+    <string name="widget_open_app">Ouvrir Findora</string>
+    <string name="widget_preview_row">Georgie House · 10 000 ₹</string>
+    <string name="widget_preview_viewing">Prochaine visite : mar. 14:00</string>
 </resources>

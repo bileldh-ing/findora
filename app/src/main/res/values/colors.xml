@@ -2,4 +2,8 @@
 <resources>
     <color name="findora_background">#FFFFFFFF</color>
     <color name="findora_icon_background">#FF161616</color>
+    <!-- "Findora picks" widget preview (the live widget sets the same colours in code). -->
+    <color name="widget_background">#FFFFFFFF</color>
+    <color name="widget_surface">#FFF2F2F2</color>
+    <color name="widget_on_background">#FF161616</color>
 </resources>

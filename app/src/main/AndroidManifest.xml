@@ -65,7 +65,28 @@
                     android:host="chat"
                     android:scheme="findora" />
             </intent-filter>
+            <!-- New-match notifications: findora://search/{searchId} opens Home with that saved search (owner only). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="search"
+                    android:scheme="findora" />
+            </intent-filter>
         </activity>
+
+        <!-- "Findora picks" home-screen widget (Jetpack Glance). -->
+        <receiver
+            android:name=".widget.FindoraPicksWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_picks_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/findora_picks_widget_info" />
+        </receiver>
 
         <!-- Per-app language below Android 13: AppCompat stores the chosen locale itself and restores it at launch
              (Android 13+ keeps it in the system, where it also appears in the app's language settings). -->

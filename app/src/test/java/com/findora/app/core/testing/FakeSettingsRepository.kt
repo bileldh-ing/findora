@@ -43,6 +43,7 @@ class FakeSettingsRepository(
             NotificationToggle.Messages -> it.copy(messageNotifications = enabled)
             NotificationToggle.ViewingReminders -> it.copy(viewingReminderNotifications = enabled)
             NotificationToggle.InApp -> it.copy(inAppNotifications = enabled)
+            NotificationToggle.SearchAlerts -> it.copy(searchAlertNotifications = enabled)
         }
     }
 }

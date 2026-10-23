@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -60,6 +61,7 @@ import com.findora.app.core.ui.TimeLabels
 import com.findora.app.core.ui.appLocale
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.Locale
 
 private val KindIconBox = 44.dp
 private val UnreadDot = 9.dp
@@ -70,6 +72,7 @@ fun NotificationsRoute(
     onOpenConversation: (String) -> Unit,
     onOpenProperty: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onOpenSavedSearch: (Long) -> Unit = {},
     viewModel: NotificationsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -77,6 +80,7 @@ fun NotificationsRoute(
     val deleted = stringResource(R.string.notifications_deleted)
     val openConversation by rememberUpdatedState(onOpenConversation)
     val openProperty by rememberUpdatedState(onOpenProperty)
+    val openSavedSearch by rememberUpdatedState(onOpenSavedSearch)
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
@@ -84,6 +88,7 @@ fun NotificationsRoute(
                     when (val target = effect.target) {
                         is NotificationTarget.Chat -> openConversation(target.conversationId)
                         is NotificationTarget.Property -> openProperty(target.propertyId)
+                        is NotificationTarget.SavedSearch -> openSavedSearch(target.searchId)
                     }
                 NotificationsUiEffect.Deleted -> snackbarHostState.showSnackbar(deleted)
             }
@@ -223,26 +228,8 @@ private fun NotificationRow(
     modifier: Modifier = Modifier,
 ) {
     val locale = appLocale()
-    val title =
-        when (notification.kind) {
-            NotificationKind.NewMessage -> stringResource(R.string.notification_message_title, notification.subject)
-            NotificationKind.ViewingReminder -> stringResource(R.string.notification_reminder_title)
-            NotificationKind.ViewingBooked -> stringResource(R.string.notification_booked_title)
-        }
-    val body =
-        when (notification.kind) {
-            NotificationKind.NewMessage -> notification.preview
-            NotificationKind.ViewingReminder, NotificationKind.ViewingBooked ->
-                notification.eventAt
-                    ?.let {
-                        stringResource(
-                            R.string.notification_viewing_body,
-                            notification.subject,
-                            TimeLabels.dateTime(it, zone, locale),
-                        )
-                    }
-                    ?: notification.subject
-        }
+    val title = notificationTitle(notification)
+    val body = notificationBody(notification, zone, locale)
     val time = TimeLabels.listLabel(notification.createdAt, zone, today, locale)
     val unreadLabel = stringResource(R.string.notification_unread)
     val description =
@@ -251,12 +238,64 @@ private fun NotificationRow(
         }
     val openLabel =
         stringResource(
-            if (notification.target is NotificationTarget.Chat) {
-                R.string.chat_open_conversation
-            } else {
-                R.string.chat_open_listing
+            when (notification.target) {
+                is NotificationTarget.Chat -> R.string.chat_open_conversation
+                is NotificationTarget.SavedSearch -> R.string.saved_search_run
+                is NotificationTarget.Property -> R.string.chat_open_listing
             },
         )
+    NotificationRowContent(notification, title, body, time, description, openLabel, onClick, modifier)
+}
+
+@Composable
+private fun notificationTitle(notification: AppNotification): String =
+    when (notification.kind) {
+        NotificationKind.NewMessage -> stringResource(R.string.notification_message_title, notification.subject)
+        NotificationKind.ViewingReminder -> stringResource(R.string.notification_reminder_title)
+        NotificationKind.ViewingBooked -> stringResource(R.string.notification_booked_title)
+        NotificationKind.NewMatches ->
+            pluralStringResource(
+                R.plurals.search_alert_title,
+                notification.count.coerceAtLeast(1),
+                notification.count.coerceAtLeast(1),
+                notification.subject,
+            )
+        NotificationKind.PriceDrop -> stringResource(R.string.price_drop_title, notification.subject)
+    }
+
+@Composable
+private fun notificationBody(
+    notification: AppNotification,
+    zone: ZoneId,
+    locale: Locale,
+): String =
+    when (notification.kind) {
+        NotificationKind.NewMessage, NotificationKind.PriceDrop -> notification.preview
+        NotificationKind.NewMatches -> stringResource(R.string.search_alert_body, notification.preview)
+        NotificationKind.ViewingReminder, NotificationKind.ViewingBooked ->
+            notification.eventAt
+                ?.let {
+                    stringResource(
+                        R.string.notification_viewing_body,
+                        notification.subject,
+                        TimeLabels.dateTime(it, zone, locale),
+                    )
+                }
+                ?: notification.subject
+    }
+
+@Suppress("LongParameterList")
+@Composable
+private fun NotificationRowContent(
+    notification: AppNotification,
+    title: String,
+    body: String,
+    time: String,
+    description: String,
+    openLabel: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
@@ -316,4 +355,6 @@ private fun kindIcon(kind: NotificationKind): ImageVector =
         NotificationKind.NewMessage -> FindoraIcons.Chat
         NotificationKind.ViewingReminder -> FindoraIcons.Clock
         NotificationKind.ViewingBooked -> FindoraIcons.Calendar
+        NotificationKind.NewMatches -> FindoraIcons.Bookmark
+        NotificationKind.PriceDrop -> FindoraIcons.TrendingDown
     }

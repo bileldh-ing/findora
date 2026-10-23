@@ -25,8 +25,27 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 4 | Property detail (gallery, agent contact, share links, similar homes, price history, neighbourhood radar, affordability calculator) and viewing bookings (slots, reminders, calendar, My viewings) | Done (v0.5.0) |
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
-| 7 | Pro extras | Planned |
+| 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A) | In progress |
 | 8 | Polish and release | Planned |
+
+## What Phase 7A ships
+
+- **Saved searches with alerts**: "Save search" on a filtered Home feed and "Save this search" in Ask Findora; the
+  Saved tab's **Searches** list runs, renames and deletes them and sets new-match alerts (Daily or On every refresh).
+  Listings that already match when a search is saved never alert; each new one alerts once (`AlertDiff`,
+  `CheckSearchAlerts`, seen ids in Room v4).
+- **Background checks**: `SearchAlertWorker` every 4 hours (battery not low; no network constraint because the
+  backend is local) plus a one-off check of instant searches after each listings refresh; favourites that got
+  cheaper are reported too. Entries go to the notifications center and to the **Search alerts** channel, each
+  honouring its Settings toggle and `POST_NOTIFICATIONS`. A new-match notification opens
+  `findora://search/{id}`, which applies the search to Home for its owner only.
+- **A market that moves over time**: the fake backend (`FakeMarket`) deterministically publishes two new units per
+  region every day (09:00 and 13:00 UTC, listed for a week) and offers about one listing in eight 5% cheaper each
+  week, so alerts have real, reproducible events.
+- **"Findora picks" widget** (Jetpack Glance): the top three homes (best matches, else saved homes, else
+  Recommended) with photo, price in the display currency and match score, plus the next viewing; taps open the
+  listing through `findora://property/{id}`. Light and dark, localized, TalkBack sentences, refreshed by WorkManager
+  every 3 hours and whenever favourites or viewings change, with a scalable picker preview on Android 12+.
 
 ## What Phase 6C ships
 
@@ -352,6 +371,7 @@ app/src/main/java/com/findora/app
 | Turbine, MockK, kotlinx-coroutines-test | Flow assertions, mocking and virtual-time coroutine tests |
 | Robolectric + Compose UI test | Compose UI tests on the JVM, in CI |
 | WorkManager (work-runtime-ktx, work-testing) | Viewing reminders that survive process death and reboots; `TestListenableWorkerBuilder` and the test WorkManager in unit tests |
+| Jetpack Glance (glance-appwidget, glance-appwidget-testing) | The "Findora picks" home-screen widget written in Compose style, with JVM unit tests of its content |
 | androidx.hilt:hilt-work (+ hilt-compiler) | Constructor-injected `@HiltWorker` workers through `HiltWorkerFactory` |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
 
@@ -365,7 +385,11 @@ app/src/main/java/com/findora/app
 | `PriceFormatterTest` | Design style, INR lakh grouping, USD, EUR, TND, Arabic/RTL isolation |
 | `DomainModelTest` | Money arithmetic, stable ids, bounds, filters |
 | `PropertyDaoTest`, `UserDataDaoTest`, `ActivityDaoTest` | Every DAO against in-memory Room (Robolectric): filters, ordering, per-user favourites, unique e-mail, double-booking guard, recent-search de-duplication and trimming |
-| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v3 and v2 to v3 migrations keep data (`MigrationTestHelper`) |
+| `DatabaseSchemaTest` | Exported schemas committed and identical to the entities; v1 to v4, v2 to v3 and v3 to v4 migrations keep data (`MigrationTestHelper`) |
+| `AlertDiffTest`, `CheckSearchAlertsTest`, `FakeMarketTest`, `SavedFilterJsonTest` | New-match diff, due rules, no duplicate alerts, price drops; the deterministic moving market; saved filter JSON round trip and tolerance |
+| `RoomSavedSearchRepositoryTest`, `SearchAlertWorkerTest` | Owner-scoped saved searches, seen ids, deletion with the account, price baselines; alert worker with `TestListenableWorkerBuilder` (deep link, toggles, permission, signed out, no repeats, price drop) |
+| `SavedSearchesViewModelTest`, `SearchNameStateTest`, `SavedSearchesScreenTest`, `SaveSearchDialogTest`, `SearchDeepLinkTest` | Saved searches list, run, rename, alerts, delete, Home save, owner-only links (Turbine); name trimming, blank names and the length cap; Searches tab and name field (Compose), the name dialog on the emulator; `findora://search/{id}` parsing and routing |
+| `PicksWidgetStateBuilderTest`, `PicksWidgetContentTest`, `MainShellViewModelTest` | Widget picks, prices, match scores and next viewing; Glance content, TalkBack and click actions (glance-appwidget-testing); widget refresh and alert scheduling triggers |
 | `AgentReplyEngineTest` | Demo agent rules: greeting once, availability, one open slot per day, taken slots never offered, "tomorrow" spacing, price flexibility from history and age, pets / parking / furnishing / size, French and Arabic, no false keyword matches, determinism, bounded typing time |
 | `RoomChatRepositoryTest`, `DemoAgentResponderTest`, `AndroidChatNotifierTest` | Threads and notifications per user (isolation, unread counts, newest first, one unread notification per thread, account deletion); sending, sent, read, typing, reply and notification in virtual time, no notification for the open thread; Messages channel and chat link |
 | `ChatViewModelTest`, `ConversationsViewModelTest`, `NotificationsViewModelTest` | Start from a listing, first message creates the thread, quick replies, failed send, foreign thread not found, read on screen, typing and day separators; list order, unread and typing, Chat tab badge; open, mark read, mark all, delete (Turbine) |

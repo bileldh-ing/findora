@@ -699,4 +699,52 @@
         <item quantity="one">%1$d photo</item>
         <item quantity="other">%1$d photos</item>
     </plurals>
+    <!-- Phase 7A: saved searches, search alerts and the home-screen widget -->
+    <string name="saved_tab_searches">Searches</string>
+    <string name="saved_search_save_action">Save search</string>
+    <string name="saved_search_save_this">Save this search</string>
+    <string name="saved_search_save_title">Save this search</string>
+    <string name="saved_search_save">Save</string>
+    <string name="saved_search_name_label">Name</string>
+    <string name="saved_search_save_hint">We will let you know when new homes match it. Change alerts anytime in Saved › Searches.</string>
+    <string name="saved_search_default_name">My search</string>
+    <string name="saved_search_saved">Search saved. Alerts are on.</string>
+    <string name="saved_search_run">Show results</string>
+    <string name="saved_search_rename">Rename search</string>
+    <string name="saved_search_rename_confirm">Rename</string>
+    <string name="saved_search_delete">Delete search</string>
+    <string name="saved_search_alerts">New-match alerts</string>
+    <string name="saved_search_alerts_summary">Tell me when new homes match this search</string>
+    <string name="saved_search_frequency_daily">Daily</string>
+    <string name="saved_search_frequency_instant">On every refresh</string>
+    <string name="saved_search_opening">Opening your saved search</string>
+    <string name="saved_searches_empty_title">No saved searches yet</string>
+    <string name="saved_searches_empty_body">Filter the Home feed or ask Findora, then tap “Save search” to get alerts for new homes.</string>
+    <plurals name="saved_search_bedrooms">
+        <item quantity="one">%1$d+ bedroom</item>
+        <item quantity="other">%1$d+ bedrooms</item>
+    </plurals>
+    <string name="search_alerts_channel_name">Search alerts</string>
+    <string name="search_alerts_channel_description">New homes for your saved searches and price drops on homes you saved</string>
+    <plurals name="search_alert_title">
+        <item quantity="one">1 new home for “%2$s”</item>
+        <item quantity="other">%1$d new homes for “%2$s”</item>
+    </plurals>
+    <string name="search_alert_body">Newest: %1$s</string>
+    <string name="price_drop_title">Price drop: %1$s</string>
+    <string name="price_drop_body">Now %1$s a month (was %2$s)</string>
+    <string name="notify_search_alerts">Search alerts</string>
+    <string name="notify_search_alerts_summary">New matches for saved searches and price drops on saved homes</string>
+    <string name="widget_picks_name">Findora picks</string>
+    <string name="widget_picks_description">Your top homes with prices and your next viewing</string>
+    <string name="widget_heading_matches">Top matches for you</string>
+    <string name="widget_heading_saved">Your saved homes</string>
+    <string name="widget_heading_recommended">Recommended homes</string>
+    <string name="widget_match">%1$d%% match</string>
+    <string name="widget_next_viewing">Next viewing: %1$s · %2$s</string>
+    <string name="widget_empty">No homes to show yet. Open Findora to load listings.</string>
+    <string name="widget_signed_out">Sign in to Findora to see your picks.</string>
+    <string name="widget_open_app">Open Findora</string>
+    <string name="widget_preview_row">Georgie House · ₹10,000</string>
+    <string name="widget_preview_viewing">Next viewing: Tue 14:00</string>
 </resources>

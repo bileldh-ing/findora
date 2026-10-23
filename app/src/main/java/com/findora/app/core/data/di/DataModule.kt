@@ -20,6 +20,7 @@ import com.findora.app.core.data.local.dao.ChatDao
 import com.findora.app.core.data.local.dao.FavoriteDao
 import com.findora.app.core.data.local.dao.InteractionEventDao
 import com.findora.app.core.data.local.dao.NotificationDao
+import com.findora.app.core.data.local.dao.PriceWatchDao
 import com.findora.app.core.data.local.dao.PropertyDao
 import com.findora.app.core.data.local.dao.RecentSearchDao
 import com.findora.app.core.data.local.dao.SavedSearchDao
@@ -235,6 +236,7 @@ object DataModule {
 /** Room database and its DAOs. */
 @Module
 @InstallIn(SingletonComponent::class)
+@Suppress("TooManyFunctions") // One provider per DAO.
 object DatabaseModule {
     @Provides
     @Singleton
@@ -263,6 +265,9 @@ object DatabaseModule {
 
     @Provides
     fun provideSavedSearchDao(db: FindoraDatabase): SavedSearchDao = db.savedSearchDao()
+
+    @Provides
+    fun providePriceWatchDao(db: FindoraDatabase): PriceWatchDao = db.priceWatchDao()
 
     @Provides
     fun provideViewingDao(db: FindoraDatabase): ViewingDao = db.viewingDao()

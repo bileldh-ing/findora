@@ -15,6 +15,8 @@ import kotlin.random.Random
  * Backend stand-in that serves the bundled seed with realistic latency (150 to 600 ms by default)
  * and switchable failures, so the whole app works with no server. [random] is injected so tests
  * get deterministic latency and failures; delays use coroutine time, so tests skip them instantly.
+ * With a [market] the listings move with time (new units, weekly offers; see [FakeMarket]); without one the seed
+ * is served as is.
  */
 @Singleton
 class FakeRemoteDataSource
@@ -23,6 +25,7 @@ class FakeRemoteDataSource
         private val seedReader: SeedReader,
         private val config: FakeRemoteConfig,
         private val random: Random,
+        private val market: FakeMarket? = null,
     ) : RemoteDataSource {
         private val mutex = Mutex()
         private var listings: List<ListingDto>? = null
@@ -59,8 +62,10 @@ class FakeRemoteDataSource
                     ?: throw RemoteException(DataError.NotFound, "Listing $id not found")
             }
 
-        private fun allListings(): List<ListingDto> =
-            listings ?: seedReader.readListings().listings.also { listings = it }
+        private fun allListings(): List<ListingDto> {
+            val seed = listings ?: seedReader.readListings().listings.also { listings = it }
+            return market?.apply(seed) ?: seed
+        }
 
         private suspend fun <T> simulate(block: () -> T): T {
             val range = config.latencyMillis
