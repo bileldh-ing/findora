@@ -3,6 +3,9 @@ package com.findora.app.feature.detail
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import com.findora.app.core.domain.insight.AffordabilityVerdict
+import com.findora.app.core.domain.insight.NeighbourhoodScore
+import com.findora.app.core.domain.insight.PriceTrend
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.model.Property
@@ -177,6 +180,69 @@ class DetailViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
         }
+
+    @Test
+    fun contentCarriesPriceTrendAndSampleNeighbourhood() =
+        runTest(main.dispatcher) {
+            viewModel().state.test {
+                val content = awaitSettled() as DetailUiState.Content
+                assertEquals(PriceTrend.from(georgie.priceHistory), content.priceTrend)
+                assertEquals(NeighbourhoodScore.sample(georgie.regionId, georgie.locality), content.neighbourhood)
+                assertTrue(content.neighbourhood.isSampleData)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun affordabilityCalculatorOpensUpdatesAndCloses() =
+        runTest(main.dispatcher) {
+            val vm = viewModel()
+            vm.state.test {
+                val initial = (awaitSettled() as DetailUiState.Content).affordability
+                assertFalse(initial.isOpen)
+                assertEquals(georgie.rent, initial.rent)
+                assertEquals(null, initial.report)
+
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.Open))
+                assertTrue(affordability().isOpen)
+
+                val income = georgie.rent.amount * 4
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.IncomeChanged(income.toString())))
+                val report = requireNotNull(affordability().report)
+                assertEquals(AffordabilityVerdict.Comfortable, report.verdict)
+                assertEquals(income * 30 / 100, report.maxRent)
+
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.DepositMonthsChanged(3)))
+                assertEquals(georgie.rent.amount * 3, requireNotNull(affordability().report).deposit)
+
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.IncomeChanged(georgie.rent.amount.toString())))
+                assertEquals(AffordabilityVerdict.Over, requireNotNull(affordability().report).verdict)
+
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.Dismiss))
+                val closed = affordability()
+                assertFalse(closed.isOpen)
+                // The form keeps its values for the next time the sheet opens.
+                assertEquals(3, closed.depositMonths)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun anIncomeOfZeroIsFlagged() =
+        runTest(main.dispatcher) {
+            val vm = viewModel()
+            vm.state.test {
+                awaitSettled()
+                vm.onEvent(DetailUiEvent.Affordability(AffordabilityEvent.IncomeChanged("0")))
+                val state = affordability()
+                assertEquals(AffordabilityFieldError.IncomeZero, state.incomeError)
+                assertEquals(null, state.report)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    private suspend fun ReceiveTurbine<DetailUiState>.affordability(): AffordabilityUiState =
+        (awaitItem() as DetailUiState.Content).affordability
 }
 
 /** The next state that is not Loading (an unconfined dispatcher may resolve before the first collection). */
