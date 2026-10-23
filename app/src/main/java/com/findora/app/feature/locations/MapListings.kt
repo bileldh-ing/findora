@@ -152,9 +152,9 @@ fun MapListingCard(
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     val colors = FindoraTheme.colors
     val price = PriceFormatter.formatPerMonth(property.rent, locale, stringResource(R.string.per_month))
-    val specs = stringResource(R.string.map_card_specs, property.bedrooms, property.bathrooms, property.areaSqm)
-    val spokenSpecs =
-        stringResource(R.string.map_card_specs_cd, property.bedrooms, property.bathrooms, property.areaSqm)
+    val area = String.format(locale, "%d", property.areaSqm)
+    val specs = stringResource(R.string.map_card_specs, property.bedrooms, property.bathrooms, "$area m²")
+    val spokenSpecs = stringResource(R.string.map_card_specs_cd, property.bedrooms, property.bathrooms, area)
     val rating = String.format(locale, "%.1f", property.rating)
     val spokenPrice = PriceFormatter.format(property.rent, locale, PriceStyle.Localized)
     val summary =

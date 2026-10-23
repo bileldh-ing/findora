@@ -212,9 +212,8 @@
     <string name="map_empty_filtered">No homes match your filters here</string>
     <string name="map_empty_area">No homes in this area</string>
     <string name="map_region_switcher">Region</string>
-    <string name="map_card_specs">%1$d bd · %2$d ba · %3$d m²</string>
-    <string name="map_card_specs_cd">%1$d bedrooms, %2$d bathrooms, %3$d square metres</string>
-    <string name="map_selected">Selected</string>
+    <string name="map_card_specs">Beds %1$d · Baths %2$d · %3$s</string>
+    <string name="map_card_specs_cd">Bedrooms: %1$d, bathrooms: %2$d, area: %3$s square metres</string>
     <string name="map_marker_action">Show %1$s, %2$s</string>
     <plurals name="map_homes_count">
         <item quantity="one">%1$d home</item>

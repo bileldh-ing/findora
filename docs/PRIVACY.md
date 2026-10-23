@@ -28,15 +28,21 @@ and the choices you have.
 | Preferences | language, theme, currency, best-match answers (budget, bedrooms, lifestyle tags) | on your device | showing results that fit you |
 | Activity in the app | favourites, recent and saved searches, properties viewed | on your device | favourites, recommendations, alerts |
 | Messages and viewing requests | text you send, chosen dates and times | on your device | chat and viewing bookings |
-| Location | only if you grant the permission | used on your device, not stored by us | "near me" search and distances on the map |
+| Approximate location | only if you tap "My location" and grant the permission | read once on your device from the last known position, never stored or sent anywhere | centring the map on where you are |
 | Photos | only images you pick with the system photo picker | on your device | adding photos to a listing |
 
 [If a version adds a backend, analytics or crash reporting, add a row per data type, name each
 service provider, where the data is processed and how long it is kept.]
 
+**Play Console Data safety (Location):** approximate location, *collected: No* (processed only on the
+device, never transmitted), not shared, optional. Precise location: not accessed.
+
 ## 3. Permissions
 
-- **Location** (optional): to centre the map and sort by distance. Findora works without it.
+- **Approximate location** (`ACCESS_COARSE_LOCATION`, optional): asked only when you tap "My location"
+  on the map. Findora reads the last position Android already knows (no GPS request, no Google Play
+  services, never in the background), centres the map on it and keeps it only in memory while the map
+  is open. Precise location is never requested. If you decline, the map keeps working by region.
 - **Notifications** (optional): for viewing reminders and saved-search alerts.
 - **Biometrics** (optional): to unlock the app with your fingerprint or face; biometric data never
   leaves the Android system and is not accessible to Findora.
@@ -44,8 +50,10 @@ service provider, where the data is processed and how long it is kept.]
 
 ## 4. Third parties
 
-Map tiles are requested from [tile provider name and privacy policy URL], which receives your IP
-address and the map area being viewed, as with any web request. [List any other services.]
+Map tiles are requested from the OpenStreetMap Foundation's tile servers (tile.openstreetmap.org,
+privacy policy: https://osmfoundation.org/wiki/Privacy_Policy), which receive your IP address, the app's
+identifier as user agent and the map area being viewed, as with any web request. Your location is
+never sent to them; tiles are cached on your device so areas you have seen load again offline. [List any other services.]
 Findora does not share your personal data with anyone else, except where required by law.
 
 ## 5. Security

@@ -197,9 +197,8 @@
     <string name="map_empty_filtered">Aucun logement ne correspond à vos filtres ici</string>
     <string name="map_empty_area">Aucun logement dans cette zone</string>
     <string name="map_region_switcher">Région</string>
-    <string name="map_card_specs">%1$d ch. · %2$d sdb · %3$d m²</string>
-    <string name="map_card_specs_cd">%1$d chambres, %2$d salles de bain, %3$d mètres carrés</string>
-    <string name="map_selected">Sélectionné</string>
+    <string name="map_card_specs">Chambres : %1$d · SdB : %2$d · %3$s</string>
+    <string name="map_card_specs_cd">Chambres : %1$d, salles de bain : %2$d, surface : %3$s mètres carrés</string>
     <string name="map_marker_action">Afficher %1$s, %2$s</string>
     <plurals name="map_homes_count">
         <item quantity="one">%1$d logement</item>

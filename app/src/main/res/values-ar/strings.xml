@@ -203,9 +203,8 @@
     <string name="map_empty_filtered">لا توجد منازل تطابق عوامل التصفية هنا</string>
     <string name="map_empty_area">لا توجد منازل في هذه المنطقة</string>
     <string name="map_region_switcher">المنطقة</string>
-    <string name="map_card_specs">%1$d غرف · %2$d حمّامات · %3$d م²</string>
-    <string name="map_card_specs_cd">%1$d غرف نوم، %2$d حمّامات، %3$d متر مربع</string>
-    <string name="map_selected">محدد</string>
+    <string name="map_card_specs">غرف: %1$d · حمّامات: %2$d · %3$s</string>
+    <string name="map_card_specs_cd">غرف النوم: %1$d، الحمّامات: %2$d، المساحة: %3$s متر مربع</string>
     <string name="map_marker_action">عرض %1$s، %2$s</string>
     <plurals name="map_homes_count">
         <item quantity="zero">لا توجد منازل</item>
