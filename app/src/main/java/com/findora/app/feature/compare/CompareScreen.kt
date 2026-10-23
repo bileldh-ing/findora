@@ -3,7 +3,6 @@ package com.findora.app.feature.compare
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -276,7 +275,8 @@ private fun CompareHeaderRow(
             val earlier = stringResource(R.string.compare_move_earlier)
             val later = stringResource(R.string.compare_move_later)
             val remove = stringResource(R.string.compare_remove)
-            val position = stringResource(R.string.compare_column_description, property.title, index + 1, properties.size)
+            val position =
+                stringResource(R.string.compare_column_description, property.title, index + 1, properties.size)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier =
@@ -315,12 +315,38 @@ private fun CompareHeaderRow(
                             customActions =
                                 buildList {
                                     if (index > 0) {
-                                        add(CustomAccessibilityAction(earlier) { true.also { onEvent(CompareUiEvent.Move(index, index - 1)) } })
+                                        add(
+                                            CustomAccessibilityAction(earlier) {
+                                                true.also {
+                                                    onEvent(
+                                                        CompareUiEvent.Move(
+                                                            index,
+                                                            index - 1,
+                                                        ),
+                                                    )
+                                                }
+                                            },
+                                        )
                                     }
                                     if (index < properties.lastIndex) {
-                                        add(CustomAccessibilityAction(later) { true.also { onEvent(CompareUiEvent.Move(index, index + 1)) } })
+                                        add(
+                                            CustomAccessibilityAction(later) {
+                                                true.also {
+                                                    onEvent(
+                                                        CompareUiEvent.Move(
+                                                            index,
+                                                            index + 1,
+                                                        ),
+                                                    )
+                                                }
+                                            },
+                                        )
                                     }
-                                    add(CustomAccessibilityAction(remove) { true.also { onEvent(CompareUiEvent.Remove(property.id)) } })
+                                    add(
+                                        CustomAccessibilityAction(
+                                            remove,
+                                        ) { true.also { onEvent(CompareUiEvent.Remove(property.id)) } },
+                                    )
                                 }
                         }.testTag("compareColumn_$index"),
             ) {
@@ -329,7 +355,9 @@ private fun CompareHeaderRow(
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .clip(FindoraTheme.shapes.chip)
-                        .clickable(onClickLabel = stringResource(R.string.action_open_listing)) { onOpenProperty(property.id) },
+                        .clickable(
+                            onClickLabel = stringResource(R.string.action_open_listing),
+                        ) { onOpenProperty(property.id) },
                 ) {
                     ListingCoverPhoto(property, Modifier.fillMaxSize())
                 }
@@ -344,11 +372,20 @@ private fun CompareHeaderRow(
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (index > 0) {
-                        SmallIconButton(FindoraIcons.ChevronEnd, earlier, { onEvent(CompareUiEvent.Move(index, index - 1)) }, "compareEarlier_$index", flip = true)
+                        SmallIconButton(FindoraIcons.ChevronEnd, earlier, {
+                            onEvent(CompareUiEvent.Move(index, index - 1))
+                        }, "compareEarlier_$index", flip = true)
                     }
-                    SmallIconButton(FindoraIcons.Close, remove, { onEvent(CompareUiEvent.Remove(property.id)) }, "compareRemove_$index")
+                    SmallIconButton(
+                        FindoraIcons.Close,
+                        remove,
+                        { onEvent(CompareUiEvent.Remove(property.id)) },
+                        "compareRemove_$index",
+                    )
                     if (index < properties.lastIndex) {
-                        SmallIconButton(FindoraIcons.ChevronEnd, later, { onEvent(CompareUiEvent.Move(index, index + 1)) }, "compareLater_$index")
+                        SmallIconButton(FindoraIcons.ChevronEnd, later, {
+                            onEvent(CompareUiEvent.Move(index, index + 1))
+                        }, "compareLater_$index")
                     }
                 }
             }
@@ -370,7 +407,11 @@ private fun MetricRow(
             val isBest = index in row.best
             val spoken =
                 buildString {
-                    append(label).append(", ").append(properties[index].title).append(": ").append(text)
+                    append(label)
+                        .append(", ")
+                        .append(properties[index].title)
+                        .append(": ")
+                        .append(text)
                     if (isBest) append(", ").append(bestLabel)
                 }
             Box(
@@ -382,7 +423,13 @@ private fun MetricRow(
                         .padding(FindoraTheme.spacing.xxs)
                         .clip(FindoraTheme.shapes.chip)
                         .background(
-                            if (isBest) FindoraTheme.colors.success.copy(alpha = BEST_ALPHA) else FindoraTheme.colors.background,
+                            if (isBest) {
+                                FindoraTheme.colors.success.copy(
+                                    alpha = BEST_ALPHA,
+                                )
+                            } else {
+                                FindoraTheme.colors.background
+                            },
                         ).clearAndSetSemantics { contentDescription = spoken }
                         .testTag(if (isBest) "best_${row.metric.name}_$index" else "cell_${row.metric.name}_$index"),
             ) {
@@ -460,7 +507,11 @@ private fun formatValue(
         CompareMetric.PricePerSqm ->
             stringResource(
                 R.string.compare_price_sqm_value,
-                PriceFormatter.format(Money(value.roundToInt().toLong(), property.rent.currency), locale, PriceStyle.Localized),
+                PriceFormatter.format(
+                    Money(value.roundToInt().toLong(), property.rent.currency),
+                    locale,
+                    PriceStyle.Localized,
+                ),
             )
         CompareMetric.Rating -> String.format(locale, "%.1f", value)
         CompareMetric.Match -> stringResource(R.string.compare_match_value, value.roundToInt())

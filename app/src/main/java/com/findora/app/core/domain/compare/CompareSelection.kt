@@ -29,9 +29,12 @@ object CompareSelection {
         fromIndex: Int,
         toIndex: Int,
     ): List<String> {
-        if (selection.isEmpty() || fromIndex !in selection.indices) return selection
+        if (fromIndex !in selection.indices) return selection
         val target = toIndex.coerceIn(selection.indices)
-        if (target == fromIndex) return selection
-        return selection.toMutableList().apply { add(target, removeAt(fromIndex)) }
+        return if (target == fromIndex) {
+            selection
+        } else {
+            selection.toMutableList().apply { add(target, removeAt(fromIndex)) }
+        }
     }
 }

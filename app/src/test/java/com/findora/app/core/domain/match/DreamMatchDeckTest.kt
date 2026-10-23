@@ -44,7 +44,13 @@ class DreamMatchDeckTest {
         val context = MatchContext(profile, BehaviorAffinity.None, now)
         val excluded = setOf(kerala.first { it.parking }.id)
         val deck = DreamMatchDeck.order(kerala, excluded, context)
-        val expected = BestMatchRanking.rank(kerala, com.findora.app.core.domain.model.PropertyFilter(), context)
+        val expected =
+            BestMatchRanking.rank(
+                kerala,
+                com.findora.app.core.domain.model
+                    .PropertyFilter(),
+                context,
+            )
         assertEquals(expected.map { it.id } - excluded, deck.map { it.property.id })
         assertTrue(deck.all { it.property.parking })
         assertFalse(deck.any { it.property.id in excluded })
@@ -73,7 +79,9 @@ class DreamMatchDeckTest {
         val neutral = MatchScoreCalculator.score(skipped, profile, BehaviorAffinity.None, now)
         val afterSkip = MatchScoreCalculator.score(skipped, profile, affinity, now)
         assertTrue(afterSkip.score <= neutral.score)
-        val behaviour = { result: MatchResult -> result.reasons.filter { it.factor == MatchFactor.LearnedBehavior }.sumOf { it.points } }
+        val behaviour = { result: MatchResult ->
+            result.reasons.filter { it.factor == MatchFactor.LearnedBehavior }.sumOf { it.points }
+        }
         assertTrue(behaviour(afterSkip) < behaviour(neutral))
     }
 }

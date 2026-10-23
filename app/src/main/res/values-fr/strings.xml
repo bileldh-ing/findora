@@ -439,10 +439,8 @@
     <string name="compare_remove_from">Retirer de la comparaison</string>
     <string name="compare_added">Ajouté à la comparaison</string>
     <string name="compare_already">Déjà dans la comparaison</string>
-    <string name="compare_full">Vous pouvez comparer jusqu’à %1$d logements. Retirez-en un d’abord.</string>
     <string name="compare_removed">Retiré de la comparaison</string>
     <string name="compare_view">Voir</string>
-    <string name="compare_tray_count">%1$d / %2$d sélectionnés</string>
     <string name="compare_tray_action">Comparer</string>
     <string name="compare_clear">Effacer</string>
     <string name="compare_empty_title">Rien à comparer</string>
@@ -472,5 +470,15 @@
         <item quantity="one">Vous avez gardé %1$d logement cette fois.</item>
         <item quantity="many">Vous avez gardé %1$d logements cette fois.</item>
         <item quantity="other">Vous avez gardé %1$d logements cette fois.</item>
+    </plurals>
+    <plurals name="compare_full">
+        <item quantity="one">Vous pouvez comparer jusqu’à %1$d logement. Retirez-en un d’abord.</item>
+        <item quantity="many">Vous pouvez comparer jusqu’à %1$d logements. Retirez-en un d’abord.</item>
+        <item quantity="other">Vous pouvez comparer jusqu’à %1$d logements. Retirez-en un d’abord.</item>
+    </plurals>
+    <plurals name="compare_tray_count">
+        <item quantity="one">%1$d / %2$d sélectionné</item>
+        <item quantity="many">%1$d / %2$d sélectionnés</item>
+        <item quantity="other">%1$d / %2$d sélectionnés</item>
     </plurals>
 </resources>

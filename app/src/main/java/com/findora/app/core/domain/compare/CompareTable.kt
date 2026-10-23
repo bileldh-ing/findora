@@ -57,7 +57,17 @@ data class CompareTable(
                     add(row(CompareMetric.PricePerSqm, properties.map(::pricePerSqm), rankable = sameCurrency))
                     add(row(CompareMetric.Bedrooms, properties.map { it.bedrooms.toDouble() }))
                     add(row(CompareMetric.Bathrooms, properties.map { it.bathrooms.toDouble() }))
-                    add(row(CompareMetric.Amenities, properties.map { it.amenities.distinct().size.toDouble() }))
+                    add(
+                        row(
+                            CompareMetric.Amenities,
+                            properties.map {
+                                it.amenities
+                                    .distinct()
+                                    .size
+                                    .toDouble()
+                            },
+                        ),
+                    )
                     add(row(CompareMetric.Rating, properties.map { it.rating }))
                     if (matchScores != null) {
                         add(row(CompareMetric.Match, properties.map { matchScores[it.id]?.toDouble() }))
@@ -75,18 +85,22 @@ data class CompareTable(
             metric: CompareMetric,
             values: List<Double?>,
             rankable: Boolean = true,
-        ): CompareRow = CompareRow(metric, values, if (rankable) bestIndices(values, metric.higherIsBetter) else emptySet())
+        ): CompareRow =
+            CompareRow(metric, values, if (rankable) bestIndices(values, metric.higherIsBetter) else emptySet())
 
         internal fun bestIndices(
             values: List<Double?>,
             higherIsBetter: Boolean,
         ): Set<Int> {
             val known = values.withIndex().mapNotNull { (index, value) -> value?.let { index to it } }
-            if (known.size < 2) return emptySet()
             val numbers = known.map { it.second }
-            val target = if (higherIsBetter) numbers.max() else numbers.min()
-            if (numbers.all { it == target }) return emptySet()
-            return known.filter { it.second == target }.mapTo(LinkedHashSet()) { it.first }
+            val target = (if (higherIsBetter) numbers.maxOrNull() else numbers.minOrNull()) ?: return emptySet()
+            val decisive = known.size >= 2 && numbers.any { it != target }
+            return if (decisive) {
+                known.filter { it.second == target }.mapTo(LinkedHashSet()) { it.first }
+            } else {
+                emptySet()
+            }
         }
     }
 }

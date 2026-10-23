@@ -28,6 +28,9 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -68,16 +71,13 @@ import com.findora.app.core.ui.InlineBanner
 import com.findora.app.core.ui.PropertyCard
 import com.findora.app.core.ui.PropertyCardSkeleton
 import com.findora.app.core.ui.StateMessage
-import kotlinx.coroutines.delay
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import com.findora.app.feature.compare.CompareTray
 import com.findora.app.feature.compare.CompareTrayEvent
 import com.findora.app.feature.compare.CompareTrayHeight
 import com.findora.app.feature.compare.CompareTrayViewModel
 import com.findora.app.feature.compare.compareMessages
 import com.findora.app.feature.match.deck.DreamMatchEntry
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val SKELETON_COUNT = 6
@@ -151,7 +151,10 @@ fun HomeRoute(
         )
         SnackbarHost(
             snackbarHostState,
-            Modifier.align(Alignment.BottomCenter).padding(bottom = contentPadding.calculateBottomPadding() + trayPadding),
+            Modifier.align(Alignment.BottomCenter).padding(
+                bottom =
+                    contentPadding.calculateBottomPadding() + trayPadding,
+            ),
         )
     }
 }
@@ -300,8 +303,7 @@ fun HomeScreen(
                     listings = listings,
                     state = state,
                     onEvent = onEvent,
-                    onOpenProperty = onOpenProperty,
-                    onAddToCompare = onAddToCompare,
+                    cardActions = FeedCardActions(onOpen = onOpenProperty, onLongPress = onAddToCompare),
                     animateEntrance = { id -> !reduceMotion && id !in revealed },
                     onRevealed = { id -> revealed += id },
                 )
@@ -338,6 +340,12 @@ fun HomeScreen(
     )
 }
 
+/** What a feed card does when tapped and long-pressed (Add to compare), by listing id. */
+private class FeedCardActions(
+    val onOpen: (String) -> Unit,
+    val onLongPress: ((String) -> Unit)?,
+)
+
 /** What the grid shows below the header. */
 private enum class FeedContent { Loading, Error, Empty, Listings, Offline }
 
@@ -360,8 +368,7 @@ private fun LazyGridScope.feedItems(
     listings: LazyPagingItems<Property>,
     state: HomeUiState,
     onEvent: (HomeUiEvent) -> Unit,
-    onOpenProperty: (String) -> Unit,
-    onAddToCompare: ((String) -> Unit)?,
+    cardActions: FeedCardActions,
     animateEntrance: (String) -> Boolean,
     onRevealed: (String) -> Unit,
 ) {
@@ -410,8 +417,8 @@ private fun LazyGridScope.feedItems(
                         animateEntrance = animateEntrance(property.id),
                         onReveal = { onRevealed(property.id) },
                         onToggleFavorite = { onEvent(HomeUiEvent.ToggleFavorite(property.id)) },
-                        onClick = { onOpenProperty(property.id) },
-                        onLongPress = onAddToCompare?.let { add -> { add(property.id) } },
+                        onClick = { cardActions.onOpen(property.id) },
+                        onLongPress = cardActions.onLongPress?.let { add -> { add(property.id) } },
                         modifier = Modifier.animateItem(),
                     )
                 }

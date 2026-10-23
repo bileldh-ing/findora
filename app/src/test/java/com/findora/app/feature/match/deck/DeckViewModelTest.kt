@@ -67,7 +67,12 @@ class DeckViewModelTest {
     fun dealsTheRegionInRecommendedOrderWithoutAProfile() =
         runTest(main.dispatcher) {
             val state = viewModel().state.value
-            val region = properties.matching(regionId(), com.findora.app.core.domain.model.PropertyFilter())
+            val region =
+                properties.matching(
+                    regionId(),
+                    com.findora.app.core.domain.model
+                        .PropertyFilter(),
+                )
             assertFalse(state.isLoading)
             assertFalse(state.rankedByMatch)
             assertEquals(region.size, state.total)
@@ -92,19 +97,35 @@ class DeckViewModelTest {
         runTest(main.dispatcher) {
             val vm = viewModel()
             vm.effects.test {
-                val first = vm.state.value.current!!.property.id
+                val first =
+                    vm.state.value.current!!
+                        .property.id
                 vm.onEvent(DeckUiEvent.Act(DeckAction.Save))
                 assertTrue(first in favorites.observeFavoriteIds(guest).first())
-                assertEquals(InteractionType.DeckSaved, interactions.events.value.last().type)
+                assertEquals(
+                    InteractionType.DeckSaved,
+                    interactions.events.value
+                        .last()
+                        .type,
+                )
                 assertEquals(2, vm.state.value.position)
                 assertEquals(DeckAction.Save, vm.state.value.lastAction)
 
-                val second = vm.state.value.current!!.property.id
+                val second =
+                    vm.state.value.current!!
+                        .property.id
                 vm.onEvent(DeckUiEvent.Act(DeckAction.Skip))
                 assertFalse(second in favorites.observeFavoriteIds(guest).first())
-                assertEquals(InteractionType.DeckSkipped, interactions.events.value.last().type)
+                assertEquals(
+                    InteractionType.DeckSkipped,
+                    interactions.events.value
+                        .last()
+                        .type,
+                )
 
-                val third = vm.state.value.current!!.property.id
+                val third =
+                    vm.state.value.current!!
+                        .property.id
                 vm.onEvent(DeckUiEvent.Act(DeckAction.SuperLike))
                 assertEquals(DeckUiEffect.OpenScheduleViewing(third), awaitItem())
                 assertTrue(third in favorites.observeFavoriteIds(guest).first())
@@ -112,15 +133,27 @@ class DeckViewModelTest {
 
                 vm.onEvent(DeckUiEvent.Undo)
                 assertFalse(third in favorites.observeFavoriteIds(guest).first())
-                assertEquals(third, vm.state.value.current!!.property.id)
+                assertEquals(
+                    third,
+                    vm.state.value.current!!
+                        .property.id,
+                )
                 assertEquals(DeckAction.Skip, vm.state.value.lastAction)
 
                 vm.onEvent(DeckUiEvent.Undo)
-                assertEquals(second, vm.state.value.current!!.property.id)
+                assertEquals(
+                    second,
+                    vm.state.value.current!!
+                        .property.id,
+                )
                 assertTrue(interactions.events.value.none { it.type == InteractionType.DeckSkipped })
 
                 vm.onEvent(DeckUiEvent.Undo)
-                assertEquals(first, vm.state.value.current!!.property.id)
+                assertEquals(
+                    first,
+                    vm.state.value.current!!
+                        .property.id,
+                )
                 assertTrue(favorites.observeFavoriteIds(guest).first().isEmpty())
                 assertTrue(interactions.events.value.isEmpty())
                 assertFalse(vm.state.value.canUndo)
@@ -133,7 +166,9 @@ class DeckViewModelTest {
     fun undoKeepsAFavouriteTheUserHadBefore() =
         runTest(main.dispatcher) {
             val vm = viewModel()
-            val id = vm.state.value.current!!.property.id
+            val id =
+                vm.state.value.current!!
+                    .property.id
             // Saved elsewhere while the deck was open: the deck must not remove it on Undo.
             favorites.toggle(guest, id)
             vm.onEvent(DeckUiEvent.Act(DeckAction.Save))
@@ -148,7 +183,10 @@ class DeckViewModelTest {
             vm.state.test {
                 var state = awaitItem()
                 val total = state.total
-                val kept = state.cards.first().property.id
+                val kept =
+                    state.cards
+                        .first()
+                        .property.id
                 vm.onEvent(DeckUiEvent.Act(DeckAction.Save))
                 repeat(total - 1) { vm.onEvent(DeckUiEvent.Act(DeckAction.Skip)) }
                 state = expectMostRecentItem()
@@ -183,14 +221,15 @@ class DeckViewModelTest {
 
             val broken =
                 DeckViewModel(
-                    properties = object : com.findora.app.core.domain.repository.PropertyRepository by properties {
-                        override fun observeProperties(
-                            regionId: String,
-                            filter: com.findora.app.core.domain.model.PropertyFilter,
-                        ) = kotlinx.coroutines.flow.flow<List<com.findora.app.core.domain.model.Property>> {
-                            throw java.io.IOException("cache unreadable")
-                        }
-                    },
+                    properties =
+                        object : com.findora.app.core.domain.repository.PropertyRepository by properties {
+                            override fun observeProperties(
+                                regionId: String,
+                                filter: com.findora.app.core.domain.model.PropertyFilter,
+                            ) = kotlinx.coroutines.flow.flow<List<com.findora.app.core.domain.model.Property>> {
+                                throw java.io.IOException("cache unreadable")
+                            }
+                        },
                     favorites = favorites,
                     interactions = interactions,
                     auth = auth,

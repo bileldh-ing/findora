@@ -21,8 +21,8 @@ import com.findora.app.feature.auth.login.LoginRoute
 import com.findora.app.feature.auth.signup.SignUpRoute
 import com.findora.app.feature.auth.unlock.UnlockRoute
 import com.findora.app.feature.auth.welcome.WelcomeRoute
-import com.findora.app.feature.designsystem.DesignSystemScreen
 import com.findora.app.feature.compare.CompareRoute
+import com.findora.app.feature.designsystem.DesignSystemScreen
 import com.findora.app.feature.detail.DetailRoute
 import com.findora.app.feature.match.deck.DeckRoute
 import com.findora.app.feature.match.quiz.MatchQuizRoute

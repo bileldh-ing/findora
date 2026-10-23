@@ -457,10 +457,8 @@
     <string name="compare_remove_from">إزالة من المقارنة</string>
     <string name="compare_added">أضيف إلى المقارنة</string>
     <string name="compare_already">موجود في المقارنة بالفعل</string>
-    <string name="compare_full">يمكنك مقارنة %1$d منازل كحد أقصى. أزل منزلًا أولًا.</string>
     <string name="compare_removed">أزيل من المقارنة</string>
     <string name="compare_view">عرض</string>
-    <string name="compare_tray_count">%1$d / %2$d محددة</string>
     <string name="compare_tray_action">قارن</string>
     <string name="compare_clear">مسح</string>
     <string name="compare_empty_title">لا شيء للمقارنة بعد</string>
@@ -493,5 +491,21 @@
         <item quantity="few">حفظت %1$d منازل في هذه الجولة.</item>
         <item quantity="many">حفظت %1$d منزلًا في هذه الجولة.</item>
         <item quantity="other">حفظت %1$d منزل في هذه الجولة.</item>
+    </plurals>
+    <plurals name="compare_full">
+        <item quantity="zero">لا يمكن مقارنة أي منزل.</item>
+        <item quantity="one">يمكنك مقارنة منزل واحد كحد أقصى. أزله أولًا.</item>
+        <item quantity="two">يمكنك مقارنة منزلين كحد أقصى. أزل منزلًا أولًا.</item>
+        <item quantity="few">يمكنك مقارنة %1$d منازل كحد أقصى. أزل منزلًا أولًا.</item>
+        <item quantity="many">يمكنك مقارنة %1$d منزلًا كحد أقصى. أزل منزلًا أولًا.</item>
+        <item quantity="other">يمكنك مقارنة %1$d منزل كحد أقصى. أزل منزلًا أولًا.</item>
+    </plurals>
+    <plurals name="compare_tray_count">
+        <item quantity="zero">%1$d / %2$d محددة</item>
+        <item quantity="one">%1$d / %2$d محدد</item>
+        <item quantity="two">%1$d / %2$d محددان</item>
+        <item quantity="few">%1$d / %2$d محددة</item>
+        <item quantity="many">%1$d / %2$d محددًا</item>
+        <item quantity="other">%1$d / %2$d محدد</item>
     </plurals>
 </resources>

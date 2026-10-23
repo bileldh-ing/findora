@@ -40,7 +40,8 @@ class CompareTableTest {
 
     @Test
     fun highlightsTheBestValueOfEveryRowInItsOwnDirection() {
-        val a = home("a", rent = 20_000, area = 100, beds = 3, baths = 2, rating = 4.2, amenities = listOf(Amenity.Wifi))
+        val a =
+            home("a", rent = 20_000, area = 100, beds = 3, baths = 2, rating = 4.2, amenities = listOf(Amenity.Wifi))
         val b = home("b", rent = 15_000, area = 50, beds = 2, baths = 2, rating = 4.8)
         val c =
             home(

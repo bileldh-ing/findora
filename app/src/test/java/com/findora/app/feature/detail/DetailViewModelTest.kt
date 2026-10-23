@@ -3,12 +3,13 @@ package com.findora.app.feature.detail
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import com.findora.app.core.data.repository.InMemoryCompareRepository
+import com.findora.app.core.domain.compare.CompareAddResult
 import com.findora.app.core.domain.insight.AffordabilityVerdict
 import com.findora.app.core.domain.insight.NeighbourhoodScore
 import com.findora.app.core.domain.insight.PriceTrend
 import com.findora.app.core.domain.match.MustHave
 import com.findora.app.core.domain.match.PreferenceProfile
-import com.findora.app.core.data.repository.InMemoryCompareRepository
 import com.findora.app.core.domain.model.InteractionEvent
 import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.model.Property
@@ -87,6 +88,27 @@ class DetailViewModelTest {
                 ),
                 interactions.events.value,
             )
+        }
+
+    @Test
+    fun toggleCompareAddsRemovesAndReportsAFullSelection() =
+        runTest(main.dispatcher) {
+            val others = seedProperties.filter { it.id != georgie.id }.take(3)
+            val vm = viewModel()
+            vm.state.test {
+                assertFalse((awaitSettled() as DetailUiState.Content).isInCompare)
+                vm.effects.test {
+                    vm.onEvent(DetailUiEvent.ToggleCompare)
+                    assertEquals(DetailUiEffect.CompareAdded(CompareAddResult.Added), awaitItem())
+                    vm.onEvent(DetailUiEvent.ToggleCompare)
+                    assertEquals(DetailUiEffect.CompareRemoved, awaitItem())
+                    others.forEach { compare.add(AuthRepository.GUEST_USER_ID, it.id) }
+                    vm.onEvent(DetailUiEvent.ToggleCompare)
+                    assertEquals(DetailUiEffect.CompareAdded(CompareAddResult.Full), awaitItem())
+                }
+                assertEquals(others.map { it.id }, compare.observe(AuthRepository.GUEST_USER_ID).first())
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test

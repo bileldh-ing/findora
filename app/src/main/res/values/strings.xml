@@ -450,10 +450,8 @@
     <string name="compare_remove_from">Remove from compare</string>
     <string name="compare_added">Added to compare</string>
     <string name="compare_already">Already in compare</string>
-    <string name="compare_full">You can compare up to %1$d homes. Remove one first.</string>
     <string name="compare_removed">Removed from compare</string>
     <string name="compare_view">View</string>
-    <string name="compare_tray_count">%1$d / %2$d selected</string>
     <string name="compare_tray_action">Compare</string>
     <string name="compare_clear">Clear</string>
     <string name="compare_empty_title">Nothing to compare yet</string>
@@ -482,5 +480,13 @@
     <plurals name="deck_done_body">
         <item quantity="one">You kept %1$d home this round.</item>
         <item quantity="other">You kept %1$d homes this round.</item>
+    </plurals>
+    <plurals name="compare_full">
+        <item quantity="one">You can compare up to %1$d home. Remove one first.</item>
+        <item quantity="other">You can compare up to %1$d homes. Remove one first.</item>
+    </plurals>
+    <plurals name="compare_tray_count">
+        <item quantity="one">%1$d / %2$d selected</item>
+        <item quantity="other">%1$d / %2$d selected</item>
     </plurals>
 </resources>

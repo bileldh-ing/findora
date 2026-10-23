@@ -151,7 +151,12 @@ class DeckViewModel
                             if (includeSkipped) {
                                 emptySet()
                             } else {
-                                interactions.observePropertyIds(user, setOf(InteractionType.DeckSkipped)).first().toSet()
+                                interactions
+                                    .observePropertyIds(
+                                        user,
+                                        setOf(InteractionType.DeckSkipped),
+                                    ).first()
+                                    .toSet()
                             }
                         val context = matchContextOrNull()
                         performed.clear()

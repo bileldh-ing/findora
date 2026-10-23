@@ -63,7 +63,10 @@ class CompareTrayViewModel
             viewModelScope.launch {
                 val user = compared.userId.first()
                 when (event) {
-                    is CompareTrayEvent.Add -> effectChannel.send(CompareTrayEffect(compare.add(user, event.propertyId)))
+                    is CompareTrayEvent.Add ->
+                        effectChannel.send(
+                            CompareTrayEffect(compare.add(user, event.propertyId)),
+                        )
                     is CompareTrayEvent.Remove -> compare.remove(user, event.propertyId)
                     CompareTrayEvent.Clear -> compare.clear(user)
                 }

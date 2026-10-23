@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -87,7 +88,13 @@ fun CompareTray(
                 }
             }
             Text(
-                text = stringResource(R.string.compare_tray_count, state.items.size, state.maxItems),
+                text =
+                    pluralStringResource(
+                        R.plurals.compare_tray_count,
+                        state.items.size,
+                        state.items.size,
+                        state.maxItems,
+                    ),
                 style = FindoraTheme.typography.label,
                 color = FindoraTheme.colors.onBackground,
                 modifier =

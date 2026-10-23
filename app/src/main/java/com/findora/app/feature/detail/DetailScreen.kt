@@ -31,8 +31,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.findora.app.R
-import com.findora.app.feature.compare.compareMessages
 import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
@@ -58,6 +57,7 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.ui.StateMessage
 import com.findora.app.core.ui.match.MatchSummaryCard
 import com.findora.app.core.ui.match.WhyThisMatchSheet
+import com.findora.app.feature.compare.compareMessages
 import kotlinx.coroutines.launch
 
 private val TopButtonSize = 48.dp

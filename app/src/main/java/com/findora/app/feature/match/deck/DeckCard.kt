@@ -138,17 +138,19 @@ fun DeckCard(
                 }.pointerInput(property.id) { detectTapGestures(onTap = { currentOnOpen() }) }
                 .pointerInput(property.id, reduceMotion) {
                     val tracker = VelocityTracker()
+                    // Tracked here (not read back from the animation) so a release always sees the full drag.
+                    var total = Offset.Zero
                     var thresholdCrossed = false
                     detectDragGestures(
                         onDragStart = {
                             tracker.resetTracking()
+                            total = Offset.Zero
                             thresholdCrossed = false
                         },
                         onDragEnd = {
-                            val offset = Offset(swipe.offsetX.value, swipe.offsetY.value)
                             val action =
                                 DeckSwipeState.decide(
-                                    offset = offset,
+                                    offset = total,
                                     velocity = tracker.calculateVelocity(),
                                     width = size.width.toFloat(),
                                     height = size.height.toFloat(),
@@ -159,22 +161,29 @@ fun DeckCard(
                         onDragCancel = { scope.launch { swipe.reset(reduceMotion) } },
                     ) { change, dragAmount ->
                         change.consume()
-                        scope.launch {
-                            swipe.dragBy(dragAmount)
-                            tracker.addPosition(change.uptimeMillis, Offset(swipe.offsetX.value, swipe.offsetY.value))
-                            val crossed =
-                                abs(swipe.horizontalProgress(size.width.toFloat())) >= 1f ||
-                                    swipe.upwardProgress(size.height.toFloat()) >= 1f
-                            if (crossed && !thresholdCrossed) {
-                                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                            }
-                            thresholdCrossed = crossed
+                        total += dragAmount
+                        tracker.addPosition(change.uptimeMillis, total)
+                        scope.launch { swipe.dragBy(dragAmount) }
+                        val crossed =
+                            abs(total.x) >= size.width * DeckSwipeState.DISTANCE_FRACTION ||
+                                -total.y >= size.height * DeckSwipeState.UP_DISTANCE_FRACTION
+                        if (crossed &&
+                            !thresholdCrossed
+                        ) {
+                            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         }
+                        thresholdCrossed = crossed
                     }
                 }.testTag("deckCard_${property.id}"),
     ) {
         DeckCardContent(entry = entry, rating = rating)
-        DeckStamps(swipe = swipe, cardSize = cardSize, saveLabel = saveLabel, skipLabel = skipLabel, superLabel = superLabel)
+        DeckStamps(
+            swipe = swipe,
+            cardSize = cardSize,
+            saveLabel = saveLabel,
+            skipLabel = skipLabel,
+            superLabel = superLabel,
+        )
     }
 }
 
@@ -194,7 +203,9 @@ fun DeckCardContent(
         Box(
             Modifier
                 .fillMaxSize()
-                .background(Brush.verticalGradient(SCRIM_START to Color.Transparent, 1f to FindoraTheme.colors.scrimEnd)),
+                .background(
+                    Brush.verticalGradient(SCRIM_START to Color.Transparent, 1f to FindoraTheme.colors.scrimEnd),
+                ),
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(FindoraTheme.spacing.xxs),
@@ -204,7 +215,12 @@ fun DeckCardContent(
                 GlassChip { Text(price, style = FindoraTheme.typography.label, color = onPhoto, maxLines = 1) }
                 GlassChip {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(FindoraIcons.Star, null, tint = FindoraTheme.colors.star, modifier = Modifier.size(SpecIcon))
+                        Icon(
+                            FindoraIcons.Star,
+                            null,
+                            tint = FindoraTheme.colors.star,
+                            modifier = Modifier.size(SpecIcon),
+                        )
                         Spacer(Modifier.width(FindoraTheme.spacing.xxs))
                         Text(rating, style = FindoraTheme.typography.label, color = onPhoto)
                     }
