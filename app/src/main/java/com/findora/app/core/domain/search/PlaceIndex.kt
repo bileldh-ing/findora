@@ -130,25 +130,27 @@ internal class PlaceIndex private constructor(
             return PlaceIndex(names.sortedBy { if (it.meaning is QueryMeaning.Place) 0 else 1 })
         }
 
-        /** Levenshtein distance, stopping early once it exceeds [limit] (then returns limit + 1). */
+        /** Levenshtein distance, capped: anything above [limit] is reported as limit + 1. */
         internal fun editDistance(
             a: String,
             b: String,
             limit: Int,
         ): Int {
-            if (kotlin.math.abs(a.length - b.length) > limit) return limit + 1
             var previous = IntArray(b.length + 1) { it }
-            for (i in 1..a.length) {
+            var withinLimit = kotlin.math.abs(a.length - b.length) <= limit
+            var i = 1
+            while (withinLimit && i <= a.length) {
                 val current = IntArray(b.length + 1)
                 current[0] = i
                 for (j in 1..b.length) {
                     val cost = if (a[i - 1] == b[j - 1]) 0 else 1
                     current[j] = minOf(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + cost)
                 }
-                if (current.min() > limit) return limit + 1
+                withinLimit = current.min() <= limit
                 previous = current
+                i++
             }
-            return previous[b.length]
+            return if (withinLimit) minOf(previous[b.length], limit + 1) else limit + 1
         }
     }
 }

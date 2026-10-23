@@ -146,8 +146,9 @@ internal object QueryText {
             val base = asNumber(token)
             val next = raw.getOrNull(index + 1)
             val multiplier = next?.takeIf { it.isWord }?.let { word -> QueryLexicon.multiplier(word.norm) }
-            if (base != null && base.scale == 1 && multiplier != null && base.value != null) {
-                out += base.copy(end = next.end, value = base.value * multiplier, scale = multiplier, countWord = false)
+            val value = base?.takeIf { it.scale == 1 }?.value
+            if (value != null && multiplier != null) {
+                out += base.copy(end = next.end, value = value * multiplier, scale = multiplier, countWord = false)
                 index += 2
             } else {
                 out += base ?: token

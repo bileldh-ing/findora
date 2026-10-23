@@ -22,6 +22,7 @@ internal data class Phrase<T>(
  * object loads, so matching is case-, accent- and Arabic-variant-insensitive. Lists are ordered longest phrase
  * first so "pet friendly" wins over "pet" and "salle de bain" over "salle".
  */
+@Suppress("LargeClass") // Vocabulary tables (one phrase per line once formatted), not logic.
 internal object QueryLexicon {
     private val splitter = Regex("[^\\p{L}\\p{N}€$₹£~]+")
 

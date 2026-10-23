@@ -229,37 +229,59 @@ private class ParseSession(
     /** "between 1 500 and 2 000 DT", "1.5-2k", "de 800 à 1200 €", "2-3 bedrooms", "80 to 120 m²". */
     private fun range(index: Int): Int? {
         val opener = phraseAt(index, QueryLexicon.rangeStarts)
-        val first = quantity(opener?.end ?: index) ?: return null
+        val first = quantity(opener?.end ?: index)?.takeIf { !it.countWord } ?: return null
         free(first.end)?.takeIf { it.norm in QueryLexicon.rangeJoins } ?: return null
         val second = quantity(first.end + 1) ?: return null
+        // "1.5-2k": the multiplier written once applies to both ends.
         val scaledLow = first.value * second.scale
         val low = if (first.scale == 1 && second.scale > 1 && scaledLow <= second.value) scaledLow else first.value
+        return roomRange(index, low, second.end)
+            ?: areaRange(index, low, second.value, second.end)
+            ?: moneyRange(index, opener != null, low, first, second)
+    }
+
+    private fun roomRange(
+        index: Int,
+        low: Double,
+        end: Int,
+    ): Int? {
+        val unit = roomUnitAt(end) ?: return null
+        val min = low.toInt().takeIf { low % 1.0 == 0.0 && it in 1..MAX_ROOMS } ?: return null
+        val meaning = if (unit.value == RoomUnit.Bathroom) QueryMeaning.Bathrooms(min) else QueryMeaning.Bedrooms(min)
+        record(meaning, index, unit.end)
+        return unit.end
+    }
+
+    private fun areaRange(
+        index: Int,
+        low: Double,
+        high: Double,
+        end: Int,
+    ): Int? {
+        val unit = areaUnitAt(end) ?: return null
+        val (lo, hi) = sorted(low * unit.value, high * unit.value)
+        record(QueryMeaning.Area(lo.roundToInt(), hi.roundToInt()), index, unit.end)
+        return unit.end
+    }
+
+    /** Without "between" / "from", a range needs evidence it is money: a currency, a multiplier or two 100+ amounts. */
+    private fun moneyRange(
+        index: Int,
+        hasOpener: Boolean,
+        low: Double,
+        first: Quantity,
+        second: Quantity,
+    ): Int? {
         val high = second.value
-        roomUnitAt(second.end)?.let { unit ->
-            val min = low.toInt().takeIf { low % 1.0 == 0.0 && it in 1..MAX_ROOMS } ?: return null
-            val meaning =
-                if (unit.value ==
-                    RoomUnit.Bathroom
-                ) {
-                    QueryMeaning.Bathrooms(min)
-                } else {
-                    QueryMeaning.Bedrooms(min)
-                }
-            record(meaning, index, unit.end)
-            return unit.end
-        }
-        areaUnitAt(second.end)?.let { unit ->
-            val (lo, hi) = sorted(low * unit.value, high * unit.value)
-            record(QueryMeaning.Area(lo.roundToInt(), hi.roundToInt()), index, unit.end)
-            return unit.end
-        }
         val currency = first.currency ?: second.currency
-        val isMoney =
-            currency != null ||
-                second.scale > 1 ||
-                (opener != null && high >= MIN_AMOUNT_WITH_KEYWORD) ||
-                (low >= MIN_BARE_AMOUNT && high >= MIN_BARE_AMOUNT)
-        if (!isMoney || first.countWord) return null
+        val evidence =
+            listOf(
+                currency != null,
+                second.scale > 1,
+                hasOpener && high >= MIN_AMOUNT_WITH_KEYWORD,
+                low >= MIN_BARE_AMOUNT && high >= MIN_BARE_AMOUNT,
+            )
+        if (evidence.none { it }) return null
         val (lo, hi) = sorted(low, high)
         recordBudget(QueryMeaning.Budget(lo.roundToLong(), hi.roundToLong(), currency), index, second.end)
         return second.end
@@ -348,15 +370,14 @@ private class ParseSession(
         return end
     }
 
-    private fun fuzzyPlace(window: List<Int>): Int? {
-        for (size in window.size downTo 1) {
-            val meaning = places.fuzzy(window.take(size).map { tokens[it].norm }) ?: continue
-            val end = window[size - 1] + 1
-            recordPlace(meaning, window.first(), end)
-            return end
+    private fun fuzzyPlace(window: List<Int>): Int? =
+        (window.size downTo 1).firstNotNullOfOrNull { size ->
+            places.fuzzy(window.take(size).map { tokens[it].norm })?.let { meaning ->
+                val end = window[size - 1] + 1
+                recordPlace(meaning, window.first(), end)
+                end
+            }
         }
-        return null
-    }
 
     /** Up to [MAX_PLACE_WORDS] consecutive free words from [start] ("Saint-Germain-des-Prés" is one window). */
     private fun wordWindow(start: Int): List<Int> {
@@ -443,28 +464,33 @@ private class ParseSession(
         to: Int,
     ) {
         val existing = found.firstOrNull { it.meaning is QueryMeaning.Budget }?.meaning as QueryMeaning.Budget?
-        if (existing == null) {
-            record(budget, from, to)
-            return
+        val merged = existing?.let { merge(it, budget) }
+        when {
+            existing == null -> record(budget, from, to)
+            merged == null -> ignore(from, to)
+            else -> {
+                replaceBudget(merged)
+                found += Found(merged, from, to)
+                claim(from, to)
+            }
         }
-        val overlaps = (existing.min != null && budget.min != null) || (existing.max != null && budget.max != null)
+    }
+
+    /** The two budgets as one, or null when they set the same bound twice, cross, or disagree on currency. */
+    private fun merge(
+        existing: QueryMeaning.Budget,
+        added: QueryMeaning.Budget,
+    ): QueryMeaning.Budget? {
+        val sameBound = (existing.min != null && added.min != null) || (existing.max != null && added.max != null)
+        val currencies = setOfNotNull(existing.currency, added.currency)
         val merged =
             QueryMeaning.Budget(
-                min = existing.min ?: budget.min,
-                max = existing.max ?: budget.max,
-                currency = existing.currency ?: budget.currency,
+                min = existing.min ?: added.min,
+                max = existing.max ?: added.max,
+                currency = currencies.firstOrNull(),
             )
-        val clashes =
-            overlaps ||
-                (merged.min != null && merged.max != null && merged.min > merged.max) ||
-                (existing.currency != null && budget.currency != null && existing.currency != budget.currency)
-        if (clashes) {
-            ignore(from, to)
-        } else {
-            replaceBudget(merged)
-            found += Found(merged, from, to)
-            claim(from, to)
-        }
+        val crossed = merged.min != null && merged.max != null && merged.min > merged.max
+        return merged.takeUnless { sameBound || crossed || currencies.size > 1 }
     }
 
     private fun replaceBudget(budget: QueryMeaning.Budget) {
@@ -500,21 +526,24 @@ private class ParseSession(
                     }
             }
         ignored.forEach { range -> range.forEach { flagged[it] = true } }
+        // A hyphen between two flagged words ("non-meublé") stays inside the run.
+        tokens.indices
+            .filter {
+                isGlue(
+                    it,
+                ) &&
+                    flagged.getOrElse(it - 1) { false } &&
+                    flagged.getOrElse(it + 1) { false }
+            }.forEach { flagged[it] = true }
         val runs = mutableListOf<String>()
-        var index = 0
-        while (index < tokens.size) {
-            if (!flagged[index]) {
-                index++
-                continue
+        var start = -1
+        for (index in 0..tokens.size) {
+            val inRun = index < tokens.size && flagged[index]
+            if (inRun && start < 0) start = index
+            if (!inRun && start >= 0) {
+                runs += text(start, index)
+                start = -1
             }
-            val start = index
-            while (index + 1 < tokens.size &&
-                (flagged[index + 1] || isGlue(index + 1) && flagged.getOrElse(index + 2) { false })
-            ) {
-                index++
-            }
-            runs += text(start, index + 1)
-            index++
         }
         return runs.distinct()
     }
