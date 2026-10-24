@@ -167,6 +167,11 @@ class StoreAssetsTest {
                     finished.incrementAndGet()
                 }
 
+                override fun onCancel(request: ImageRequest) {
+                    // A card that recomposes (the deck, for example) cancels its first request and starts another.
+                    finished.incrementAndGet()
+                }
+
                 override fun onError(
                     request: ImageRequest,
                     result: ErrorResult,
