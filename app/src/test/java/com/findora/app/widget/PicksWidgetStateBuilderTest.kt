@@ -24,7 +24,7 @@ class PicksWidgetStateBuilderTest {
 
     private val texts =
         object : PicksWidgetTexts {
-            override val perMonth = "Month"
+            override val perMonth = "month"
             override val empty = "empty"
             override val signedOut = "signed out"
 
@@ -96,7 +96,7 @@ class PicksWidgetStateBuilderTest {
                 .url,
             first.thumbnailUrl,
         )
-        assertTrue(first.priceText.endsWith("/ Month"))
+        assertTrue(first.priceText, first.priceText.endsWith(" / month"))
         assertTrue(first.contentDescription.startsWith(expected.first().title))
     }
 

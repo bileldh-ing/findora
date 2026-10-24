@@ -40,6 +40,9 @@ import com.findora.app.core.designsystem.component.GlassChip
 import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.domain.model.Currency
+import com.findora.app.core.domain.model.Money
+import com.findora.app.core.ui.rentPerMonthText
 
 private val Categories = listOf("Rental House", "Apartment", "Houses", "Rooms")
 
@@ -126,7 +129,11 @@ fun DesignSystemScreen(
                 contentAlignment = Alignment.BottomStart,
             ) {
                 GlassChip(modifier = Modifier.padding(spacing.sm)) {
-                    Text("10.000/ Month", style = FindoraTheme.typography.caption, color = colors.onPhoto)
+                    Text(
+                        text = rentPerMonthText(Money(10_000, Currency.TND)),
+                        style = FindoraTheme.typography.caption,
+                        color = colors.onPhoto,
+                    )
                 }
             }
         }

@@ -2,7 +2,6 @@ package com.findora.app.widget
 
 import com.findora.app.core.domain.format.DisplayPreferences
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.match.BestMatchRanking
 import com.findora.app.core.domain.match.MatchContext
 import com.findora.app.core.domain.model.Property
@@ -108,7 +107,6 @@ object PicksWidgetStateBuilder {
                         display.display(home.rent),
                         locale,
                         texts.perMonth,
-                        PriceStyle.Localized,
                     )
                 val matchText = scores[home.id]?.let(texts::matchPercent)
                 PickSummary(

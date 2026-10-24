@@ -8,7 +8,6 @@ import com.findora.app.core.domain.format.AreaFormatter
 import com.findora.app.core.domain.format.CurrencyConverter
 import com.findora.app.core.domain.format.DisplayMoney
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.AreaUnit
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.Money
@@ -50,7 +49,7 @@ internal fun pricePerAreaText(
             AreaUnit.Metric -> R.string.compare_price_sqm_value
             AreaUnit.Imperial -> R.string.compare_price_sqft_value
         }
-    return stringResource(format, PriceFormatter.formatDisplay(exact, locale, PriceStyle.Localized))
+    return stringResource(format, PriceFormatter.formatDisplay(exact, locale))
 }
 
 /** The row label; the price-per-area row follows the unit chosen in Settings. */

@@ -56,7 +56,6 @@ import com.findora.app.core.designsystem.component.GlassChip
 import com.findora.app.core.designsystem.component.ShimmerBox
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.image.offlineFallback
 import com.findora.app.core.ui.match.MatchBadge
@@ -102,8 +101,8 @@ fun PropertyCard(
     val listedByYou = property.isListedBy(LocalViewerId.current)
     val summary =
         buildString {
-            // TalkBack reads a currency-formatted amount ("₹10,000") rather than the design's "10.000/ Month".
-            val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
+            // TalkBack reads the amount alone ("TND 12,000"); the card description adds its own context.
+            val spokenPrice = rentText(property.rent, locale)
             append(stringResource(R.string.card_description, property.title, property.locality, spokenPrice, rating))
             if (property.verified) append(' ').append(stringResource(R.string.card_verified))
             if (listedByYou) append(' ').append(stringResource(R.string.card_listed_by_you)).append('.')

@@ -51,7 +51,6 @@ import com.findora.app.R
 import com.findora.app.core.designsystem.component.GlassChip
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.match.DeckEntry
 import com.findora.app.core.ui.ListingCoverPhoto
 import com.findora.app.core.ui.areaText
@@ -91,7 +90,7 @@ fun DeckCard(
     val currentOnOpen by rememberUpdatedState(onOpen)
     val property = entry.property
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
-    val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
+    val spokenPrice = rentText(property.rent, locale)
     val rating = String.format(locale, "%.1f", property.rating)
     val summary =
         buildString {

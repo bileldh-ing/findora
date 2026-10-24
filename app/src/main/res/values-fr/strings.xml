@@ -102,7 +102,7 @@
     <string name="category_houses">Maisons</string>
     <string name="category_rooms">Chambres</string>
     <string name="home_nearby">Locations à proximité</string>
-    <string name="per_month">Mois</string>
+    <string name="per_month">mois</string>
     <string name="cd_change_location">Changer de lieu, actuel : %1$s</string>
     <string name="cd_notifications">Notifications</string>
     <plurals name="cd_notifications_unread">
@@ -222,7 +222,6 @@
     <string name="detail_photo_position">Photo %1$d sur %2$d</string>
     <string name="detail_open_gallery">Ouvrir la galerie photo</string>
     <string name="detail_gallery_close">Fermer la galerie</string>
-    <string name="detail_price_per_month">%1$s / mois</string>
     <string name="detail_rating_cd">Noté %1$s sur 5</string>
     <string name="detail_verified">Vérifiée</string>
     <string name="detail_verified_cd">Annonce vérifiée. En savoir plus</string>

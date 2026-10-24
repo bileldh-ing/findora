@@ -168,7 +168,7 @@ class HomeScreenTest {
         compose.onNodeWithTag("chip_0").assertIsSelected()
         showInGrid(hasText("Nearby Rental Houses"))
         showInGrid(hasText("Georgie House"))
-        compose.onAllNodesWithText("10.000/ Month").onFirst().assertExists()
+        compose.onAllNodesWithText("₹10,000 / month").onFirst().assertExists()
         compose.onNodeWithContentDescription("Profile and settings").assertIsDisplayed()
         compose.onNodeWithContentDescription("Notifications").assertIsDisplayed()
         compose.onNodeWithContentDescription("Filters").assertIsDisplayed()

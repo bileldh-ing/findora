@@ -237,7 +237,6 @@
     <string name="detail_photo_position">الصورة %1$d من %2$d</string>
     <string name="detail_open_gallery">فتح معرض الصور</string>
     <string name="detail_gallery_close">إغلاق المعرض</string>
-    <string name="detail_price_per_month">%1$s / شهريًا</string>
     <string name="detail_rating_cd">التقييم %1$s من 5</string>
     <string name="detail_verified">موثّق</string>
     <string name="detail_verified_cd">إعلان موثّق. اعرف ماذا يعني ذلك</string>

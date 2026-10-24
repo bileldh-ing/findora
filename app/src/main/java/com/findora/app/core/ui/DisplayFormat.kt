@@ -12,7 +12,6 @@ import com.findora.app.core.domain.format.AreaFormatter
 import com.findora.app.core.domain.format.DisplayMoney
 import com.findora.app.core.domain.format.DisplayPreferences
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.AreaUnit
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.locale.areaUnitFormat
@@ -34,16 +33,15 @@ fun currentLocale(): Locale = ConfigurationCompat.getLocales(LocalConfiguration.
 @ReadOnlyComposable
 fun displayMoney(money: Money): DisplayMoney = LocalDisplayPreferences.current.display(money)
 
-/** A rent as text: "10.000" (design) or "₹10,000" (localized), with "≈ " when converted. */
+/** A rent in the display currency ("TND 12,000", "₹10,000"), with "≈ " when converted. */
 @Composable
 @ReadOnlyComposable
 fun rentText(
     money: Money,
-    style: PriceStyle = PriceStyle.Localized,
     locale: Locale = currentLocale(),
-): String = PriceFormatter.formatDisplay(displayMoney(money), locale, style)
+): String = PriceFormatter.formatDisplay(displayMoney(money), locale)
 
-/** "10.000/ Month" in the design style, "≈ 120/ Month" when converted. */
+/** "TND 12,000 / month", or "≈ €3,600 / month" when Settings converts to another currency. */
 @Composable
 @ReadOnlyComposable
 fun rentPerMonthText(

@@ -14,7 +14,11 @@ import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.workDataOf
 import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.domain.alert.CheckSearchAlerts
+import com.findora.app.core.domain.format.DisplayPreferences
+import com.findora.app.core.domain.format.PriceFormatter
 import com.findora.app.core.domain.model.AlertFrequency
+import com.findora.app.core.domain.model.AreaUnit
+import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.model.Property
@@ -25,6 +29,7 @@ import com.findora.app.core.domain.notification.NotificationKind
 import com.findora.app.core.domain.notification.NotificationTarget
 import com.findora.app.core.domain.repository.NewSavedSearch
 import com.findora.app.core.domain.usecase.CurrentRegion
+import com.findora.app.core.domain.usecase.ObserveDisplayPreferences
 import com.findora.app.core.locale.LocalizedContext
 import com.findora.app.core.testing.FakeAuthRepository
 import com.findora.app.core.testing.FakeFavoritesRepository
@@ -32,11 +37,13 @@ import com.findora.app.core.testing.FakeLanguageController
 import com.findora.app.core.testing.FakeNotificationRepository
 import com.findora.app.core.testing.FakePriceWatchRepository
 import com.findora.app.core.testing.FakePropertyRepository
+import com.findora.app.core.testing.FakeReferenceDataRepository
 import com.findora.app.core.testing.FakeSavedSearchRepository
 import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.MutableClock
 import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.seedProperties
+import com.findora.app.core.testing.testRates
 import com.findora.app.navigation.PropertyDeepLink
 import com.findora.app.navigation.SearchDeepLink
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +59,7 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import java.time.Instant
+import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], application = Application::class)
@@ -104,6 +112,7 @@ class SearchAlertWorkerTest {
                         notifier,
                         settings,
                         localized,
+                        ObserveDisplayPreferences(settings, FakeReferenceDataRepository()),
                     )
             }
         return TestListenableWorkerBuilder<SearchAlertWorker>(context)
@@ -239,6 +248,28 @@ class SearchAlertWorkerTest {
             assertEquals(PropertyDeepLink.uriFor(home.id), shadowOf(posted.contentIntent).savedIntent.dataString)
             val entry = inApp.observeNotifications(userId).first().single()
             assertEquals(NotificationKind.PriceDrop, entry.kind)
-            assertTrue(entry.preview.startsWith("Now "))
+            val now = PriceFormatter.format(cheaper.rent, Locale.US)
+            val was = PriceFormatter.format(home.rent, Locale.US)
+            assertEquals("Now $now a month (was $was)", entry.preview)
+        }
+
+    @Test
+    fun aPriceDropIsShownInTheCurrencyChosenInSettings() =
+        runTest {
+            settings.setCurrencyOverride(Currency.USD)
+            val home = kerala.first()
+            favorites = FakeFavoritesRepository(listings).apply { toggle(userId, home.id) }
+            worker().doWork()
+
+            val cheaper = home.copy(rent = Money(home.rent.amount - 900, home.rent.currency))
+            listings = listOf(cheaper) + kerala.drop(1)
+            favorites = FakeFavoritesRepository(listings).apply { toggle(userId, home.id) }
+            worker().doWork()
+            val display = DisplayPreferences(Currency.USD, AreaUnit.Metric, testRates)
+            val now = PriceFormatter.formatDisplay(display.display(cheaper.rent), Locale.US)
+            val was = PriceFormatter.formatDisplay(display.display(home.rent), Locale.US)
+            val entry = inApp.observeNotifications(userId).first().single()
+            assertEquals("Now $now a month (was $was)", entry.preview)
+            assertTrue(entry.preview, entry.preview.startsWith("Now \u2248\u00A0$"))
         }
 }

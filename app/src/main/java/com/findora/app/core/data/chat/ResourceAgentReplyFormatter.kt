@@ -9,7 +9,6 @@ import com.findora.app.core.domain.chat.ReplyPart
 import com.findora.app.core.domain.chat.VisitWindow
 import com.findora.app.core.domain.format.DisplayPreferences
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.locale.LocalizedContext
 import com.findora.app.core.locale.areaText
 import java.time.Instant
@@ -124,7 +123,7 @@ class ResourceAgentReplyFormatter
             }
 
             private fun price(part: ReplyPart.Price): String {
-                val rent = PriceFormatter.formatDisplay(display.display(part.rent), locale, PriceStyle.Localized)
+                val rent = PriceFormatter.formatDisplay(display.display(part.rent), locale)
                 val res =
                     when (part.flexibility) {
                         PriceFlexibility.RecentlyReduced -> R.string.agent_reply_price_reduced

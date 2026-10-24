@@ -46,7 +46,6 @@ import androidx.core.os.ConfigurationCompat
 import com.findora.app.R
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
 import com.findora.app.core.ui.areaText
@@ -165,7 +164,7 @@ fun MapListingCard(
             spokenAreaText(property.areaSqm),
         )
     val rating = String.format(locale, "%.1f", property.rating)
-    val spokenPrice = rentText(property.rent, PriceStyle.Localized, locale)
+    val spokenPrice = rentText(property.rent, locale)
     val summary =
         buildString {
             append(stringResource(R.string.card_description, property.title, property.locality, spokenPrice, rating))

@@ -49,7 +49,6 @@ import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.DisplayMoney
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Amenity
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.domain.model.Property
@@ -138,14 +137,11 @@ private fun CountUpPrice(
         }
     }
     val shown = Money(animated.value.roundToLong().coerceIn(0L, money.amount), money.currency)
-    val finalText =
-        stringResource(
-            R.string.detail_price_per_month,
-            PriceFormatter.formatDisplay(display, locale, PriceStyle.Localized),
-        )
-    val shownText = PriceFormatter.formatDisplay(DisplayMoney(shown, display.approximate), locale, PriceStyle.Localized)
+    val perMonth = stringResource(R.string.per_month)
+    val finalText = PriceFormatter.formatDisplayPerMonth(display, locale, perMonth)
+    val shownText = PriceFormatter.formatDisplayPerMonth(DisplayMoney(shown, display.approximate), locale, perMonth)
     Text(
-        text = stringResource(R.string.detail_price_per_month, shownText),
+        text = shownText,
         style = FindoraTheme.typography.title,
         color = FindoraTheme.colors.accent,
         modifier = modifier.testTag("detailPrice").clearAndSetSemantics { contentDescription = finalText },

@@ -9,8 +9,8 @@ import com.findora.app.core.domain.alert.AlertReport
 import com.findora.app.core.domain.alert.CheckSearchAlerts
 import com.findora.app.core.domain.alert.PriceDrop
 import com.findora.app.core.domain.alert.SearchAlert
+import com.findora.app.core.domain.format.DisplayPreferences
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.AppSettings
 import com.findora.app.core.domain.model.NotificationToggle
 import com.findora.app.core.domain.notification.NewNotification
@@ -20,6 +20,7 @@ import com.findora.app.core.domain.repository.NotificationRepository
 import com.findora.app.core.domain.repository.PropertyRepository
 import com.findora.app.core.domain.repository.SettingsRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
+import com.findora.app.core.domain.usecase.ObserveDisplayPreferences
 import com.findora.app.core.locale.LocalizedContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -49,6 +50,7 @@ class SearchAlertWorker
         private val notifier: SearchAlertNotifier,
         private val settings: SettingsRepository,
         private val localized: LocalizedContext,
+        private val displayPreferences: ObserveDisplayPreferences,
     ) : CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
             val session = auth.restoreSession() ?: return Result.success()
@@ -82,8 +84,9 @@ class SearchAlertWorker
                 if (inApp) notifications.add(userId, alert.toNotification())
                 if (system) notifier.postNewMatches(alert.toSystemAlert(context), channel)
             }
+            val display = displayPreferences().first()
             report.priceDrops.forEach { drop ->
-                val change = priceChange(context, drop, locale)
+                val change = priceChange(context, drop, locale, display)
                 if (inApp) {
                     notifications.add(
                         userId,
@@ -132,11 +135,12 @@ class SearchAlertWorker
             context: Context,
             drop: PriceDrop,
             locale: Locale,
+            display: DisplayPreferences,
         ): String =
             context.getString(
                 R.string.price_drop_body,
-                PriceFormatter.format(drop.current, locale, PriceStyle.Localized),
-                PriceFormatter.format(drop.previous, locale, PriceStyle.Localized),
+                PriceFormatter.formatDisplay(display.display(drop.current), locale),
+                PriceFormatter.formatDisplay(display.display(drop.previous), locale),
             )
 
         companion object {

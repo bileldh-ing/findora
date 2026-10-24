@@ -29,10 +29,10 @@ class PicksWidgetContentTest {
         propertyId = id,
         title = title,
         locality = "Kochi",
-        priceText = "₹10,000/ Month",
+        priceText = "₹10,000 / month",
         matchText = match,
         thumbnailUrl = "https://example.com/$id.jpg",
-        contentDescription = "$title, Kochi, ₹10,000/ Month",
+        contentDescription = "$title, Kochi, ₹10,000 / month",
     )
 
     private fun ui(
@@ -76,10 +76,10 @@ class PicksWidgetContentTest {
             onNode(hasTextEqualTo("Georgie House")).assertExists()
             onNode(hasTextEqualTo("92% match")).assertExists()
             onNode(hasTextEqualTo("Palm Court")).assertExists()
-            onAllNodes(hasTextEqualTo("₹10,000/ Month")).assertCountEquals(3)
+            onAllNodes(hasTextEqualTo("₹10,000 / month")).assertCountEquals(3)
             onNode(hasTextEqualTo("Next viewing: Georgie House · Oct 26, 14:00")).assertExists()
             // TalkBack reads each home as one item.
-            onNode(hasContentDescription("Luna Haven, Kochi, ₹10,000/ Month")).assertExists()
+            onNode(hasContentDescription("Luna Haven, Kochi, ₹10,000 / month")).assertExists()
         }
 
     @Test

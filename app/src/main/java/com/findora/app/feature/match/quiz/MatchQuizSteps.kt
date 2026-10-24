@@ -19,7 +19,6 @@ import androidx.core.os.ConfigurationCompat
 import com.findora.app.R
 import com.findora.app.core.designsystem.component.CategoryChip
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.match.LifestyleTag
 import com.findora.app.core.domain.match.MustHave
 import com.findora.app.core.domain.model.Money
@@ -102,8 +101,8 @@ private fun BudgetStep(
                 } else {
                     stringResource(
                         R.string.filter_range_value,
-                        rentText(Money(low, state.currency), PriceStyle.Design, locale),
-                        rentText(Money(high, state.currency), PriceStyle.Design, locale),
+                        rentText(Money(low, state.currency), locale),
+                        rentText(Money(high, state.currency), locale),
                     )
                 },
             style = FindoraTheme.typography.title,
