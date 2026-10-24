@@ -62,7 +62,20 @@ class DemoRobot {
         return context.createConfigurationContext(configuration).getString(id)
     }
 
+    private var recordingCued = false
+
+    /**
+     * Logs a demo step. The first one also cues the recorder: record-demo.sh starts screenrecord only once it sees
+     * the cue, so a clip opens on the app's first real content instead of the launch splash; the pause lets the
+     * recorder spin up before anything moves.
+     */
     fun chapter(title: String) {
+        if (!recordingCued) {
+            recordingCued = true
+            val segment = InstrumentationRegistry.getArguments().getString(SEGMENT_ARGUMENT).orEmpty()
+            Log.i(TAG, "$RECORDING_CUE $segment")
+            hold(RECORDER_SPIN_UP_MILLIS)
+        }
         Log.i(TAG, "Demo step: $title")
     }
 
@@ -98,7 +111,7 @@ class DemoRobot {
     /** Clears a typed query and any filter left by an earlier segment, so the feed starts complete. */
     fun resetHome() {
         if (exists("clearQuery")) quickTap(By.res("clearQuery"))
-        if (exists("filterBadge")) {
+        if (filtersActive()) {
             quickTap(By.res("filterButton"))
             waitFor(By.text(str(R.string.filter_title)), "filter sheet")
             scrollUntil(null, By.text(str(R.string.action_show_results)), maxSwipes = 6)
@@ -106,6 +119,24 @@ class DemoRobot {
             if (exists(By.text(str(R.string.action_show_results)))) quickTap(By.text(str(R.string.action_show_results)))
         }
         hold(SHORT_MILLIS)
+    }
+
+    /**
+     * Whether Home shows active filters. The count badge sits inside the filter button, whose semantics are
+     * replaced by one description ("Filters, 2 active"), so the button's description is the signal, not the badge.
+     */
+    fun filtersActive(): Boolean {
+        val description = runCatching { find(By.res("filterButton"))?.contentDescription }.getOrNull()
+        return description != null && description != str(R.string.cd_filters)
+    }
+
+    /** Waits until Home reports active filters (the badge has popped in). */
+    fun waitForActiveFilters() {
+        val deadline = SystemClock.uptimeMillis() + TIMEOUT_MILLIS
+        while (!filtersActive()) {
+            if (SystemClock.uptimeMillis() >= deadline) fail("The active-filter badge did not appear")
+            SystemClock.sleep(POLL_MILLIS)
+        }
     }
 
     fun grantNotifications() {
@@ -187,7 +218,8 @@ class DemoRobot {
     /** Saves the window hierarchy next to the test APK's files (pulled into the artifact), then fails. */
     private fun fail(message: String): Nothing {
         runCatching {
-            val dir = checkNotNull(instrumentation.context.getExternalFilesDir(null))
+            // The app's own external files dir (the robot runs in the app process); record-demo.sh pulls it.
+            val dir = checkNotNull(context.getExternalFilesDir(null))
             val name = message.filter { it.isLetterOrDigit() }.take(DUMP_NAME_LENGTH)
             File(dir, "${SystemClock.uptimeMillis()}-$name.xml").outputStream().use { device.dumpWindowHierarchy(it) }
         }.onFailure { Log.w(TAG, "Could not dump the window hierarchy", it) }
@@ -312,12 +344,21 @@ class DemoRobot {
         maxSwipes: Int = MAX_SWIPES,
         towardsEnd: Boolean = true,
     ): Boolean {
-        repeat(maxSwipes) {
-            if (isComfortablyVisible(target)) return true
+        var lastTop: Int? = null
+        var swipes = 0
+        while (swipes < maxSwipes && !isComfortablyVisible(target)) {
+            val top = visibleBounds(target)?.top
+            // On screen and the last swipe no longer moved it: the end of the list is reached, so stop scrolling.
+            if (top != null && top == lastTop) break
+            lastTop = top
             scroll(tag, towardsEnd)
+            swipes++
         }
-        return isComfortablyVisible(target)
+        return visibleBounds(target) != null
     }
+
+    private fun visibleBounds(selector: BySelector): Rect? =
+        runCatching { find(selector)?.visibleBounds }.getOrNull()?.takeIf { it.height() >= MIN_VISIBLE_PX }
 
     /** A slow horizontal drag across [tag]: towards the start edge moves to the next page in left-to-right. */
     fun swipeHorizontally(
@@ -347,8 +388,8 @@ class DemoRobot {
     }
 
     fun isComfortablyVisible(selector: BySelector): Boolean {
-        val bounds = runCatching { find(selector)?.visibleBounds }.getOrNull() ?: return false
-        return bounds.height() >= MIN_VISIBLE_PX && bounds.top <= device.displayHeight * VISIBLE_TOP_LIMIT
+        val bounds = visibleBounds(selector) ?: return false
+        return bounds.top <= device.displayHeight * VISIBLE_TOP_LIMIT
     }
 
     private fun area(tag: String?): Rect =
@@ -405,6 +446,9 @@ class DemoRobot {
 
     companion object {
         const val TAG = "FindoraDemo"
+        private const val RECORDING_CUE = "DEMO_RECORDING_CUE"
+        private const val SEGMENT_ARGUMENT = "demoSegment"
+        private const val RECORDER_SPIN_UP_MILLIS = 2_500L
         const val BEAT_MILLIS = 1_500L
         const val LONG_MILLIS = 3_000L
         const val SHORT_MILLIS = 500L

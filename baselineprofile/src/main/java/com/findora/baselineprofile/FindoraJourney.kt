@@ -3,7 +3,11 @@ package com.findora.baselineprofile
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.StaleObjectException
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import java.util.regex.Pattern
 
@@ -16,6 +20,7 @@ val targetAppId: String
 private const val TIMEOUT_MILLIS = 15_000L
 private const val SHORT_WAIT_MILLIS = 2_000L
 private const val SCROLL_FLINGS = 2
+private const val STALE_RETRIES = 3
 
 /** Gestures start a fifth of the screen width in from each edge (system back gesture, floating nav pill). */
 private const val GESTURE_MARGIN_DIVISOR = 5
@@ -47,27 +52,53 @@ fun MacrobenchmarkScope.continueAsGuestIfNeeded() {
 /** Flings the listing grid down and back up: the hottest path in the app (paging, Coil, card composition). */
 fun MacrobenchmarkScope.scrollHomeFeed() {
     check(device.wait(Until.hasObject(By.res(CARD)), TIMEOUT_MILLIS)) { "Home feed showed no listing card" }
-    val grid = device.findObject(By.res("homeGrid"))
-    grid.setGestureMargin(device.displayWidth / GESTURE_MARGIN_DIVISOR)
     repeat(SCROLL_FLINGS) {
-        grid.fling(Direction.DOWN)
+        device.flingFresh(By.res("homeGrid"), Direction.DOWN)
         device.waitForIdle()
     }
     repeat(SCROLL_FLINGS) {
-        grid.fling(Direction.UP)
+        device.flingFresh(By.res("homeGrid"), Direction.UP)
         device.waitForIdle()
     }
 }
 
 /** Opens the first visible listing, scrolls its detail page, then goes back to Home. */
 fun MacrobenchmarkScope.openDetailAndGoBack() {
-    val card = device.wait(Until.findObject(By.res(CARD)), TIMEOUT_MILLIS) ?: error("No listing card to open")
-    card.click()
+    device.actOnFresh(By.res(CARD)) { it.click() }
     check(device.wait(Until.hasObject(By.res("detailList")), TIMEOUT_MILLIS)) { "Detail did not open" }
-    val detail = device.findObject(By.res("detailList"))
-    detail.setGestureMargin(device.displayWidth / GESTURE_MARGIN_DIVISOR)
-    detail.fling(Direction.DOWN)
+    device.flingFresh(By.res("detailList"), Direction.DOWN)
     device.waitForIdle()
     device.pressBack()
     check(device.wait(Until.hasObject(By.res("home")), TIMEOUT_MILLIS)) { "Back did not return to Home" }
+}
+
+/** Flings the node matched by [selector], keeping clear of the screen edges (back gesture, floating nav). */
+private fun UiDevice.flingFresh(
+    selector: BySelector,
+    direction: Direction,
+) = actOnFresh(selector) {
+    it.setGestureMargin(displayWidth / GESTURE_MARGIN_DIVISOR)
+    it.fling(direction)
+}
+
+/**
+ * Finds [selector] afresh and acts on it, looking it up again when Compose replaced the node in between
+ * (StaleObjectException): lazy grids and the collapsing Home header recompose while the journey runs.
+ */
+private fun UiDevice.actOnFresh(
+    selector: BySelector,
+    action: (UiObject2) -> Unit,
+) {
+    var lastStale: StaleObjectException? = null
+    repeat(STALE_RETRIES) {
+        val target = wait(Until.findObject(selector), TIMEOUT_MILLIS) ?: error("$selector did not appear")
+        try {
+            action(target)
+            return
+        } catch (stale: StaleObjectException) {
+            lastStale = stale
+            waitForIdle()
+        }
+    }
+    throw checkNotNull(lastStale)
 }

@@ -2,6 +2,8 @@
 # Records every demo segment listed in .github/demo/segments.json on a running emulator: one screenrecord per
 # segment (screenrecord stops at 3 minutes, so it is restarted for each), then pulls the clips and writes
 # manifest.json (segment, file, duration, caption, result). Run by .github/workflows/demo.yml.
+# Recording starts when the robot logs its cue (DemoRobot.chapter, once the app shows real content), so clips
+# skip the cold-launch splash.
 set -uo pipefail
 
 OUT="${DEMO_OUT:-demo-out}"
@@ -13,7 +15,9 @@ TEST_APK=app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 SIZE="${DEMO_SIZE:-1080x2400}"
 # Optional regex over segment names (workflow_dispatch input) to re-record only some segments.
 ONLY="${DEMO_ONLY:-}"
-DUMPS=/sdcard/Android/data/$PKG.test/files
+DUMPS=/sdcard/Android/data/$PKG/files
+CUE=DEMO_RECORDING_CUE
+CUE_TIMEOUT=150
 BIT_RATE=8000000
 
 mkdir -p "$OUT/logs"
@@ -63,20 +67,36 @@ for i in $(seq 0 $((count - 1))); do
   recorded=$((recorded + 1))
   echo "::group::Segment $name ($test)"
   adb shell rm -f "$remote"
-  # Back to the launcher so every clip opens on a calm frame.
   adb shell input keyevent KEYCODE_HOME
   sleep 1
+  # Follow the robot's log for this segment's cue, run the test, and start recording once the cue shows up.
+  cue_log="$OUT/logs/.cue-$name.txt"
+  adb logcat -v brief -s FindoraDemo:I > "$cue_log" 2>&1 &
+  CUE_PID=$!
+  adb shell am instrument -w -r -e class "$test" -e demoSegment "$name" "$RUNNER" > "$OUT/logs/$name.txt" 2>&1 &
+  TEST_PID=$!
+  waited=0
+  until grep -q "$CUE $name" "$cue_log" || ! kill -0 "$TEST_PID" 2> /dev/null || [ "$waited" -ge $((CUE_TIMEOUT * 4)) ]; do
+    sleep 0.25
+    waited=$((waited + 1))
+  done
+  grep -q "$CUE $name" "$cue_log" || echo "::warning::no recording cue for $name, recording from now"
   used_size="$SIZE"
-  if ! start_recording "$remote" "$SIZE"; then
-    echo "screenrecord refused $SIZE, falling back to 720x1600"
-    used_size=720x1600
-    start_recording "$remote" "$used_size" || echo "::warning::screenrecord could not start for $name"
+  REC_PID=""
+  if kill -0 "$TEST_PID" 2> /dev/null; then
+    if ! start_recording "$remote" "$SIZE"; then
+      echo "screenrecord refused $SIZE, falling back to 720x1600"
+      used_size=720x1600
+      start_recording "$remote" "$used_size" || echo "::warning::screenrecord could not start for $name"
+    fi
   fi
-  adb shell am instrument -w -r -e class "$test" "$RUNNER" > "$OUT/logs/$name.txt" 2>&1
+  wait "$TEST_PID"
+  kill "$CUE_PID" 2> /dev/null || true
+  rm -f "$cue_log"
   if grep -q "OK (1 test)" "$OUT/logs/$name.txt"; then result=passed; else result=failed; fi
   sleep 1
   adb shell 'kill -INT $(pidof screenrecord)' 2> /dev/null || true
-  wait "$REC_PID" 2> /dev/null || true
+  [ -n "$REC_PID" ] && { wait "$REC_PID" 2> /dev/null || true; }
   sleep 1
   adb pull "$remote" "$OUT/$name.mp4" > /dev/null 2>&1 || echo "::warning::no clip pulled for $name"
   duration=0

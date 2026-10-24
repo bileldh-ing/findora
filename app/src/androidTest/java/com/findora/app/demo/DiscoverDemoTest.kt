@@ -103,7 +103,7 @@ class DiscoverDemoTest {
             hold(BEAT_MILLIS)
             scrollUntil(null, By.text(str(R.string.action_show_results)))
             tapText(str(R.string.action_show_results))
-            waitFor("filterBadge")
+            waitForActiveFilters()
             hold(2_500)
             repeat(2) { scroll("homeGrid") }
             hold(BEAT_MILLIS)
@@ -149,7 +149,7 @@ class DiscoverDemoTest {
             tapText(str(R.string.filter_verified))
             scrollUntil(null, By.text(str(R.string.action_show_results)))
             tapText(str(R.string.action_show_results))
-            waitFor("filterBadge")
+            waitForActiveFilters()
             tap("saveSearch")
             type(By.clazz("android.widget.EditText"), "Verified homes in Kochi", "search name")
             hideKeyboard()

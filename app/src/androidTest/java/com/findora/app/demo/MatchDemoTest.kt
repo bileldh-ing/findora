@@ -84,7 +84,14 @@ class MatchDemoTest {
             tap("deckSkip")
             hold(BEAT_MILLIS)
             drag(waitFor(card, "deck card"), 0.45f, 0f)
-            hold(2_000)
+            hold(BEAT_MILLIS)
+            chapter("Swipe up to super-like and book a viewing")
+            drag(waitFor(card, "deck card"), 0f, -0.35f)
+            waitFor("scheduleViewing")
+            hold(LONG_MILLIS)
+            back()
+            waitFor("deck")
+            hold(BEAT_MILLIS)
             tap("deckBack")
         }
 
