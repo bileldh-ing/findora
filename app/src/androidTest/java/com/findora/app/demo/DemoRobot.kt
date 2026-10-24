@@ -465,7 +465,7 @@ class DemoRobot {
         private const val ACK_MILLIS = 300L
         private const val STALE_RETRIES = 4
         private const val DUMP_NAME_LENGTH = 60
-        private const val SCROLL_STEPS = 70
+        private const val SCROLL_STEPS = 35
         private const val SWIPE_STEPS = 45
         private const val DRAG_STEPS = 35
         private const val SCROLL_SETTLE_MILLIS = 700L
@@ -473,7 +473,7 @@ class DemoRobot {
         private const val SCROLL_FROM = 0.75f
         private const val EDGE = 0.15f
         private const val MAX_SWIPES = 10
-        private const val MIN_VISIBLE_PX = 90
+        private const val MIN_VISIBLE_PX = 30
         private const val VISIBLE_TOP_LIMIT = 0.72f
         private const val SCREEN_TOP_DIVISOR = 4
         private val ADD_WIDGET_PATTERN: Pattern = Pattern.compile("(?i)(add to home screen|add automatically|add)")
