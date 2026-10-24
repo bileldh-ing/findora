@@ -101,10 +101,13 @@ class DemoRobot {
     fun startSignedIn() {
         launch()
         if (exists("welcome")) {
-            scrollUntil("welcome", By.text(str(R.string.action_try_demo)), maxSwipes = 3)
-            tap(By.text(str(R.string.action_try_demo)), "Try demo account")
+            val tryDemo = By.text(str(R.string.action_try_demo))
+            scrollUntil("welcome", tryDemo, maxSwipes = 3)
+            tap(tryDemo, "Try demo account")
+            // A tap that lands while the Welcome panel is still settling is swallowed: tap again once.
+            if (!appears("home", SIGN_IN_RETRY_MILLIS) && exists(tryDemo)) tap(tryDemo, "Try demo account")
         }
-        waitFor("home")
+        waitFor("home", LAUNCH_TIMEOUT_MILLIS)
         hold(SETTLE_MILLIS)
     }
 
@@ -459,6 +462,7 @@ class DemoRobot {
         private const val DOUBLE_TAP_GAP_MILLIS = 90L
         private const val TIMEOUT_MILLIS = 15_000L
         private const val LAUNCH_TIMEOUT_MILLIS = 20_000L
+        private const val SIGN_IN_RETRY_MILLIS = 6_000L
         private const val OPTIONAL_TIMEOUT_MILLIS = 4_000L
         private const val WIDGET_DIALOG_TIMEOUT_MILLIS = 8_000L
         private const val POLL_MILLIS = 250L
