@@ -11,6 +11,9 @@ RUNNER="$PKG.test/androidx.test.runner.AndroidJUnitRunner"
 APP_APK=app/build/outputs/apk/debug/app-debug.apk
 TEST_APK=app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 SIZE="${DEMO_SIZE:-1080x2400}"
+# Optional regex over segment names (workflow_dispatch input) to re-record only some segments.
+ONLY="${DEMO_ONLY:-}"
+DUMPS=/sdcard/Android/data/$PKG.test/files
 BIT_RATE=8000000
 
 mkdir -p "$OUT/logs"
@@ -50,11 +53,14 @@ start_recording() {
 
 entries=()
 count=$(jq length "$SEGMENTS")
+recorded=0
 for i in $(seq 0 $((count - 1))); do
   name=$(jq -r ".[$i].name" "$SEGMENTS")
   test=$(jq -r ".[$i].test" "$SEGMENTS")
   caption=$(jq -r ".[$i].caption" "$SEGMENTS")
+  if [ -n "$ONLY" ] && ! [[ "$name" =~ $ONLY ]]; then continue; fi
   remote="/sdcard/$name.mp4"
+  recorded=$((recorded + 1))
   echo "::group::Segment $name ($test)"
   adb shell rm -f "$remote"
   # Back to the launcher so every clip opens on a calm frame.
@@ -87,9 +93,11 @@ done
 
 printf '%s\n' "${entries[@]}" | jq -s '{generated_by: "Demo recordings workflow", segments: .}' > "$OUT/manifest.json"
 adb logcat -d -v time > "$OUT/logs/logcat.txt" || true
+# Window hierarchies the robot saved when a step failed.
+adb pull "$DUMPS" "$OUT/logs/dumps" > /dev/null 2>&1 || true
 cat "$OUT/manifest.json"
 
 failed=$(jq '[.segments[] | select(.result != "passed")] | length' "$OUT/manifest.json")
-echo "Recorded $count segments, $failed failed."
+echo "Recorded $recorded segments, $failed failed."
 # Exit status reflects failed segments so a broken script is visible, while every clip is still uploaded.
 [ "$failed" -eq 0 ]

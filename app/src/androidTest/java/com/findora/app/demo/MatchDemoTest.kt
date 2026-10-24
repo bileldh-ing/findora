@@ -19,9 +19,11 @@ class MatchDemoTest {
     @After
     fun lingerOnTheLastFrame() = robot.hold(BEAT_MILLIS)
 
+    private fun demo(script: DemoRobot.() -> Unit) = robot.script()
+
     @Test
     fun bestMatchQuiz() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Find my best match")
@@ -58,7 +60,7 @@ class MatchDemoTest {
 
     @Test
     fun dreamMatchDeck() =
-        with(robot) {
+        demo {
             startSignedIn()
             chapter("Dream Match")
             tap("nav_saved")
@@ -88,13 +90,13 @@ class MatchDemoTest {
 
     @Test
     fun compareSideBySide() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Long press cards to compare")
             val cards = By.res(Pattern.compile("card_.*"))
             waitFor(cards, "listing cards")
-            device.findObjects(cards).take(2).forEach {
+            findAll(cards).take(2).forEach {
                 longPress(it)
                 hold(BEAT_MILLIS)
             }
@@ -113,13 +115,13 @@ class MatchDemoTest {
 
     @Test
     fun askFindora() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Ask Findora")
             tap("searchPill")
             waitFor("search")
-            tapText(str(R.string.ask_mode_ask))
+            tapSegment("searchMode", index = 1, count = 2)
             hold(2_000)
             type("searchField", str(R.string.ask_example_4))
             hideKeyboard()

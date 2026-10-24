@@ -19,9 +19,11 @@ class ListingDemoTest {
     @After
     fun lingerOnTheLastFrame() = robot.hold(BEAT_MILLIS)
 
+    private fun demo(script: DemoRobot.() -> Unit) = robot.script()
+
     @Test
     fun listingDetailAndGallery() =
-        with(robot) {
+        demo {
             openFirstListing()
             chapter("Photo carousel")
             hold(2_000)
@@ -36,14 +38,8 @@ class ListingDemoTest {
             hold(BEAT_MILLIS)
             tap("galleryClose")
             chapter("Details, amenities, agent and location")
-            for (section in listOf(
-                "detailSpecs",
-                "detailDescription",
-                "detailAmenities",
-                "detailAgent",
-                "detailLocation",
-            )) {
-                scrollUntil("detailList", By.res(section))
+            for (section in DETAIL_SECTIONS) {
+                scrollUntil("detailList", By.res(section), maxSwipes = 4)
                 hold(BEAT_MILLIS)
             }
             tap("detailBack")
@@ -51,7 +47,7 @@ class ListingDemoTest {
 
     @Test
     fun shareAndDeepLink() =
-        with(robot) {
+        demo {
             openFirstListing()
             chapter("Share a listing link")
             tap("detailShare")
@@ -70,7 +66,7 @@ class ListingDemoTest {
 
     @Test
     fun bookAViewingWithReminder() =
-        with(robot) {
+        demo {
             openFirstListing()
             chapter("Schedule a viewing")
             tap("detailSchedule")
@@ -97,7 +93,7 @@ class ListingDemoTest {
 
     @Test
     fun affordabilityCalculator() =
-        with(robot) {
+        demo {
             openFirstListing()
             chapter("Affordability calculator")
             scrollUntil("detailList", By.res("affordabilityOpen"), maxSwipes = 14)
@@ -119,7 +115,7 @@ class ListingDemoTest {
 
     @Test
     fun priceHistoryAndNeighbourhoodRadar() =
-        with(robot) {
+        demo {
             openFirstListing()
             chapter("Price history")
             scrollUntil("detailList", By.res("detailPriceHistory"), maxSwipes = 12)
@@ -140,5 +136,6 @@ class ListingDemoTest {
 
     private companion object {
         const val DEEP_LINK = "findora://property/fd-kl-0003"
+        val DETAIL_SECTIONS = listOf("detailDescription", "detailAmenities", "detailAgent", "detailLocation")
     }
 }

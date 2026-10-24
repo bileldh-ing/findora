@@ -2,7 +2,6 @@ package com.findora.app.demo
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Until
 import com.findora.app.demo.DemoRobot.Companion.BEAT_MILLIS
 import com.findora.app.demo.DemoRobot.Companion.LONG_MILLIS
 import org.junit.After
@@ -19,9 +18,11 @@ class ConnectDemoTest {
     @After
     fun lingerOnTheLastFrame() = robot.hold(BEAT_MILLIS)
 
+    private fun demo(script: DemoRobot.() -> Unit) = robot.script()
+
     @Test
     fun openStreetMapLocations() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Locations on OpenStreetMap")
@@ -36,7 +37,7 @@ class ConnectDemoTest {
                 hold(2_000)
             }
             chapter("Pan and zoom, then search this area")
-            device.findObject(By.res("osmMap"))?.let { map ->
+            find(By.res("osmMap"))?.let { map ->
                 map.pinchOpen(0.35f, 600)
                 hold(2_500)
             }
@@ -57,13 +58,13 @@ class ConnectDemoTest {
 
     @Test
     fun chatWithDemoAgent() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             tap(By.res(Pattern.compile("card_.*")), "first listing")
             waitFor("detailList")
             chapter("Message the agent")
-            scrollUntil("detailList", By.res("detailMessage"), maxSwipes = 16)
+            scrollUntil("detailList", By.res("detailMessage"), maxSwipes = 12)
             tap("detailMessage")
             waitFor("chat")
             hold(BEAT_MILLIS)
@@ -87,7 +88,7 @@ class ConnectDemoTest {
 
     @Test
     fun notificationsCenter() =
-        with(robot) {
+        demo {
             startSignedIn()
             chapter("Notifications center")
             tap("bell")
@@ -100,13 +101,13 @@ class ConnectDemoTest {
             }
             tryTap(By.res("markAllRead"))
             hold(2_500)
-            tap("notificationsBack")
+            if (exists("notificationsBack")) tap("notificationsBack") else back()
             hold(BEAT_MILLIS)
         }
 
     /** The demo agent shows its typing dots, then answers after a human-looking delay. */
     private fun DemoRobot.waitForReply() {
-        device.wait(Until.hasObject(By.res("typingIndicator")), 6_000)
+        appears("typingIndicator", 6_000)
         hold(BEAT_MILLIS)
         waitGone("typingIndicator", 20_000)
         hold(LONG_MILLIS)

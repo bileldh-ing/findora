@@ -19,9 +19,9 @@ import androidx.test.uiautomator.Configurator
 import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
-import androidx.test.uiautomator.Until
 import com.findora.app.R
 import com.findora.app.widget.FindoraPicksWidgetReceiver
+import java.io.File
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -100,9 +100,10 @@ class DemoRobot {
         if (exists("clearQuery")) quickTap(By.res("clearQuery"))
         if (exists("filterBadge")) {
             quickTap(By.res("filterButton"))
-            waitFor(By.text(str(R.string.action_show_results)), "filter sheet")
+            waitFor(By.text(str(R.string.filter_title)), "filter sheet")
+            scrollUntil(null, By.text(str(R.string.action_show_results)), maxSwipes = 6)
             quickTap(By.text(str(R.string.action_reset)))
-            quickTap(By.text(str(R.string.action_show_results)))
+            if (exists(By.text(str(R.string.action_show_results)))) quickTap(By.text(str(R.string.action_show_results)))
         }
         hold(SHORT_MILLIS)
     }
@@ -115,9 +116,9 @@ class DemoRobot {
 
     // ---- Finding ------------------------------------------------------------------------------------------
 
-    fun exists(tag: String): Boolean = device.hasObject(By.res(tag))
+    fun exists(tag: String): Boolean = exists(By.res(tag))
 
-    fun exists(selector: BySelector): Boolean = device.hasObject(selector)
+    fun exists(selector: BySelector): Boolean = find(selector) != null
 
     fun waitFor(
         tag: String,
@@ -128,13 +129,50 @@ class DemoRobot {
         selector: BySelector,
         what: String,
         timeout: Long = TIMEOUT_MILLIS,
-    ): UiObject2 = device.wait(Until.findObject(selector), timeout) ?: throw AssertionError("'$what' did not appear")
+    ): UiObject2 = poll(selector, timeout) ?: fail("'$what' did not appear")
 
     fun waitGone(
         tag: String,
         timeout: Long = TIMEOUT_MILLIS,
     ) {
-        device.wait(Until.gone(By.res(tag)), timeout)
+        val deadline = SystemClock.uptimeMillis() + timeout
+        while (exists(tag) && SystemClock.uptimeMillis() < deadline) SystemClock.sleep(POLL_MILLIS)
+    }
+
+    /** Whether [tag] shows up within [timeout] (an optional wait that never fails the segment). */
+    fun appears(
+        tag: String,
+        timeout: Long,
+    ): Boolean = poll(By.res(tag), timeout) != null
+
+    fun findAll(selector: BySelector): List<UiObject2> {
+        clearAccessibilityCache()
+        return runCatching { device.findObjects(selector) }.getOrDefault(emptyList())
+    }
+
+    /**
+     * Compose only sends accessibility events while it believes a service is listening, so the UiAutomation node
+     * cache can keep a screen as it was before a scroll. Every lookup starts from a cleared cache.
+     */
+    fun find(selector: BySelector): UiObject2? {
+        clearAccessibilityCache()
+        return runCatching { device.findObject(selector) }.getOrNull()
+    }
+
+    private fun poll(
+        selector: BySelector,
+        timeout: Long,
+    ): UiObject2? {
+        val deadline = SystemClock.uptimeMillis() + timeout
+        while (true) {
+            find(selector)?.let { return it }
+            if (SystemClock.uptimeMillis() >= deadline) return null
+            SystemClock.sleep(POLL_MILLIS)
+        }
+    }
+
+    private fun clearAccessibilityCache() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) instrumentation.uiAutomation.clearCache()
     }
 
     private fun waitForAny(vararg tags: String) {
@@ -143,7 +181,17 @@ class DemoRobot {
             if (tags.any { exists(it) }) return
             SystemClock.sleep(POLL_MILLIS)
         }
-        throw AssertionError("None of ${tags.joinToString()} appeared")
+        fail("None of ${tags.joinToString()} appeared")
+    }
+
+    /** Saves the window hierarchy next to the test APK's files (pulled into the artifact), then fails. */
+    private fun fail(message: String): Nothing {
+        runCatching {
+            val dir = checkNotNull(instrumentation.context.getExternalFilesDir(null))
+            val name = message.filter { it.isLetterOrDigit() }.take(DUMP_NAME_LENGTH)
+            File(dir, "${SystemClock.uptimeMillis()}-$name.xml").outputStream().use { device.dumpWindowHierarchy(it) }
+        }.onFailure { Log.w(TAG, "Could not dump the window hierarchy", it) }
+        throw AssertionError(message)
     }
 
     // ---- Gestures -----------------------------------------------------------------------------------------
@@ -151,6 +199,18 @@ class DemoRobot {
     fun tap(tag: String) = tap(By.res(tag), tag)
 
     fun tapText(text: String) = tap(By.text(text), text)
+
+    /** Taps option [index] of [count] equal-width options in the control tagged [tag] (segmented controls). */
+    fun tapSegment(
+        tag: String,
+        index: Int,
+        count: Int,
+    ) {
+        val bounds = waitFor(tag).visibleBounds
+        hold(PRE_TAP_MILLIS)
+        device.click(bounds.left + bounds.width() * (2 * index + 1) / (2 * count), bounds.centerY())
+        hold(AFTER_TAP_MILLIS)
+    }
 
     /** Waits for the target, pauses so the viewer sees it, taps its centre with a real touch, then lets it land. */
     fun tap(
@@ -168,7 +228,7 @@ class DemoRobot {
         selector: BySelector,
         timeout: Long = OPTIONAL_TIMEOUT_MILLIS,
     ): Boolean {
-        if (device.wait(Until.findObject(selector), timeout) == null) return false
+        if (poll(selector, timeout) == null) return false
         hold(PRE_TAP_MILLIS)
         val tapped = runCatching { retrying(selector, selector.toString()) { it.click() } }.isSuccess
         hold(AFTER_TAP_MILLIS)
@@ -287,12 +347,12 @@ class DemoRobot {
     }
 
     fun isComfortablyVisible(selector: BySelector): Boolean {
-        val bounds = runCatching { device.findObject(selector)?.visibleBounds }.getOrNull() ?: return false
+        val bounds = runCatching { find(selector)?.visibleBounds }.getOrNull() ?: return false
         return bounds.height() >= MIN_VISIBLE_PX && bounds.top <= device.displayHeight * VISIBLE_TOP_LIMIT
     }
 
     private fun area(tag: String?): Rect =
-        tag?.let { runCatching { device.findObject(By.res(it))?.visibleBounds }.getOrNull() }
+        tag?.let { runCatching { find(By.res(it))?.visibleBounds }.getOrNull() }
             ?: Rect(0, device.displayHeight / SCREEN_TOP_DIVISOR, device.displayWidth, device.displayHeight * 4 / 5)
 
     private fun retrying(
@@ -301,7 +361,7 @@ class DemoRobot {
         action: (UiObject2) -> Unit,
     ) {
         repeat(STALE_RETRIES) {
-            val target = device.wait(Until.findObject(selector), TIMEOUT_MILLIS)
+            val target = poll(selector, TIMEOUT_MILLIS)
             if (target != null) {
                 try {
                     action(target)
@@ -312,7 +372,7 @@ class DemoRobot {
             }
             SystemClock.sleep(POLL_MILLIS)
         }
-        throw AssertionError("Could not act on '$what'")
+        fail("Could not act on '$what'")
     }
 
     // ---- System surfaces ----------------------------------------------------------------------------------
@@ -341,7 +401,7 @@ class DemoRobot {
         return requested && tryTap(By.text(ADD_WIDGET_PATTERN).clickable(true), WIDGET_DIALOG_TIMEOUT_MILLIS)
     }
 
-    fun documentsUiShowing(): Boolean = device.wait(Until.hasObject(By.pkg(DOCUMENTS_UI_PATTERN)), TIMEOUT_MILLIS)
+    fun documentsUiShowing(): Boolean = poll(By.pkg(DOCUMENTS_UI_PATTERN), TIMEOUT_MILLIS) != null
 
     companion object {
         const val TAG = "FindoraDemo"
@@ -360,6 +420,7 @@ class DemoRobot {
         private const val POLL_MILLIS = 250L
         private const val ACK_MILLIS = 300L
         private const val STALE_RETRIES = 4
+        private const val DUMP_NAME_LENGTH = 60
         private const val SCROLL_STEPS = 70
         private const val SWIPE_STEPS = 45
         private const val DRAG_STEPS = 35

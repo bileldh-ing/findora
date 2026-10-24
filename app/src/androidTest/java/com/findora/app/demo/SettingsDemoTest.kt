@@ -19,9 +19,11 @@ class SettingsDemoTest {
     @After
     fun lingerOnTheLastFrame() = robot.hold(BEAT_MILLIS)
 
+    private fun demo(script: DemoRobot.() -> Unit) = robot.script()
+
     @Test
     fun languageSwitchWithArabicRtl() =
-        with(robot) {
+        demo {
             openSettings()
             chapter("Switch the app to Arabic")
             scrollUntil("settings", By.res("settingsLanguage"))
@@ -50,7 +52,7 @@ class SettingsDemoTest {
 
     @Test
     fun currencyUnitsAndNotificationToggles() =
-        with(robot) {
+        demo {
             openSettings()
             chapter("Display currency")
             scrollUntil("settings", By.res("settingsCurrency"))
@@ -58,8 +60,8 @@ class SettingsDemoTest {
             tap(By.textStartsWith("EUR"), "EUR")
             hold(BEAT_MILLIS)
             chapter("Units")
-            scrollUntil("settings", By.text(str(R.string.area_unit_imperial)))
-            tapText(str(R.string.area_unit_imperial))
+            scrollUntil("settings", By.res("settingsAreaUnit"))
+            tapSegment("settingsAreaUnit", index = 1, count = 2)
             hold(BEAT_MILLIS)
             tap("nav_home")
             waitFor("home")
@@ -76,14 +78,14 @@ class SettingsDemoTest {
             scrollUntil("settings", By.res("settingsCurrency"), towardsEnd = false)
             tap("settingsCurrency")
             tapText(str(R.string.currency_listing))
-            scrollUntil("settings", By.text(str(R.string.area_unit_metric)))
-            tapText(str(R.string.area_unit_metric))
+            scrollUntil("settings", By.res("settingsAreaUnit"))
+            tapSegment("settingsAreaUnit", index = 0, count = 2)
             hold(BEAT_MILLIS)
         }
 
     @Test
     fun exportMyData() =
-        with(robot) {
+        demo {
             openSettings()
             chapter("Export my data")
             scrollUntil("settings", By.res("settingsExport"), maxSwipes = 14)
@@ -98,7 +100,7 @@ class SettingsDemoTest {
 
     @Test
     fun aboutScreen() =
-        with(robot) {
+        demo {
             openSettings()
             chapter("About Findora")
             scrollUntil("settings", By.res("settingsAbout"), maxSwipes = 16)
@@ -112,13 +114,16 @@ class SettingsDemoTest {
 
     @Test
     fun ownerMode() =
-        with(robot) {
+        demo {
             openSettings()
             chapter("Owner mode")
             scrollUntil("settings", By.res("settingsOwnerMode"), maxSwipes = 14)
             if (!exists("settingsOwnerDashboard")) tap("settingsOwnerMode")
-            scrollUntil("settings", By.res("settingsOwnerDashboard"))
-            tap("settingsOwnerDashboard")
+            // Switching owner mode on opens the dashboard; when it was already on, the shortcut row does.
+            if (!appears("ownerDashboard", 4_000)) {
+                scrollUntil("settings", By.res("settingsOwnerDashboard"))
+                tap("settingsOwnerDashboard")
+            }
             waitFor("ownerDashboard")
             hold(LONG_MILLIS)
             chapter("List your property")
@@ -145,11 +150,11 @@ class SettingsDemoTest {
 
     @Test
     fun darkMode() =
-        with(robot) {
+        demo {
             openSettings()
             chapter("Dark theme")
-            scrollUntil("settings", By.text(str(R.string.theme_dark)))
-            tapText(str(R.string.theme_dark))
+            scrollUntil("settings", By.res("settingsTheme"))
+            tapSegment("settingsTheme", index = 2, count = 3)
             hold(LONG_MILLIS)
             tap("nav_home")
             waitFor("home")
@@ -167,8 +172,8 @@ class SettingsDemoTest {
             hold(2_000)
             chapter("Back to the system theme")
             tap("nav_settings")
-            scrollUntil("settings", By.text(str(R.string.theme_system)))
-            tapText(str(R.string.theme_system))
+            scrollUntil("settings", By.res("settingsTheme"), towardsEnd = false)
+            tapSegment("settingsTheme", index = 0, count = 3)
             hold(2_000)
         }
 

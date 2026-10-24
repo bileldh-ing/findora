@@ -218,6 +218,7 @@ fun SettingsScreen(
                 ),
             selected = state.themeMode,
             onSelect = { onEvent(PreferenceEvent.ThemeSelected(it)) },
+            modifier = Modifier.testTag("settingsTheme"),
         )
 
         LanguageAndUnitsSection(state, onEvent, onOpen = { openChoice = it })

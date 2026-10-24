@@ -4,6 +4,11 @@ name: Demo recordings
 # on, one MP4 clip per feature, and uploads them with a manifest. Not a quality gate: CI (ci.yml) is.
 on:
   workflow_dispatch:
+    inputs:
+      only:
+        description: Regex over segment names to re-record only those (empty records all)
+        required: false
+        default: ""
   push:
     branches: [wip/phase8b-demo]
 
@@ -43,6 +48,8 @@ jobs:
 
       - name: Record segments
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          DEMO_ONLY: ${{ inputs.only }}
         with:
           api-level: 34
           target: google_apis

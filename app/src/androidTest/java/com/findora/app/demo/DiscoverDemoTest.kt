@@ -19,9 +19,11 @@ class DiscoverDemoTest {
     @After
     fun lingerOnTheLastFrame() = robot.hold(BEAT_MILLIS)
 
+    private fun demo(script: DemoRobot.() -> Unit) = robot.script()
+
     @Test
     fun welcomeAndDemoSignIn() =
-        with(robot) {
+        demo {
             launch()
             if (!exists("welcome")) signOut()
             chapter("Welcome")
@@ -42,7 +44,7 @@ class DiscoverDemoTest {
 
     @Test
     fun homeFeedAndFloatingNav() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Home feed")
@@ -65,7 +67,7 @@ class DiscoverDemoTest {
 
     @Test
     fun searchWithSuggestions() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Search")
@@ -86,12 +88,12 @@ class DiscoverDemoTest {
 
     @Test
     fun filtersSheet() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Filters")
             tap("filterButton")
-            waitFor(By.text(str(R.string.action_show_results)), "filter sheet")
+            waitFor(By.text(str(R.string.filter_title)), "filter sheet")
             hold(BEAT_MILLIS)
             tap(By.text(str(R.string.filter_at_least, 2)), "2+ bedrooms")
             scrollUntil(null, By.text(str(R.string.filter_furnished)))
@@ -99,6 +101,7 @@ class DiscoverDemoTest {
             scrollUntil(null, By.text(str(R.string.sort_price_low)))
             tapText(str(R.string.sort_price_low))
             hold(BEAT_MILLIS)
+            scrollUntil(null, By.text(str(R.string.action_show_results)))
             tapText(str(R.string.action_show_results))
             waitFor("filterBadge")
             hold(2_500)
@@ -109,16 +112,16 @@ class DiscoverDemoTest {
 
     @Test
     fun favourites() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Double-tap a card to save it")
             val cards = By.res(Pattern.compile("card_.*"))
             waitFor(cards, "a listing card")
-            doubleTap(device.findObjects(cards).first())
+            doubleTap(findAll(cards).first())
             hold(BEAT_MILLIS)
             chapter("Heart another home")
-            device.findObjects(By.res(Pattern.compile("heart_.*"))).getOrNull(1)?.let {
+            findAll(By.res(Pattern.compile("heart_.*"))).getOrNull(1)?.let {
                 hold(600)
                 it.click()
             }
@@ -136,14 +139,15 @@ class DiscoverDemoTest {
 
     @Test
     fun savedSearchesAndAlerts() =
-        with(robot) {
+        demo {
             startSignedIn()
             resetHome()
             chapter("Filter, then save the search")
             tap("filterButton")
-            waitFor(By.text(str(R.string.action_show_results)), "filter sheet")
+            waitFor(By.text(str(R.string.filter_title)), "filter sheet")
             scrollUntil(null, By.text(str(R.string.filter_verified)))
             tapText(str(R.string.filter_verified))
+            scrollUntil(null, By.text(str(R.string.action_show_results)))
             tapText(str(R.string.action_show_results))
             waitFor("filterBadge")
             tap("saveSearch")
@@ -166,7 +170,7 @@ class DiscoverDemoTest {
 
     @Test
     fun picksWidget() =
-        with(robot) {
+        demo {
             startSignedIn()
             chapter("Pin the Findora picks widget")
             hold(BEAT_MILLIS)
