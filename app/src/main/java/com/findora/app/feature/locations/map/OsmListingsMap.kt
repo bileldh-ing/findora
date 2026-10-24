@@ -69,8 +69,6 @@ private const val FIT_PADDING_DP = 64
 private const val MIN_FIT_SPAN = 1e-4
 private const val TILE_CACHE_MAX_BYTES = 64L * 1024 * 1024
 private const val TILE_CACHE_TRIM_BYTES = 48L * 1024 * 1024
-private const val LRI = '\u2066'
-private const val PDI = '\u2069'
 
 /**
  * The OpenStreetMap map (osmdroid) behind the Locations tab, wrapped for Compose:
@@ -294,7 +292,7 @@ private fun clusterMarker(
         if (cluster.isSingle) {
             // The bitmap is one left-to-right run, so the RTL isolation marks are not needed (or drawable).
             val rent = display.display(cluster.items.first().rent)
-            val price = PriceFormatter.formatDisplay(rent, locale).filterNot { it == LRI || it == PDI }
+            val price = PriceFormatter.withoutIsolation(PriceFormatter.formatDisplay(rent, locale))
             icon = BitmapDrawable(mapView.resources, bitmaps.pricePill(price, selected))
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             title = cluster.items.first().title

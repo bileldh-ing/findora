@@ -9,6 +9,8 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -21,6 +23,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.findora.app.core.data.repository.SeedRegionRepository
 import com.findora.app.core.designsystem.theme.FindoraTheme
+import com.findora.app.core.domain.format.DisplayPreferences
+import com.findora.app.core.domain.format.PriceFormatter
+import com.findora.app.core.domain.model.AreaUnit
+import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.InteractionType
 import com.findora.app.core.domain.repository.AuthRepository
 import com.findora.app.core.domain.usecase.CurrentRegion
@@ -32,6 +38,8 @@ import com.findora.app.core.testing.FakeSettingsRepository
 import com.findora.app.core.testing.fileSeedReader
 import com.findora.app.core.testing.observeMatchContext
 import com.findora.app.core.testing.seedProperties
+import com.findora.app.core.testing.testRates
+import com.findora.app.core.ui.LocalDisplayPreferences
 import com.findora.app.feature.match.deck.DeckScreen
 import com.findora.app.feature.match.deck.DeckUiEffect
 import com.findora.app.feature.match.deck.DeckViewModel
@@ -48,6 +56,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import java.time.Instant
+import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], qualifiers = "w411dp-h891dp")
@@ -67,6 +76,7 @@ class DeckScreenTest {
     private fun showDeck(
         darkTheme: Boolean = false,
         direction: LayoutDirection = LayoutDirection.Ltr,
+        display: DisplayPreferences = DisplayPreferences(),
     ): DeckViewModel {
         val homes = seedProperties.filter { it.regionId == "kerala" }.take(3)
         val properties = FakePropertyRepository(homes)
@@ -86,7 +96,10 @@ class DeckScreenTest {
             val state by vm.state.collectAsStateWithLifecycle()
             LaunchedEffect(vm) { vm.effects.collect { effects += it } }
             FindoraTheme(darkTheme = darkTheme) {
-                CompositionLocalProvider(LocalLayoutDirection provides direction) {
+                CompositionLocalProvider(
+                    LocalLayoutDirection provides direction,
+                    LocalDisplayPreferences provides display,
+                ) {
                     DeckScreen(
                         state = state,
                         onEvent = vm::onEvent,
@@ -207,5 +220,28 @@ class DeckScreenTest {
         compose.onNodeWithTag("deckSuperLike").performClick()
         compose.waitForIdle()
         assertEquals(2, vm.state.value.savedCount)
+    }
+
+    @Test
+    fun theCardShowsTheRentWithItsCurrencyAndPeriod() {
+        val vm = showDeck()
+        val rent =
+            vm.state.value.current!!
+                .property.rent
+        val expected = PriceFormatter.formatPerMonth(rent, Locale.US)
+        assertTrue(expected, expected.endsWith(" / month"))
+        compose.onAllNodesWithText(expected, useUnmergedTree = true).onFirst().assertExists()
+    }
+
+    @Test
+    fun theCardHonoursTheDisplayCurrencyChosenInSettings() {
+        val display = DisplayPreferences(Currency.USD, AreaUnit.Metric, testRates)
+        val vm = showDeck(display = display)
+        val rent =
+            vm.state.value.current!!
+                .property.rent
+        val expected = PriceFormatter.formatDisplayPerMonth(display.display(rent), Locale.US)
+        assertTrue(expected, expected.startsWith("\u2248\u00A0$"))
+        compose.onAllNodesWithText(expected, useUnmergedTree = true).onFirst().assertExists()
     }
 }

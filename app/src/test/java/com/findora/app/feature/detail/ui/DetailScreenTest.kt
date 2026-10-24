@@ -18,7 +18,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.testing.seedProperties
 import com.findora.app.feature.detail.DetailError
 import com.findora.app.feature.detail.DetailScreen
@@ -77,7 +76,7 @@ class DetailScreenTest {
         showContent()
         compose.onNodeWithTag("detailTitle").assertIsDisplayed().assert(isHeading())
         compose.onNodeWithText("Georgie House").assertIsDisplayed()
-        val price = PriceFormatter.format(georgie.rent, Locale.getDefault(), PriceStyle.Localized)
+        val price = PriceFormatter.format(georgie.rent, Locale.getDefault())
         compose.onNodeWithTag("detailPrice").assert(hasContentDescription("$price / month"))
         compose.onNodeWithTag("detailRating").assert(hasContentDescription("Rated 4.5 out of 5, 147 reviews"))
         compose.onNodeWithContentDescription("Bedrooms: ${georgie.bedrooms}").assertIsDisplayed()

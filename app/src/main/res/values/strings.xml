@@ -113,7 +113,7 @@
     <string name="category_houses">Houses</string>
     <string name="category_rooms">Rooms</string>
     <string name="home_nearby">Nearby Rental Houses</string>
-    <string name="per_month">Month</string>
+    <string name="per_month">month</string>
     <string name="cd_change_location">Change location, current: %1$s</string>
     <string name="cd_notifications">Notifications</string>
     <plurals name="cd_notifications_unread">
@@ -234,7 +234,6 @@
     <string name="detail_photo_position">Photo %1$d of %2$d</string>
     <string name="detail_open_gallery">Open photo gallery</string>
     <string name="detail_gallery_close">Close gallery</string>
-    <string name="detail_price_per_month">%1$s / month</string>
     <string name="detail_rating_cd">Rated %1$s out of 5</string>
     <string name="detail_verified">Verified</string>
     <string name="detail_verified_cd">Verified listing. Learn what this means</string>

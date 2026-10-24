@@ -47,7 +47,6 @@ import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.insight.PriceTrend
 import com.findora.app.core.domain.insight.TrendDirection
 import com.findora.app.core.domain.model.Currency
@@ -110,7 +109,7 @@ fun PriceHistorySection(
 ) {
     val locale = currentLocale()
 
-    fun price(amount: Long) = PriceFormatter.format(Money(amount, currency), locale, PriceStyle.Localized)
+    fun price(amount: Long) = PriceFormatter.format(Money(amount, currency), locale)
     val change = formatSignedPercent(trend.changePercent, locale)
     val months = trend.points.size
     val changeText = pluralStringResource(R.plurals.detail_price_change, months, change, months)

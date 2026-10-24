@@ -62,7 +62,6 @@ import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.compare.CompareMetric
 import com.findora.app.core.domain.compare.CompareRow
 import com.findora.app.core.domain.compare.CompareTable
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Property
 import com.findora.app.core.ui.ListingCoverPhoto
 import com.findora.app.core.ui.StateMessage
@@ -502,7 +501,7 @@ private fun formatValue(
     val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
     if (value == null) return stringResource(R.string.compare_unknown)
     return when (metric) {
-        CompareMetric.Price -> rentText(property.rent, PriceStyle.Localized, locale)
+        CompareMetric.Price -> rentText(property.rent, locale)
         CompareMetric.Area -> areaText(value.roundToInt(), locale = locale)
         CompareMetric.PricePerSqm -> pricePerAreaText(value, property.rent.currency, locale)
         CompareMetric.Rating -> String.format(locale, "%.1f", value)

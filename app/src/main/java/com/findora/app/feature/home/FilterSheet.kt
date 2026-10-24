@@ -33,7 +33,6 @@ import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.component.SwitchRow
 import com.findora.app.core.designsystem.theme.FindoraTheme
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.model.Amenity
 import com.findora.app.core.domain.model.Currency
 import com.findora.app.core.domain.model.ListingBounds
@@ -90,8 +89,8 @@ fun FilterSheetContent(
                 text =
                     stringResource(
                         R.string.filter_range_value,
-                        rentText(Money(low, currency), PriceStyle.Design, locale),
-                        rentText(Money(high, currency), PriceStyle.Design, locale),
+                        rentText(Money(low, currency), locale),
+                        rentText(Money(high, currency), locale),
                     ),
                 style = FindoraTheme.typography.caption,
                 color = FindoraTheme.colors.onSurfaceMuted,

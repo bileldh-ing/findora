@@ -16,7 +16,6 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.insight.AffordabilityCalculator
 import com.findora.app.core.domain.model.Money
 import com.findora.app.core.testing.seedProperties
@@ -43,8 +42,7 @@ class DetailInsightsTest {
 
     private val georgie = seedProperties.first { it.title == "Georgie House" }
 
-    private fun price(amount: Long) =
-        PriceFormatter.format(Money(amount, georgie.rent.currency), Locale.getDefault(), PriceStyle.Localized)
+    private fun price(amount: Long) = PriceFormatter.format(Money(amount, georgie.rent.currency), Locale.getDefault())
 
     /** The real screen with the real reducer, so opening the calculator works as in the app. */
     private fun showDetail(darkTheme: Boolean = false) {

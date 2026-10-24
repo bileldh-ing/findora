@@ -46,7 +46,6 @@ import com.findora.app.core.designsystem.component.PrimaryPillButton
 import com.findora.app.core.designsystem.component.rememberReducedMotion
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.insight.AffordabilityCalculator
 import com.findora.app.core.domain.insight.AffordabilityReport
 import com.findora.app.core.ui.displayMoney
@@ -124,7 +123,7 @@ fun AffordabilityForm(
                     stringResource(
                         R.string.afford_currency_note,
                         state.rent.currency.code,
-                        PriceFormatter.formatDisplay(converted, locale, PriceStyle.Localized),
+                        PriceFormatter.formatDisplay(converted, locale),
                     ),
                 style = FindoraTheme.typography.caption,
                 color = FindoraTheme.colors.onSurfaceMuted,

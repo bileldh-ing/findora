@@ -27,7 +27,6 @@ import com.findora.app.core.designsystem.component.SecondaryPillButton
 import com.findora.app.core.designsystem.icon.FindoraIcons
 import com.findora.app.core.designsystem.theme.FindoraTheme
 import com.findora.app.core.domain.format.PriceFormatter
-import com.findora.app.core.domain.format.PriceStyle
 import com.findora.app.core.domain.insight.AffordabilityVerdict
 import java.util.Locale
 
@@ -57,7 +56,7 @@ internal fun AffordabilityVerdict.label(): String =
 internal fun AffordabilityUiState.format(
     amount: Long,
     locale: Locale,
-): String = PriceFormatter.format(money(amount), locale, PriceStyle.Localized)
+): String = PriceFormatter.format(money(amount), locale)
 
 /** "Can I afford it?" entry card; once an income was entered it also shows the last verdict. */
 @Composable

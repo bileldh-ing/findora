@@ -102,9 +102,9 @@ class CurrencyConverterTest {
     @Test
     fun convertedPricesAreMarkedApproximate() {
         val converted = DisplayPreferences(Currency.EUR, AreaUnit.Metric, testRates).display(Money(9_000, Currency.INR))
-        assertEquals("≈\u00A090/ Month", PriceFormatter.formatDisplayPerMonth(converted, Locale.US))
-        assertEquals("≈\u00A0€90", PriceFormatter.formatDisplay(converted, Locale.US, PriceStyle.Localized))
+        assertEquals("≈\u00A0€90 / month", PriceFormatter.formatDisplayPerMonth(converted, Locale.US))
+        assertEquals("≈\u00A0€90", PriceFormatter.formatDisplay(converted, Locale.US))
         val listed = DisplayMoney(Money(10_000, Currency.INR), approximate = false)
-        assertEquals("10.000/ Month", PriceFormatter.formatDisplayPerMonth(listed, Locale.US))
+        assertEquals("₹10,000 / month", PriceFormatter.formatDisplayPerMonth(listed, Locale.US))
     }
 }
