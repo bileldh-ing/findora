@@ -1,1 +1,0 @@
-First release of Findora: the Findora design system, launch screen, adaptive app icon and English, French and Arabic support.

@@ -1,0 +1,1 @@
+Prête pour le Play Store : fiche traduite, politique de confidentialité et notes sur la sécurité des données. Travaux récents : démarrage plus rapide grâce à un Baseline Profile, contrôles d'accessibilité et captures de référence des écrans clés, alertes de recherche, widget Sélection Findora, mode propriétaire et mises en page pour tablettes et pliables.

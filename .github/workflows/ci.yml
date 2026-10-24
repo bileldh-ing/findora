@@ -104,9 +104,13 @@ jobs:
       - name: Verify key-screen goldens (light/dark, LTR/RTL)
         run: .github/scripts/screenshots.sh
 
+      - name: Verify Google Play store images (screenshots, feature graphic, icon)
+        if: success() || failure()
+        run: .github/scripts/store-assets.sh
+
       - name: Report failures as annotations
         if: failure()
-        run: .github/scripts/annotate-failures.sh screenshots.log
+        run: .github/scripts/annotate-failures.sh screenshots.log store-assets.log
 
       - uses: actions/upload-artifact@v7
         if: always()
@@ -114,9 +118,22 @@ jobs:
           name: screenshots
           path: |
             screenshots.log
+            store-assets.log
+            fastlane/metadata/android/en-US/images
             app/src/test/screenshots
             app/build/outputs/roborazzi
             app/build/reports/tests/testDebugUnitTest
+
+  store-readiness:
+    name: Store readiness (listing, graphics, version, policy)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Readiness script self-test
+        run: python3 -m unittest discover -s scripts/store -p 'test_*.py' -v
+      - name: Play listing lengths, required files, image sizes, versionCode/versionName
+        run: python3 scripts/store/check_store_readiness.py --summary "$GITHUB_STEP_SUMMARY"
 
   instrumented:
     name: Instrumented tests (emulator API 34)

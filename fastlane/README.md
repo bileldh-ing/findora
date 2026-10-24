@@ -1,6 +1,6 @@
 # Google Play listing metadata
 
-Store listing text in the [fastlane supply](https://docs.fastlane.tools/actions/supply/) layout, one
+Store listing text and graphics in the [fastlane supply](https://docs.fastlane.tools/actions/supply/) layout, one
 folder per Play locale (`en-US`, `fr-FR`, `ar`):
 
 | File | Play Console field | Limit |
@@ -8,12 +8,11 @@ folder per Play locale (`en-US`, `fr-FR`, `ar`):
 | `title.txt` | App name | 30 characters |
 | `short_description.txt` | Short description | 80 characters |
 | `full_description.txt` | Full description | 4000 characters |
-| `changelogs/default.txt` | Release notes ("What's new") | 500 characters |
+| `changelogs/<versionCode>.txt` | Release notes ("What's new") | 500 characters |
+| `en-US/images/icon.png` | App icon | 512 x 512, 32-bit PNG |
+| `en-US/images/featureGraphic.png` | Feature graphic | 1024 x 500, 24-bit PNG |
+| `en-US/images/phoneScreenshots/` | Phone screenshots | 2 to 8; 1080 x 1920, 24-bit PNG |
 
-The Release workflow sends the "What's new" text from `distribution/whatsnew/whatsnew-<locale>`
-with each Play upload; keep those files in sync with `changelogs/default.txt` for the release.
-
-The full description presents Findora's product scope. Before publishing to production, check every
-line against the features the release actually ships (Google Play's metadata policy forbids
-describing functionality the app does not have), and add screenshots, the 512×512 icon and the
-1024×500 feature graphic under `images/` or directly in Play Console.
+The graphics are rendered from the app by `StoreAssetsTest`; the text describes only what the current version ships.
+`scripts/store/check_store_readiness.py` checks all of it on every CI run. How each file is produced, verified and
+published: [docs/STORE_LISTING.md](../docs/STORE_LISTING.md).

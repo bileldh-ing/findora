@@ -25,7 +25,9 @@ not accepted by Google Play) and the workflow says so in a warning and in the ru
 
 ```bash
 # 1. Update CHANGELOG.md with a "## [1.2.3] ..." section, and the Play "What's new" text in
-#    distribution/whatsnew/whatsnew-<locale> (max 500 characters each). Commit and push to main.
+#    fastlane/metadata/android/<locale>/changelogs/<versionCode>.txt and, identical,
+#    distribution/whatsnew/whatsnew-<locale> (max 500 characters each; CI's "Store readiness" job
+#    checks both). Work through docs/RELEASE_CHECKLIST.md. Commit and push to main.
 # 2. Make sure CI is green on that commit, then:
 git tag -a v1.2.3 -m "Findora 1.2.3"
 git push origin v1.2.3
@@ -93,12 +95,12 @@ findora.key.password=...
 
 1. Register as a developer (one-time fee) and verify your identity at <https://play.google.com/console>.
 2. *Create app*: name **Findora**, default language English (United States), App, Free.
-3. Fill in *App content*: privacy policy URL (publish [PRIVACY.md](PRIVACY.md), for example through
-   GitHub Pages, after filling in its bracketed fields), ads (none), content rating questionnaire,
-   target audience, data safety form (consistent with the privacy policy).
-4. Store listing: copy title, short and full description per language from
-   `fastlane/metadata/android/<locale>/` (en-US, fr-FR, ar) and add screenshots, the 512×512 icon
-   and the 1024×500 feature graphic.
+3. Fill in *App content* with the answers in [DATA_SAFETY.md](DATA_SAFETY.md): privacy policy URL
+   ([PRIVACY.md](PRIVACY.md), the page the app links to), ads (none), app access (demo account),
+   content rating questionnaire, target audience and the Data safety form.
+4. Store listing: the title, short and full description per language and the graphics are in
+   `fastlane/metadata/android/` (en-US, fr-FR, ar); paste and upload them, or push them with
+   `fastlane supply` as described in [STORE_LISTING.md](STORE_LISTING.md).
 5. **Upload the first AAB manually**: Testing → Internal testing → Create new release, accept Play
    App Signing, upload `findora-<version>.aab` from a signed GitHub Release. The Play API cannot
    create an app's very first release, so this step is required once.

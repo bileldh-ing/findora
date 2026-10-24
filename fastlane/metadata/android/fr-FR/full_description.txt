@@ -1,16 +1,44 @@
 Findora - Dream House. Là où le confort rencontre la simplicité.
 
-Findora est une application de location conçue pour rendre la recherche de votre prochain logement simple et sereine. Tout part de la photo : de grandes images nettes, un design épuré et contrasté, et une présentation qui garde l'essentiel à portée de regard.
+Findora est une application de location centrée sur la photo, pour trouver un logement adapté à votre budget et à votre mode de vie, en français, en anglais ou en arabe.
 
-Ce pour quoi Findora est conçue
-• Parcourir des biens à louer dans un fil clair, centré sur les photos
-• Voir l'essentiel d'un coup d'œil : loyer mensuel, note, emplacement et statut vérifié
-• Mettre de côté les logements qui vous plaisent et les comparer
-• Obtenir un classement personnalisé selon votre budget, votre quartier et votre mode de vie
-• Explorer les annonces sur une carte et réserver des visites auprès des propriétaires
-• Utiliser l'application en français, en anglais ou en arabe, avec une prise en charge complète de l'écriture de droite à gauche
-• Thèmes clair et sombre, avec un contraste lisible partout
+TROUVER UN LOGEMENT
+• Des logements à louer à Kochi (Kerala), Tunis, Paris et Dubaï : loyer, note, surface et statut vérifié d'un coup d'œil
+• Recherche avec suggestions et historique, filtres par loyer, surface, chambres, salles de bain, meublé, animaux, parking, annonces vérifiées et équipements
+• Demander à Findora : écrivez ou dictez votre besoin (« T3 meublé à La Marsa moins de 2 000 DT ») et voyez ce qui a été compris avant de l'appliquer. La phrase est analysée sur l'appareil par des règles, sans service d'IA
+• Une carte OpenStreetMap avec les loyers sur les marqueurs, des regroupements, « Rechercher dans cette zone » et un bouton « Ma position » facultatif
 
-Findora est développée de façon ouverte, par petites versions testées. Chaque mise à jour de cette fiche décrit ce que contient réellement la version : consultez « Nouveautés » pour connaître les fonctionnalités disponibles dans la vôtre.
+TROUVER LE MEILLEUR CHOIX
+• Un questionnaire en six étapes (budget, pièces, types de logement, quartiers ou trajet, mode de vie, critères indispensables) donne à chaque logement un score d'affinité, avec ses raisons
+• Dream Match : faites glisser les logements pour les garder, les passer ou les adorer, avec annulation et un bouton pour chaque geste
+• Comparez jusqu'à trois logements côte à côte, la meilleure valeur de chaque ligne mise en avant
 
-Respect de la vie privée : Findora ne vend pas vos données. Consultez notre politique de confidentialité pour en savoir plus.
+TOUT SUR UN LOGEMENT
+• Galerie photo plein écran avec zoom
+• Historique des loyers, radar du quartier et calculateur « Est-ce dans mon budget ? » selon vos revenus
+• Réservez une visite sur un créneau libre, ajoutez-la à votre agenda et recevez un rappel une heure avant
+• Écrivez à l'agent de l'annonce et recevez des réponses immédiates d'un agent de démonstration automatisé
+
+SUIVRE LE MARCHÉ
+• Favoris et recherches enregistrées avec alertes de nouvelles annonces et de baisses de loyer (chaque jour ou à chaque actualisation)
+• Un centre de notifications pour les messages, les visites et les alertes
+• Un widget d'écran d'accueil « Sélection Findora » avec vos meilleurs logements et votre prochaine visite
+
+PUBLIER VOTRE LOGEMENT
+• Mode propriétaire : un assistant en sept étapes avec repère sur la carte, photos choisies dans le sélecteur de photos du système et brouillons enregistrés automatiquement
+• Un tableau de bord avec les vues, les enregistrements et les demandes de chaque annonce
+
+À VOTRE IMAGE
+• Français, anglais et arabe avec mise en page de droite à gauche, langue choisie pour l'application seule
+• Prix affichés en INR, USD, EUR ou TND et surfaces en mètres carrés ou en pieds carrés
+• Thèmes clair et sombre, réduction des animations, libellés et actions TalkBack
+• Verrouillage biométrique, export de vos données dans un fichier de votre choix et mises en page adaptées aux tablettes, aux pliables et au mode paysage
+
+BON À SAVOIR
+• Findora est un projet de portfolio. Ses 64 annonces sont des logements fictifs d'exemple illustrés par de vraies photos Pexels ; agents, numéros de téléphone, loyers, historiques de prix et scores de quartier sont des données d'exemple, signalées comme telles dans l'application.
+• Les réponses des agents viennent d'un agent de démonstration automatisé qui fonctionne sur votre appareil. Vos messages ne sont jamais envoyés à un véritable agent ni à un serveur.
+• Les prix convertis utilisent une table de taux de change indicatifs intégrée à l'application (datée dans l'application) et sont précédés de « ≈ ».
+• Comptes, favoris, messages, visites et annonces sont enregistrés uniquement sur votre appareil. Une annonce que vous publiez n'est visible que par les autres utilisateurs du même appareil.
+• Une connexion internet sert à charger les photos des annonces et les tuiles de carte OpenStreetMap. Des photos intégrées gardent les fiches lisibles hors ligne.
+
+Confidentialité : pas de publicité, pas de statistiques d'usage, pas de pistage, et Findora n'envoie jamais ce que vous saisissez hors de votre appareil. Détails dans la politique de confidentialité.
