@@ -1,8 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [1.0.0] - 2026-10-24 Phase 8: Polish and ship
 
-Version 0.9.0 (versionCode 9) in preparation.
+First stable release (versionCode 10). Phase 8 makes Findora fast, accessible, verifiable and ready for Google Play: a Baseline Profile with a startup Macrobenchmark, accessibility checks on the key screens, Roborazzi screenshot goldens in light/dark and LTR/RTL, a store listing in English, French and Arabic with graphics rendered from the app and a CI readiness gate, scripted demo recordings of every feature, and prices that always show their currency.
+
+### Release
+- `versionCode` 10 and `versionName` 1.0.0 in `defaultConfig` (CI release builds still set their own increasing versionCode); "What's new" for versionCode 10 in `fastlane/metadata/android/{en-US,fr-FR,ar}/changelogs/10.txt`, identical to `distribution/whatsnew/`.
+- Demo recordings: the widget segment now opens the first home listed in the "Findora picks" widget (the topmost clickable row inside the widget) instead of matching listing names, so it works with any listing such as Harbour Nook or Backwater Cottage.
+- README and `docs/RELEASE_CHECKLIST.md` updated for the release.
 
 ### Fixed
 - **Prices always show their currency**: the Dream Match card (and every other per-month price) read "12.000/ Month", with no currency and the slash glued to the number. `PriceFormatter` is now the only way a rent becomes text and has a single, locale-aware style: "TND 12,000 / month", "₹1,50,000 / month", "1 250 € / mois", with "≈ " for amounts converted to the currency chosen in Settings. The digits-only design style (`PriceStyle`) is gone, so the Dream Match deck, Home and search cards, Best Match, the map pins and map list, chat listing cards and agent replies, Compare, the listing page, the owner preview, the filter and quiz budget sliders, the home-screen widget, the design-system catalogue and saved-search price-drop alerts all format the same way. Letter currency codes get a no-break space before the digits on the JVM as Android's ICU does ("TND 12,000"); in Arabic the amount is wrapped in FIRST STRONG ISOLATE marks so " / شهر" never reorders. Price-drop notifications now use the display currency from Settings. The `per_month` label is lowercase and `detail_price_per_month` was removed (the listing page uses the shared formatter). New and updated tests: `PriceFormatterTest`, `CurrencyConverterTest`, `DeckScreenTest` (card price, converted price), `SearchAlertWorkerTest` (price drop in the listing and the display currency), Home, detail and widget tests; Roborazzi goldens and the affected store screenshots re-recorded on CI.

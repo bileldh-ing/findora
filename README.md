@@ -4,7 +4,8 @@
 
 [![CI](https://github.com/bileldh-ing/findora/actions/workflows/ci.yml/badge.svg)](https://github.com/bileldh-ing/findora/actions/workflows/ci.yml)
 [![Release](https://github.com/bileldh-ing/findora/actions/workflows/release.yml/badge.svg)](https://github.com/bileldh-ing/findora/actions/workflows/release.yml)
-[![Latest release](https://img.shields.io/github/v/release/bileldh-ing/findora?include_prereleases&sort=semver)](https://github.com/bileldh-ing/findora/releases)
+[![Latest release](https://img.shields.io/github/v/release/bileldh-ing/findora?sort=semver)](https://github.com/bileldh-ing/findora/releases/latest)
+![Version](https://img.shields.io/badge/version-1.0.0-1E5EFF)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.1-7F52FF?logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
 ![minSdk](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)
@@ -26,14 +27,22 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
 | 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A); owner mode and adaptive layouts for tablets, foldables and landscape (7B) | Done (v0.8.0) |
-| 8 | Polish and ship: Baseline Profile, startup Macrobenchmark, Compose stability, StrictMode/LeakCanary, accessibility checks and screenshot tests (8A); store readiness: Play listing in three languages, store graphics rendered from the app, privacy policy, Data safety answers and a CI readiness gate (8B) | In progress (8A, 8B store readiness done) |
+| 8 | Polish and ship: Baseline Profile, startup Macrobenchmark, Compose stability, StrictMode/LeakCanary, accessibility checks and screenshot tests (8A); store readiness: Play listing in three languages, store graphics rendered from the app, privacy policy, Data safety answers and a CI readiness gate; scripted demo recordings; prices always shown with their currency (8B) | Done (v1.0.0) |
+
+## Findora 1.0.0
+
+The first stable release (versionCode 10), tagged `v1.0.0`. The signed-by-CI APK and AAB (with the R8 mapping file
+and `SHA256SUMS.txt`) are attached to the [GitHub Release](https://github.com/bileldh-ing/findora/releases/latest);
+the [changelog](CHANGELOG.md#100---2026-10-24-phase-8-polish-and-ship) lists everything Phase 8 added. Without the
+upload keystore secrets the Release workflow signs with the debug key (installable, not uploadable to Play) and
+skips the Google Play upload; see [docs/RELEASING.md](docs/RELEASING.md).
 
 ## What Phase 8B ships (store readiness)
 
 Everything a Google Play submission needs, kept in the repository and checked by CI:
 
 - **Store listing** in English, French and Arabic ([`fastlane/metadata/android/`](fastlane/metadata/android), fastlane
-  supply layout): title, short and full description and "What's new" for versionCode 9. The descriptions list only
+  supply layout): title, short and full description and "What's new" for versionCode 10. The descriptions list only
   shipped features and say plainly that the listings are fictional sample data, that agent replies come from an
   on-device demo agent, that Ask Findora is rule-based and on-device and that converted prices use indicative rates.
 - **Store graphics rendered from the app** by `StoreAssetsTest` (Robolectric + Roborazzi): eight 1080 x 1920 phone
@@ -49,7 +58,7 @@ Everything a Google Play submission needs, kept in the repository and checked by
   tests) fails the build on a listing text over Play's limits, a missing or mismatched "What's new", graphics of the
   wrong size, count, aspect ratio or with an alpha channel, a versionCode / versionName that disagrees with the
   changelog, or a policy document with unfilled template fields.
-- Version **0.9.0** (versionCode 9) in `defaultConfig`, announced by the changelog's Unreleased section.
+- Version **1.0.0** (versionCode 10) in `defaultConfig`, with its own `## [1.0.0]` changelog section.
 
 ## What Phase 8A ships
 

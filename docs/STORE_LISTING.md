@@ -10,7 +10,7 @@ fastlane/metadata/android/
 │   ├── title.txt                App name (max 30 characters)
 │   ├── short_description.txt    Short description (max 80)
 │   ├── full_description.txt     Full description (max 4000)
-│   ├── changelogs/9.txt         "What's new" for versionCode 9 (max 500)
+│   ├── changelogs/10.txt        "What's new" for versionCode 10 (max 500)
 │   └── images/
 │       ├── icon.png             512 x 512, 32-bit PNG
 │       ├── featureGraphic.png   1024 x 500, 24-bit PNG
@@ -29,7 +29,7 @@ Play shows the en-US graphics for every language unless a locale has its own `im
 | fr-FR | Findora : Location Dream House | Locations classées pour vous : score d'affinité, carte, visites, comparateur. |
 | ar | Findora: إيجار منزل الأحلام | منازل للإيجار مرتبة حسب ما يناسبك: نسبة توافق، خريطة، معاينات، مقارنة وتنبيهات. |
 
-The full descriptions list only features that version 0.9.0 ships, grouped as the app is (find homes, best match,
+The full descriptions list only features that version 1.0.0 ships, grouped as the app is (find homes, best match,
 the listing page, alerts and widget, owner mode, settings), and end with a "Good to know" section that Google Play's
 metadata policy makes important here:
 

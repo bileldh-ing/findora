@@ -180,7 +180,7 @@ class DiscoverDemoTest {
             hold(6_000)
             if (pinned) {
                 chapter("Open a home from the widget")
-                tryTap(By.text(WIDGET_ROW_PATTERN))
+                tapFirstPicksWidgetItem()
                 hold(LONG_MILLIS)
             }
         }
@@ -196,6 +196,5 @@ class DiscoverDemoTest {
     private companion object {
         const val DEMO_EMAIL = "demo@findora.app"
         const val DEMO_PASSWORD = "Demo1234"
-        val WIDGET_ROW_PATTERN: Pattern = Pattern.compile(".*(House|Haven|Nest|Suites|Apartments|Villa|Residency).*")
     }
 }

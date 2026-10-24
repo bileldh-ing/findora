@@ -445,6 +445,37 @@ class DemoRobot {
         return requested && tryTap(By.text(ADD_WIDGET_PATTERN).clickable(true), WIDGET_DIALOG_TIMEOUT_MILLIS)
     }
 
+    /**
+     * Taps the first home in the pinned "Findora picks" widget: the topmost clickable row inside the widget, whose
+     * root reads "Open Findora" to TalkBack. Rows are picked by position, never by listing name, so any seed or
+     * market listing works. Returns false when no row shows up in time; the segment then simply ends.
+     */
+    fun tapFirstPicksWidgetItem(): Boolean {
+        val openApp = str(R.string.widget_open_app)
+        val deadline = SystemClock.uptimeMillis() + WIDGET_ROW_TIMEOUT_MILLIS
+        var tapped = false
+        while (!tapped && SystemClock.uptimeMillis() < deadline) {
+            val row = runCatching { firstPicksWidgetRow(openApp) }.getOrNull()
+            if (row == null) {
+                SystemClock.sleep(POLL_MILLIS)
+            } else {
+                hold(PRE_TAP_MILLIS)
+                tapped = runCatching { row.click() }.isSuccess
+                hold(AFTER_TAP_MILLIS)
+            }
+        }
+        return tapped
+    }
+
+    private fun firstPicksWidgetRow(openApp: String): UiObject2? {
+        val widget = find(By.desc(openApp)) ?: return null
+        val widgetBounds = widget.visibleBounds
+        return widget
+            .findObjects(By.clickable(true))
+            .filter { it.contentDescription != openApp && it.visibleBounds != widgetBounds }
+            .minWithOrNull(compareBy<UiObject2>({ it.visibleBounds.top }, { it.visibleBounds.left }))
+    }
+
     fun documentsUiShowing(): Boolean = poll(By.pkg(DOCUMENTS_UI_PATTERN), TIMEOUT_MILLIS) != null
 
     companion object {
@@ -465,6 +496,7 @@ class DemoRobot {
         private const val SIGN_IN_RETRY_MILLIS = 6_000L
         private const val OPTIONAL_TIMEOUT_MILLIS = 4_000L
         private const val WIDGET_DIALOG_TIMEOUT_MILLIS = 8_000L
+        private const val WIDGET_ROW_TIMEOUT_MILLIS = 10_000L
         private const val POLL_MILLIS = 250L
         private const val ACK_MILLIS = 300L
         private const val STALE_RETRIES = 4
