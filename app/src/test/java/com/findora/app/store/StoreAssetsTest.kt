@@ -110,10 +110,10 @@ import java.time.ZoneId
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * Google Play store assets rendered from the real app: eight 1080 x 1920 phone screenshots of shipped screens (a 411 dp wide phone), the
- * 1024 x 500 feature graphic and the 512 x 512 icon (the adaptive launcher icon's own layers). Screens are composed
- * with the same stateless screen composables the app uses, fed with the bundled seed listings, and listing photos
- * come from the app's bundled offline photo pack through its real [OfflineFallbackInterceptor] (remote loads are
+ * Google Play store assets rendered from the real app: eight 1080 x 1920 phone screenshots of shipped screens (a 411 dp
+ * wide phone), the 1024 x 500 feature graphic and the 512 x 512 icon (the adaptive launcher icon's own layers). Screens
+ * are composed with the same stateless screen composables the app uses, fed with the bundled seed listings, and listing
+ * photos come from the app's bundled offline photo pack through its real [OfflineFallbackInterceptor] (remote loads are
  * failed on purpose), so the images never depend on the network.
  *
  * Plain test runs render every asset and check its size and that every photo loaded. With -Pfindora.store=verify
@@ -214,7 +214,7 @@ class StoreAssetsTest {
 
     @Test fun phone2Detail() = phone("2_detail") { Detail() }
 
-    @Test fun phone3AskFindora() = phone("3_ask_findora") { Ask() }
+    @Test fun phone3AskFindora() = phone("3_ask_findora", photos = false) { Ask() }
 
     @Test fun phone4DreamMatch() = phone("4_dream_match") { DreamMatch() }
 
@@ -222,7 +222,7 @@ class StoreAssetsTest {
 
     @Test fun phone6Chat() = phone("6_chat") { Chat() }
 
-    @Test fun phone7Settings() = phone("7_settings") { Settings() }
+    @Test fun phone7Settings() = phone("7_settings", photos = false) { Settings() }
 
     @Test
     @Config(qualifiers = "+ar-ldrtl")
@@ -234,6 +234,7 @@ class StoreAssetsTest {
         capture(
             path = "$IMAGES/featureGraphic.png",
             pixels = 1024 to 500,
+            photos = false,
         ) { FeatureGraphic() }
 
     @Test
@@ -243,16 +244,19 @@ class StoreAssetsTest {
             path = "$IMAGES/icon.png",
             pixels = 512 to 512,
             keepAlpha = true,
+            photos = false,
         ) { Icon() }
 
     private fun phone(
         name: String,
         dark: Boolean = false,
+        photos: Boolean = true,
         content: @Composable () -> Unit,
     ) = capture(
         path = "$IMAGES/phoneScreenshots/$name.png",
         pixels = 1080 to 1920,
         dark = dark,
+        photos = photos,
         content = content,
     )
 
@@ -261,6 +265,7 @@ class StoreAssetsTest {
         pixels: Pair<Int, Int>,
         dark: Boolean = false,
         keepAlpha: Boolean = false,
+        photos: Boolean = true,
         content: @Composable () -> Unit,
     ) {
         compose.setContent {
@@ -270,9 +275,10 @@ class StoreAssetsTest {
                 Box(Modifier.requiredSize(size).clipToBounds().testTag(FRAME)) { content() }
             }
         }
-        awaitImages()
+        if (photos) awaitImages() else compose.waitForIdle()
         val frame = compose.onNodeWithTag(FRAME).fetchSemanticsNode().size
         assertEquals(pixels, frame.width to frame.height)
+        if (!photos) assertEquals("a screen without listing photos started an image request", 0, started.get())
         assertEquals("a bundled photo failed to load", 0, failedFallbacks.get())
         // Roborazzi captures the frame (ARGB); StoreImages re-encodes it the way Google Play wants it.
         val raw = File("build/tmp/store-assets", File(path).name)
@@ -284,9 +290,10 @@ class StoreAssetsTest {
     }
 
     /**
-     * Waits until image loading has settled: no request started or finished for [QUIET_POLLS] polls in a row. Decoding
-     * runs off the main thread; a request whose image never gets a size (a card stacked out of sight) may stay open,
-     * so open requests alone do not hold the capture back.
+     * Waits until image loading has settled on a screen that shows listing photos: at least one request finished and
+     * none started or finished for [QUIET_POLLS] polls in a row. Decoding runs off the main thread; a request whose
+     * image never gets a size (a card stacked out of sight) may stay open, so open requests alone do not hold the
+     * capture back.
      */
     private fun awaitImages() {
         compose.waitForIdle()
