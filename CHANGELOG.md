@@ -17,6 +17,7 @@ Version 0.9.0 (versionCode 9) in preparation.
 ### Phase 8B: Demo recordings
 - **Scripted demo segments** (`app/src/androidTest/.../demo`, `@DemoRecording`): 25 human-paced walkthroughs, one per feature, from Welcome and demo sign-in to dark mode, driven by `DemoRobot` with real UiAutomator touches, swipes, long presses and typing. Excluded from the gating instrumented run through the `notAnnotation` runner argument.
 - **Demo recordings workflow** (`.github/workflows/demo.yml`, manual or on push to `wip/phase8b-demo`): API 34 Pixel 6 emulator (1080 × 2400) with animations on, gesture navigation, visible taps and System UI demo mode; `record-demo.sh` records each segment with `screenrecord` (restarted per segment), writes `manifest.json` with durations and captions and uploads the `demo-recordings` artifact (14 days). Recording starts on the robot's cue once the app shows content, so clips skip the launch splash. See `docs/TESTING.md`.
+- **Accessibility checks**: each screen is scanned up to three times and only errors present on every scan fail the test, so a scan that lands mid-transition on a slow emulator no longer reports the outgoing screen's half-clipped nodes.
 - **Baseline Profile journey**: the generator and benchmark look Home grid, cards and the detail list up afresh before every fling or click and retry when Compose replaced the node (`StaleObjectException`).
 
 ### Phase 8A: Performance and quality gates
