@@ -43,6 +43,8 @@ android {
         versionCode = 9
         versionName = "0.9.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // The scripted demo segments (com.findora.app.demo) are recorded by the Demo recordings workflow, not gated.
+        testInstrumentationRunnerArguments["notAnnotation"] = "com.findora.app.demo.DemoRecording"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -303,6 +305,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.accessibility.test.framework)
+    androidTestImplementation(libs.androidx.test.uiautomator)
     // ATF exposes Guava types (ImmutableSet) in its API but declares Guava as a runtime-only dependency.
     androidTestImplementation(libs.guava)
 }

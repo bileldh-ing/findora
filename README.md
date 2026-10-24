@@ -440,6 +440,7 @@ app/src/main/java/com/findora/app
 | LeakCanary (debug only) | Detects leaked activities, view models and views in debug builds |
 | Roborazzi (+ compose, junit-rule) | JVM screenshot tests of key screens with committed goldens |
 | Accessibility Test Framework | Accessibility Scanner's checks (labels, touch targets, contrast) in instrumented tests |
+| UiAutomator (androidTest) | Real touch, swipe and typing input for the scripted demo segments recorded by the Demo recordings workflow |
 | detekt (+ Compose rules), Spotless/ktlint, Kover | Static analysis, formatting, coverage |
 
 ## Tests
@@ -503,6 +504,7 @@ app/src/main/java/com/findora/app
 | `SearchViewModelTest` (Ask Findora), `AskFindoraScreenTest` | Interpretation and region, chip removal reset by new text, Apply replacing the Home filter with region switch and Best match, explicit sort kept, plain-text fallback, quiz hint, currency mismatch (Turbine); examples, chips appear / remove / apply, notes, nothing-understood state, mode switch, voice button only when available (Compose, Robolectric) |
 | `GridClustererTest`, `MapAreasTest` | Grid clustering by zoom (merge, split, max zoom, determinism, Mercator pixels); visible-bounds filtering with the shared filter, inclusive edges, antimeridian, "moved enough" for Search this area |
 | `MapViewModelTest`, `LocationsScreenTest` | Region change, marker vs card selection, cluster zoom, search this area, shared filter, my location (denied, unavailable, centred), list toggle, offline tiles, open listing (Turbine); carousel, marker-driven scroll, list alternative, controls, banners, empty state, RTL with a fake map (Compose, Robolectric) |
+| `DiscoverDemoTest`, `ListingDemoTest`, `MatchDemoTest`, `ConnectDemoTest`, `SettingsDemoTest` (`@DemoRecording`) | Scripted, human-paced walkthroughs of every feature, one clip per test, recorded by `.github/workflows/demo.yml` and excluded from the gating instrumented run (see [docs/TESTING.md](docs/TESTING.md#demo-recordings)) |
 | `MainActivitySmokeTest` (instrumented) | Real launch with Hilt and Keystore; guest journey Welcome to Home, chip filter, open a listing and book a viewing, My viewings, tabs, Settings and back |
 
 ## Credits

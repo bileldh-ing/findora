@@ -36,6 +36,10 @@ import java.util.Locale
  * TalkBack sees it through UiAutomation, with a screenshot so the text and image contrast checks run too.
  * Any ERROR (missing label, touch target under 48dp, low contrast, duplicate clickable bounds...) fails the test
  * with the screen, element and message, so a regression shows up as a CI annotation.
+ *
+ * A screen is scanned up to [SCAN_ATTEMPTS] times and only errors found on every scan are reported: a scan can
+ * land mid-transition (the outgoing screen's half-clipped nodes) on a slow emulator, while a real defect is there
+ * every time.
  */
 @RunWith(AndroidJUnit4::class)
 class AccessibilityChecksTest {
@@ -88,8 +92,20 @@ class AccessibilityChecksTest {
         )
     }
 
-    /** Runs every ATF check on the current window and records each ERROR with the screen it was found on. */
+    /** Scans the current window and records each ERROR that persists across scans, with the screen's name. */
     private fun check(screen: String) {
+        var persistent = scan(screen)
+        var attempt = 1
+        while (persistent.isNotEmpty() && attempt < SCAN_ATTEMPTS) {
+            SystemClock.sleep(RESCAN_DELAY_MILLIS)
+            persistent = persistent intersect scan(screen)
+            attempt++
+        }
+        findings += persistent
+    }
+
+    /** Runs every ATF check on the current window and returns each ERROR with the screen it was found on. */
+    private fun scan(screen: String): Set<String> {
         composeRule.waitForIdle()
         val automation = instrumentation.uiAutomation
         automation.waitForIdle(IDLE_MILLIS, TIMEOUT_MILLIS)
@@ -97,11 +113,11 @@ class AccessibilityChecksTest {
         val hierarchy = AccessibilityHierarchyAndroid.newBuilder(root, composeRule.activity).build()
         val parameters = Parameters()
         automation.takeScreenshot()?.let { parameters.putScreenCapture(BitmapImage(it)) }
-        AccessibilityCheckPreset
+        return AccessibilityCheckPreset
             .getAccessibilityHierarchyChecksForPreset(AccessibilityCheckPreset.LATEST)
             .flatMap { it.runCheckOnHierarchy(hierarchy, null, parameters) }
             .filter { it.type == AccessibilityCheckResultType.ERROR }
-            .forEach { findings += "[$screen] ${describe(it)}" }
+            .mapTo(mutableSetOf()) { "[$screen] ${describe(it)}" }
     }
 
     private fun describe(result: AccessibilityHierarchyCheckResult): String {
@@ -167,5 +183,7 @@ class AccessibilityChecksTest {
         const val TIMEOUT_MILLIS = 15_000L
         const val IDLE_MILLIS = 500L
         const val SETTLE_MILLIS = 750L
+        const val SCAN_ATTEMPTS = 3
+        const val RESCAN_DELAY_MILLIS = 1_000L
     }
 }
