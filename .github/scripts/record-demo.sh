@@ -75,7 +75,7 @@ for i in $(seq 0 $((count - 1))); do
   adb pull "$remote" "$OUT/$name.mp4" > /dev/null 2>&1 || echo "::warning::no clip pulled for $name"
   duration=0
   if [ -s "$OUT/$name.mp4" ]; then
-    duration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT/$name.mp4" || echo 0)
+    duration=$(python3 .github/scripts/mp4_duration.py "$OUT/$name.mp4")
   fi
   [ "$result" = failed ] && echo "::warning::Demo segment $name failed (see logs/$name.txt)"
   cat "$OUT/logs/$name.txt"

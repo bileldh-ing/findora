@@ -38,10 +38,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: ffmpeg and jq
-        run: |
-          command -v ffprobe > /dev/null && command -v jq > /dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg jq; }
-
       - name: Build app and test APKs
         run: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest --stacktrace
 
