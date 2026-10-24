@@ -40,3 +40,27 @@ out at the end so the other instrumented tests start from a fresh install state.
 
 `./gradlew :app:connectedDebugAndroidTest` on an API 34 emulator (CI job "Instrumented tests"). The Baseline Profile
 generator and the startup benchmark are described in [PERFORMANCE.md](PERFORMANCE.md).
+
+The scripted demo segments in `com.findora.app.demo` are annotated `@DemoRecording` and skipped by this run
+(`notAnnotation` runner argument in `app/build.gradle.kts`); they are recorded separately, see below.
+
+## Demo recordings
+
+`.github/workflows/demo.yml` (manual dispatch, and every push to `wip/phase8b-demo`) records one MP4 per feature on
+an API 34 `google_apis` emulator with the `pixel_6` profile (1080 × 2400), animations on, gesture navigation, visible
+taps and the System UI demo mode (12:00, full battery, full Wi-Fi, no notification icons).
+
+- **Segments**: `.github/demo/segments.json` lists each segment's name, test method and caption, in recording order.
+  The first starts from a fresh install (`pm clear`); later ones build on the state earlier ones leave (a saved home,
+  a booked viewing, a chat thread), and each segment that changes a setting restores it before it ends.
+- **Tests**: `DiscoverDemoTest`, `ListingDemoTest`, `MatchDemoTest`, `ConnectDemoTest` and `SettingsDemoTest` drive
+  the real app through `DemoRobot`, which injects real touches, swipes, long presses and keystrokes with UiAutomator
+  (Compose test tags are exposed as resource ids) and pauses between steps. Compose test rules are not used: with
+  animations on, infinite transitions such as the Welcome Ken Burns drift never let the Compose clock go idle.
+- **Recording**: `.github/scripts/record-demo.sh` restarts `adb shell screenrecord --bit-rate 8000000 --size 1080x2400`
+  for every segment (it stops at three minutes), runs the test with `am instrument -e class`, stops the recorder with
+  SIGINT so the MP4 is finalised, pulls the clip and writes `manifest.json` (segment, file, duration, caption, test,
+  result). Everything is uploaded as the `demo-recordings` artifact, kept 14 days, with per-segment instrumentation
+  logs and logcat under `logs/`.
+- Run a single segment locally on a connected device:
+  `adb shell am instrument -w -e class com.findora.app.demo.MatchDemoTest#askFindora com.findora.app.debug.test/androidx.test.runner.AndroidJUnitRunner`.
