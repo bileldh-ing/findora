@@ -64,7 +64,7 @@ Robolectric + Roborazzi test with native graphics, so they always show the real 
 | `phoneScreenshots/2_detail.png` | Georgie House: gallery, price, rating, match ring |
 | `phoneScreenshots/3_ask_findora.png` | Ask Findora parsing "2 bedroom apartment in La Marsa under 2000 TND with parking" |
 | `phoneScreenshots/4_dream_match.png` | the Dream Match deck ranked by match score |
-| `phoneScreenshots/5_compare.png` | three Kochi homes side by side with match scores |
+| `phoneScreenshots/5_compare_homes.png` | three Kochi homes side by side with match scores |
 | `phoneScreenshots/6_chat.png` | a conversation with the demo agent (labelled as automated) |
 | `phoneScreenshots/7_settings.png` | Settings: appearance, language and units, notifications, privacy and data |
 | `phoneScreenshots/8_home_arabic_dark.png` | Home in Arabic (right to left) with the dark theme |

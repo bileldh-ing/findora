@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -29,7 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -109,7 +110,7 @@ import java.time.ZoneId
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * Google Play store assets rendered from the real app: eight 1080 x 1920 phone screenshots of shipped screens, the
+ * Google Play store assets rendered from the real app: eight 1080 x 1920 phone screenshots of shipped screens (a 411 dp wide phone), the
  * 1024 x 500 feature graphic and the 512 x 512 icon (the adaptive launcher icon's own layers). Screens are composed
  * with the same stateless screen composables the app uses, fed with the bundled seed listings, and listing photos
  * come from the app's bundled offline photo pack through its real [OfflineFallbackInterceptor] (remote loads are
@@ -212,7 +213,7 @@ class StoreAssetsTest {
 
     @Test fun phone4DreamMatch() = phone("4_dream_match") { DreamMatch() }
 
-    @Test fun phone5Compare() = phone("5_compare") { Compare() }
+    @Test fun phone5Compare() = phone("5_compare_homes") { Compare() }
 
     @Test fun phone6Chat() = phone("6_chat") { Chat() }
 
@@ -227,9 +228,7 @@ class StoreAssetsTest {
     fun featureGraphic() =
         capture(
             path = "$IMAGES/featureGraphic.png",
-            width = 1024.dp,
-            height = 500.dp,
-            expectedPixels = 1024 to 500,
+            pixels = 1024 to 500,
         ) { FeatureGraphic() }
 
     @Test
@@ -237,9 +236,7 @@ class StoreAssetsTest {
     fun icon() =
         capture(
             path = "$IMAGES/icon.png",
-            width = 512.dp,
-            height = 512.dp,
-            expectedPixels = 512 to 512,
+            pixels = 512 to 512,
             keepAlpha = true,
         ) { Icon() }
 
@@ -249,30 +246,28 @@ class StoreAssetsTest {
         content: @Composable () -> Unit,
     ) = capture(
         path = "$IMAGES/phoneScreenshots/$name.png",
-        width = 360.dp,
-        height = 640.dp,
-        expectedPixels = 1080 to 1920,
+        pixels = 1080 to 1920,
         dark = dark,
         content = content,
     )
 
     private fun capture(
         path: String,
-        width: Dp,
-        height: Dp,
-        expectedPixels: Pair<Int, Int>,
+        pixels: Pair<Int, Int>,
         dark: Boolean = false,
         keepAlpha: Boolean = false,
         content: @Composable () -> Unit,
     ) {
         compose.setContent {
             FindoraTheme(darkTheme = dark) {
-                Box(Modifier.requiredSize(width, height).clipToBounds().testTag(FRAME)) { content() }
+                // The frame is sized in pixels so every asset has Play's exact dimensions whatever the density.
+                val size = with(LocalDensity.current) { DpSize(pixels.first.toDp(), pixels.second.toDp()) }
+                Box(Modifier.requiredSize(size).clipToBounds().testTag(FRAME)) { content() }
             }
         }
         awaitImages()
         val frame = compose.onNodeWithTag(FRAME).fetchSemanticsNode().size
-        assertEquals(expectedPixels, frame.width to frame.height)
+        assertEquals(pixels, frame.width to frame.height)
         assertEquals("a bundled photo failed to load", 0, failedFallbacks.get())
         // Roborazzi captures the frame (ARGB); StoreImages re-encodes it the way Google Play wants it.
         val raw = File("build/tmp/store-assets", File(path).name)
@@ -530,5 +525,5 @@ class StoreAssetsTest {
     }
 }
 
-/** 360 x 640 dp at xxhdpi: 1080 x 1920 px phone screenshots, with room for the system bars around the frame. */
-private const val PHONE = "w360dp-h760dp-xxhdpi"
+/** A 411 dp wide phone at 420 dpi (like a Pixel 6): the 1080 x 1920 px frame is 411 x 731 dp, with room to spare. */
+private const val PHONE = "w411dp-h900dp-420dpi"
