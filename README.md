@@ -447,7 +447,7 @@ app/src/main/java/com/findora/app
 | Suite | Covers |
 |---|---|
 | `KeyScreensScreenshotTest` | Roborazzi goldens of Welcome, Home, detail, Settings and chat in light/dark and English LTR / Arabic RTL |
-| `StoreAssetsTest` | Google Play phone screenshots, feature graphic and icon rendered from the app: exact pixel sizes, every bundled photo loaded, verified against the committed images on CI (`-Pfindora.store=verify`) |
+| `StoreAssetsTest` | Google Play phone screenshots, feature graphic and icon rendered from the app: exact pixel sizes, image loading settled with no failed photo, verified against the committed images on CI (`-Pfindora.store=verify`) |
 | `scripts/store/test_check_store_readiness.py` | The store-readiness gate: character limits counted in characters (Arabic), placeholders, "What's new" per versionCode and in sync, image sizes, alpha, count and aspect ratio, version order, policy template fields |
 | `AccessibilityChecksTest` | Accessibility Test Framework errors on Welcome, Home, detail, chat and Settings (instrumented) |
 | `BaselineProfileGenerator`, `StartupBenchmark` | Baseline Profile from the critical journey; cold/warm startup and Home-scroll frames, no AOT vs profile (`:baselineprofile`, device) |

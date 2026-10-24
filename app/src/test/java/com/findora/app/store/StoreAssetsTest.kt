@@ -107,7 +107,6 @@ import java.io.File
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -129,8 +128,8 @@ class StoreAssetsTest {
     @get:Rule
     val compose = createComposeRule()
 
-    /** Image requests in flight, by request, with the data they load (for the failure message). */
-    private val pending = ConcurrentHashMap<ImageRequest, String>()
+    private val started = AtomicInteger()
+    private val finished = AtomicInteger()
     private val failedFallbacks = AtomicInteger()
 
     private val kerala: RegionPack by lazy { regions.first { it.id == "kerala" } }
@@ -158,26 +157,26 @@ class StoreAssetsTest {
         val counter =
             object : EventListener() {
                 override fun onStart(request: ImageRequest) {
-                    pending[request] = request.data.toString()
+                    started.incrementAndGet()
                 }
 
                 override fun onSuccess(
                     request: ImageRequest,
                     result: SuccessResult,
                 ) {
-                    pending.remove(request)
+                    finished.incrementAndGet()
                 }
 
                 override fun onCancel(request: ImageRequest) {
                     // A card that recomposes (the deck, for example) cancels its first request and starts another.
-                    pending.remove(request)
+                    finished.incrementAndGet()
                 }
 
                 override fun onError(
                     request: ImageRequest,
                     result: ErrorResult,
                 ) {
-                    pending.remove(request)
+                    finished.incrementAndGet()
                     failedFallbacks.incrementAndGet()
                 }
             }
@@ -284,17 +283,24 @@ class StoreAssetsTest {
         StoreImages.process(raw = raw, target = File(path), keepAlpha = keepAlpha, mode = StoreImages.mode())
     }
 
-    /** Waits until every image request started by the composition has finished (decoding runs off the main thread). */
+    /**
+     * Waits until image loading has settled: no request started or finished for [QUIET_POLLS] polls in a row. Decoding
+     * runs off the main thread; a request whose image never gets a size (a card stacked out of sight) may stay open,
+     * so open requests alone do not hold the capture back.
+     */
     private fun awaitImages() {
         compose.waitForIdle()
-        var stableChecks = 0
+        var quiet = 0
+        var last = started.get() to finished.get()
         val deadline = System.currentTimeMillis() + IMAGE_TIMEOUT_MILLIS
-        while (stableChecks < STABLE_CHECKS && System.currentTimeMillis() < deadline) {
-            stableChecks = if (pending.isEmpty()) stableChecks + 1 else 0
+        while (quiet < QUIET_POLLS && System.currentTimeMillis() < deadline) {
             Thread.sleep(POLL_MILLIS)
             compose.waitForIdle()
+            val now = started.get() to finished.get()
+            quiet = if (now == last && now.second > 0) quiet + 1 else 0
+            last = now
         }
-        assertTrue("image requests still running: ${pending.values}", pending.isEmpty())
+        assertTrue("image loading never settled (started, finished): $last", quiet >= QUIET_POLLS)
     }
 
     @Composable
@@ -523,7 +529,7 @@ class StoreAssetsTest {
         const val FRAME = "storeFrame"
         const val IMAGES = "../fastlane/metadata/android/en-US/images"
         const val IMAGE_TIMEOUT_MILLIS = 20_000L
-        const val STABLE_CHECKS = 5
+        const val QUIET_POLLS = 10
         const val POLL_MILLIS = 100L
         const val SECONDS_PER_MINUTE = 60L
 
