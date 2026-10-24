@@ -1,1 +1,0 @@
-Première version de Findora : système de design Findora, écran de lancement, icône adaptative et prise en charge du français, de l'anglais et de l'arabe.

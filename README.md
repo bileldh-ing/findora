@@ -26,7 +26,30 @@ before the next one starts. The [changelog](CHANGELOG.md) records what each phas
 | 5 | Best-match recommendations: preference quiz, explainable match score, Best match sort (5A); Dream Match swipe deck and side-by-side Compare (5B); Ask Findora natural-language search (5C) | Done (v0.6.0) |
 | 6 | Map, chat, settings, localisation (EN, FR, AR with RTL): Locations map (6A); chat with agents and notifications center (6B); complete Settings with per-app language, display currency, units, notification, accessibility and privacy controls (6C) | Done (v0.7.0) |
 | 7 | Pro extras: saved-search alerts and the "Findora picks" widget (7A); owner mode and adaptive layouts for tablets, foldables and landscape (7B) | Done (v0.8.0) |
-| 8 | Polish and ship: Baseline Profile, startup Macrobenchmark, Compose stability, StrictMode/LeakCanary, accessibility checks and screenshot tests (8A); release polish (8B) | In progress (8A) |
+| 8 | Polish and ship: Baseline Profile, startup Macrobenchmark, Compose stability, StrictMode/LeakCanary, accessibility checks and screenshot tests (8A); store readiness: Play listing in three languages, store graphics rendered from the app, privacy policy, Data safety answers and a CI readiness gate (8B) | In progress (8A, 8B store readiness done) |
+
+## What Phase 8B ships (store readiness)
+
+Everything a Google Play submission needs, kept in the repository and checked by CI:
+
+- **Store listing** in English, French and Arabic ([`fastlane/metadata/android/`](fastlane/metadata/android), fastlane
+  supply layout): title, short and full description and "What's new" for versionCode 9. The descriptions list only
+  shipped features and say plainly that the listings are fictional sample data, that agent replies come from an
+  on-device demo agent, that Ask Findora is rule-based and on-device and that converted prices use indicative rates.
+- **Store graphics rendered from the app** by `StoreAssetsTest` (Robolectric + Roborazzi): eight 1080 x 1920 phone
+  screenshots (Home, listing detail, Ask Findora, Dream Match, Compare, chat, Settings, Home in Arabic dark), the
+  1024 x 500 feature graphic and the 512 x 512 icon from the launcher icon's own layers. Listing photos come from the
+  bundled offline pack through the app's real fallback interceptor, so rendering is offline and reproducible. The
+  "Screenshot tests" job verifies them against a fresh render on every pull request.
+- **Policy documents**: the final [privacy policy](docs/PRIVACY.md) (no server, no ads or analytics, the only network
+  traffic is Pexels photos and OpenStreetMap tiles), the Play [Data safety and App content answers](docs/DATA_SAFETY.md)
+  with the code behind each one, the [store listing guide](docs/STORE_LISTING.md) and a
+  [release checklist](docs/RELEASE_CHECKLIST.md).
+- **CI "Store readiness" job**: `scripts/store/check_store_readiness.py` (standard library only, with its own unit
+  tests) fails the build on a listing text over Play's limits, a missing or mismatched "What's new", graphics of the
+  wrong size, count, aspect ratio or with an alpha channel, a versionCode / versionName that disagrees with the
+  changelog, or a policy document with unfilled template fields.
+- Version **0.9.0** (versionCode 9) in `defaultConfig`, announced by the changelog's Unreleased section.
 
 ## What Phase 8A ships
 
@@ -343,6 +366,7 @@ cd findora
 ./gradlew check                      # detekt + spotlessCheck + unit tests + Android Lint
 ./gradlew :app:koverHtmlReportDebug  # coverage report
 ./gradlew spotlessApply              # auto-format
+python3 scripts/store/check_store_readiness.py   # Play listing, graphics, version and policy checks
 ```
 
 ## Architecture
@@ -423,6 +447,8 @@ app/src/main/java/com/findora/app
 | Suite | Covers |
 |---|---|
 | `KeyScreensScreenshotTest` | Roborazzi goldens of Welcome, Home, detail, Settings and chat in light/dark and English LTR / Arabic RTL |
+| `StoreAssetsTest` | Google Play phone screenshots, feature graphic and icon rendered from the app: exact pixel sizes, image loading settled with no failed photo, verified against the committed images on CI (`-Pfindora.store=verify`) |
+| `scripts/store/test_check_store_readiness.py` | The store-readiness gate: character limits counted in characters (Arabic), placeholders, "What's new" per versionCode and in sync, image sizes, alpha, count and aspect ratio, version order, policy template fields |
 | `AccessibilityChecksTest` | Accessibility Test Framework errors on Welcome, Home, detail, chat and Settings (instrumented) |
 | `BaselineProfileGenerator`, `StartupBenchmark` | Baseline Profile from the critical journey; cold/warm startup and Home-scroll frames, no AOT vs profile (`:baselineprofile`, device) |
 | `DesignTokensTest` | Palette hex values, spacing/radius/motion scales, WCAG AA contrast of key pairs in light and dark |

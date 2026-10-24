@@ -1,16 +1,44 @@
 Findora - Dream House. Where comfort meets convenience.
 
-Findora is a rental app designed to make finding your next home feel simple and calm. It is built photo-first: large, clear property images, a clean high-contrast design and a layout that keeps the details you care about one glance away.
+Findora is a photo-first rental app for finding a home that fits your budget and the way you live. Browse, shortlist, compare and book viewings in one calm, high-contrast app, in English, French or Arabic.
 
-What Findora is built for
-• Browse rental properties in a clean, photo-first feed
-• See the essentials at a glance: monthly price, rating, location and verification status
-• Shortlist the places you like and compare them side by side
-• Get a personalised best-match ranking based on your budget, location and lifestyle
-• Explore listings on a map and book viewings with property owners
-• Use the app in English, French or Arabic, with full right-to-left support
-• Light and dark themes, designed with readable contrast throughout
+FIND HOMES
+• A photo-first feed of rental homes in Kochi (Kerala), Tunis, Paris and Dubai, with price, rating, area and verification at a glance
+• Search with suggestions and recent searches, plus filters for rent, area, bedrooms, bathrooms, furnished, pets, parking, verified listings and amenities
+• Ask Findora: type or say what you want ("2 bedroom apartment in La Marsa under 2000 TND with parking") and see exactly which parts were understood before you apply them. The sentence is understood on your device by rules, not sent to an AI service
+• Browse on an OpenStreetMap map with price markers, clusters, "Search this area" and an optional "My location" button
 
-Findora is developed in the open, in small, tested releases. Each update to this listing describes what that version actually contains, so check "What's new" for the features available in your version.
+FIND YOUR BEST MATCH
+• A six-step quiz (budget, rooms, home types, neighbourhoods or commute, lifestyle, must-haves) gives every home a match score with the reasons behind it
+• Dream Match: swipe through homes to save, skip or super like, with undo and a button for every gesture
+• Compare up to three homes side by side, with the best value in each row highlighted
 
-Privacy first: Findora does not sell your data. See our privacy policy for details.
+EVERYTHING ABOUT A HOME
+• Full-screen photo gallery with zoom
+• Price history chart, neighbourhood radar and a "Can I afford it?" calculator based on your income
+• Schedule a viewing from open time slots, add it to your calendar and get a reminder one hour before
+• Message the listing's agent and get instant replies from an automated demo agent
+
+STAY ON TOP OF THE MARKET
+• Favourites, and saved searches with new-match and price-drop alerts (daily or on every refresh)
+• A notifications center for messages, viewings and alerts
+• A "Findora picks" home-screen widget with your top homes and your next viewing
+
+LIST YOUR OWN PLACE
+• Owner mode: a seven-step listing wizard with map pin, photos from the system photo picker and autosaved drafts
+• An owner dashboard with views, saves and enquiries for each listing
+
+MADE FOR YOU
+• English, French and Arabic with full right-to-left layout, chosen per app
+• Display prices in INR, USD, EUR or TND and areas in square metres or square feet
+• Light and dark themes, reduce-motion setting, TalkBack labels and actions throughout
+• Biometric app lock, data export to a file you choose, and adaptive layouts for tablets, foldables and landscape
+
+GOOD TO KNOW
+• Findora is a portfolio project. Its 64 listings are fictional sample homes with real photography from Pexels; agents, phone numbers, prices, price histories and neighbourhood scores are sample data, and the app labels them as such.
+• Agent replies come from an automated demo agent that runs on your device. Your messages are never sent to a real agent or a server.
+• Converted prices use a bundled table of indicative exchange rates (dated in the app) and are shown with "≈".
+• Accounts, favourites, messages, viewings and owner listings are stored only on your device. A listing you publish is visible to other people only on the same device.
+• An internet connection is used to load listing photos and OpenStreetMap map tiles. Bundled photos keep cards readable offline.
+
+Privacy: no ads, no analytics, no tracking, and Findora never sends what you enter off your device. Read the privacy policy for details.
