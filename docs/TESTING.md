@@ -58,9 +58,11 @@ taps and the System UI demo mode (12:00, full battery, full Wi-Fi, no notificati
   (Compose test tags are exposed as resource ids) and pauses between steps. Compose test rules are not used: with
   animations on, infinite transitions such as the Welcome Ken Burns drift never let the Compose clock go idle.
 - **Recording**: `.github/scripts/record-demo.sh` restarts `adb shell screenrecord --bit-rate 8000000 --size 1080x2400`
-  for every segment (it stops at three minutes), runs the test with `am instrument -e class`, stops the recorder with
+  for every segment (it stops at three minutes, so each segment is kept well under that), runs the test with
+  `am instrument -e class -e demoSegment <name>` and starts the recorder only when the robot logs its recording cue
+  (`DemoRobot.chapter`, once the app shows Welcome or Home), so clips skip the cold-launch splash. It stops the recorder with
   SIGINT so the MP4 is finalised, pulls the clip and writes `manifest.json` (segment, file, duration, caption, test,
   result). Everything is uploaded as the `demo-recordings` artifact, kept 14 days, with per-segment instrumentation
-  logs and logcat under `logs/`.
+  logs and logcat under `logs/`, plus the window hierarchy the robot saves when a step fails (`logs/dumps/`).
 - Run a single segment locally on a connected device:
   `adb shell am instrument -w -e class com.findora.app.demo.MatchDemoTest#askFindora com.findora.app.debug.test/androidx.test.runner.AndroidJUnitRunner`.
