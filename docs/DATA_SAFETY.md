@@ -1,6 +1,6 @@
 # Google Play Data safety and App content answers
 
-The answers to enter in Play Console for Findora 0.9.0, each with the behaviour in the code that justifies it. They
+The answers to enter in Play Console for Findora 1.0.0, each with the behaviour in the code that justifies it. They
 must stay consistent with the [privacy policy](PRIVACY.md); re-check both whenever a release adds a network call,
 an SDK, a permission or a new kind of stored data (the [release checklist](RELEASE_CHECKLIST.md) has the step).
 
